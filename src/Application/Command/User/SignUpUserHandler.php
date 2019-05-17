@@ -4,7 +4,7 @@ namespace Tailgate\Application\Command\User;
 
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
-use Tailgate\Application\DataTransformer\User\UserDataTransformer;
+use Tailgate\Application\DataTransformer\User\UserDataTransformerInterface;
 
 /**
  * handles a person attempting to sign up
@@ -16,7 +16,7 @@ class SignUpUserHandler
 
     public function __construct(
         UserRepositoryInterface $userRepository,
-        UserDataTransformer $userDataTransformer
+        UserDataTransformerInterface $userDataTransformer
     ) {
         $this->userRepository = $userRepository;
         $this->userDataTransformer = $userDataTransformer;

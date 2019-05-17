@@ -3,9 +3,9 @@
 namespace Tailgate\Application\DataTransformer\User;
 
 use Tailgate\Domain\Model\User\User;
-use Tailgate\Application\DataTransformer\User\UserDataTransformer;
+use Tailgate\Application\DataTransformer\User\UserDataTransformerInterface;
 
-class UserDtoDataTransformer implements UserDataTransformer
+class UserDtoDataTransformer implements UserDataTransformerInterface
 {
     private $user;
 
