@@ -1,25 +1,31 @@
-# Required to run your project under the correct environment
+# required to run project under the correct environment
 language: php
 
-# Versions of PHP you want your project run with
+# versions of PHP to run project with
 php:
   - '7.1'
   - '7.2'
   - '7.3'
 
-# Cache composer packages so "composer install" is faster
+# safelist
+branches:
+  only:
+  - master
+  - dev
+
+# cache composer packages so "composer install" is faster
 cache:
   directories:
     - $HOME/.composer/cache/files
-    
-# Update composer
+
+# update composer
 before-install:
  - composer self-update
 
-# Commands to be run before your environment runs
+# commands to run before environment runs
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source --dev
 
-# Commands you want to run that will verify your build
+# commands to run to verify build
 script: vendor/bin/phpunit
