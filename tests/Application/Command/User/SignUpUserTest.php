@@ -3,7 +3,7 @@
 namespace Tailgate\Test\Application\Command\User;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Application\Command\User\SignUpUser;
+use Tailgate\Application\Command\User\SignUpUserCommand;
 
 class SignUpUserTest extends TestCase
 {
@@ -13,7 +13,7 @@ class SignUpUserTest extends TestCase
         $password = 'password';
         $email = 'email@email.com';
 
-        $command = new SignUpUser($username, $password, $email);
+        $command = new SignUpUserCommand($username, $password, $email);
 
         $this->assertEquals($username, $command->getUsername());
         $this->assertEquals($password, $command->getPassword());

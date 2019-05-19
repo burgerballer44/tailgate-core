@@ -3,7 +3,7 @@
 namespace Tailgate\Test\Application\Command\User;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Application\Command\User\SignUpUser;
+use Tailgate\Application\Command\User\SignUpUserCommand;
 use Tailgate\Application\Command\User\SignUpUserHandler;
 use Tailgate\Application\DataTransformer\User\UserDtoDataTransformer;
 use Tailgate\Domain\Model\User\UserId;
@@ -23,7 +23,7 @@ class SignUpUserHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->signUpUserCommand = new SignUpUser(
+        $this->signUpUserCommand = new SignUpUserCommand(
             $this->username, 
             $this->password, 
             $this->email

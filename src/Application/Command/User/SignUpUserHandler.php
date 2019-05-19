@@ -22,7 +22,7 @@ class SignUpUserHandler
         $this->userDataTransformer = $userDataTransformer;
     }
 
-    public function handle(SignUpUser $signUpUserCommand)
+    public function handle(SignUpUserCommand $signUpUserCommand)
     {
         $username = $signUpUserCommand->getUsername();
         $password = $signUpUserCommand->getPassword();

@@ -5,7 +5,7 @@ namespace Tailgate\Application\Command\User;
 /**
  * data representing a person signing up
  */
-class SignUpUser
+class SignUpUserCommand
 {
     private $username;
     private $password;
