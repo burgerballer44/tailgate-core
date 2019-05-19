@@ -9,7 +9,7 @@ use Tailgate\Application\DataTransformer\User\UserDtoDataTransformer;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\EventStore\InMemory\InMemoryEventStore;
 use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
-use Tailgate\Infrastructure\Persistence\Projection\InMemory\InMemoryUserProjection;
+use Tailgate\Infrastructure\Persistence\Projection\Null\NullUserProjection;
 
 class SignUpUserHandlerTest extends TestCase
 {
@@ -30,7 +30,7 @@ class SignUpUserHandlerTest extends TestCase
         );
         $this->userRepository = new UserRepository(
             new InMemoryEventStore,
-            new InMemoryUserProjection
+            new NullUserProjection
         );
         $this->userDataTransformer = new UserDtoDataTransformer();
         $this->signUpUserCommandHandler = new SignUpUserHandler(
