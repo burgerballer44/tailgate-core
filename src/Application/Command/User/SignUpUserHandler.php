@@ -2,9 +2,9 @@
 
 namespace Tailgate\Application\Command\User;
 
+use Tailgate\Application\DataTransformer\User\UserDataTransformerInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
-use Tailgate\Application\DataTransformer\User\UserDataTransformerInterface;
 
 /**
  * handles a person attempting to sign up

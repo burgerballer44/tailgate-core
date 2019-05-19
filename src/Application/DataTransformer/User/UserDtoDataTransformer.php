@@ -2,8 +2,8 @@
 
 namespace Tailgate\Application\DataTransformer\User;
 
-use Tailgate\Domain\Model\User\User;
 use Tailgate\Application\DataTransformer\User\UserDataTransformerInterface;
+use Tailgate\Domain\Model\User\User;
 
 class UserDtoDataTransformer implements UserDataTransformerInterface
 {
@@ -18,9 +18,9 @@ class UserDtoDataTransformer implements UserDataTransformerInterface
     public function read()
     {
         return [
-            'id' => $this->user->getId(),
-            'username' =>  $this->user->getUsername(),
-            'email' =>  $this->user->getEmail(),
+            'id'       => $this->user->getId(),
+            'username' => $this->user->getUsername(),
+            'email'    => $this->user->getEmail(),
         ];
     }
 }

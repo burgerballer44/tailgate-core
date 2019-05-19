@@ -7,7 +7,7 @@ use Tailgate\Application\Command\User\SignUpUser;
 
 class SignUpUserTest extends TestCase
 {
-    public function testItIsInitializable()
+    public function testItCapturesCertainFields()
     {
         $username = 'username';
         $password = 'password';

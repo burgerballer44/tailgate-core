@@ -9,7 +9,7 @@ use Tailgate\Application\DataTransformer\User\UserDtoDataTransformer;
 
 class UserDtoDataTransformerTest extends TestCase
 {
-    public function testItTurnsAUserIntoAnAray()
+    public function testItTurnsAUserIntoAnArray()
     {
         $id = new UserId;
         $username = 'username';

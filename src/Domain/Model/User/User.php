@@ -2,14 +2,20 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Tailgate\Domain\Model\User\UserId;
+use Buttercup\Protects\AggregateHistory;
+use Buttercup\Protects\DomainEvent;
+use Buttercup\Protects\DomainEvents;
+use Buttercup\Protects\IsEventSourced;
+use Buttercup\Protects\RecordsEvents;
+use Verraes\ClassFunctions\ClassFunctions;
 
-class User
+class User implements RecordsEvents, IsEventSourced
 {
     private $userId;
     private $username;
     private $password;
     private $email;
+    private $recordedEvents = [];
 
     private function __construct($userId, $username, $password, $email)
     {
@@ -22,6 +28,11 @@ class User
     public static function create(UserId $userId, $username, $password, $email)
     {
         $newUser = new User($userId, $username, $password, $email);
+
+        $newUser->recordThat(
+            new UserSignedUp($userId, $username, $password, $email)
+        );
+
         return $newUser;
     }
 
@@ -43,5 +54,44 @@ class User
     public function getEmail()
     {
         return $this->email;
+    }
+
+    private function recordThat(DomainEvent $domainEvent)
+    {
+        $this->recordedEvents[] = $domainEvent;
+    }
+
+    public function getRecordedEvents()
+    {
+        return new DomainEvents($this->recordedEvents);
+    }
+
+    public function clearRecordedEvents()
+    {
+        $this->recordedEvents = [];
+    }
+
+    public static function reconstituteFrom(AggregateHistory $aggregateHistory)
+    {
+        $user = new User($aggregateHistory->getAggregateId(), '', '', '');
+
+        foreach ($aggregateHistory as $event) {
+            $user->apply($event);
+        }
+
+        return $user;
+    }
+
+    private function apply($anEvent)
+    {
+        $method = 'apply' . ClassFunctions::short($anEvent);
+        $this->$method($anEvent);
+    }
+
+    private function applyUserSignedUp(UserSignedUp $event)
+    {
+        $this->username = $event->getUsername();
+        $this->password = $event->getPassword();
+        $this->email = $event->getEmail();
     }
 }

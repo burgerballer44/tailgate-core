@@ -3,11 +3,13 @@
 namespace Tailgate\Test\Application\Command\User;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Application\Command\User\SignUpUser;
 use Tailgate\Application\Command\User\SignUpUserHandler;
-use Tailgate\Infrastructure\Persistence\Repository\InMemory\InMemoryUserRepository;
 use Tailgate\Application\DataTransformer\User\UserDtoDataTransformer;
+use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Infrastructure\Persistence\EventStore\InMemory\InMemoryEventStore;
+use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
+use Tailgate\Infrastructure\Persistence\Projection\InMemory\InMemoryUserProjection;
 
 class SignUpUserHandlerTest extends TestCase
 {
@@ -26,7 +28,10 @@ class SignUpUserHandlerTest extends TestCase
             $this->password, 
             $this->email
         );
-        $this->userRepository = new InMemoryUserRepository();
+        $this->userRepository = new UserRepository(
+            new InMemoryEventStore,
+            new InMemoryUserProjection
+        );
         $this->userDataTransformer = new UserDtoDataTransformer();
         $this->signUpUserCommandHandler = new SignUpUserHandler(
             $this->userRepository, $this->userDataTransformer
@@ -37,7 +42,7 @@ class SignUpUserHandlerTest extends TestCase
     {
         $user = $this->signUpUserCommandHandler->handle($this->signUpUserCommand);
 
-        $userFromRepository = $this->userRepository->byId(new UserId($user['id']));
+        $userFromRepository = $this->userRepository->get(new UserId($user['id']));
 
         $this->assertNotNull($userFromRepository);
         $this->assertEquals($this->username, $userFromRepository->getUsername());

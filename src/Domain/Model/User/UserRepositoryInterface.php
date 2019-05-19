@@ -2,12 +2,11 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Tailgate\Domain\Model\User\UserId;
+use Buttercup\Protects\AggregateRepository;
 use Tailgate\Domain\Model\User\User;
+use Tailgate\Domain\Model\User\UserId;
 
-interface UserRepositoryInterface
+interface UserRepositoryInterface extends AggregateRepository
 {
     public function nextIdentity();
-    public function byId(UserId $userId);
-    public function add(User $user);
 }
