@@ -5,7 +5,7 @@ namespace Tailgate\Test\Application\Command\User;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\SignUpUserCommand;
 
-class SignUpUserTest extends TestCase
+class SignUpUserCommandTest extends TestCase
 {
     public function testItCapturesCertainFields()
     {
