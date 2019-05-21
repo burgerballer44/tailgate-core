@@ -27,7 +27,8 @@ class UserDtoDataTransformerTest extends TestCase
                 'username' => $username,
                 'email' => $email,
             ],
-            $transformer->read()         
+            $transformer->read(),
+            'the user array from the object does not match'        
         );
     }
 }
