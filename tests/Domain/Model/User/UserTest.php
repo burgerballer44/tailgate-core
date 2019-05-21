@@ -22,6 +22,10 @@ class UserTest extends TestCase
 
         $this->assertCount(1, $events);
         $this->assertTrue($events[0] instanceof UserSignedUp);
+        $this->assertTrue($events[0]->getAggregateId()->equals($id));
+        $this->assertEquals($username, $events[0]->getUsername());
+        $this->assertEquals($password, $events[0]->getPassword());
+        $this->assertEquals($email, $events[0]->getEmail());
 
         $user->clearRecordedEvents();
         $this->assertCount(0, $user->getRecordedEvents());
