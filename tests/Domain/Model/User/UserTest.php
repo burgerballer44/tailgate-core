@@ -10,43 +10,46 @@ use Tailgate\Domain\Model\User\UserSignedUp;
 
 class UserTest extends TestCase
 {
-    public function testUserIsSignedUpEventOccursOnCreate()
+    private $id;
+    private $username;
+    private $password;
+    private $email;
+
+    public function setUp()
     {
-        $id = new UserId('idToCheck');
-        $username = 'username';
-        $password = 'password';
-        $email = 'email@email.com';
-
-        $user = User::create($id, $username, $password, $email);
-        $events = $user->getRecordedEvents();
-
-        $this->assertCount(1, $events);
-        $this->assertTrue($events[0] instanceof UserSignedUp);
-        $this->assertTrue($events[0]->getAggregateId()->equals($id));
-        $this->assertEquals($username, $events[0]->getUsername());
-        $this->assertEquals($password, $events[0]->getPassword());
-        $this->assertEquals($email, $events[0]->getEmail());
-
-        $user->clearRecordedEvents();
-        $this->assertCount(0, $user->getRecordedEvents());
+        $this->id = new UserId('idToCheck');
+        $this->username = 'username';
+        $this->password = 'password';
+        $this->email = 'email@email.com';
     }
 
-    public function testItShouldBeTheSameAfterReconstitution()
+    public function testUserShouldBeTheSameAfterReconstitution()
     {
-        $id = new UserId('idToCheck');
-        $username = 'username';
-        $password = 'password';
-        $email = 'email@email.com';
-
-        $user = User::create($id, $username, $password, $email);
-
+        $user = User::create($this->id, $this->username, $this->password, $this->email);
         $events = $user->getRecordedEvents();
         $user->clearRecordedEvents();
 
         $reconstitutedUser = User::reconstituteFrom(
-            new AggregateHistory($id, (array) $events)
+            new AggregateHistory($this->id, (array) $events)
         );
 
-        $this->assertEquals($user, $reconstitutedUser);
+        $this->assertEquals($user, $reconstitutedUser,
+            'the reconstituted user does not match the original user');
+    }
+
+    public function testUserSignedUpEventOccursWhenUserIsCreated()
+    {
+        $user = User::create($this->id, $this->username, $this->password, $this->email);
+        $events = $user->getRecordedEvents();
+        $user->clearRecordedEvents();
+
+        $this->assertCount(1, $events);
+        $this->assertTrue($events[0] instanceof UserSignedUp);
+        $this->assertTrue($events[0]->getAggregateId()->equals($this->id));
+        $this->assertEquals($this->username, $events[0]->getUsername());
+        $this->assertEquals($this->password, $events[0]->getPassword());
+        $this->assertEquals($this->email, $events[0]->getEmail());
+
+        $this->assertCount(0, $user->getRecordedEvents());
     }
 }
