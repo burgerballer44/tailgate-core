@@ -5,11 +5,8 @@ namespace Tailgate\Test\Application\Command\User;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\SignUpUserCommand;
 use Tailgate\Application\Command\User\SignUpUserHandler;
-use Tailgate\Application\DataTransformer\User\UserDtoDataTransformer;
-use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\EventStore\InMemory\InMemoryEventStore;
+use Tailgate\Domain\Model\User\User;
 use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
-use Tailgate\Infrastructure\Persistence\Projection\Null\NullUserProjection;
 
 class SignUpUserHandlerTest extends TestCase
 {
@@ -28,25 +25,26 @@ class SignUpUserHandlerTest extends TestCase
             $this->password, 
             $this->email
         );
-        $this->userRepository = new UserRepository(
-            new InMemoryEventStore,
-            new NullUserProjection
-        );
-        $this->userDataTransformer = new UserDtoDataTransformer();
+
+        $this->userRepository = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['add'])
+            ->getMock();
+
+         $this->userRepository
+            ->expects($this->once())
+            ->method('add')
+            ->with($this->callback(function($user) {
+                return $user instanceof User;
+            }));
+
         $this->signUpUserCommandHandler = new SignUpUserHandler(
-            $this->userRepository, $this->userDataTransformer
+            $this->userRepository
         );
     }
 
-    public function testItSignsUpANewUserByAddingToTheUserRepository()
+    public function testItAttemptsToAddAUserToTheUserRepository()
     {
-        $user = $this->signUpUserCommandHandler->handle($this->signUpUserCommand);
-
-        $userFromRepository = $this->userRepository->get(new UserId($user['id']));
-
-        $this->assertNotNull($userFromRepository);
-        $this->assertEquals($this->username, $userFromRepository->getUsername());
-        $this->assertEquals($this->password, $userFromRepository->getPassword());
-        $this->assertEquals($this->email, $userFromRepository->getEmail());
+        $this->signUpUserCommandHandler->handle($this->signUpUserCommand);
     }
 }
