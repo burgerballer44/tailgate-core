@@ -11,7 +11,6 @@ use Tailgate\Domain\Model\User\UserRepositoryInterface;
 class SignUpUserHandler
 {
     private $userRepository;
-    private $userDataTransformer;
 
     public function __construct(
         UserRepositoryInterface $userRepository
