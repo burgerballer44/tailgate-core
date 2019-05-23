@@ -14,7 +14,6 @@ class SignUpUserHandlerTest extends TestCase
     private $password = 'password';
     private $email = 'email@email.com';
     private $userRepository;
-    private $userDataTransformer;
     private $signUpUserCommand;
     private $signUpUserCommandHandler;
 
