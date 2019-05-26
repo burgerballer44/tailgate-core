@@ -5,9 +5,6 @@ namespace Tailgate\Application\Command\User;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 
-/**
- * handles a person attempting to sign up
- */
 class SignUpUserHandler
 {
     private $userRepository;

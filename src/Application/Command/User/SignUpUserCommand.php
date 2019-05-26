@@ -2,9 +2,6 @@
 
 namespace Tailgate\Application\Command\User;
 
-/**
- * data representing a person signing up
- */
 class SignUpUserCommand
 {
     private $username;

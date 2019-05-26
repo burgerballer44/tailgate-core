@@ -35,7 +35,8 @@ class SignUpUserHandlerTest extends TestCase
             ->method('add')
             ->with($this->callback(function($user) {
                 return $user instanceof User;
-            }));
+            }
+        ));
 
         $this->signUpUserCommandHandler = new SignUpUserHandler(
             $this->userRepository
