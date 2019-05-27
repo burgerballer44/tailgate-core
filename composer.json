@@ -3,6 +3,7 @@
     "description": "score prediction with friends",
     "type": "project",
     "license": "MIT",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "authors": [
         {
