@@ -49,7 +49,7 @@ class Group implements RecordsEvents, IsEventSourced
 
     public static function reconstituteFrom(AggregateHistory $aggregateHistory)
     {
-        $group = new Group($aggregateHistory->getAggregateId(), '', '', '');
+        $group = new Group($aggregateHistory->getAggregateId(), '');
 
         foreach ($aggregateHistory as $event) {
             $group->apply($event);

@@ -12,8 +12,6 @@ class GroupTest extends TestCase
 {
     private $id;
     private $name;
-    private $password;
-    private $email;
 
     public function setUp()
     {
