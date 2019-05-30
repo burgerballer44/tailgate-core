@@ -4,6 +4,7 @@ namespace Tailgate\Application\Command\Group;
 
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
+use Tailgate\Domain\Model\User\UserId;
 
 class CreateGroupHandler
 {
@@ -17,10 +18,12 @@ class CreateGroupHandler
     public function handle(CreateGroupCommand $createGroupCommand)
     {
         $name = $createGroupCommand->getName();
+        $ownerId = $createGroupCommand->getOwnerId();
 
         $group = Group::create(
             $this->groupRepository->nextIdentity(),
-            $name
+            $name,
+            new UserId($ownerId)
         );
         $this->groupRepository->add($group);
     }

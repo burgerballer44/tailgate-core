@@ -6,19 +6,23 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\CreateGroupCommand;
 use Tailgate\Application\Command\Group\CreateGroupHandler;
 use Tailgate\Domain\Model\Group\Group;
+use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
 
 class CreateGroupHandlerTest extends TestCase
 {
-    private $name = 'groupName';
     private $groupRepository;
     private $createGroupCommand;
     private $CreateGroupHandler;
 
     public function setUp()
     {
+        $name = 'groupName';
+        $ownerId = new UserId('ownerId');
+
         $this->createGroupCommand = new CreateGroupCommand(
-            $this->name
+            $name,
+            $ownerId
         );
 
         $this->groupRepository = $this->getMockBuilder(GroupRepository::class)
@@ -29,8 +33,13 @@ class CreateGroupHandlerTest extends TestCase
          $this->groupRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($group) {
-                return $group instanceof Group;
+            ->with($this->callback(function($group) use (
+                $name,
+                $ownerId
+            ) {
+                return $group instanceof Group
+                && $group->getName() === $name
+                && $group->getOwnerId() === (string) $ownerId;
             }
         ));
 
