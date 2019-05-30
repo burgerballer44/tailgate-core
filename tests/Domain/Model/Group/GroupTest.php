@@ -47,6 +47,7 @@ class GroupTest extends TestCase
         $this->assertTrue($events[0]->getAggregateId()->equals($this->id));
         $this->assertEquals($this->name, $events[0]->getName());
         $this->assertEquals($this->ownerId, $events[0]->getOwnerId());
+        $this->assertTrue($events[0]->getOccuredOn() instanceof \DateTimeImmutable);
 
         $this->assertCount(0, $group->getRecordedEvents());
     }

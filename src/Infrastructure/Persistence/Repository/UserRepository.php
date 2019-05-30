@@ -4,17 +4,21 @@ namespace Tailgate\Infrastructure\Persistence\Repository;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
+use Tailgate\Common\EventStore\EventStoreInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Domain\User\UserProjectionInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
     private $eventStore;
     private $userProjection;
 
-    public function __construct($eventStore, $userProjection)
-    {
+    public function __construct(
+        EventStoreInterface $eventStore,
+        UserProjectionInterface $userProjection
+    ) {
         $this->eventStore = $eventStore;
         $this->userProjection = $userProjection;
     }

@@ -49,6 +49,7 @@ class UserTest extends TestCase
         $this->assertEquals($this->username, $events[0]->getUsername());
         $this->assertEquals($this->password, $events[0]->getPassword());
         $this->assertEquals($this->email, $events[0]->getEmail());
+        $this->assertTrue($events[0]->getOccuredOn() instanceof \DateTimeImmutable);
 
         $this->assertCount(0, $user->getRecordedEvents());
     }

@@ -10,6 +10,7 @@ class UserSignedUp implements DomainEvent
     private $username;
     private $password;
     private $email;
+    private $occuredOn;
 
     public function __construct(UserId $userId, $username, $password, $email)
     {
@@ -17,6 +18,7 @@ class UserSignedUp implements DomainEvent
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
+        $this->occurredOn = new \DateTimeImmutable();
     }
 
     public function getAggregateId()
@@ -37,5 +39,10 @@ class UserSignedUp implements DomainEvent
     public function getEmail()
     {
         return $this->email;
+    }
+
+    public function getOccuredOn()
+    {
+        return $this->occurredOn;
     }
 }
