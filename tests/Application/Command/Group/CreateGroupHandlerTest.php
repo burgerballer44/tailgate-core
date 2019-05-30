@@ -10,7 +10,7 @@ use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
 
 class CreateGroupHandlerTest extends TestCase
 {
-    private $groupName = 'groupName';
+    private $name = 'groupName';
     private $groupRepository;
     private $createGroupCommand;
     private $CreateGroupHandler;
@@ -18,7 +18,7 @@ class CreateGroupHandlerTest extends TestCase
     public function setUp()
     {
         $this->createGroupCommand = new CreateGroupCommand(
-            $this->groupName
+            $this->name
         );
 
         $this->groupRepository = $this->getMockBuilder(GroupRepository::class)
