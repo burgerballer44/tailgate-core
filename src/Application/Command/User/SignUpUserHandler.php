@@ -19,6 +19,9 @@ class SignUpUserHandler
         $password = $signUpUserCommand->getPassword();
         $email = $signUpUserCommand->getEmail();
 
+        // reminder: password_repeat should be checked before it touches the command
+        // Todo: check unique username, email
+
         $user = User::create(
             $this->userRepository->nextIdentity(),
             $username,
