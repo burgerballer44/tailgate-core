@@ -31,7 +31,7 @@ class SignUpUserHandlerTest extends TestCase
             ->setMethods(['add'])
             ->getMock();
 
-         $this->userRepository
+        $this->userRepository
             ->expects($this->once())
             ->method('add')
             ->with($this->callback(function($user) use (

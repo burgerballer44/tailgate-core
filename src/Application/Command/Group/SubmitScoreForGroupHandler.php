@@ -26,9 +26,11 @@ class SubmitScoreForGroupHandler
 
         $group = $this->groupRepository->get(GroupID::fromString($groupId));
 
-        // cannot submit another score
-        // cannot submit score if game has started
-        // cannot submit score someone else has
+        //Todo
+        // group can have a rule list that they can choose to follow
+            // cannot submit another score
+            // cannot submit score if game has started
+            // cannot submit score someone else has
 
         $group->submitScore(
             GroupId::fromString($groupId),

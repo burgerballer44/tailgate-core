@@ -52,6 +52,11 @@ class Group implements RecordsEvents, IsEventSourced
         return (string) $this->ownerId;
     }
 
+    public function getScores()
+    {
+        return $this->scores;
+    }
+
     public function getRecordedEvents()
     {
         return new DomainEvents($this->recordedEvents);

@@ -8,7 +8,7 @@ use Tailgate\Common\EventStore\EventStoreInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
-use Tailgate\Domain\User\UserProjectionInterface;
+use Tailgate\Domain\Model\User\UserProjectionInterface;
 
 class UserRepository implements UserRepositoryInterface
 {

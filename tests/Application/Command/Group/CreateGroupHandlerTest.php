@@ -48,7 +48,7 @@ class CreateGroupHandlerTest extends TestCase
         );
     }
 
-    public function testItAttemptsToAddANewGroupToTheGroupRepository()
+    public function testItAddsANewGroupToTheRepository()
     {
         $this->createGroupHandler->handle($this->createGroupCommand);
     }

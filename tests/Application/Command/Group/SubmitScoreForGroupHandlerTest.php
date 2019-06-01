@@ -7,6 +7,7 @@ use Tailgate\Application\Command\Group\SubmitScoreForGroupCommand;
 use Tailgate\Application\Command\Group\SubmitScoreForGroupHandler;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\Score;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Domain\Model\Game\GameId;
@@ -61,6 +62,7 @@ class SubmitScoreForGroupHandlerTest extends TestCase
                 $awayTeamPrediction
             ) {
                 $events = $group->getRecordedEvents();
+                $scores = $group->getScores();
 
                 return $events[0] instanceof ScoreSubmitted
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
@@ -69,7 +71,9 @@ class SubmitScoreForGroupHandlerTest extends TestCase
                 && $events[0]->getGameId()->equals(GameId::fromString($gameId))
                 && $events[0]->getHomeTeamPrediction() == $homeTeamPrediction
                 && $events[0]->getAwayTeamPrediction() == $awayTeamPrediction
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
+                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable
+                && 1 == count($scores)
+                && $scores[0] instanceof Score;
             }
         ));
         
@@ -78,7 +82,7 @@ class SubmitScoreForGroupHandlerTest extends TestCase
         );
     }
 
-    public function testItAttemptsToAddANewGroupScoreToAGroup()
+    public function testItAddsAGroupScoreToAGroupInTheRepository()
     {
         $this->submitScoreForGroupHandler->handle($this->submitScoreForGroupCommand);
     }

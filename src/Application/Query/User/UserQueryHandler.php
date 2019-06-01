@@ -16,6 +16,6 @@ class UserQueryHandler
 
     public function handle(UserQuery $userQuery)
     {
-        return $this->userViewRepository->get(new UserId($userQuery->getUserId()));
+        return $this->userViewRepository->get(UserId::fromString($userQuery->getUserId()));
     }
 }

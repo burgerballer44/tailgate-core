@@ -11,11 +11,11 @@ class SubmitScoreForGroupCommand
     private $awayTeamPrediction;
 
     public function __construct(
-        $groupId,
-        $userId,
-        $gameId,
-        $homeTeamPrediction,
-        $awayTeamPrediction
+        string $groupId,
+        string $userId,
+        string $gameId,
+        int $homeTeamPrediction,
+        int $awayTeamPrediction
     )
     {
         $this->groupId = $groupId;
