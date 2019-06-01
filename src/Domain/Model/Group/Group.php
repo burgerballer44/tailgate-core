@@ -8,6 +8,7 @@ use Buttercup\Protects\DomainEvents;
 use Buttercup\Protects\IsEventSourced;
 use Buttercup\Protects\RecordsEvents;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Game\GameId;
 use Verraes\ClassFunctions\ClassFunctions;
 
 class Group implements RecordsEvents, IsEventSourced
@@ -15,6 +16,7 @@ class Group implements RecordsEvents, IsEventSourced
     private $groupId;
     private $name;
     private $ownerId;
+    private $scores = [];
     private $recordedEvents = [];
 
     private function __construct($groupId, $name, $ownerId)
@@ -50,11 +52,6 @@ class Group implements RecordsEvents, IsEventSourced
         return (string) $this->ownerId;
     }
 
-    private function recordThat(DomainEvent $domainEvent)
-    {
-        $this->recordedEvents[] = $domainEvent;
-    }
-
     public function getRecordedEvents()
     {
         return new DomainEvents($this->recordedEvents);
@@ -76,15 +73,53 @@ class Group implements RecordsEvents, IsEventSourced
         return $group;
     }
 
+    public function submitScore(GroupId $groupId, UserId $userId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
+    {
+        $this->applyAndRecordThat(
+            new ScoreSubmitted(
+                new ScoreId(),
+                $groupId,
+                $userId,
+                $gameId,
+                $homeTeamPrediction,
+                $awayTeamPrediction
+            )
+        );
+    }
+
     private function apply($anEvent)
     {
         $method = 'apply' . ClassFunctions::short($anEvent);
         $this->$method($anEvent);
     }
 
+    private function recordThat(DomainEvent $domainEvent)
+    {
+        $this->recordedEvents[] = $domainEvent;
+    }
+
+    private function applyAndRecordThat(DomainEvent $aDomainEvent)
+    {
+        $this->recordThat($aDomainEvent);
+        $this->apply($aDomainEvent);
+    }
+
     private function applyGroupCreated(GroupCreated $event)
     {
         $this->name = $event->getName();
         $this->ownerId = $event->getOwnerId();
+    }
+
+    private function applyScoreSubmitted(ScoreSubmitted $event)
+    {
+        $this->scores[] = Score::create(
+            $event->getScoreId(),
+            $event->getGroupId(),
+            $event->getUserId(),
+            $event->getGameId(),
+            $event->getHomeTeamPrediction(),
+            $event->getAwayTeamPrediction(),
+            $event->getOccurredOn()
+        );
     }
 }

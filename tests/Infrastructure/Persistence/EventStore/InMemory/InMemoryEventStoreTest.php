@@ -12,7 +12,6 @@ use Tailgate\Infrastructure\Persistence\EventStore\InMemory\InMemoryEventStore;
 
 class InMemoryEventStoreTest extends TestCase
 {
-
     public function testItAddsDomainEventsAndCanReturnAggregateHistory()
     {
         $id1 = new UserId('idToCheck1');

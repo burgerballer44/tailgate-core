@@ -23,8 +23,9 @@ class CreateGroupHandler
         $group = Group::create(
             $this->groupRepository->nextIdentity(),
             $name,
-            new UserId($ownerId)
+            UserId::fromString($ownerId)
         );
+        
         $this->groupRepository->add($group);
     }
 }

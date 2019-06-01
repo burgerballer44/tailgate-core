@@ -8,7 +8,7 @@ use Tailgate\Common\EventStore\EventStoreInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Group\GroupProjectionInterface;
+use Tailgate\Domain\Model\Group\GroupProjectionInterface;
 
 class GroupRepository implements GroupRepositoryInterface
 {
@@ -17,7 +17,7 @@ class GroupRepository implements GroupRepositoryInterface
 
     public function __construct(
         EventStoreInterface $eventStore,
-        GroupProjectionInterface $userProjection
+        GroupProjectionInterface $groupProjection
     ) {
         $this->eventStore = $eventStore;
         $this->groupProjection = $groupProjection;
