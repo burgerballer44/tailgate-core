@@ -13,6 +13,10 @@ use Verraes\ClassFunctions\ClassFunctions;
 
 class Group implements RecordsEvents, IsEventSourced
 {
+    const G_ROLE_OWNER = 10; // owns the group
+    const G_ROLE_ADMIN = 20; // someone who can do owner like things
+    const G_ROLE_MEMBER = 30; // regular user who can submti scores
+
     private $groupId;
     private $name;
     private $ownerId;

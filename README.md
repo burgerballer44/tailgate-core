@@ -3,5 +3,27 @@
 
 Score prediction with friends
 
-#### Todo
-Username and email must be unique
+#### Todo List
+
+##### User
+* invite codes to invite someone to use the site as part of your group
+* password reset token for resetting passwords
+* authorization key for auth stuff
+
+##### Group
+* generate access code so other users can search for and join group
+* message for describing the group
+* add members to group
+* change group role of members
+* group owner role should match owner_id of group
+* create rules/rule list that a group can follow
+
+##### Follower
+
+##### Team
+
+##### Game
+
+##### Sport
+
+##### Season

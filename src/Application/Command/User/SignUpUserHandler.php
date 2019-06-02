@@ -26,7 +26,7 @@ class SignUpUserHandler
         $email = $signUpUserCommand->getEmail();
 
         // check for unique username and email
-        // emailInterface - place it here or...something asynchronous
+        // emailInterface to send confirmation email - place it here or...something asynchronous
 
         $user = User::create(
             $this->userRepository->nextIdentity(),
