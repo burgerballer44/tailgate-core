@@ -14,7 +14,7 @@ class SignUpUserHandlerTest extends TestCase
     private $userRepository;
     private $passwordHashing;
     private $signUpUserCommand;
-    private $signUpUserCommandHandler;
+    private $signUpUserHandler;
 
     public function setUp()
     {
@@ -54,7 +54,7 @@ class SignUpUserHandlerTest extends TestCase
             ->method('hash')
             ->willReturn($password);
 
-        $this->signUpUserCommandHandler = new SignUpUserHandler(
+        $this->signUpUserHandler = new SignUpUserHandler(
             $this->userRepository,
             $this->passwordHashing
         );
@@ -62,6 +62,6 @@ class SignUpUserHandlerTest extends TestCase
 
     public function testItAttemptsToAddAUserToTheUserRepository()
     {
-        $this->signUpUserCommandHandler->handle($this->signUpUserCommand);
+        $this->signUpUserHandler->handle($this->signUpUserCommand);
     }
 }
