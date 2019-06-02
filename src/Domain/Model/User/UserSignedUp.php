@@ -12,7 +12,7 @@ class UserSignedUp implements DomainEvent
     private $email;
     private $status;
     private $role;
-    private $occuredOn;
+    private $occurredOn;
 
     public function __construct(
         UserId $userId,
@@ -61,7 +61,7 @@ class UserSignedUp implements DomainEvent
         return $this->role;
     }
 
-    public function getOccuredOn()
+    public function getOccurredOn()
     {
         return $this->occurredOn;
     }

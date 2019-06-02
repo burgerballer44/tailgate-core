@@ -53,7 +53,7 @@ class UserTest extends TestCase
         $this->assertEquals($this->email, $events[0]->getEmail());
         $this->assertEquals(User::STATUS_PENDING, $events[0]->getStatus());
         $this->assertEquals(User::ROLE_USER, $events[0]->getRole());
-        $this->assertTrue($events[0]->getOccuredOn() instanceof \DateTimeImmutable);
+        $this->assertTrue($events[0]->getOccurredOn() instanceof \DateTimeImmutable);
 
         $this->assertCount(0, $user->getRecordedEvents());
     }

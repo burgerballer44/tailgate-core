@@ -10,7 +10,7 @@ class GroupCreated implements DomainEvent
     private $groupId;
     private $name;
     private $ownerId;
-    private $occuredOn;
+    private $occurredOn;
 
     public function __construct(GroupId $groupId, $name, UserId $ownerId)
     {
@@ -35,7 +35,7 @@ class GroupCreated implements DomainEvent
         return $this->ownerId;
     }
 
-    public function getOccuredOn()
+    public function getOccurredOn()
     {
         return $this->occurredOn;
     }
