@@ -8,16 +8,26 @@ class UserSignedUp implements DomainEvent
 {
     private $userId;
     private $username;
-    private $password;
+    private $passwordHash;
     private $email;
+    private $status;
+    private $role;
     private $occuredOn;
 
-    public function __construct(UserId $userId, $username, $password, $email)
-    {
+    public function __construct(
+        UserId $userId,
+        $username,
+        $passwordHash,
+        $email,
+        $status,
+        $role
+    ) {
         $this->userId = $userId;
         $this->username = $username;
-        $this->password = $password;
+        $this->passwordHash = $passwordHash;
         $this->email = $email;
+        $this->status = $status;
+        $this->role = $role;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
@@ -31,14 +41,24 @@ class UserSignedUp implements DomainEvent
         return $this->username;
     }
 
-    public function getPassword()
+    public function getPasswordHash()
     {
-        return $this->password;
+        return $this->passwordHash;
     }
 
     public function getEmail()
     {
         return $this->email;
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function getRole()
+    {
+        return $this->role;
     }
 
     public function getOccuredOn()

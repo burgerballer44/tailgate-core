@@ -11,26 +11,59 @@ use Verraes\ClassFunctions\ClassFunctions;
 
 class User implements RecordsEvents, IsEventSourced
 {
+    const ROLE_USER = 10; // the average user, normal people who sign up
+    const ROLE_ADMIN = 20; // an important person who can mostly do whatever
+    const ROLE_DEVELOPER = 30; // more than an admin who can do whatever
+
+    const STATUS_ACTIVE = 10; // can use the app
+    const STATUS_PENDING = 20; // user who signs up but needs to confirm email
+    const STATUS_INVITED = 30; // user who was invited by an admin
+    const STATUS_DELETED = 99; // user who is deleted
+
     private $userId;
     private $username;
-    private $password;
+    private $passwordHash;
     private $email;
+    private $status;
+    private $role;
     private $recordedEvents = [];
 
-    private function __construct($userId, $username, $password, $email)
-    {
+    private function __construct(
+        $userId,
+        $username,
+        $passwordHash,
+        $email,
+        $status,
+        $role
+    ) {
         $this->userId = $userId;
         $this->username = $username;
-        $this->password = $password;
+        $this->passwordHash = $passwordHash;
         $this->email = $email;
+        $this->status = $status;
+        $this->role = $role;
     }
 
-    public static function create(UserId $userId, $username, $password, $email)
+    public static function create(UserId $userId, $username, $passwordHash, $email)
     {
-        $newUser = new User($userId, $username, $password, $email);
+        $newUser = new User(
+            $userId,
+            $username,
+            $passwordHash,
+            $email,
+            User::STATUS_PENDING,
+            User::ROLE_USER
+        );
 
         $newUser->recordThat(
-            new UserSignedUp($userId, $username, $password, $email)
+            new UserSignedUp(
+                $userId,
+                $username,
+                $passwordHash,
+                $email,
+                User::STATUS_PENDING,
+                User::ROLE_USER
+            )
         );
 
         return $newUser;
@@ -46,9 +79,9 @@ class User implements RecordsEvents, IsEventSourced
         return $this->username;
     }
 
-    public function getPassword()
+    public function getPasswordHash()
     {
-        return $this->password;
+        return $this->passwordHash;
     }
 
     public function getEmail()
@@ -73,7 +106,9 @@ class User implements RecordsEvents, IsEventSourced
 
     public static function reconstituteFrom(AggregateHistory $aggregateHistory)
     {
-        $user = new User($aggregateHistory->getAggregateId(), '', '', '');
+        $user = new User(
+            $aggregateHistory->getAggregateId(), '', '', '', '', ''
+        );
 
         foreach ($aggregateHistory as $event) {
             $user->apply($event);
@@ -91,7 +126,9 @@ class User implements RecordsEvents, IsEventSourced
     private function applyUserSignedUp(UserSignedUp $event)
     {
         $this->username = $event->getUsername();
-        $this->password = $event->getPassword();
+        $this->passwordHash = $event->getPasswordHash();
         $this->email = $event->getEmail();
+        $this->status = $event->getStatus();
+        $this->role = $event->getRole();
     }
 }

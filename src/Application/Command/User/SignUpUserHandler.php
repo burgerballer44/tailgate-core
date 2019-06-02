@@ -4,13 +4,19 @@ namespace Tailgate\Application\Command\User;
 
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
 
 class SignUpUserHandler
 {
     private $userRepository;
+    private $passwordHashing;
 
-    public function __construct(UserRepositoryInterface $userRepository) {
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        PasswordHashingInterface $passwordHashing
+    ) {
         $this->userRepository = $userRepository;
+        $this->passwordHashing = $passwordHashing;
     }
 
     public function handle(SignUpUserCommand $signUpUserCommand)
@@ -19,13 +25,13 @@ class SignUpUserHandler
         $password = $signUpUserCommand->getPassword();
         $email = $signUpUserCommand->getEmail();
 
-        // reminder: password_repeat should be checked before it touches the command
-        // Todo: check unique username, email
+        // check for unique username and email
+        // emailInterface - place it here or...something asynchronous
 
         $user = User::create(
             $this->userRepository->nextIdentity(),
             $username,
-            $password,
+            $this->passwordHashing->hash($password),
             $email
         );
 

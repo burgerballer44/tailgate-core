@@ -12,20 +12,22 @@ class UserTest extends TestCase
 {
     private $id;
     private $username;
-    private $password;
+    private $passwordHash;
     private $email;
 
     public function setUp()
     {
         $this->id = new UserId('idToCheck');
         $this->username = 'username';
-        $this->password = 'password';
+        $this->passwordHash = 'password';
         $this->email = 'email@email.com';
     }
 
     public function testUserShouldBeTheSameAfterReconstitution()
     {
-        $user = User::create($this->id, $this->username, $this->password, $this->email);
+        $user = User::create(
+            $this->id, $this->username, $this->passwordHash, $this->email
+        );
         $events = $user->getRecordedEvents();
         $user->clearRecordedEvents();
 
@@ -39,7 +41,7 @@ class UserTest extends TestCase
 
     public function testUserSignedUpEventOccursWhenUserIsCreated()
     {
-        $user = User::create($this->id, $this->username, $this->password, $this->email);
+        $user = User::create($this->id, $this->username, $this->passwordHash, $this->email);
         $events = $user->getRecordedEvents();
         $user->clearRecordedEvents();
 
@@ -47,8 +49,10 @@ class UserTest extends TestCase
         $this->assertTrue($events[0] instanceof UserSignedUp);
         $this->assertTrue($events[0]->getAggregateId()->equals($this->id));
         $this->assertEquals($this->username, $events[0]->getUsername());
-        $this->assertEquals($this->password, $events[0]->getPassword());
+        $this->assertEquals($this->passwordHash, $events[0]->getPasswordHash());
         $this->assertEquals($this->email, $events[0]->getEmail());
+        $this->assertEquals(User::STATUS_PENDING, $events[0]->getStatus());
+        $this->assertEquals(User::ROLE_USER, $events[0]->getRole());
         $this->assertTrue($events[0]->getOccuredOn() instanceof \DateTimeImmutable);
 
         $this->assertCount(0, $user->getRecordedEvents());

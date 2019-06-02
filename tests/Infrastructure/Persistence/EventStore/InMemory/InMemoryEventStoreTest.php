@@ -19,9 +19,9 @@ class InMemoryEventStoreTest extends TestCase
         $id3 = new UserId('idToNotFind');
 
         $domainEvents = new DomainEvents([
-            new UserSignedUp($id1, 'username1', 'password1', 'email1'),
-            new UserSignedUp($id1, 'username2', 'password2', 'email2'),
-            new UserSignedUp($id2, 'username3', 'password3', 'email3'),
+            new UserSignedUp($id1, 'username1', 'password1', 'email1', 'status', 'role'),
+            new UserSignedUp($id1, 'username2', 'password2', 'email2', 'status', 'role'),
+            new UserSignedUp($id2, 'username3', 'password3', 'email3', 'status', 'role'),
         ]);
         $eventStore = new InMemoryEventStore;
 
