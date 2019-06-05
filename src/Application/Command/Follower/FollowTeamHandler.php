@@ -21,8 +21,6 @@ class FollowTeamHandler
         $groupId = $followTeamCommand->getGroupId();
         $teamId = $followTeamCommand->getTeamId();
 
-        // confirm that team and group exists
-
         $follower = Follower::create(
             $this->followerRepository->nextIdentity(),
             GroupId::fromString($groupId),

@@ -89,6 +89,16 @@ class User implements RecordsEvents, IsEventSourced
         return $this->email;
     }
 
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    public function getRole()
+    {
+        return $this->role;
+    }
+
     private function recordThat(DomainEvent $domainEvent)
     {
         $this->recordedEvents[] = $domainEvent;

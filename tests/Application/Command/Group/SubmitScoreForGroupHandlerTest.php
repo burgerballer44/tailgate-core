@@ -12,46 +12,58 @@ use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Domain\Model\Game\GameId;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\EventStore\InMemory\InMemoryEventStore;
-use Tailgate\Infrastructure\Persistence\Projection\InMemory\InMemoryGroupProjectionViewRepository;
 use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
 
 class SubmitScoreForGroupHandlerTest extends TestCase
 {
-    private $groupRepository;
+    private $groupId = 'groupId';
+    private $userId = 'userId';
+    private $gameId = 'gameId';
+    private $groupName = 'groupName';
+    private $homeTeamPrediction = '70';
+    private $awayTeamPrediction = '60';
+    private $group;
     private $submitScoreForGroupCommand;
-    private $submitScoreForGroupHandler;
 
     public function setUp()
     {
-        $groupId = 'groupId';
-        $userId = 'userId';
-        $gameId = 'gameId';
-        $homeTeamPrediction = '70';
-        $awayTeamPrediction = '60';
-
-        $group = Group::create(GroupId::fromString($groupId), 'groupName', UserId::fromString($userId));
-        $group->clearRecordedEvents();
+        $this->group = Group::create(GroupId::fromString($this->groupId), $this->groupName, UserId::fromString($this->userId));
+        $this->group->clearRecordedEvents();
 
         $this->submitScoreForGroupCommand = new SubmitScoreForGroupCommand(
-            $groupId,
-            $userId,
-            $gameId,
-            $homeTeamPrediction,
-            $awayTeamPrediction
+            $this->groupId,
+            $this->userId,
+            $this->gameId,
+            $this->homeTeamPrediction,
+            $this->awayTeamPrediction
         );
+    }
 
-        $this->groupRepository = $this->getMockBuilder(GroupRepository::class)
+    public function testItAddsScoreSubmittedEventToAGroupInTheGroupRepository()
+    {
+        $groupId = $this->groupId;
+        $userId = $this->userId;
+        $gameId = $this->gameId;
+        $groupName = $this->groupName;
+        $homeTeamPrediction = $this->homeTeamPrediction;
+        $awayTeamPrediction = $this->awayTeamPrediction;
+        $group = $this->group;
+
+        // only needs the get and add method
+        $groupRepository = $this->getMockBuilder(GroupRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'add'])
             ->getMock();
 
-        $this->groupRepository
+        // the get method should be called once and will return the group
+        $groupRepository
            ->expects($this->once())
            ->method('get')
            ->willReturn($group);
 
-        $this->groupRepository
+        // the add method should be called once
+        // the group object should have the ScoreSubmitted event
+        $groupRepository
             ->expects($this->once())
             ->method('add')
             ->with($this->callback(function($group) use (
@@ -77,13 +89,10 @@ class SubmitScoreForGroupHandlerTest extends TestCase
             }
         ));
         
-        $this->submitScoreForGroupHandler = new SubmitScoreForGroupHandler(
-            $this->groupRepository
+        $submitScoreForGroupHandler = new SubmitScoreForGroupHandler(
+            $groupRepository
         );
-    }
 
-    public function testItAddsAGroupScoreToAGroupInTheRepository()
-    {
-        $this->submitScoreForGroupHandler->handle($this->submitScoreForGroupCommand);
+        $submitScoreForGroupHandler->handle($this->submitScoreForGroupCommand);
     }
 }

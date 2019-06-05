@@ -8,10 +8,11 @@ use Tailgate\Domain\Model\Game\GameId;
 class Score
 {
     private $scoreId;
-    private $name;
-    private $ownerId;
-    private $scores = [];
-    private $recordedEvents = [];
+    private $groupId;
+    private $userId;
+    private $gameId;
+    private $homeTeamPrediction;
+    private $awayTeamPrediction;
 
     private function __construct(
         $scoreId,
@@ -47,5 +48,40 @@ class Score
         );
 
         return $newScore;
+    }
+
+    public function getScoreId()
+    {
+        return $this->scoreId;
+    }
+
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    public function getGameId()
+    {
+        return $this->gameId;
+    }
+
+    public function getHomeTeamPrediction()
+    {
+        return $this->homeTeamPrediction;
+    }
+
+    public function getAwayTeamPrediction()
+    {
+        return $this->awayTeamPrediction;
     }
 }

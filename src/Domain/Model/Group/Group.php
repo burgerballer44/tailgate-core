@@ -13,14 +13,14 @@ use Verraes\ClassFunctions\ClassFunctions;
 
 class Group implements RecordsEvents, IsEventSourced
 {
-    const G_ROLE_OWNER = 10; // owns the group
-    const G_ROLE_ADMIN = 20; // someone who can do owner like things
-    const G_ROLE_MEMBER = 30; // regular user who can submti scores
+    const G_ROLE_ADMIN = 10; // someone who can do manage the gorup
+    const G_ROLE_MEMBER = 20; // regular user who can submit scores
 
     private $groupId;
     private $name;
     private $ownerId;
     private $scores = [];
+    private $members = [];
     private $recordedEvents = [];
 
     private function __construct($groupId, $name, $ownerId)
@@ -36,6 +36,15 @@ class Group implements RecordsEvents, IsEventSourced
 
         $newGroup->recordThat(
             new GroupCreated($groupId, $name, $ownerId)
+        );
+
+        $newGroup->applyAndRecordThat(
+            new MemberAdded(
+                new MemberId(),
+                $groupId,
+                $ownerId,
+                Group::G_ROLE_ADMIN
+            )
         );
 
         return $newGroup;
@@ -59,6 +68,11 @@ class Group implements RecordsEvents, IsEventSourced
     public function getScores()
     {
         return $this->scores;
+    }
+
+    public function getMembers()
+    {
+        return $this->members;
     }
 
     public function getRecordedEvents()
@@ -96,6 +110,18 @@ class Group implements RecordsEvents, IsEventSourced
         );
     }
 
+    public function addMember(GroupId $groupId, UserId $userId)
+    {
+        $this->applyAndRecordThat(
+            new MemberAdded(
+                new MemberId(),
+                $groupId,
+                $userId,
+                Group::G_ROLE_MEMBER
+            )
+        );
+    }
+
     private function apply($anEvent)
     {
         $method = 'apply' . ClassFunctions::short($anEvent);
@@ -129,6 +155,16 @@ class Group implements RecordsEvents, IsEventSourced
             $event->getHomeTeamPrediction(),
             $event->getAwayTeamPrediction(),
             $event->getOccurredOn()
+        );
+    }
+
+    private function applyMemberAdded(MemberAdded $event)
+    {
+        $this->members[] = Member::create(
+            $event->getMemberId(),
+            $event->getGroupId(),
+            $event->getUserId(),
+            $event->getGroupRole()
         );
     }
 }

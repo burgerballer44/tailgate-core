@@ -5,51 +5,59 @@ namespace Tailgate\Test\Application\Command\Group;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\CreateGroupCommand;
 use Tailgate\Application\Command\Group\CreateGroupHandler;
-use Tailgate\Domain\Model\Group\Group;
+use Tailgate\Domain\Model\Group\GroupCreated;
+use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
 
 class CreateGroupHandlerTest extends TestCase
 {
-    private $groupRepository;
+    private $groupName = 'groupName';
+    private $ownerId = 'ownerId';
     private $createGroupCommand;
-    private $CreateGroupHandler;
 
     public function setUp()
     {
-        $name = 'groupName';
-        $ownerId = new UserId('ownerId');
-
         $this->createGroupCommand = new CreateGroupCommand(
-            $name,
-            $ownerId
+            $this->groupName,
+            $this->ownerId
         );
+    }
 
-        $this->groupRepository = $this->getMockBuilder(GroupRepository::class)
+    public function testItAddsAGroupCreatedEventToTheGroupRepository()
+    {
+        $groupName = $this->groupName;
+        $ownerId = $this->ownerId;
+
+        // only needs the add method
+        $groupRepository = $this->getMockBuilder(GroupRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['add'])
             ->getMock();
 
-         $this->groupRepository
+        // the add method should be called once
+        // the group object should have the GroupCreated event
+        $groupRepository
             ->expects($this->once())
             ->method('add')
             ->with($this->callback(function($group) use (
-                $name,
+                $groupName,
                 $ownerId
             ) {
-                return $group instanceof Group
-                && $group->getName() === $name
-                && $group->getOwnerId() === (string) $ownerId;
+                $events = $group->getRecordedEvents();
+
+                return $events[0] instanceof GroupCreated
+                && $events[0]->getAggregateId() instanceof GroupId
+                && $events[0]->getName() === $groupName
+                && $events[0]->getOwnerId()->equals(UserId::fromString($ownerId))
+                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));
 
-        $this->createGroupHandler = new CreateGroupHandler(
-            $this->groupRepository
+        $createGroupHandler = new CreateGroupHandler(
+            $groupRepository
         );
-    }
 
-    public function testItAddsANewGroupToTheRepository()
-    {
-        $this->createGroupHandler->handle($this->createGroupCommand);
+        $createGroupHandler->handle($this->createGroupCommand);
     }
 }

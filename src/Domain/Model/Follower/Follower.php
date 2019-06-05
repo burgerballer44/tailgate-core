@@ -16,7 +16,6 @@ class Follower implements RecordsEvents, IsEventSourced
     private $followerId;
     private $groupId;
     private $teamId;
-
     private $recordedEvents = [];
 
     private function __construct($followerId, $groupId, $teamId)
