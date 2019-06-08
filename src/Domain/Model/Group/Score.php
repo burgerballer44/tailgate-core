@@ -60,11 +60,6 @@ class Score
         return $this->groupId;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function getUserId()
     {
         return $this->userId;

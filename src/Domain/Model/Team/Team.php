@@ -87,9 +87,9 @@ class Team extends AbstractEntity
     protected function applyTeamFollowed(TeamFollowed $event)
     {
         $this->followers[] = Follow::create(
-            $this->followId = $event->getFollowId(),
-            $this->teamId = $event->getTeamId(),
-            $this->groupId = $event->getGroupId()
+            $event->getFollowId(),
+            $event->getTeamId(),
+            $event->getGroupId()
         );
     }
 }
