@@ -24,7 +24,7 @@ class SubmitScoreForGroupHandler
         $homeTeamPrediction = $submitScoreForGroupCommand->getHomeTeamPrediction();
         $awayTeamPrediction = $submitScoreForGroupCommand->getAwayTeamPrediction();
 
-        $group = $this->groupRepository->get(GroupID::fromString($groupId));
+        $group = $this->groupRepository->get(GroupId::fromString($groupId));
 
         //Todo
         // group can have a rule list that they can choose to follow

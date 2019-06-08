@@ -17,6 +17,7 @@ class SignUpUserHandler
     ) {
         $this->userRepository = $userRepository;
         $this->passwordHashing = $passwordHashing;
+        $this->usernameValidator = $passwordHashing;
     }
 
     public function handle(SignUpUserCommand $signUpUserCommand)

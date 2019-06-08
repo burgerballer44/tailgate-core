@@ -9,26 +9,29 @@ Score prediction with friends
 * invite codes to invite someone to use the site as part of your group
 * password reset token for resetting passwords
 * authorization key for auth stuff
-* check for unique username and email on signUp
-* emailInterface to send confirmation email on SignUp - place it here or...something asynchronous
 * user update their own info
+* validation - check for unique username and email on signUp, update
+* validation - email confirmation
 
 ##### Group
 * generate access code so other users can search for and join group
 * message for describing the group
 * change group role of members
-* group owner role should match owner_id of group
+* limit numbers of members in group
+* limit numbers of teams followed
 * create rules/rule list that a group can follow
-* groups must have unique name
-* confirm grop and user exists when adding member
+* validation - groups must have unique name
+* validation - confirm group and user exists when adding member
+* validation - confirm the team and group exists when following
 
-##### Follower
-* confirm the team and group exists
 
 ##### Team
+* add team
 
 ##### Game
+* add game
 
 ##### Sport
 
 ##### Season
+* add season

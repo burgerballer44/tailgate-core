@@ -9,6 +9,7 @@ use Buttercup\Protects\IsEventSourced;
 use Buttercup\Protects\RecordsEvents;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Game\GameId;
+use Tailgate\Domain\Model\Team\TeamId;
 use Verraes\ClassFunctions\ClassFunctions;
 
 class Group implements RecordsEvents, IsEventSourced
@@ -21,6 +22,7 @@ class Group implements RecordsEvents, IsEventSourced
     private $ownerId;
     private $scores = [];
     private $members = [];
+    private $follows = [];
     private $recordedEvents = [];
 
     private function __construct($groupId, $name, $ownerId)
@@ -75,6 +77,11 @@ class Group implements RecordsEvents, IsEventSourced
         return $this->members;
     }
 
+    public function getFollows()
+    {
+        return $this->follows;
+    }
+
     public function getRecordedEvents()
     {
         return new DomainEvents($this->recordedEvents);
@@ -122,6 +129,17 @@ class Group implements RecordsEvents, IsEventSourced
         );
     }
 
+    public function followTeam(GroupId $groupId, TeamId $teamId)
+    {
+        $this->applyAndRecordThat(
+             new TeamFollowed(
+                new FollowId(),
+                $groupId,
+                $teamId
+            )
+        );
+    }
+
     private function apply($anEvent)
     {
         $method = 'apply' . ClassFunctions::short($anEvent);
@@ -165,6 +183,15 @@ class Group implements RecordsEvents, IsEventSourced
             $event->getGroupId(),
             $event->getUserId(),
             $event->getGroupRole()
+        );
+    }
+
+    private function applyTeamFollowed(TeamFollowed $event)
+    {
+        $this->follows[] = Follow::create(
+            $this->followId = $event->getFollowId(),
+            $this->groupId = $event->getGroupId(),
+            $this->teamId = $event->getTeamId()
         );
     }
 }

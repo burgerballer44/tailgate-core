@@ -6,12 +6,15 @@ use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\Follow;
+use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\Member;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\Score;
 use Tailgate\Domain\Model\Group\ScoreId;
-use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Game\GameId;
+use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Team\TeamId;
 
 class GroupTest extends TestCase
 {
@@ -101,5 +104,20 @@ class GroupTest extends TestCase
         $this->assertTrue($members[1]->getGroupId()->equals($this->groupId));
         $this->assertTrue($members[1]->getUserId()->equals($userId));
         $this->assertEquals($members[1]->getGroupRole(), Group::G_ROLE_MEMBER);
+    }
+
+    public function testFollowAddedWhenTeamIsFollowed()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $teamId = TeamId::fromString('teamId');
+
+        $group->followTeam($this->groupId, $teamId);
+        $follows = $group->getFollows();
+
+        $this->assertCount(1, $follows);
+        $this->assertTrue($follows[0] instanceof Follow);
+        $this->assertTrue($follows[0]->getFollowId() instanceof FollowId);
+        $this->assertTrue($follows[0]->getGroupId()->equals($this->groupId));
+        $this->assertTrue($follows[0]->getTeamId()->equals($teamId));
     }
 }
