@@ -22,7 +22,6 @@ class User extends AbstractEntity
     private $email;
     private $status;
     private $role;
-    private $recordedEvents = [];
 
     protected function __construct(
         $userId,
