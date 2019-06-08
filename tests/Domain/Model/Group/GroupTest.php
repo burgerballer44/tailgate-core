@@ -73,7 +73,7 @@ class GroupTest extends TestCase
         $homeTeamPrediction = '70';
         $awayTeamPrediction = '60';
 
-        $group->submitScore($this->groupId, $userId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
+        $group->submitScore($userId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
         $scores = $group->getScores();
 
         $this->assertCount(1, $scores);
@@ -91,7 +91,7 @@ class GroupTest extends TestCase
         $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
         $userId = UserId::fromString('userID');
 
-        $group->addMember($this->groupId, $userId);
+        $group->addMember($userId);
         $members = $group->getMembers();
 
         // 2 because of the owner and new member

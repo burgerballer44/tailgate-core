@@ -23,10 +23,7 @@ class AddMemberToGroupHandler
 
         $group = $this->groupRepository->get(GroupId::fromString($groupId));
 
-        $group->addMember(
-            GroupId::fromString($groupId),
-            UserId::fromString($userId)
-        );
+        $group->addMember(UserId::fromString($userId));
 
         $this->groupRepository->add($group);
     }

@@ -18,7 +18,6 @@ Score prediction with friends
 * message for describing the group
 * change group role of members
 * limit numbers of members in group
-* limit numbers of teams followed
 * create rules/rule list that a group can follow
 * validation - groups must have unique name
 * validation - confirm group and user exists when adding member
@@ -26,7 +25,7 @@ Score prediction with friends
 
 
 ##### Team
-* add team
+* limit numbers of teams followed
 
 ##### Game
 * add game

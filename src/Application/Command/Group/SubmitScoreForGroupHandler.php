@@ -33,7 +33,6 @@ class SubmitScoreForGroupHandler
             // cannot submit score someone else has
 
         $group->submitScore(
-            GroupId::fromString($groupId),
             UserId::fromString($userId),
             GameId::fromString($gameId),
             $homeTeamPrediction,

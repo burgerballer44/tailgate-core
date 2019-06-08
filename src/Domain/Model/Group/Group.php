@@ -81,12 +81,12 @@ class Group extends AbstractEntity
         return $this->follows;
     }
 
-    public function submitScore(GroupId $groupId, UserId $userId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
+    public function submitScore(UserId $userId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
     {
         $this->applyAndRecordThat(
             new ScoreSubmitted(
                 new ScoreId(),
-                $groupId,
+                $this->groupId,
                 $userId,
                 $gameId,
                 $homeTeamPrediction,
@@ -95,12 +95,12 @@ class Group extends AbstractEntity
         );
     }
 
-    public function addMember(GroupId $groupId, UserId $userId)
+    public function addMember(UserId $userId)
     {
         $this->applyAndRecordThat(
             new MemberAdded(
                 new MemberId(),
-                $groupId,
+                $this->groupId,
                 $userId,
                 Group::G_ROLE_MEMBER
             )
