@@ -5,7 +5,6 @@ namespace Tailgate\Domain\Model\Group;
 use Tailgate\Domain\Model\AbstractEntity;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Game\GameId;
-use Tailgate\Domain\Model\Team\TeamId;
 use Buttercup\Protects\IdentifiesAggregate;
 
 class Group extends AbstractEntity
@@ -108,17 +107,6 @@ class Group extends AbstractEntity
         );
     }
 
-    public function followTeam(GroupId $groupId, TeamId $teamId)
-    {
-        $this->applyAndRecordThat(
-             new TeamFollowed(
-                new FollowId(),
-                $groupId,
-                $teamId
-            )
-        );
-    }
-
     protected function applyGroupCreated(GroupCreated $event)
     {
         $this->name = $event->getName();
@@ -145,15 +133,6 @@ class Group extends AbstractEntity
             $event->getGroupId(),
             $event->getUserId(),
             $event->getGroupRole()
-        );
-    }
-
-    protected function applyTeamFollowed(TeamFollowed $event)
-    {
-        $this->follows[] = Follow::create(
-            $this->followId = $event->getFollowId(),
-            $this->groupId = $event->getGroupId(),
-            $this->teamId = $event->getTeamId()
         );
     }
 }

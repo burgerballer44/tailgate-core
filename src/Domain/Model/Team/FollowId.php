@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Domain\Model\Group;
+namespace Tailgate\Domain\Model\Team;
 
 use Ramsey\Uuid\Uuid;
 use Buttercup\Protects\IdentifiesAggregate;

@@ -1,31 +1,30 @@
 <?php
 
-namespace Tailgate\Test\Application\Command\Group;
+namespace Tailgate\Test\Application\Command\Team;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Application\Command\Group\FollowTeamCommand;
-use Tailgate\Application\Command\Group\FollowTeamHandler;
-use Tailgate\Domain\Model\Group\Group;
+use Tailgate\Application\Command\Team\FollowTeamCommand;
+use Tailgate\Application\Command\Team\FollowTeamHandler;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Group\FollowId;
-use Tailgate\Domain\Model\Group\TeamFollowed;
+use Tailgate\Domain\Model\Team\FollowId;
+use Tailgate\Domain\Model\Team\TeamFollowed;
+use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
+use Tailgate\Infrastructure\Persistence\Repository\TeamRepository;
 
 class FollowTeamHandlerTest extends TestCase
 {
     private $groupId = 'groupId';
     private $teamId = 'teamId';
-    private $userId = 'userId';
-    private $groupName = 'groupName';
+    private $designation = 'designation';
+    private $mascot = 'mascot';
     private $followTeamCommand;
-    private $group;
+    private $team;
 
     public function setUp()
     {
-        $this->group = Group::create(GroupId::fromString($this->groupId), $this->groupName, UserId::fromString($this->userId));
-        $this->group->clearRecordedEvents();
+        $this->team = Team::create(TeamId::fromString($this->teamId), $this->designation, $this->mascot);
+        $this->team->clearRecordedEvents();
 
         $this->followTeamCommand = new FollowTeamCommand(
             $this->groupId,
@@ -33,34 +32,34 @@ class FollowTeamHandlerTest extends TestCase
         );
     }
 
-    public function testItAttemptsToAddATeamFollowedEventToTheGroupRepository()
+    public function testItAttemptsToAddATeamFollowedEventToTheTeamRepository()
     {
         $groupId = $this->groupId;
         $teamId = $this->teamId;
-        $group = $this->group;
+        $team = $this->team;
 
         // only needs the get and add method
-        $groupRepository = $this->getMockBuilder(GroupRepository::class)
+        $teamRepository = $this->getMockBuilder(TeamRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'add'])
             ->getMock();
 
         // the get method should be called once and will return the group
-        $groupRepository
+        $teamRepository
            ->expects($this->once())
            ->method('get')
-           ->willReturn($group);
+           ->willReturn($team);
 
         // the add method should be called once
-        // the group object should have the TeamFollowed event
-        $groupRepository
+        // the team object should have the TeamFollowed event
+        $teamRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($group) use (
-                $groupId,
-                $teamId
+            ->with($this->callback(function($team) use (
+                $teamId,
+                $groupId
             ) {
-                $events = $group->getRecordedEvents();
+                $events = $team->getRecordedEvents();
 
                 return $events[0] instanceof TeamFollowed
                 && $events[0]->getAggregateId() instanceof GroupId
@@ -72,7 +71,7 @@ class FollowTeamHandlerTest extends TestCase
         ));
 
         $this->followTeamHandler = new FollowTeamHandler(
-            $groupRepository
+            $teamRepository
         );
 
         $this->followTeamHandler->handle($this->followTeamCommand);

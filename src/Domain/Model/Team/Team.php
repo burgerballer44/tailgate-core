@@ -4,12 +4,14 @@ namespace Tailgate\Domain\Model\Team;
 
 use Tailgate\Domain\Model\AbstractEntity;
 use Buttercup\Protects\IdentifiesAggregate;
+use Tailgate\Domain\Model\Group\GroupId;
 
 class Team extends AbstractEntity
 {
     private $teamId;
     private $designation;
     private $mascot;
+    private $followers;
 
     protected function __construct(
         $teamId,
@@ -60,9 +62,34 @@ class Team extends AbstractEntity
         return $this->mascot;
     }
 
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+
+    public function followTeam(GroupId $groupId)
+    {
+        $this->applyAndRecordThat(
+             new TeamFollowed(
+                new FollowId(),
+                $this->teamId,
+                $groupId
+            )
+        );
+    }
+
     protected function applyTeamAdded(TeamAdded $event)
     {
         $this->designation = $event->getDesignation();
         $this->mascot = $event->getMascot();
+    }
+
+    protected function applyTeamFollowed(TeamFollowed $event)
+    {
+        $this->followers[] = Follow::create(
+            $this->followId = $event->getFollowId(),
+            $this->teamId = $event->getTeamId(),
+            $this->groupId = $event->getGroupId()
+        );
     }
 }

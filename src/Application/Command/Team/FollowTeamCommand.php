@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Application\Command\Group;
+namespace Tailgate\Application\Command\Team;
 
 class FollowTeamCommand
 {
