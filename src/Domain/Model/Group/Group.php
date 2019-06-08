@@ -2,17 +2,13 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use Buttercup\Protects\DomainEvents;
-use Buttercup\Protects\IsEventSourced;
-use Buttercup\Protects\RecordsEvents;
+use Tailgate\Domain\Model\AbstractEntity;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Game\GameId;
 use Tailgate\Domain\Model\Team\TeamId;
-use Verraes\ClassFunctions\ClassFunctions;
+use Buttercup\Protects\IdentifiesAggregate;
 
-class Group implements RecordsEvents, IsEventSourced
+class Group extends AbstractEntity
 {
     const G_ROLE_ADMIN = 10; // someone who can do manage the gorup
     const G_ROLE_MEMBER = 20; // regular user who can submit scores
@@ -23,9 +19,8 @@ class Group implements RecordsEvents, IsEventSourced
     private $scores = [];
     private $members = [];
     private $follows = [];
-    private $recordedEvents = [];
 
-    private function __construct($groupId, $name, $ownerId)
+    protected function __construct($groupId, $name, $ownerId)
     {
         $this->groupId = $groupId;
         $this->name = $name;
@@ -50,6 +45,11 @@ class Group implements RecordsEvents, IsEventSourced
         );
 
         return $newGroup;
+    }
+
+    protected static function createEmptyEntity(IdentifiesAggregate $groupId)
+    {
+        return new Group($groupId, '', '');
     }
 
     public function getId()
@@ -80,27 +80,6 @@ class Group implements RecordsEvents, IsEventSourced
     public function getFollows()
     {
         return $this->follows;
-    }
-
-    public function getRecordedEvents()
-    {
-        return new DomainEvents($this->recordedEvents);
-    }
-
-    public function clearRecordedEvents()
-    {
-        $this->recordedEvents = [];
-    }
-
-    public static function reconstituteFrom(AggregateHistory $aggregateHistory)
-    {
-        $group = new Group($aggregateHistory->getAggregateId(), '', '');
-
-        foreach ($aggregateHistory as $event) {
-            $group->apply($event);
-        }
-
-        return $group;
     }
 
     public function submitScore(GroupId $groupId, UserId $userId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
@@ -140,30 +119,13 @@ class Group implements RecordsEvents, IsEventSourced
         );
     }
 
-    private function apply($anEvent)
-    {
-        $method = 'apply' . ClassFunctions::short($anEvent);
-        $this->$method($anEvent);
-    }
-
-    private function recordThat(DomainEvent $domainEvent)
-    {
-        $this->recordedEvents[] = $domainEvent;
-    }
-
-    private function applyAndRecordThat(DomainEvent $aDomainEvent)
-    {
-        $this->recordThat($aDomainEvent);
-        $this->apply($aDomainEvent);
-    }
-
-    private function applyGroupCreated(GroupCreated $event)
+    protected function applyGroupCreated(GroupCreated $event)
     {
         $this->name = $event->getName();
         $this->ownerId = $event->getOwnerId();
     }
 
-    private function applyScoreSubmitted(ScoreSubmitted $event)
+    protected function applyScoreSubmitted(ScoreSubmitted $event)
     {
         $this->scores[] = Score::create(
             $event->getScoreId(),
@@ -176,7 +138,7 @@ class Group implements RecordsEvents, IsEventSourced
         );
     }
 
-    private function applyMemberAdded(MemberAdded $event)
+    protected function applyMemberAdded(MemberAdded $event)
     {
         $this->members[] = Member::create(
             $event->getMemberId(),
@@ -186,7 +148,7 @@ class Group implements RecordsEvents, IsEventSourced
         );
     }
 
-    private function applyTeamFollowed(TeamFollowed $event)
+    protected function applyTeamFollowed(TeamFollowed $event)
     {
         $this->follows[] = Follow::create(
             $this->followId = $event->getFollowId(),

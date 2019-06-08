@@ -2,14 +2,10 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use Buttercup\Protects\DomainEvents;
-use Buttercup\Protects\IsEventSourced;
-use Buttercup\Protects\RecordsEvents;
-use Verraes\ClassFunctions\ClassFunctions;
+use Tailgate\Domain\Model\AbstractEntity;
+use Buttercup\Protects\IdentifiesAggregate;
 
-class User implements RecordsEvents, IsEventSourced
+class User extends AbstractEntity
 {
     const ROLE_USER = 10; // the average user, normal people who sign up
     const ROLE_ADMIN = 20; // an important person who can mostly do whatever
@@ -28,7 +24,7 @@ class User implements RecordsEvents, IsEventSourced
     private $role;
     private $recordedEvents = [];
 
-    private function __construct(
+    protected function __construct(
         $userId,
         $username,
         $passwordHash,
@@ -69,6 +65,11 @@ class User implements RecordsEvents, IsEventSourced
         return $newUser;
     }
 
+    protected static function createEmptyEntity(IdentifiesAggregate $userId)
+    {
+        return new User($userId, '', '', '', '', '');
+    }
+
     public function getId()
     {
         return (string) $this->userId;
@@ -99,41 +100,7 @@ class User implements RecordsEvents, IsEventSourced
         return $this->role;
     }
 
-    private function recordThat(DomainEvent $domainEvent)
-    {
-        $this->recordedEvents[] = $domainEvent;
-    }
-
-    public function getRecordedEvents()
-    {
-        return new DomainEvents($this->recordedEvents);
-    }
-
-    public function clearRecordedEvents()
-    {
-        $this->recordedEvents = [];
-    }
-
-    public static function reconstituteFrom(AggregateHistory $aggregateHistory)
-    {
-        $user = new User(
-            $aggregateHistory->getAggregateId(), '', '', '', '', ''
-        );
-
-        foreach ($aggregateHistory as $event) {
-            $user->apply($event);
-        }
-
-        return $user;
-    }
-
-    private function apply($anEvent)
-    {
-        $method = 'apply' . ClassFunctions::short($anEvent);
-        $this->$method($anEvent);
-    }
-
-    private function applyUserSignedUp(UserSignedUp $event)
+    protected function applyUserSignedUp(UserSignedUp $event)
     {
         $this->username = $event->getUsername();
         $this->passwordHash = $event->getPasswordHash();
