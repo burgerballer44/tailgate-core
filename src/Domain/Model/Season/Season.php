@@ -72,7 +72,7 @@ class Season extends AbstractEntity
 
     protected static function createEmptyEntity(IdentifiesAggregate $seasonId)
     {
-        return new Season($seasonId, '', '', '', '' , '');
+        return new Season($seasonId, '', '', '', '', '');
     }
 
     public function getId()
