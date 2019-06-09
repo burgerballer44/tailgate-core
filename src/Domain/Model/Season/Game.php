@@ -10,6 +10,8 @@ class Game
     private $seasonId;
     private $homeTeamId;
     private $awayTeamId;
+    private $homeTeamScore;
+    private $awayTeamScore;
     private $startDate;
 
     private function __construct(
@@ -64,8 +66,28 @@ class Game
         return $this->awayTeamId;
     }
 
+    public function getHomeTeamScore()
+    {
+        return $this->homeTeamScore;
+    }
+
+    public function getAwayTeamScore()
+    {
+        return $this->awayTeamScore;
+    }
+
     public function getStartDate()
     {
         return $this->startDate;
+    }
+
+    public function addHomeTeamScore(int $homeTeamScore)
+    {
+        $this->homeTeamScore = $homeTeamScore;
+    }
+
+    public function addAwayTeamScore(int $awayTeamScore)
+    {
+        $this->awayTeamScore = $awayTeamScore;
     }
 }

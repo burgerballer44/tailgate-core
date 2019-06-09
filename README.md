@@ -27,9 +27,4 @@ Score prediction with friends
 ##### Team
 * limit numbers of teams followed
 
-##### Sport
-
 ##### Season
-* add season
-* add game
-* update game score

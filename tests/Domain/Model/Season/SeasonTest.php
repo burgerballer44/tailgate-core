@@ -89,6 +89,40 @@ class SeasonTest extends TestCase
         $this->assertTrue($games[0]->getGameId() instanceof GameId);
         $this->assertTrue($games[0]->getHomeTeamId()->equals($homeTeamId));
         $this->assertTrue($games[0]->getAwayTeamId()->equals($awayTeamId));
+        $this->assertEquals($startDate, $games[0]->getStartDate());
+        $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
+    }
+
+    public function testAGameScoreIsAddedToAGameWhenGameScoreIsAdded()
+    {
+        $season = Season::create(
+            $this->seasonId,
+            $this->sport,
+            $this->seasonType,
+            $this->name,
+            $this->seasonStart,
+            $this->seasonEnd
+        );
+        $homeTeamId = TeamId::fromString('homeTeamId');
+        $awayTeamId = TeamId::fromString('awayTeamId');
+        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $games = $season->getGames();
+
+        $homeTeamScore = 70;
+        $awayTeamScore = 60;
+
+        $season->addGameScore(
+            $games[0]->getGameId(),
+            $homeTeamScore,
+            $awayTeamScore
+        );
+
+        $this->assertCount(1, $games);
+        $this->assertTrue($games[0] instanceof Game);
+        $this->assertTrue($games[0]->getGameId() instanceof GameId);
+        $this->assertEquals($homeTeamScore, $games[0]->getHomeTeamScore());
+        $this->assertEquals($awayTeamScore, $games[0]->getAwayTeamScore());
         $this->assertTrue($games[0]->getStartDate() === $startDate);
         $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
     }

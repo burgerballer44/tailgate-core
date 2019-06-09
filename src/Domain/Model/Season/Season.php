@@ -123,6 +123,18 @@ class Season extends AbstractEntity
         );
     }
 
+    public function addGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore)
+    {
+        $this->applyAndRecordThat(
+            new GameScoreAdded(
+                $gameId,
+                $this->seasonId,
+                $homeTeamScore,
+                $awayTeamScore
+            )
+        );
+    }
+
     protected function applySeasonCreated(SeasonCreated $event)
     {
         $this->sport = $event->getSport();
@@ -141,5 +153,23 @@ class Season extends AbstractEntity
             $event->getAwayTeamId(),
             $event->getStartDate()
         );
+    }
+
+    protected function applyGameScoreAdded(GameScoreAdded $event)
+    {   
+        $game = $this->getGameById($event->getGameId());
+        $game->addHomeTeamScore($event->getHomeTeamScore());
+        $game->addAwayTeamScore($event->getAwayTeamScore());
+    }
+
+    private function getGameById(GameId $gameId)
+    {
+        foreach ($this->games as $game) {
+            if ($game->getGameId() == $gameId) {
+                return $game;
+            }
+        }
+        // Todo
+        // throw notfoundexception
     }
 }
