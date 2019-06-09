@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Model\Group;
 
 use Tailgate\Domain\Model\AbstractEntity;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\Game\GameId;
+use Tailgate\Domain\Model\Season\GameId;
 use Buttercup\Protects\IdentifiesAggregate;
 
 class Group extends AbstractEntity

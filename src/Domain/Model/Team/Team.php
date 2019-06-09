@@ -70,7 +70,7 @@ class Team extends AbstractEntity
     public function followTeam(GroupId $groupId)
     {
         $this->applyAndRecordThat(
-             new TeamFollowed(
+            new TeamFollowed(
                 new FollowId(),
                 $this->teamId,
                 $groupId

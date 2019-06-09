@@ -9,7 +9,7 @@ use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Infrastructure\Persistence\Repository\TeamRepository;
 
-class AddTeamHandlerTestTest extends TestCase
+class AddTeamHandlerTest extends TestCase
 {
     private $designation = 'designation';
     private $mascot = 'mascot';

@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Model\Group;
 
 use Buttercup\Protects\DomainEvent;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\Game\GameId;
+use Tailgate\Domain\Model\Season\GameId;
 
 class ScoreSubmitted implements DomainEvent
 {

@@ -11,7 +11,7 @@ class TeamAdded implements DomainEvent
     private $mascot;
     private $occurredOn;
 
-    public function __construct( TeamId $teamId, $designation, $mascot)
+    public function __construct(TeamId $teamId, $designation, $mascot)
     {
         $this->teamId = $teamId;
         $this->designation = $designation;

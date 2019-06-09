@@ -3,7 +3,7 @@
 namespace Tailgate\Domain\Model\Group;
 
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\Game\GameId;
+use Tailgate\Domain\Model\Season\GameId;
 
 class Score
 {

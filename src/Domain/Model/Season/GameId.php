@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Domain\Model\Game;
+namespace Tailgate\Domain\Model\Season;
 
 use Ramsey\Uuid\Uuid;
 use Buttercup\Protects\IdentifiesAggregate;

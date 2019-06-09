@@ -10,7 +10,7 @@ use Tailgate\Domain\Model\Group\Member;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\Score;
 use Tailgate\Domain\Model\Group\ScoreId;
-use Tailgate\Domain\Model\Game\GameId;
+use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
 
 class GroupTest extends TestCase

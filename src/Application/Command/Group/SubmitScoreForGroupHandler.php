@@ -2,7 +2,7 @@
 
 namespace Tailgate\Application\Command\Group;
 
-use Tailgate\Domain\Model\Game\GameId;
+use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
