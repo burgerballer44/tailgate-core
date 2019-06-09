@@ -4,7 +4,6 @@ namespace Tailgate\Tests\Infrastructure\Persistence\EventStore\InMemory;
 
 use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvents;
-use Buttercup\Protects\IdentifiesAggregate;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
