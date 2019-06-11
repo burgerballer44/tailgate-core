@@ -2,15 +2,15 @@
 
 namespace Tailgate\Test\Application\Command\Group;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\CreateGroupCommand;
 use Tailgate\Application\Command\Group\CreateGroupHandler;
 use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
+use Tailgate\Tests\BaseTestCase;
 
-class CreateGroupHandlerTest extends TestCase
+class CreateGroupHandlerTest extends BaseTestCase
 {
     private $groupName = 'groupName';
     private $ownerId = 'ownerId';

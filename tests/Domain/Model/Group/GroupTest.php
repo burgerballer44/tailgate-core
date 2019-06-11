@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Model\User;
 
 use Buttercup\Protects\AggregateHistory;
-use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\Member;
@@ -12,8 +11,9 @@ use Tailgate\Domain\Model\Group\Score;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Tests\BaseTestCase;
 
-class GroupTest extends TestCase
+class GroupTest extends BaseTestCase
 {
     private $groupId;
     private $groupName;

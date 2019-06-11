@@ -2,7 +2,6 @@
 
 namespace Tailgate\Test\Application\Command\Season;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Season\AddGameScoreCommand;
 use Tailgate\Application\Command\Season\AddGameScoreHandler;
 use Tailgate\Domain\Model\Season\Season;
@@ -11,8 +10,9 @@ use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\GameScoreAdded;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Infrastructure\Persistence\Repository\SeasonRepository;
+use Tailgate\Tests\BaseTestCase;
 
-class AddGameScoreHandlerTest extends TestCase
+class AddGameScoreHandlerTest extends BaseTestCase
 {
     private $homeTeamScore = 70;
     private $awayTeamScore = 60;

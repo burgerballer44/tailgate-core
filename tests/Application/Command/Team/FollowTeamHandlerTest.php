@@ -2,7 +2,6 @@
 
 namespace Tailgate\Test\Application\Command\Team;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\FollowTeamCommand;
 use Tailgate\Application\Command\Team\FollowTeamHandler;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -11,8 +10,9 @@ use Tailgate\Domain\Model\Team\TeamFollowed;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Infrastructure\Persistence\Repository\TeamRepository;
+use Tailgate\Tests\BaseTestCase;
 
-class FollowTeamHandlerTest extends TestCase
+class FollowTeamHandlerTest extends BaseTestCase
 {
     private $groupId = 'groupId';
     private $teamId = 'teamId';

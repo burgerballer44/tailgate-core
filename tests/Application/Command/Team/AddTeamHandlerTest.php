@@ -2,14 +2,14 @@
 
 namespace Tailgate\Test\Application\Command\Team;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\AddTeamCommand;
 use Tailgate\Application\Command\Team\AddTeamHandler;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Infrastructure\Persistence\Repository\TeamRepository;
+use Tailgate\Tests\BaseTestCase;
 
-class AddTeamHandlerTest extends TestCase
+class AddTeamHandlerTest extends BaseTestCase
 {
     private $designation = 'designation';
     private $mascot = 'mascot';

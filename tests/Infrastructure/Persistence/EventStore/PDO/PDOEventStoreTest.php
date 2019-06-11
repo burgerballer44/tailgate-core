@@ -4,82 +4,105 @@ namespace Tailgate\Tests\Infrastructure\Persistence\EventStore\PDO;
 
 use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvents;
-use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
 use Tailgate\Infrastructure\Persistence\EventStore\PDO\PDOEventStore;
+use Tailgate\Tests\BaseTestCase;
 
-class PDOEventStoreTest extends TestCase
+class PDOEventStoreTest extends BaseTestCase
 {
-    private $pdo;
+    private $pdoMock;
+    private $pdoStatementMock;
     private $eventStore;
 
     public function setUp()
     {
-        $connection = getenv('DB_CONNECTION');
-        $host = getenv('DB_HOST');
-        $port = getenv('DB_PORT');
-        $name = getenv('DB_DATABASE');
-        $user = getenv('DB_USERNAME');
-        $password = getenv('DB_PASSWORD');
-
-        $this->pdo = new \PDO("{$connection}:host={$host};port={$port};dbname={$name};charset=utf8mb4", "{$user}", "{$password}", [
-            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
-        ]);
-
-        $this->eventStore = new PDOEventStore($this->pdo);
-
-        $this->pdo->query("
-            CREATE TABLE IF NOT EXISTS events (
-                aggregate_id VARCHAR(255) NOT NULL,
-                type VARCHAR(255) NOT NULL,
-                created_at DATETIME NOT NULL,
-                data text NOT NULL
-            ) ENGINE = INNODB;
-        ");
+        $this->pdoMock = $this->createMock(\PDO::class);
+        $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
+        $this->eventStore = new PDOEventStore($this->pdoMock);
     }
 
-    public function tearDown()
+    public function testItCanCommitDomainEvents()
     {
-        $this->pdo->query("DROP TABLE IF EXISTS events;");
-    }
-
-    public function testItAddsDomainEventsAndCanReturnAggregateHistory()
-    {
-        $id1 = UserId::fromString('idToCheck1');
-        $id2 = UserId::fromString('idToCheck2');
-        $id3 = UserId::fromString('idToNotFind');
-
         $domainEvents = new DomainEvents([
-            new UserSignedUp($id1, 'username1', 'password1', 'email1', 'status', 'role'),
-            new UserSignedUp($id1, 'username2', 'password2', 'email2', 'status', 'role'),
-            new UserSignedUp($id2, 'username3', 'password3', 'email3', 'status', 'role'),
+            new UserSignedUp(UserId::fromString('idToCheck1'), 'username1', 'password1', 'email1', 'status', 'role'),
+            new UserSignedUp(UserId::fromString('idToCheck1'), 'username2', 'password2', 'email2', 'status', 'role'),
+            new UserSignedUp(UserId::fromString('idToCheck1'), 'username3', 'password3', 'email3', 'status', 'role'),
         ]);
-        $this->eventStore = new PDOEventStore($this->pdo);
 
-        $history = $this->eventStore->getAggregateHistoryFor($id1);
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('INSERT INTO events (aggregate_id, type, created_at, data)
+            VALUES (:aggregate_id, :type, :created_at, :data)')
+            ->willReturn($this->pdoStatementMock);
 
-        $this->assertEmpty(
-            $history,
-            'failed to return nothing since no events have been added yet'
-        );
+        // execute method called three times
+        $this->pdoStatementMock
+            ->expects($this->exactly(3))
+            ->method('execute');
 
         $this->eventStore->commit($domainEvents);
+    }
 
-        $history1 = $this->eventStore->getAggregateHistoryFor($id1);
-        $history2 = $this->eventStore->getAggregateHistoryFor($id2);
-        $history3 = $this->eventStore->getAggregateHistoryFor($id3);
+    public function testItCanGetAnAggregateHistory()
+    {
+        $id = UserId::fromString('idToCheck1');
+        $event1 = new UserSignedUp($id, 'username1', 'password1', 'email1', 'status', 'role');
+        $event2 = new UserSignedUp($id, 'username2', 'password2', 'email2', 'status', 'role');
+        $serializedEvent1 = serialize($event1);
+        $serializedEvent2 = serialize($event2);
+
+        $rows = [
+            [
+                'aggregate_id' => $id,
+                'type' => get_class($event1),
+                'created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+                'data' => $serializedEvent1
+            ], [
+                'aggregate_id' => $id,
+                'type' => get_class($event2),
+                'created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+                'data' => $serializedEvent2
+            ]
+        ];
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM events WHERE aggregate_id = :aggregate_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+           ->expects($this->once())
+           ->method('execute')
+           ->with([':aggregate_id' => $id]);
+
+        // fetch method called
+        $this->pdoStatementMock
+           ->expects($this->at(1))
+           ->method('fetch')
+           ->will($this->returnValue($rows[0]));
+        $this->pdoStatementMock
+           ->expects($this->at(2))
+           ->method('fetch')
+           ->will($this->returnValue($rows[1]));
+
+        // closeCursor method called once
+       $this->pdoStatementMock
+           ->expects($this->once())
+           ->method('closeCursor');
+
+        $history = $this->eventStore->getAggregateHistoryFor($id);
+
+        $this->assertNotEmpty($history);
         $this->assertTrue(
-            $history1 instanceof AggregateHistory,
+            $history instanceof AggregateHistory,
             'failed to return an AggregateHistory even though there are two events for id1'
         );
-        $this->assertCount(2, $history1, 'failed to find both events for id1');
-        $this->assertTrue(
-            $history2 instanceof AggregateHistory,
-            'failed to return an AggregateHistory for id2'
-        );
-        $this->assertCount(0, $history3,
-            'failed to return nothing since id3 was not added to event store'
-        );
+        $this->assertCount(2, $history, 'failed to find both events for id1');
     }
 }

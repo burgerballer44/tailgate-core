@@ -3,12 +3,12 @@
 namespace Tailgate\Test\Domain\Model\User;
 
 use Buttercup\Protects\AggregateHistory;
-use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
+use Tailgate\Tests\BaseTestCase;
 
-class UserTest extends TestCase
+class UserTest extends BaseTestCase
 {
     private $userId;
     private $username;

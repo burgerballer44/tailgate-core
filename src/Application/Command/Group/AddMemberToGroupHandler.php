@@ -4,7 +4,6 @@ namespace Tailgate\Application\Command\Group;
 
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\User\UserId;
 
 class AddMemberToGroupHandler

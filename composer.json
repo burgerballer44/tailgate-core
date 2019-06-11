@@ -19,8 +19,7 @@
         "mathiasverraes/classfunctions": "1.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5",
-        "fzaninotto/faker": "^1.8"
+        "phpunit/phpunit": "^7.5"
     },
     "autoload": {
         "psr-4" : {

@@ -3,14 +3,14 @@
 namespace Tailgate\Test\Domain\Model\Team;
 
 use Buttercup\Protects\AggregateHistory;
-use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Team\Follow;
 use Tailgate\Domain\Model\Team\FollowId;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Tests\BaseTestCase;
 
-class TeamTest extends TestCase
+class TeamTest extends BaseTestCase
 {
     private $teamId;
     private $designation = 'designation';
