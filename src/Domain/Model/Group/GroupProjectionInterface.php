@@ -8,4 +8,5 @@ interface GroupProjectionInterface extends ProjectionInterface
 {
     public function projectGroupCreated(GroupCreated $event);
     public function projectScoreSubmitted(ScoreSubmitted $event);
+    public function projectMemberAdded(MemberAdded $event);
 }
