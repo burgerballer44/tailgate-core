@@ -2,6 +2,7 @@
 
 namespace Tailgate\Test\Application\Command\Group;
 
+use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\SubmitScoreForGroupCommand;
 use Tailgate\Application\Command\Group\SubmitScoreForGroupHandler;
 use Tailgate\Domain\Model\Group\Group;
@@ -12,9 +13,8 @@ use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
-use Tailgate\Tests\BaseTestCase;
 
-class SubmitScoreForGroupHandlerTest extends BaseTestCase
+class SubmitScoreForGroupHandlerTest extends TestCase
 {
     private $groupId = 'groupId';
     private $userId = 'userId';

@@ -2,12 +2,12 @@
 
 namespace Tailgate\Test\Application\Command\User;
 
+use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Query\User\AllUsersQuery;
 use Tailgate\Application\Query\User\AllUsersQueryHandler;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
-use Tailgate\Tests\BaseTestCase;
 
-class AllUsersQueryHandlerTest extends BaseTestCase
+class AllUsersQueryHandlerTest extends TestCase
 {
     public function testItAttemptsToGetAllUsersFromUserViewRepository()
     {

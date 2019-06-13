@@ -4,12 +4,12 @@ namespace Tailgate\Tests\Infrastructure\Persistence\EventStore\PDO;
 
 use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvents;
+use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
 use Tailgate\Infrastructure\Persistence\EventStore\PDO\PDOEventStore;
-use Tailgate\Tests\BaseTestCase;
 
-class PDOEventStoreTest extends BaseTestCase
+class PDOEventStoreTest extends TestCase
 {
     private $pdoMock;
     private $pdoStatementMock;
@@ -34,7 +34,7 @@ class PDOEventStoreTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO events (aggregate_id, type, created_at, data)
+            ->with('INSERT INTO event (aggregate_id, type, created_at, data)
             VALUES (:aggregate_id, :type, :created_at, :data)')
             ->willReturn($this->pdoStatementMock);
 
@@ -72,7 +72,7 @@ class PDOEventStoreTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM events WHERE aggregate_id = :aggregate_id')
+            ->with('SELECT * FROM event WHERE aggregate_id = :aggregate_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once

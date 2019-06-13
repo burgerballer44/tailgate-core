@@ -3,11 +3,31 @@
 namespace Tailgate\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Phinx\Console\PhinxApplication;
+use Phinx\Wrapper\TextWrapper;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
 use PDO;
 
-abstract class BaseTestCase extends TestCase
+abstract class DatabaseTestCase extends TestCase
 {
+    protected $phinxWrapper;
     protected $pdo;
+
+    public function setUp()
+    {
+        $app = new PhinxApplication();
+        $app->setAutoExit(false);
+        $app->run(new StringInput(' '), new NullOutput());
+
+        $this->phinxWrapper = new TextWrapper($app);
+        $this->phinxWrapper->getMigrate("testing");
+    }
+
+    public function tearDown()
+    {
+        $this->phinxWrapper->getRollback("testing", 0);
+    }
 
     protected function createPDOConnection()
     {

@@ -2,6 +2,7 @@
 
 namespace Tailgate\Test\Application\Command\User;
 
+use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\SignUpUserCommand;
 use Tailgate\Application\Command\User\SignUpUserHandler;
 use Tailgate\Domain\Model\User\User;
@@ -9,9 +10,8 @@ use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
 use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
-use Tailgate\Tests\BaseTestCase;
 
-class SignUpUserHandlerTest extends BaseTestCase
+class SignUpUserHandlerTest extends TestCase
 {
     private $username = 'username';
     private $password = 'password';

@@ -20,7 +20,7 @@ class PDOEventStore implements EventStoreInterface
     public function commit(DomainEvents $events)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO events (aggregate_id, type, created_at, data)
+            'INSERT INTO event (aggregate_id, type, created_at, data)
             VALUES (:aggregate_id, :type, :created_at, :data)'
         );
 
@@ -37,7 +37,7 @@ class PDOEventStore implements EventStoreInterface
     public function getAggregateHistoryFor(IdentifiesAggregate $id)
     {
         $stmt = $this->pdo->prepare(
-            'SELECT * FROM events WHERE aggregate_id = :aggregate_id'
+            'SELECT * FROM event WHERE aggregate_id = :aggregate_id'
         );
         $stmt->execute([':aggregate_id' => (string) $id]);
 

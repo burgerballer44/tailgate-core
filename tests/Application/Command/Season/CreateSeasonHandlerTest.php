@@ -2,14 +2,14 @@
 
 namespace Tailgate\Test\Application\Command\Season;
 
+use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Season\CreateSeasonCommand;
 use Tailgate\Application\Command\Season\CreateSeasonHandler;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonCreated;
 use Tailgate\Infrastructure\Persistence\Repository\SeasonRepository;
-use Tailgate\Tests\BaseTestCase;
 
-class CreateSeasonHandlerTest extends BaseTestCase
+class CreateSeasonHandlerTest extends TestCase
 {
     private $sport = 'sport';
     private $seasonType = 'seasonType';

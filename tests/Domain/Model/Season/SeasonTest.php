@@ -3,14 +3,14 @@
 namespace Tailgate\Test\Domain\Model\Season;
 
 use Buttercup\Protects\AggregateHistory;
+use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\Game;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Tests\BaseTestCase;
 
-class SeasonTest extends BaseTestCase
+class SeasonTest extends TestCase
 {
    private $seasonId;
    private $sport = 'sport';

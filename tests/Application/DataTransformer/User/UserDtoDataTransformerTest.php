@@ -2,12 +2,12 @@
 
 namespace Tailgate\Test\Application\DataTransformer\User;
 
+use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Application\DataTransformer\User\UserDtoDataTransformer;
-use Tailgate\Tests\BaseTestCase;
 
-class UserDtoDataTransformerTest extends BaseTestCase
+class UserDtoDataTransformerTest extends TestCase
 {
     public function testItTurnsAUserIntoAnArray()
     {

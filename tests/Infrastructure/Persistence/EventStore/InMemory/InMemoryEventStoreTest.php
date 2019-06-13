@@ -4,12 +4,12 @@ namespace Tailgate\Tests\Infrastructure\Persistence\EventStore\InMemory;
 
 use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvents;
+use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
 use Tailgate\Infrastructure\Persistence\EventStore\InMemory\InMemoryEventStore;
-use Tailgate\Tests\BaseTestCase;
 
-class InMemoryEventStoreTest extends BaseTestCase
+class InMemoryEventStoreTest extends TestCase
 {
     public function testItAddsDomainEventsAndCanReturnAggregateHistory()
     {

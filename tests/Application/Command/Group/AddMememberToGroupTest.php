@@ -2,6 +2,7 @@
 
 namespace Tailgate\Test\Application\Command\Group;
 
+use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\AddMemberToGroupCommand;
 use Tailgate\Application\Command\Group\AddMemberToGroupHandler;
 use Tailgate\Domain\Model\Group\Group;
@@ -10,9 +11,8 @@ use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\MemberAdded;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
-use Tailgate\Tests\BaseTestCase;
 
-class AddMemberToGroupHandlerTest extends BaseTestCase
+class AddMemberToGroupHandlerTest extends TestCase
 {
     private $groupId = 'groupId';
     private $userId = 'userId';

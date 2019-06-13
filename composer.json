@@ -19,7 +19,8 @@
         "mathiasverraes/classfunctions": "1.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5"
+        "phpunit/phpunit": "^7.5",
+        "robmorgan/phinx": "^0.10.7"
     },
     "autoload": {
         "psr-4" : {
