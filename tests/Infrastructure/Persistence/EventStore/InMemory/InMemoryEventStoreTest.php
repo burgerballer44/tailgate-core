@@ -13,9 +13,9 @@ class InMemoryEventStoreTest extends TestCase
 {
     public function testItAddsDomainEventsAndCanReturnAggregateHistory()
     {
-        $id1 = UserId::fromString('idToCheck1');
-        $id2 = UserId::fromString('idToCheck2');
-        $id3 = UserId::fromString('idToNotFind');
+        $id1 = UserId::fromString('userId1');
+        $id2 = UserId::fromString('userId2');
+        $id3 = UserId::fromString('userId3');
 
         $domainEvents = new DomainEvents([
             new UserSignedUp($id1, 'username1', 'password1', 'email1', 'status', 'role'),

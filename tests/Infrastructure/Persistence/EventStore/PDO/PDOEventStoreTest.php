@@ -25,9 +25,9 @@ class PDOEventStoreTest extends TestCase
     public function testItCanCommitDomainEvents()
     {
         $domainEvents = new DomainEvents([
-            new UserSignedUp(UserId::fromString('idToCheck1'), 'username1', 'password1', 'email1', 'status', 'role'),
-            new UserSignedUp(UserId::fromString('idToCheck1'), 'username2', 'password2', 'email2', 'status', 'role'),
-            new UserSignedUp(UserId::fromString('idToCheck1'), 'username3', 'password3', 'email3', 'status', 'role'),
+            new UserSignedUp(UserId::fromString('userId1'), 'username1', 'password1', 'email1', 'status', 'role'),
+            new UserSignedUp(UserId::fromString('userId2'), 'username2', 'password2', 'email2', 'status', 'role'),
+            new UserSignedUp(UserId::fromString('userId3'), 'username3', 'password3', 'email3', 'status', 'role'),
         ]);
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -48,7 +48,7 @@ class PDOEventStoreTest extends TestCase
 
     public function testItCanGetAnAggregateHistory()
     {
-        $id = UserId::fromString('idToCheck1');
+        $id = UserId::fromString('userId');
         $event1 = new UserSignedUp($id, 'username1', 'password1', 'email1', 'status', 'role');
         $event2 = new UserSignedUp($id, 'username2', 'password2', 'email2', 'status', 'role');
         $serializedEvent1 = serialize($event1);
@@ -90,11 +90,6 @@ class PDOEventStoreTest extends TestCase
            ->expects($this->at(2))
            ->method('fetch')
            ->will($this->returnValue($rows[1]));
-
-        // closeCursor method called once
-       $this->pdoStatementMock
-           ->expects($this->once())
-           ->method('closeCursor');
 
         $history = $this->eventStore->getAggregateHistoryFor($id);
 

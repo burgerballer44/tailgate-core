@@ -12,7 +12,7 @@ class UserQueryHandlerTest extends TestCase
 {
     public function testItAttemptsToGetAUserByUserIdFromUserViewRepository()
     {
-        $userId = 'idToCheck';
+        $userId = 'userId';
 
         $userViewRepository = $this->createMock(UserViewRepositoryInterface::class);
         $userViewRepository->expects($this->once())

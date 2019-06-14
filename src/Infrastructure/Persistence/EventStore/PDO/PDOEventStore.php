@@ -47,8 +47,6 @@ class PDOEventStore implements EventStoreInterface
             $events[] = unserialize($row['data']);
         }
 
-        $stmt->closeCursor();
-
         return new AggregateHistory($id, $events);
     }
 }

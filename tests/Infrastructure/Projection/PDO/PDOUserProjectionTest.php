@@ -22,7 +22,7 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectUserSignedUp()
     {
-        $event = new UserSignedUp(UserId::fromString('idToCheck1'), 'username1', 'password1', 'email1', 'status', 'role');
+        $event = new UserSignedUp(UserId::fromString('userId'), 'username1', 'password1', 'email1', 'status', 'role');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
