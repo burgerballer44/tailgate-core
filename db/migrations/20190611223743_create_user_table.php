@@ -12,8 +12,9 @@ class CreateUserTable extends AbstractMigration
             ->addColumn('email', 'string', ['limit' => 100])
             ->addColumn('status', 'string', ['limit' => 100])
             ->addColumn('role', 'string', ['limit' => 30])
-            ->addColumn('created_at', 'datetime')
-            ->addIndex(['username', 'email'], ['unique' => true])
+            ->addColumn('updated_at', 'datetime')
+            ->addIndex(['username'], ['unique' => true])
+            ->addIndex(['email'], ['unique' => true])
             ->save();
     }
 

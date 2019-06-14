@@ -69,7 +69,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO members (member_id, group_id, user_id, role, created_at)
+            ->with('INSERT INTO member (member_id, group_id, user_id, role, created_at)
             VALUES (:member_id, :game_id, :user_id, :role, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
@@ -104,7 +104,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO scoues (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
+            ->with('INSERT INTO score (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
             VALUES (:score_id, :group_id, :user_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)')
             ->willReturn($this->pdoStatementMock);
 

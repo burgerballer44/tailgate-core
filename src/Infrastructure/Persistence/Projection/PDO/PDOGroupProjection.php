@@ -36,7 +36,7 @@ class PDOGroupProjection extends AbstractProjection implements GroupProjectionIn
     public function projectMemberAdded(MemberAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO members (member_id, group_id, user_id, role, created_at)
+            'INSERT INTO member (member_id, group_id, user_id, role, created_at)
             VALUES (:member_id, :game_id, :user_id, :role, :created_at)'
         );
 
@@ -52,7 +52,7 @@ class PDOGroupProjection extends AbstractProjection implements GroupProjectionIn
     public function projectScoreSubmitted(ScoreSubmitted $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO scoues (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
+            'INSERT INTO score (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
             VALUES (:score_id, :group_id, :user_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)'
         );
 
