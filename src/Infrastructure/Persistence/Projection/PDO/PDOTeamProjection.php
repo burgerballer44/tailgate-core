@@ -20,17 +20,14 @@ class PDOTeamProjection extends AbstractProjection implements TeamProjectionInte
     public function projectTeamAdded(TeamAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO team (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
+            'INSERT INTO team (team_id, designation, mascot, created_at)
+            VALUES (:team_id, :designation, :mascot, :created_at)'
         );
 
         $stmt->execute([
-            ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
-            ':password_hash' => $event->getPasswordHash(),
-            ':email' => $event->getEmail(),
-            ':status' => $event->getStatus(),
-            ':role' => $event->getRole(),
+            ':team_id' => $event->getAggregateId(),
+            ':designation' => $event->getDesignation(),
+            ':mascot' => $event->getMascot(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }
@@ -38,17 +35,14 @@ class PDOTeamProjection extends AbstractProjection implements TeamProjectionInte
     public function projectTeamFollowed(TeamFollowed $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
+            'INSERT INTO follow (follow_id, team_id, group_id)
+            VALUES (:follow_id, :team_id, :group_id)'
         );
 
         $stmt->execute([
-            ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
-            ':password_hash' => $event->getPasswordHash(),
-            ':email' => $event->getEmail(),
-            ':status' => $event->getStatus(),
-            ':role' => $event->getRole(),
+           ':follow_id' => $event->getFollowId(),
+            ':group_id' => $event->getGroupId(),
+            ':team_id' => $event->getTeamId(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }

@@ -21,17 +21,14 @@ class PDOGroupProjection extends AbstractProjection implements GroupProjectionIn
     public function projectGroupCreated(GroupCreated $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
+            'INSERT INTO group (group_id, name, owner_id, created_at)
+            VALUES (:group_id, :name, :owner_id, :created_at)'
         );
 
         $stmt->execute([
-            ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
-            ':password_hash' => $event->getPasswordHash(),
-            ':email' => $event->getEmail(),
-            ':status' => $event->getStatus(),
-            ':role' => $event->getRole(),
+           ':group_id' => $event->getAggregateId(),
+            ':name' => $event->getName(),
+            ':owner_id' => $event->getOwnerId(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }
@@ -39,17 +36,15 @@ class PDOGroupProjection extends AbstractProjection implements GroupProjectionIn
     public function projectMemberAdded(MemberAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
+            'INSERT INTO members (member_id, group_id, user_id, role, created_at)
+            VALUES (:member_id, :game_id, :user_id, :role, :created_at)'
         );
 
         $stmt->execute([
-            ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
-            ':password_hash' => $event->getPasswordHash(),
-            ':email' => $event->getEmail(),
-            ':status' => $event->getStatus(),
-            ':role' => $event->getRole(),
+            ':group_id' => $event->getAggregateId(),
+            ':member_id' => $event->getMemberId(),
+            ':user_id' => $event->getUserId(),
+            ':role' => $event->getGroupRole(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }
@@ -57,17 +52,17 @@ class PDOGroupProjection extends AbstractProjection implements GroupProjectionIn
     public function projectScoreSubmitted(ScoreSubmitted $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
+            'INSERT INTO scoues (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
+            VALUES (:score_id, :group_id, :user_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)'
         );
 
         $stmt->execute([
-            ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
-            ':password_hash' => $event->getPasswordHash(),
-            ':email' => $event->getEmail(),
-            ':status' => $event->getStatus(),
-            ':role' => $event->getRole(),
+            'score_id' => $event->getScoreId(),
+            ':group_id' => $event->getGroupId(),
+            ':user_id' => $event->getUserId(),
+            ':game_id' => $event->getGameId(),
+            ':home_team_prediction' => $event->getHomeTeamPrediction(),
+            ':away_team_prediction' => $event->getAwayTeamPrediction(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }

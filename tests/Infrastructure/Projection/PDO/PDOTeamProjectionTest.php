@@ -3,6 +3,8 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 
 use PHPUnit\Framework\TestCase;
+use Tailgate\Domain\Model\Team\FollowId;
+use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamFollowed;
@@ -23,14 +25,14 @@ class PDOTeamProjectionTest extends TestCase
 
     public function testItCanProjectTeamAdded()
     {
-        $event = new TeamAdded(UserId::fromString('idToCheck1'), 'username1', 'password1', 'email1', 'status', 'role');
+        $event = new TeamAdded(TeamId::fromString('teamId'), 'designation', 'mascot');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)')
+            ->with('INSERT INTO team (team_id, designation, mascot, created_at)
+            VALUES (:team_id, :designation, :mascot, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -38,28 +40,29 @@ class PDOTeamProjectionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with([
-                ':user_id' => $event->getAggregateId(),
-                ':username' => $event->getUsername(),
-                ':password_hash' => $event->getPasswordHash(),
-                ':email' => $event->getEmail(),
-                ':status' => $event->getStatus(),
-                ':role' => $event->getRole(),
+                ':team_id' => $event->getAggregateId(),
+                ':designation' => $event->getDesignation(),
+                ':mascot' => $event->getMascot(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
 
-        $this->projection->projectUserSignedUp($event);
+        $this->projection->projectTeamAdded($event);
     }
 
     public function testItCanProjectTeamFollowed()
     {
-        $event = new TeamFollowed(UserId::fromString('idToCheck1'), 'username1', 'password1', 'email1', 'status', 'role');
+        $event = new TeamFollowed(
+            FollowId::fromString('followId'),
+            TeamId::fromString('teamId'),
+            GroupId::fromString('groupId')
+        );
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)')
+            ->with('INSERT INTO follow (follow_id, team_id, group_id)
+            VALUES (:follow_id, :team_id, :group_id)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -67,15 +70,12 @@ class PDOTeamProjectionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with([
-                ':user_id' => $event->getAggregateId(),
-                ':username' => $event->getUsername(),
-                ':password_hash' => $event->getPasswordHash(),
-                ':email' => $event->getEmail(),
-                ':status' => $event->getStatus(),
-                ':role' => $event->getRole(),
+                ':follow_id' => $event->getFollowId(),
+                ':group_id' => $event->getGroupId(),
+                ':team_id' => $event->getTeamId(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
 
-        $this->projection->projectUserSignedUp($event);
+        $this->projection->projectTeamFollowed($event);
     }
 }

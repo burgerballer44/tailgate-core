@@ -21,17 +21,17 @@ class PDOSeasonProjection extends AbstractProjection implements SeasonProjection
     public function projectSeasonCreated(SeasonCreated $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
+            'INSERT INTO season (season_id, sport, type, name, season_start, season_end, created_at)
+            VALUES (:season_id, :sport, :type, :name, :season_start, :season_end, :created_at)'
         );
 
         $stmt->execute([
-            ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
-            ':password_hash' => $event->getPasswordHash(),
-            ':email' => $event->getEmail(),
-            ':status' => $event->getStatus(),
-            ':role' => $event->getRole(),
+            ':season_id' => $event->getAggregateId(),
+            ':sport' => $event->getSport(),
+            ':type' => $event->getSeasonType(),
+            ':name' => $event->getName(),
+            ':season_start' => $event->getSeasonStart(),
+            ':season_end' => $event->getSeasonEnd(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }
@@ -39,17 +39,16 @@ class PDOSeasonProjection extends AbstractProjection implements SeasonProjection
     public function projectGameAdded(GameAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
+            'INSERT INTO game (game_id, season_id, home_team_id, away_team_id, start_date, created_at)
+            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :created_at)'
         );
 
         $stmt->execute([
-            ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
-            ':password_hash' => $event->getPasswordHash(),
-            ':email' => $event->getEmail(),
-            ':status' => $event->getStatus(),
-            ':role' => $event->getRole(),
+            ':season_id' => $event->getAggregateId(),
+            ':game_id' => $event->getGameId(),
+            ':home_team_id' => $event->getHomeTeamId(),
+            ':away_team_id' => $event->getAwayTeamId(),
+            ':start_date' => $event->getStartDate(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }
@@ -57,18 +56,15 @@ class PDOSeasonProjection extends AbstractProjection implements SeasonProjection
     public function projectGameScoreAdded(GameScoreAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
+            'UPDATE game (home_team_score, away_team_score)
+            SET (:home_team_score, :away_team_score)
+            WHERE game_id = :game_id'
         );
 
         $stmt->execute([
-            ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
-            ':password_hash' => $event->getPasswordHash(),
-            ':email' => $event->getEmail(),
-            ':status' => $event->getStatus(),
-            ':role' => $event->getRole(),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':game_id' => $event->getGameId(),
+            ':home_team_score' => $event->getHomeTeamScore(),
+            ':away_team_score' => $event->getAwayTeamScore()
         ]);
     }
 }
