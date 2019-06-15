@@ -6,8 +6,14 @@ class CreateMemberTable extends AbstractMigration
 {
     public function up()
     {
-        $member = $this->table('member', ['id' => 'member_id', 'collation' => 'utf8mb4_unicode_ci', 'signed' => false]);
-        $member->addColumn('group_id', 'string', ['limit' => 36])
+        $member = $this->table('member', [
+            'id' => false,
+            'primary_key' => ['member_id'],
+            'collation' => 'utf8mb4_unicode_ci',
+            'signed' => false
+        ]);
+        $member->addColumn('member_id', 'string', ['limit' => 36])
+            ->addColumn('group_id', 'string', ['limit' => 36])
             ->addColumn('user_id', 'string', ['limit' => 36])
             ->addColumn('role', 'string', ['limit' => 30])
             ->addColumn('created_at', 'datetime')

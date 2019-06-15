@@ -121,8 +121,7 @@ class Group extends AbstractEntity
             $event->getUserId(),
             $event->getGameId(),
             $event->getHomeTeamPrediction(),
-            $event->getAwayTeamPrediction(),
-            $event->getOccurredOn()
+            $event->getAwayTeamPrediction()
         );
     }
 

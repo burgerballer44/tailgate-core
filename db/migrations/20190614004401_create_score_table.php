@@ -6,8 +6,14 @@ class CreateScoreTable extends AbstractMigration
 {
     public function up()
     {
-        $score = $this->table('score', ['id' => 'score_id', 'collation' => 'utf8mb4_unicode_ci', 'signed' => false]);
-        $score->addColumn('group_id', 'string', ['limit' => 36])
+        $score = $this->table('score', [
+            'id' => false,
+            'primary_key' => ['score_id'],
+            'collation' => 'utf8mb4_unicode_ci',
+            'signed' => false
+        ]);
+        $score->addColumn('score_id', 'string', ['limit' => 36])
+            ->addColumn('group_id', 'string', ['limit' => 36])
             ->addColumn('user_id', 'string', ['limit' => 36])
             ->addColumn('game_id', 'string', ['limit' => 36])
             ->addColumn('home_team_prediction', 'integer')
