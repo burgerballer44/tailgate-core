@@ -21,15 +21,15 @@ class PDOUserViewRepository implements UserViewRepositoryInterface
         $stmt = $this->pdo->prepare('SELECT * FROM user WHERE user_id = :user_id');
         $stmt->execute([':user_id' => (string) $id]);
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return new UserView(
-            $row['user_id'],
-            $row['username'],
-            $row['email'],
-            $row['status'],
-            $row['role']
-        );
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            return new UserView(
+                $row['user_id'],
+                $row['username'],
+                $row['email'],
+                $row['status'],
+                $row['role']
+            );
+        }
     }
 
     public function all()
@@ -50,5 +50,41 @@ class PDOUserViewRepository implements UserViewRepositoryInterface
         }
 
         return $users;
+    }
+
+    public function byUsername($username)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM user WHERE username = :username');
+        $stmt->execute([':username' => (string) $username]);
+
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            return new UserView(
+                $row['user_id'],
+                $row['username'],
+                $row['email'],
+                $row['status'],
+                $row['role']
+            );
+        }
+
+        return false;
+    }
+
+    public function byEmail($email)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM user WHERE email = :email');
+        $stmt->execute([':email' => (string) $email]);
+
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            return new UserView(
+                $row['user_id'],
+                $row['username'],
+                $row['email'],
+                $row['status'],
+                $row['role']
+            );
+        }
+
+        return false;
     }
 }

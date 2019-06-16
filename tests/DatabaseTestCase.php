@@ -16,17 +16,17 @@ abstract class DatabaseTestCase extends TestCase
 
     public function setUp()
     {
-        $app = new PhinxApplication();
-        $app->setAutoExit(false);
-        $app->run(new StringInput(' '), new NullOutput());
+        // $app = new PhinxApplication();
+        // $app->setAutoExit(false);
+        // $app->run(new StringInput(' '), new NullOutput());
 
-        $this->phinxWrapper = new TextWrapper($app);
-        $this->phinxWrapper->getMigrate("testing");
+        // $this->phinxWrapper = new TextWrapper($app);
+        // $this->phinxWrapper->getMigrate("testing");
     }
 
     public function tearDown()
     {
-        $this->phinxWrapper->getRollback("testing", 0);
+        // $this->phinxWrapper->getRollback("testing", 0);
     }
 
     protected function createPDOConnection()
