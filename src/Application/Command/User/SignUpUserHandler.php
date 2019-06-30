@@ -4,7 +4,7 @@ namespace Tailgate\Application\Command\User;
 
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
-use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
+use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
 
 class SignUpUserHandler
 {

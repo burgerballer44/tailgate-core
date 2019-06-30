@@ -8,7 +8,7 @@ use Tailgate\Application\Command\User\SignUpUserHandler;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
-use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
+use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
 
 class SignUpUserHandlerTest extends TestCase
