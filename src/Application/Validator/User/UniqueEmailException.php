@@ -8,10 +8,10 @@ class UniqueEmailException extends ValidationException
 {
     public static $defaultTemplates = [
         self::MODE_DEFAULT => [
-            self::STANDARD => '{{name}} is taken. Please choose a unique email.',
+            self::STANDARD => 'Please choose a unique email. This email is unavailable.',
         ],
         self::MODE_NEGATIVE => [
-            self::STANDARD => '{{name}} is taken. Please choose a... not unique email.',
+            self::STANDARD => 'Please choose a... not unique email.',
         ]
     ];
 }

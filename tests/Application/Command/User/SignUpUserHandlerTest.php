@@ -15,6 +15,7 @@ class SignUpUserHandlerTest extends TestCase
 {
     private $username = 'username';
     private $password = 'password';
+    private $confirmPassword = 'password';
     private $email = 'email@email.com';
     private $signUpUserCommand;
 
@@ -23,7 +24,8 @@ class SignUpUserHandlerTest extends TestCase
         $this->signUpUserCommand = new SignUpUserCommand(
             $this->username,
             $this->password,
-            $this->email
+            $this->email,
+            $this->confirmPassword
         );
     }
 
@@ -31,6 +33,7 @@ class SignUpUserHandlerTest extends TestCase
     {
         $username = $this->username;
         $password = $this->password;
+        $confirmPassword = $this->confirmPassword;
         $email = $this->email;
 
         // only needs the add method
@@ -47,6 +50,7 @@ class SignUpUserHandlerTest extends TestCase
             ->with($this->callback(function($user) use (
                 $username,
                 $password,
+                $confirmPassword,
                 $email
             ) {
                 $events = $user->getRecordedEvents();

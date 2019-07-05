@@ -8,10 +8,10 @@ class UniqueUsernameException extends ValidationException
 {
     public static $defaultTemplates = [
         self::MODE_DEFAULT => [
-            self::STANDARD => '{{name}} is taken. Please choose a unique username.',
+            self::STANDARD => 'Please choose a unique username. This username is unavailable.',
         ],
         self::MODE_NEGATIVE => [
-            self::STANDARD => '{{name}} is taken. Please choose a... not unique username.',
+            self::STANDARD => 'Please choose a... not unique username.',
         ]
     ];
 }
