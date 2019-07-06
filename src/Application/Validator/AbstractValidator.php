@@ -34,7 +34,7 @@ abstract class AbstractValidator
         return 'get' . str_replace('_', '', ucwords($field, '_'));
     }
 
-    protected function assertEachField()
+    protected function assertEachField($command)
     {
         foreach ($this->rules as $field => $validator) {
             $method = $this->getMethodNameFromField($field);
