@@ -14,7 +14,7 @@ abstract class AbstractValidator
         $this->initMessages();
     }
 
-    abstract protected function messageOverWrites($command) : array;
+    abstract protected function messageOverWrites() : array;
     abstract protected function addRules($command);
 
     public function assert($command)
