@@ -18,7 +18,7 @@ class PDOSeasonViewRepository implements SeasonViewRepositoryInterface
 
     public function get(SeasonId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM season WHERE season_id = :season_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `season` WHERE season_id = :season_id');
         $stmt->execute([':season_id' => (string) $id]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -35,7 +35,7 @@ class PDOSeasonViewRepository implements SeasonViewRepositoryInterface
 
     public function all()
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM team');
+        $stmt = $this->pdo->prepare('SELECT * FROM `season`');
         $stmt->execute();
 
         $seasons = [];

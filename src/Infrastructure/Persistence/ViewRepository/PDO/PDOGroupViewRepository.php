@@ -18,7 +18,7 @@ class PDOGroupViewRepository implements GroupViewRepositoryInterface
 
     public function get(GroupId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM group WHERE group_id = :group_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `group` WHERE group_id = :group_id');
         $stmt->execute([':group_id' => (string) $id]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -32,7 +32,7 @@ class PDOGroupViewRepository implements GroupViewRepositoryInterface
 
     public function all()
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM group');
+        $stmt = $this->pdo->prepare('SELECT * FROM `group`');
         $stmt->execute();
 
         $groups = [];

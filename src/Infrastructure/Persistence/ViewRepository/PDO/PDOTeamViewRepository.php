@@ -18,7 +18,7 @@ class PDOTeamViewRepository implements TeamViewRepositoryInterface
 
     public function get(TeamId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM team WHERE team_id = :team_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `team` WHERE team_id = :team_id');
         $stmt->execute([':team_id' => (string) $id]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -32,7 +32,7 @@ class PDOTeamViewRepository implements TeamViewRepositoryInterface
 
     public function all()
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM team');
+        $stmt = $this->pdo->prepare('SELECT * FROM `team`');
         $stmt->execute();
 
         $teams = [];
