@@ -2,7 +2,6 @@
 
 namespace Tailgate\Application\Validator;
 
-
 abstract class AbstractValidator
 {
     protected $rules = [];
@@ -61,5 +60,10 @@ abstract class AbstractValidator
             'length'         => '{{name}} must be between {{minValue}} and {{maxValue}} characters.',
             'email'          => 'Please make sure you typed a correct email address.',
         ], $this->messageOverWrites());
+    }
+
+    public function errors()
+    {
+        return $this->errors;
     }
 }
