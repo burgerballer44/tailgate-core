@@ -20,7 +20,7 @@ abstract class AbstractValidator
     public function assert($command)
     {
         $this->addRules($command);
-        $this->assertEachField();
+        $this->assertEachField($command);
 
         if (!empty($this->errors)) {
             return false;
