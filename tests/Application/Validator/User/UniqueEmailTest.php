@@ -5,7 +5,7 @@ namespace Tailgate\Test\Application\Validator\User;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Validator\User\UniqueEmail;
 use Tailgate\Application\Validator\User\UniqueEmailException;
-use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\PDOUserViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\UserViewRepository;
 use Tailgate\Tests\DatabaseTestCase;
 
 class UniqueEmailTest extends DatabaseTestCase
@@ -13,7 +13,7 @@ class UniqueEmailTest extends DatabaseTestCase
     public function testItReturnsTrueWhenUserNameDoesNotExist()
     {
         // only needs the byEmail method
-        $userViewRepository = $this->getMockBuilder(PDOUserViewRepository::class)
+        $userViewRepository = $this->getMockBuilder(UserViewRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['byEmail'])
             ->getMock();
@@ -32,7 +32,7 @@ class UniqueEmailTest extends DatabaseTestCase
         $input = 'email@email.com';
 
         // only needs the byEmail method
-        $userViewRepository = $this->getMockBuilder(PDOUserViewRepository::class)
+        $userViewRepository = $this->getMockBuilder(UserViewRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['byEmail'])
             ->getMock();

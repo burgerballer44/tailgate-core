@@ -9,7 +9,7 @@ use Tailgate\Domain\Model\Group\MemberAdded;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
-class PDOGroupProjection extends AbstractProjection implements GroupProjectionInterface
+class GroupProjection extends AbstractProjection implements GroupProjectionInterface
 {
     private $pdo;
 
@@ -21,7 +21,7 @@ class PDOGroupProjection extends AbstractProjection implements GroupProjectionIn
     public function projectGroupCreated(GroupCreated $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO group (group_id, name, owner_id, created_at)
+            'INSERT INTO `group` (group_id, name, owner_id, created_at)
             VALUES (:group_id, :name, :owner_id, :created_at)'
         );
 
@@ -36,7 +36,7 @@ class PDOGroupProjection extends AbstractProjection implements GroupProjectionIn
     public function projectMemberAdded(MemberAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO member (member_id, group_id, user_id, role, created_at)
+            'INSERT INTO `member` (member_id, group_id, user_id, role, created_at)
             VALUES (:member_id, :game_id, :user_id, :role, :created_at)'
         );
 
@@ -52,7 +52,7 @@ class PDOGroupProjection extends AbstractProjection implements GroupProjectionIn
     public function projectScoreSubmitted(ScoreSubmitted $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO score (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
+            'INSERT INTO `score` (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
             VALUES (:score_id, :group_id, :user_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)'
         );
 

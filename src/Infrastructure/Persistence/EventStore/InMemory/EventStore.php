@@ -8,7 +8,7 @@ use Buttercup\Protects\DomainEvents;
 use Buttercup\Protects\IdentifiesAggregate;
 use Tailgate\Common\EventStore\EventStoreInterface;
 
-class InMemoryEventStore implements EventStoreInterface
+class EventStore implements EventStoreInterface
 {
     private $events = [];
 

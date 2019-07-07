@@ -5,7 +5,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
-use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\PDOUserViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\UserViewRepository;
 
 class PDOUserViewRepositoryTest extends TestCase
 {
@@ -17,7 +17,7 @@ class PDOUserViewRepositoryTest extends TestCase
     {
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
-        $this->viewRepository = new PDOUserViewRepository($this->pdoMock);
+        $this->viewRepository = new UserViewRepository($this->pdoMock);
     }
 
     public function testItCanGetAUser()
@@ -28,7 +28,7 @@ class PDOUserViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM user WHERE user_id = :user_id')
+            ->with('SELECT * FROM `user` WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -46,7 +46,7 @@ class PDOUserViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM user')
+            ->with('SELECT * FROM `user`')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once

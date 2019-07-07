@@ -11,7 +11,7 @@ use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\Projection\PDO\PDOGroupProjection;
+use Tailgate\Infrastructure\Persistence\Projection\PDO\GroupProjection;
 
 class PDOGroupProjectionTest extends TestCase
 {
@@ -23,7 +23,7 @@ class PDOGroupProjectionTest extends TestCase
     {
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
-        $this->projection = new PDOGroupProjection($this->pdoMock);
+        $this->projection = new GroupProjection($this->pdoMock);
     }
 
     public function testItCanProjectGroupCreated()
@@ -38,7 +38,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO group (group_id, name, owner_id, created_at)
+            ->with('INSERT INTO `group` (group_id, name, owner_id, created_at)
             VALUES (:group_id, :name, :owner_id, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
@@ -69,7 +69,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO member (member_id, group_id, user_id, role, created_at)
+            ->with('INSERT INTO `member` (member_id, group_id, user_id, role, created_at)
             VALUES (:member_id, :game_id, :user_id, :role, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
@@ -104,7 +104,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO score (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
+            ->with('INSERT INTO `score` (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
             VALUES (:score_id, :group_id, :user_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)')
             ->willReturn($this->pdoStatementMock);
 

@@ -1,7 +1,12 @@
-### Tailgate
+## Tailgate - Score prediction with friends
 [![Build Status](https://travis-ci.org/burgerballer44/tailgate.svg?branch=master)](https://travis-ci.org/burgerballer44/tailgate) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/burgerballer44/tailgate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/burgerballer44/tailgate/?branch=master)
 
-Score prediction with friends
+### Composer
+`composer install`
+
+### Phinx Migration
+`./vendor/bin/phinx migrate`  
+`./vendor/bin/phinx rollback -t 0`  
 
 #### Todo List
 
@@ -10,8 +15,6 @@ Score prediction with friends
 * password reset token for resetting passwords
 * authorization key for auth stuff
 * user update their own info
-* validation - check for unique username and email on signUp, update
-* validation - email confirmation
 
 ##### Group
 * generate access code so other users can search for and join group
@@ -22,7 +25,6 @@ Score prediction with friends
 * validation - groups must have unique name
 * validation - confirm group and user exists when adding member
 * validation - confirm the team and group exists when following
-
 
 ##### Team
 * limit numbers of teams followed

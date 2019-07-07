@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupView;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 
-class PDOGroupViewRepository implements GroupViewRepositoryInterface
+class GroupViewRepository implements GroupViewRepositoryInterface
 {
     private $pdo;
 

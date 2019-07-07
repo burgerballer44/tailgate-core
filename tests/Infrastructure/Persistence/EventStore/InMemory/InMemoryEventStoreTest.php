@@ -7,7 +7,7 @@ use Buttercup\Protects\DomainEvents;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
-use Tailgate\Infrastructure\Persistence\EventStore\InMemory\InMemoryEventStore;
+use Tailgate\Infrastructure\Persistence\EventStore\InMemory\EventStore;
 
 class InMemoryEventStoreTest extends TestCase
 {
@@ -22,7 +22,7 @@ class InMemoryEventStoreTest extends TestCase
             new UserSignedUp($id1, 'username2', 'password2', 'email2', 'status', 'role'),
             new UserSignedUp($id2, 'username3', 'password3', 'email3', 'status', 'role'),
         ]);
-        $eventStore = new InMemoryEventStore;
+        $eventStore = new EventStore;
 
         $history = $eventStore->getAggregateHistoryFor($id1);
         $this->assertEmpty(

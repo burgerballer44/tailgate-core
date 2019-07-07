@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
 
-class PDOUserViewRepository implements UserViewRepositoryInterface
+class UserViewRepository implements UserViewRepositoryInterface
 {
     private $pdo;
 

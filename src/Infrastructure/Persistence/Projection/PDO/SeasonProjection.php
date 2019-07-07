@@ -9,7 +9,7 @@ use Tailgate\Domain\Model\Season\SeasonCreated;
 use Tailgate\Domain\Model\Season\SeasonProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
-class PDOSeasonProjection extends AbstractProjection implements SeasonProjectionInterface
+class SeasonProjection extends AbstractProjection implements SeasonProjectionInterface
 {
     private $pdo;
 
@@ -21,7 +21,7 @@ class PDOSeasonProjection extends AbstractProjection implements SeasonProjection
     public function projectSeasonCreated(SeasonCreated $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO season (season_id, sport, type, name, season_start, season_end, created_at)
+            'INSERT INTO `season` (season_id, sport, type, name, season_start, season_end, created_at)
             VALUES (:season_id, :sport, :type, :name, :season_start, :season_end, :created_at)'
         );
 
@@ -39,7 +39,7 @@ class PDOSeasonProjection extends AbstractProjection implements SeasonProjection
     public function projectGameAdded(GameAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO game (game_id, season_id, home_team_id, away_team_id, start_date, created_at)
+            'INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, created_at)
             VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :created_at)'
         );
 
@@ -56,7 +56,7 @@ class PDOSeasonProjection extends AbstractProjection implements SeasonProjection
     public function projectGameScoreAdded(GameScoreAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE game (home_team_score, away_team_score)
+            'UPDATE `game` (home_team_score, away_team_score)
             SET (:home_team_score, :away_team_score)
             WHERE game_id = :game_id'
         );

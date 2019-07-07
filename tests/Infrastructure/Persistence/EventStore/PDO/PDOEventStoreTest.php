@@ -7,7 +7,7 @@ use Buttercup\Protects\DomainEvents;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
-use Tailgate\Infrastructure\Persistence\EventStore\PDO\PDOEventStore;
+use Tailgate\Infrastructure\Persistence\EventStore\PDO\EventStore;
 
 class PDOEventStoreTest extends TestCase
 {
@@ -19,7 +19,7 @@ class PDOEventStoreTest extends TestCase
     {
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
-        $this->eventStore = new PDOEventStore($this->pdoMock);
+        $this->eventStore = new EventStore($this->pdoMock);
     }
 
     public function testItCanCommitDomainEvents()

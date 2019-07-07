@@ -8,7 +8,7 @@ use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamFollowed;
-use Tailgate\Infrastructure\Persistence\Projection\PDO\PDOTeamProjection;
+use Tailgate\Infrastructure\Persistence\Projection\PDO\TeamProjection;
 
 class PDOTeamProjectionTest extends TestCase
 {
@@ -20,7 +20,7 @@ class PDOTeamProjectionTest extends TestCase
     {
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
-        $this->projection = new PDOTeamProjection($this->pdoMock);
+        $this->projection = new TeamProjection($this->pdoMock);
     }
 
     public function testItCanProjectTeamAdded()
@@ -31,7 +31,7 @@ class PDOTeamProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO team (team_id, designation, mascot, created_at)
+            ->with('INSERT INTO `team` (team_id, designation, mascot, created_at)
             VALUES (:team_id, :designation, :mascot, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
@@ -61,7 +61,7 @@ class PDOTeamProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO follow (follow_id, team_id, group_id)
+            ->with('INSERT INTO `follow` (follow_id, team_id, group_id)
             VALUES (:follow_id, :team_id, :group_id)')
             ->willReturn($this->pdoStatementMock);
 

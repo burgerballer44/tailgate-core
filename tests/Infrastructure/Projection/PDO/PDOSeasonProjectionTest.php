@@ -9,7 +9,7 @@ use Tailgate\Domain\Model\Season\GameScoreAdded;
 use Tailgate\Domain\Model\Season\SeasonCreated;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Infrastructure\Persistence\Projection\PDO\PDOSeasonProjection;
+use Tailgate\Infrastructure\Persistence\Projection\PDO\SeasonProjection;
 
 class PDOSeasonProjectionTest extends TestCase
 {
@@ -21,7 +21,7 @@ class PDOSeasonProjectionTest extends TestCase
     {
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
-        $this->projection = new PDOSeasonProjection($this->pdoMock);
+        $this->projection = new SeasonProjection($this->pdoMock);
     }
 
     public function testItCanProjectSeasonCreated()
@@ -39,7 +39,7 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO season (season_id, sport, type, name, season_start, season_end, created_at)
+            ->with('INSERT INTO `season` (season_id, sport, type, name, season_start, season_end, created_at)
             VALUES (:season_id, :sport, :type, :name, :season_start, :season_end, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
@@ -74,7 +74,7 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO game (game_id, season_id, home_team_id, away_team_id, start_date, created_at)
+            ->with('INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, created_at)
             VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
@@ -108,7 +108,7 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE game (home_team_score, away_team_score)
+            ->with('UPDATE `game` (home_team_score, away_team_score)
             SET (:home_team_score, :away_team_score)
             WHERE game_id = :game_id')
             ->willReturn($this->pdoStatementMock);

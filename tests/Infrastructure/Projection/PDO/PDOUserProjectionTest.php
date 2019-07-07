@@ -5,7 +5,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
-use Tailgate\Infrastructure\Persistence\Projection\PDO\PDOUserProjection;
+use Tailgate\Infrastructure\Persistence\Projection\PDO\UserProjection;
 
 class PDOUserProjectionTest extends TestCase
 {
@@ -17,7 +17,7 @@ class PDOUserProjectionTest extends TestCase
     {
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
-        $this->projection = new PDOUserProjection($this->pdoMock);
+        $this->projection = new UserProjection($this->pdoMock);
     }
 
     public function testItCanProjectUserSignedUp()
@@ -28,7 +28,7 @@ class PDOUserProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
+            ->with('INSERT INTO `user` (user_id, username, password_hash, email, status, role, created_at)
             VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)')
             ->willReturn($this->pdoStatementMock);
 

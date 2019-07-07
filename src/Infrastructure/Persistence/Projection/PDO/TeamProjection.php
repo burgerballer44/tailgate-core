@@ -8,7 +8,7 @@ use Tailgate\Domain\Model\Team\TeamFollowed;
 use Tailgate\Domain\Model\Team\TeamProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
-class PDOTeamProjection extends AbstractProjection implements TeamProjectionInterface
+class TeamProjection extends AbstractProjection implements TeamProjectionInterface
 {
     private $pdo;
 
@@ -20,7 +20,7 @@ class PDOTeamProjection extends AbstractProjection implements TeamProjectionInte
     public function projectTeamAdded(TeamAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO team (team_id, designation, mascot, created_at)
+            'INSERT INTO `team` (team_id, designation, mascot, created_at)
             VALUES (:team_id, :designation, :mascot, :created_at)'
         );
 
@@ -35,7 +35,7 @@ class PDOTeamProjection extends AbstractProjection implements TeamProjectionInte
     public function projectTeamFollowed(TeamFollowed $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO follow (follow_id, team_id, group_id)
+            'INSERT INTO `follow` (follow_id, team_id, group_id)
             VALUES (:follow_id, :team_id, :group_id)'
         );
 

@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\User\UserProjectionInterface;
 use Tailgate\Domain\Model\User\UserSignedUp;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
-class PDOUserProjection extends AbstractProjection implements UserProjectionInterface
+class UserProjection extends AbstractProjection implements UserProjectionInterface
 {
     private $pdo;
 
@@ -19,7 +19,7 @@ class PDOUserProjection extends AbstractProjection implements UserProjectionInte
     public function projectUserSignedUp(UserSignedUp $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO user (user_id, username, password_hash, email, status, role, created_at)
+            'INSERT INTO `user` (user_id, username, password_hash, email, status, role, created_at)
             VALUES (:user_id, :username, :password_hash, :email, :status, :role, :created_at)'
         );
 

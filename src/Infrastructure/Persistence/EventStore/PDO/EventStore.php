@@ -8,7 +8,7 @@ use Buttercup\Protects\IdentifiesAggregate;
 use Tailgate\Common\EventStore\EventStoreInterface;
 use PDO;
 
-class PDOEventStore implements EventStoreInterface
+class EventStore implements EventStoreInterface
 {
     private $pdo;
 

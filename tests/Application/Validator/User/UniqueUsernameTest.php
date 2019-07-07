@@ -5,14 +5,14 @@ namespace Tailgate\Test\Application\Validator\User;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Validator\User\UniqueUsername;
 use Tailgate\Application\Validator\User\UniqueUsernameException;
-use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\PDOUserViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\UserViewRepository;
 
 class UniqueUsernameTest extends TestCase
 {
     public function testItReturnsTrueWhenUserNameDoesNotExist()
     {
         // only needs the byUsername method
-        $userViewRepository = $this->getMockBuilder(PDOUserViewRepository::class)
+        $userViewRepository = $this->getMockBuilder(UserViewRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['byUsername'])
             ->getMock();
@@ -31,7 +31,7 @@ class UniqueUsernameTest extends TestCase
         $input = 'burger';
 
         // only needs the byUsername method
-        $userViewRepository = $this->getMockBuilder(PDOUserViewRepository::class)
+        $userViewRepository = $this->getMockBuilder(UserViewRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['byUsername'])
             ->getMock();

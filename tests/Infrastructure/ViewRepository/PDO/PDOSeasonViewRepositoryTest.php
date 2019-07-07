@@ -3,11 +3,11 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Group\GroupView;
-use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\GroupViewRepository;
+use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Season\SeasonView;
+use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\SeasonViewRepository;
 
-class PDOGroupViewRepositoryTest extends TestCase
+class PDOSeasonViewRepositoryTest extends TestCase
 {
     private $pdoMock;
     private $pdoStatementMock;
@@ -17,38 +17,38 @@ class PDOGroupViewRepositoryTest extends TestCase
     {
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
-        $this->viewRepository = new GroupViewRepository($this->pdoMock);
+        $this->viewRepository = new SeasonViewRepository($this->pdoMock);
     }
 
     public function testItCanGetAUser()
     {
-        $groupId = GroupId::fromString('groupId');
+        $seasonId = SeasonId::fromString('seasonId');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `group` WHERE group_id = :group_id')
+            ->with('SELECT * FROM `season` WHERE season_id = :season_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
-            ->with([':group_id' => (string) $groupId]);
+            ->with([':season_id' => (string) $seasonId]);
 
-        $this->viewRepository->get($groupId);
+        $this->viewRepository->get($seasonId);
     }
 
     public function testItCanGetAllUsers()
     {
-        $groupId = GroupId::fromString('groupId');
+        $seasonId = SeasonId::fromString('seasonId');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `group`')
+            ->with('SELECT * FROM `season`')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once

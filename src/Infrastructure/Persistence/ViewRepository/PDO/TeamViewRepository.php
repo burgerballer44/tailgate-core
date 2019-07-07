@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
 
-class PDOTeamViewRepository implements TeamViewRepositoryInterface
+class TeamViewRepository implements TeamViewRepositoryInterface
 {
     private $pdo;
 

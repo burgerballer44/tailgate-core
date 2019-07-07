@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
 
-class PDOSeasonViewRepository implements SeasonViewRepositoryInterface
+class SeasonViewRepository implements SeasonViewRepositoryInterface
 {
     private $pdo;
 
