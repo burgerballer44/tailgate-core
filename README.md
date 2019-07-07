@@ -1,22 +1,18 @@
-## Tailgate - Score prediction with friends
+# Tailgate - Score prediction with friends
 [![Build Status](https://travis-ci.org/burgerballer44/tailgate.svg?branch=master)](https://travis-ci.org/burgerballer44/tailgate) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/burgerballer44/tailgate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/burgerballer44/tailgate/?branch=master)
 
-### Composer
+## Composer
 `composer install`
 
-### Phinx Migration
-`./vendor/bin/phinx migrate`  
-`./vendor/bin/phinx rollback -t 0`  
+## Todo List
 
-#### Todo List
-
-##### User
+#### User
 * invite codes to invite someone to use the site as part of your group
 * password reset token for resetting passwords
 * authorization key for auth stuff
 * user update their own info
 
-##### Group
+### Group
 * generate access code so other users can search for and join group
 * message for describing the group
 * change group role of members
@@ -26,7 +22,7 @@
 * validation - confirm group and user exists when adding member
 * validation - confirm the team and group exists when following
 
-##### Team
+### Team
 * limit numbers of teams followed
 
-##### Season
+### Season
