@@ -6,9 +6,8 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Validator\User\UniqueEmail;
 use Tailgate\Application\Validator\User\UniqueEmailException;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\UserViewRepository;
-use Tailgate\Tests\DatabaseTestCase;
 
-class UniqueEmailTest extends DatabaseTestCase
+class UniqueEmailTest extends TestCase
 {
     public function testItReturnsTrueWhenUserNameDoesNotExist()
     {
