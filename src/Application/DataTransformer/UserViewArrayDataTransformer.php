@@ -5,7 +5,7 @@ namespace Tailgate\Application\DataTransformer;
 use Tailgate\Application\DataTransformer\UserDataTransformerInterface;
 use Tailgate\Domain\Model\User\UserView;
 
-class UserViewArrayDataTransformer
+class UserViewArrayDataTransformer implements UserDataTransformerInterface
 {
     public function read(UserView $userView)
     {
