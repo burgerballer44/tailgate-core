@@ -10,7 +10,7 @@ class UserViewArrayDataTransformer implements UserDataTransformerInterface
     public function read(UserView $userView)
     {
         return [
-            'id'       => $userView->getId(),
+            'id'       => $userView->getUserId(),
             'username' => $userView->getUsername(),
             'email'    => $userView->getEmail(),
             'status'   => $userView->getStatus(),
