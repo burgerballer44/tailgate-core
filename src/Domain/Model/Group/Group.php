@@ -9,8 +9,8 @@ use Buttercup\Protects\IdentifiesAggregate;
 
 class Group extends AbstractEntity
 {
-    const G_ROLE_ADMIN = 10; // someone who can do manage the gorup
-    const G_ROLE_MEMBER = 20; // regular user who can submit scores
+    const G_ROLE_ADMIN = 'Group-Admin'; // someone who can do manage the gorup
+    const G_ROLE_MEMBER = 'Group-Member'; // regular user who can submit scores
 
     private $groupId;
     private $name;

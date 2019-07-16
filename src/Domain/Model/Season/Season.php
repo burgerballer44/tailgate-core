@@ -8,12 +8,12 @@ use Tailgate\Domain\Model\Team\TeamId;
 
 class Season extends AbstractEntity
 {
-    const SPORT_FOOTBALL = 10;
-    const SPORT_BASKETBALL = 20;
+    const SPORT_FOOTBALL = 'Football';
+    const SPORT_BASKETBALL = 'Basketball';
 
-    const SEASON_TYPE_PRE = 10;
-    const SEASON_TYPE_REG = 20;
-    const SEASON_TYPE_POST = 30;
+    const SEASON_TYPE_PRE = 'Pre-Season';
+    const SEASON_TYPE_REG = 'Regular-Season';
+    const SEASON_TYPE_POST = 'Post-Season';
 
     private $seasonId;
     private $sport;

@@ -7,14 +7,14 @@ use Buttercup\Protects\IdentifiesAggregate;
 
 class User extends AbstractEntity
 {
-    const ROLE_USER = 10; // the average user, normal people who sign up
-    const ROLE_ADMIN = 20; // an important person who can mostly do whatever
-    const ROLE_DEVELOPER = 30; // more than an admin who can do whatever
+    const ROLE_USER = 'Normal'; // the average user, normal people who sign up
+    const ROLE_ADMIN = 'Admin'; // an important person who can mostly do whatever
+    const ROLE_DEVELOPER = 'Developer'; // more than an admin who can do whatever
 
-    const STATUS_ACTIVE = 10; // can use the app
-    const STATUS_PENDING = 20; // user who signs up but needs to confirm email
-    const STATUS_INVITED = 30; // user who was invited by an admin
-    const STATUS_DELETED = 99; // user who is deleted
+    const STATUS_ACTIVE = 'Active'; // can use the app
+    const STATUS_PENDING = 'Pending'; // user who signs up but needs to confirm email
+    const STATUS_INVITED = 'Invited'; // user who was invited by an admin
+    const STATUS_DELETED = 'Deleted'; // user who is deleted
 
     private $userId;
     private $username;

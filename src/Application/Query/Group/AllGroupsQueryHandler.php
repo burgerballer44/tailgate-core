@@ -3,18 +3,31 @@
 namespace Tailgate\Application\Query\Group;
 
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
+use Tailgate\Application\DataTransformer\GroupDataTransformerInterface;
 
 class AllGroupsQueryHandler
 {
     private $groupViewRepository;
+    private $groupViewTransformer;
 
-    public function __construct(GroupViewRepositoryInterface $groupViewRepository)
-    {
+    public function __construct(
+        GroupViewRepositoryInterface $groupViewRepository,
+        GroupDataTransformerInterface $groupViewTransformer
+    ) {
         $this->groupViewRepository = $groupViewRepository;
+        $this->groupViewTransformer = $groupViewTransformer;
     }
 
     public function handle(AllGroupsQuery $allGroupsQuery)
     {
-        return $this->groupViewRepository->all();
+        $groupViews = $this->groupViewRepository->all();
+
+        $groups = [];
+
+        foreach ($groupViews as $groupView) {
+            $groups[] = $this->groupViewTransformer->read($groupView);
+        }
+
+        return $groups;
     }
 }
