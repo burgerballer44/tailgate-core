@@ -37,7 +37,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     {
         $stmt = $this->pdo->prepare(
             'INSERT INTO `member` (member_id, group_id, user_id, role, created_at)
-            VALUES (:member_id, :game_id, :user_id, :role, :created_at)'
+            VALUES (:member_id, :group_id, :user_id, :role, :created_at)'
         );
 
         $stmt->execute([

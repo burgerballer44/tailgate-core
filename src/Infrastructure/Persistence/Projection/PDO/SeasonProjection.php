@@ -30,8 +30,8 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':sport' => $event->getSport(),
             ':type' => $event->getSeasonType(),
             ':name' => $event->getName(),
-            ':season_start' => $event->getSeasonStart(),
-            ':season_end' => $event->getSeasonEnd(),
+            ':season_start' => $event->getSeasonStart()->format('Y-m-d H:i:s'),
+            ':season_end' => $event->getSeasonEnd()->format('Y-m-d H:i:s'),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }
@@ -48,7 +48,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':game_id' => $event->getGameId(),
             ':home_team_id' => $event->getHomeTeamId(),
             ':away_team_id' => $event->getAwayTeamId(),
-            ':start_date' => $event->getStartDate(),
+            ':start_date' => $event->getStartDate()->format('Y-m-d H:i:s'),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }

@@ -70,7 +70,7 @@ class PDOGroupProjectionTest extends TestCase
             ->expects($this->once())
             ->method('prepare')
             ->with('INSERT INTO `member` (member_id, group_id, user_id, role, created_at)
-            VALUES (:member_id, :game_id, :user_id, :role, :created_at)')
+            VALUES (:member_id, :group_id, :user_id, :role, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
