@@ -3,11 +3,10 @@
 namespace Tailgate\Application\Validator;
 
 use Respect\Validation\Validator as V;
-use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
 
 class AddMemberToGroupCommandValidator extends AbstractValidator
 {
-    public function __construct(UserViewRepositoryInterface $userViewRepository)
+    public function __construct()
     {
         parent::__construct();
     }
