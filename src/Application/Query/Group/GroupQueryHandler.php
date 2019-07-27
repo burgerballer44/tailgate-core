@@ -7,6 +7,8 @@ use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
 use Tailgate\Application\DataTransformer\GroupDataTransformerInterface;
+use Tailgate\Application\DataTransformer\MemberDataTransformerInterface;
+use Tailgate\Application\DataTransformer\ScoreDataTransformerInterface;
 
 class GroupQueryHandler
 {
@@ -14,17 +16,23 @@ class GroupQueryHandler
     private $memberViewRepository;
     private $scoreViewRepository;
     private $groupViewTransformer;
+    private $groupViewTransformer;
+    private $groupViewTransformer;
 
     public function __construct(
         GroupViewRepositoryInterface $groupViewRepository,
         MemberViewRepositoryInterface $memberViewRepository,
         ScoreViewRepositoryInterface $scoreViewRepository,
-        GroupDataTransformerInterface $groupViewTransformer
+        GroupDataTransformerInterface $groupViewTransformer,
+        MemberDataTransformerInterface $memberViewTransformer,
+        ScoreDataTransformerInterface $scoreViewTransformer
     ) {
         $this->groupViewRepository = $groupViewRepository;
         $this->memberViewRepository = $memberViewRepository;
         $this->scoreViewRepository = $scoreViewRepository;
         $this->groupViewTransformer = $groupViewTransformer;
+        $this->memberViewTransformer = $memberViewTransformer;
+        $this->scoreViewTransformer = $scoreViewTransformer;
     }
 
     public function handle(GroupQuery $groupQuery)
@@ -34,9 +42,19 @@ class GroupQueryHandler
         $groupView = $this->groupViewRepository->get($groupId);
 
         $memberViews = $this->memberViewRepository->getAllByGroup($groupId);
+        foreach ($memberViews as $memberView) {
+            $members[] = $this->memberViewTransformer->read($memberView);
+        }
 
         $scoreViews = $this->scoreViewRepository->getAllByGroup($groupId);
+        foreach ($scoreViews as $scoreView) {
+            $scores[] = $this->scoreViewTransformer->read($scoreView);
+        }
 
-        return $this->groupViewTransformer->read($groupView);
+        return [
+            $this->groupViewTransformer->read($groupView),
+            'members' => $members,
+            'scores' => $scores,
+        ];
     }
 }
