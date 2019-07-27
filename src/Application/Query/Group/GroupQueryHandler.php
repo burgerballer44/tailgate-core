@@ -16,8 +16,8 @@ class GroupQueryHandler
     private $memberViewRepository;
     private $scoreViewRepository;
     private $groupViewTransformer;
-    private $groupViewTransformer;
-    private $groupViewTransformer;
+    private $memberViewTransformer;
+    private $scoreViewTransformer;
 
     public function __construct(
         GroupViewRepositoryInterface $groupViewRepository,
@@ -42,11 +42,13 @@ class GroupQueryHandler
         $groupView = $this->groupViewRepository->get($groupId);
 
         $memberViews = $this->memberViewRepository->getAllByGroup($groupId);
+        $members = [];
         foreach ($memberViews as $memberView) {
             $members[] = $this->memberViewTransformer->read($memberView);
         }
 
         $scoreViews = $this->scoreViewRepository->getAllByGroup($groupId);
+        $scores = [];
         foreach ($scoreViews as $scoreView) {
             $scores[] = $this->scoreViewTransformer->read($scoreView);
         }
