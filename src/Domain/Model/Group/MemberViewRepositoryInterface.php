@@ -2,11 +2,11 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\MemberId;
 
-interface MeMberViewRepositoryInterface
+interface MemberViewRepositoryInterface
 {
-    public function get(GroupId $id, UserId $userId);
-    public function all(GroupId $id);
+    public function get(MemberId $id);
+    public function getAllByGroup(GroupId $id);
 }

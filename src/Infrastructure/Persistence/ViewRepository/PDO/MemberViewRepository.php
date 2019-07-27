@@ -3,8 +3,8 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
-use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\MemberView;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
 
@@ -17,10 +17,10 @@ class MemberViewRepository implements MemberViewRepositoryInterface
         $this->pdo = $pdo;
     }
 
-    public function get(GroupId $id, UserId $userId)
+    public function get(MemberId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `member` WHERE group_id = :group_id AND user_id = :user_id');
-        $stmt->execute([':group_id' => (string) $id, ':user_id' => (string) $userId]);
+        $stmt = $this->pdo->prepare('SELECT * FROM `member` WHERE member_id = :member_id');
+        $stmt->execute([':member_id' => (string) $id]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -32,15 +32,15 @@ class MemberViewRepository implements MemberViewRepositoryInterface
         );
     }
 
-    public function all(GroupId $id)
+    public function getAllByGroup(GroupId $id)
     {
         $stmt = $this->pdo->prepare('SELECT * FROM `member` WHERE group_id = :group_id');
-        $stmt->execute();
+        $stmt->execute([':group_id' => (string) $id]);
 
-        $groups = [];
+        $members = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $groups[] = new MemberView(
+            $members[] = new MemberView(
                 $row['member_id'],
                 $row['group_id'],
                 $row['user_id'],
@@ -48,6 +48,6 @@ class MemberViewRepository implements MemberViewRepositoryInterface
             );
         }
 
-        return $groups;
+        return $members;
     }
 }

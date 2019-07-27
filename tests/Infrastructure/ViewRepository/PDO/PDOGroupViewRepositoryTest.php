@@ -20,7 +20,7 @@ class PDOGroupViewRepositoryTest extends TestCase
         $this->viewRepository = new GroupViewRepository($this->pdoMock);
     }
 
-    public function testItCanGetAUser()
+    public function testItCanGetAGroup()
     {
         $groupId = GroupId::fromString('groupId');
 
@@ -40,7 +40,7 @@ class PDOGroupViewRepositoryTest extends TestCase
         $this->viewRepository->get($groupId);
     }
 
-    public function testItCanGetAllUsers()
+    public function testItCanGetAllGroups()
     {
         $groupId = GroupId::fromString('groupId');
 

@@ -7,6 +7,8 @@ class GroupView
     private $groupId;
     private $name;
     private $ownerId;
+    private $members;
+    private $scores;
 
     public function __construct($groupId, $name, $ownerId)
     {

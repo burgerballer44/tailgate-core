@@ -4,8 +4,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Group\GroupView;
-use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\MemberViewRepository;
 
 class PDOMemberViewRepositoryTest extends TestCase
@@ -23,23 +22,22 @@ class PDOMemberViewRepositoryTest extends TestCase
 
     public function testItCanGetAMember()
     {
-        $groupId = GroupId::fromString('groupId');
-        $userId = UserId::fromString('userId');
+        $memberId = MemberId::fromString('memberId');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `member` WHERE group_id = :group_id AND user_id = :user_id')
+            ->with('SELECT * FROM `member` WHERE member_id = :member_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
-            ->with([':group_id' => (string) $groupId, ':user_id' => (string) $userId]);
+            ->with([':member_id' => (string) $memberId]);
 
-        $this->viewRepository->get($groupId, $userId);
+        $this->viewRepository->get($memberId);
     }
 
     public function testItCanGetAllMembersOfAGroup()
@@ -56,13 +54,14 @@ class PDOMemberViewRepositoryTest extends TestCase
         // execute method called once
         $this->pdoStatementMock
             ->expects($this->once())
-            ->method('execute');
+            ->method('execute')
+            ->with([':group_id' => (string) $groupId]);
 
          // fetch method called
          $this->pdoStatementMock
             ->expects($this->atLeastOnce())
             ->method('fetch');
 
-        $this->viewRepository->all($groupId);
+        $this->viewRepository->getAllByGroup($groupId);
     }
 }
