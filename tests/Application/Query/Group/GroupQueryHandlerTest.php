@@ -11,8 +11,6 @@ use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
 use Tailgate\Application\DataTransformer\GroupDataTransformerInterface;
-use Tailgate\Application\DataTransformer\MemberDataTransformerInterface;
-use Tailgate\Application\DataTransformer\ScoreDataTransformerInterface;
 
 class GroupQueryHandlerTest extends TestCase
 {
@@ -24,8 +22,6 @@ class GroupQueryHandlerTest extends TestCase
         $memberViewRepository = $this->createMock(MemberViewRepositoryInterface::class);
         $scoreViewRepository = $this->createMock(ScoreViewRepositoryInterface::class);
         $groupViewTransformer = $this->createMock(GroupDataTransformerInterface::class);
-        $memberViewTransformer = $this->createMock(MemberDataTransformerInterface::class);
-        $scoreViewTransformer = $this->createMock(ScoreDataTransformerInterface::class);
         $groupView = $this->createMock(GroupView::class);
         $groupViewRepository->expects($this->once())
             ->method('get')
@@ -52,8 +48,6 @@ class GroupQueryHandlerTest extends TestCase
             $memberViewRepository,
             $scoreViewRepository,
             $groupViewTransformer,
-            $memberViewTransformer,
-            $scoreViewTransformer,
         );
         $groupQueryHandler->handle($groupQuery);
     }
