@@ -2,10 +2,10 @@
 
 namespace Tailgate\Application\DataTransformer;
 
-use Tailgate\Application\DataTransformer\GroupDataTransformerInterface;
+use Tailgate\Application\DataTransformer\ScoreDataTransformerInterface;
 use Tailgate\Domain\Model\Group\GroupView;
 
-class ScoreViewArrayDataTransformer implements GroupDataTransformerInterface
+class ScoreViewArrayDataTransformer implements ScoreDataTransformerInterface
 {
     public function read(GroupView $groupView)
     {
