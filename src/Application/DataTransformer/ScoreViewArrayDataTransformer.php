@@ -7,15 +7,15 @@ use Tailgate\Domain\Model\Group\GroupView;
 
 class ScoreViewArrayDataTransformer implements ScoreDataTransformerInterface
 {
-    public function read(GroupView $groupView)
+    public function read(ScoreView $scoreView)
     {
         return [
-            'scoreId' => $groupView->getScoreId(),
-            'groupId' => $groupView->getGroupId(),
-            'userId' => $groupView->getUserId(),
-            'gameId' => $groupView->getGameId(),
-            'homeTeamPrediction' => $groupView->getHomeTeamPrediction(),
-            'awayTeamPrediction' => $groupView->getAwayTeamPrediction()
+            'scoreId' => $scoreView->getScoreId(),
+            'groupId' => $scoreView->getGroupId(),
+            'userId' => $scoreView->getUserId(),
+            'gameId' => $scoreView->getGameId(),
+            'homeTeamPrediction' => $scoreView->getHomeTeamPrediction(),
+            'awayTeamPrediction' => $scoreView->getAwayTeamPrediction()
         ];
     }
 }
