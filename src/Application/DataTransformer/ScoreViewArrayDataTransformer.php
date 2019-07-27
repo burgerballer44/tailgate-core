@@ -3,7 +3,7 @@
 namespace Tailgate\Application\DataTransformer;
 
 use Tailgate\Application\DataTransformer\ScoreDataTransformerInterface;
-use Tailgate\Domain\Model\Group\GroupView;
+use Tailgate\Domain\Model\Group\ScoreView;
 
 class ScoreViewArrayDataTransformer implements ScoreDataTransformerInterface
 {
