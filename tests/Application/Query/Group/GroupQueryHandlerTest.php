@@ -47,7 +47,7 @@ class GroupQueryHandlerTest extends TestCase
             $groupViewRepository,
             $memberViewRepository,
             $scoreViewRepository,
-            $groupViewTransformer,
+            $groupViewTransformer
         );
         $groupQueryHandler->handle($groupQuery);
     }
