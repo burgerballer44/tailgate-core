@@ -20,7 +20,7 @@ class PDOSeasonViewRepositoryTest extends TestCase
         $this->viewRepository = new SeasonViewRepository($this->pdoMock);
     }
 
-    public function testItCanGetAUser()
+    public function testItCanGetASeason()
     {
         $seasonId = SeasonId::fromString('seasonId');
 
@@ -40,7 +40,7 @@ class PDOSeasonViewRepositoryTest extends TestCase
         $this->viewRepository->get($seasonId);
     }
 
-    public function testItCanGetAllUsers()
+    public function testItCanGetAllSeasons()
     {
         $seasonId = SeasonId::fromString('seasonId');
 

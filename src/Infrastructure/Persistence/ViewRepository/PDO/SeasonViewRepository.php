@@ -29,7 +29,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
             $row['type'],
             $row['name'],
             $row['season_start'],
-            $row['season_end'],
+            $row['season_end']
         );
     }
 
@@ -47,7 +47,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
                 $row['type'],
                 $row['name'],
                 $row['season_start'],
-                $row['season_end'],
+                $row['season_end']
             );
         }
 
