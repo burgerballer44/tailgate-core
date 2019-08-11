@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Common\Security\RandomStringInterface;
 
-class SignUpUserHandler
+class RegisterUserHandler
 {
     private $userRepository;
     private $passwordHashing;
@@ -23,11 +23,11 @@ class SignUpUserHandler
         $this->randomStringer = $randomStringer;
     }
 
-    public function handle(SignUpUserCommand $signUpUserCommand)
+    public function handle(RegisterUserCommand $registerUserCommand)
     {
-        $username = $signUpUserCommand->getUsername();
-        $password = $signUpUserCommand->getPassword();
-        $email = $signUpUserCommand->getEmail();
+        $username = $registerUserCommand->getUsername();
+        $password = $registerUserCommand->getPassword();
+        $email = $registerUserCommand->getEmail();
 
         $user = User::create(
             $this->userRepository->nextIdentity(),

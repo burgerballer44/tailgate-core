@@ -6,7 +6,7 @@ use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserSignedUp;
+use Tailgate\Domain\Model\User\UserRegistered;
 
 class UserTest extends TestCase
 {

@@ -6,7 +6,7 @@ use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvents;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserSignedUp;
+use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Infrastructure\Persistence\EventStore\PDO\EventStore;
 
 class PDOEventStoreTest extends TestCase
@@ -25,9 +25,9 @@ class PDOEventStoreTest extends TestCase
     public function testItCanCommitDomainEvents()
     {
         $domainEvents = new DomainEvents([
-            new UserSignedUp(UserId::fromString('userId1'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString'),
-            new UserSignedUp(UserId::fromString('userId2'), 'username2', 'password2', 'email2', 'status', 'role', 'randomString'),
-            new UserSignedUp(UserId::fromString('userId3'), 'username3', 'password3', 'email3', 'status', 'role', 'randomString'),
+            new UserRegistered(UserId::fromString('userId1'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString'),
+            new UserRegistered(UserId::fromString('userId2'), 'username2', 'password2', 'email2', 'status', 'role', 'randomString'),
+            new UserRegistered(UserId::fromString('userId3'), 'username3', 'password3', 'email3', 'status', 'role', 'randomString'),
         ]);
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -49,8 +49,8 @@ class PDOEventStoreTest extends TestCase
     public function testItCanGetAnAggregateHistory()
     {
         $id = UserId::fromString('userId');
-        $event1 = new UserSignedUp($id, 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
-        $event2 = new UserSignedUp($id, 'username2', 'password2', 'email2', 'status', 'role', 'randomString');
+        $event1 = new UserRegistered($id, 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
+        $event2 = new UserRegistered($id, 'username2', 'password2', 'email2', 'status', 'role', 'randomString');
         $serializedEvent1 = serialize($event1);
         $serializedEvent2 = serialize($event2);
 

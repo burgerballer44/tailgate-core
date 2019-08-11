@@ -2,7 +2,7 @@
 
 namespace Tailgate\Application\Command\User;
 
-class SignUpUserCommand
+class RegisterUserCommand
 {
     private $username;
     private $password;

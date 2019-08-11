@@ -3,27 +3,27 @@
 namespace Tailgate\Test\Application\Command\User;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Application\Command\User\SignUpUserCommand;
-use Tailgate\Application\Command\User\SignUpUserHandler;
+use Tailgate\Application\Command\User\RegisterUserCommand;
+use Tailgate\Application\Command\User\RegisterUserHandler;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserSignedUp;
+use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Common\Security\RandomStringInterface;
 use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
 
-class SignUpUserHandlerTest extends TestCase
+class RegisterUserHandlerTest extends TestCase
 {
     private $username = 'username';
     private $password = 'password';
     private $confirmPassword = 'password';
     private $email = 'email@email.com';
     private $key = 'randomKey';
-    private $signUpUserCommand;
+    private $registerUserCommand;
 
     public function setUp()
     {
-        $this->signUpUserCommand = new SignUpUserCommand(
+        $this->registerUserCommand = new RegisterUserCommand(
             $this->username,
             $this->password,
             $this->email,
@@ -31,7 +31,7 @@ class SignUpUserHandlerTest extends TestCase
         );
     }
 
-    public function testItAddsAUserSignedUpToTheUserRepository()
+    public function testItAddsAUserRegisteredToTheUserRepository()
     {
         $username = $this->username;
         $password = $this->password;
@@ -46,7 +46,7 @@ class SignUpUserHandlerTest extends TestCase
             ->getMock();
 
         // the add method should be called once
-        // the user object should have the UserSignedUp event
+        // the user object should have the UserRegistered event
         $userRepository
             ->expects($this->once())
             ->method('add')
@@ -59,7 +59,7 @@ class SignUpUserHandlerTest extends TestCase
             ) {
                 $events = $user->getRecordedEvents();
 
-                return $events[0] instanceof UserSignedUp
+                return $events[0] instanceof UserRegistered
                 && $events[0]->getAggregateId() instanceof UserId
                 && $events[0]->getUsername() === $username
                 && $events[0]->getPasswordHash() === $password
@@ -83,12 +83,12 @@ class SignUpUserHandlerTest extends TestCase
             ->method('generate')
             ->willReturn($key);
 
-        $signUpUserHandler = new SignUpUserHandler(
+        $registerUserHandler = new RegisterUserHandler(
             $userRepository,
             $passwordHashing,
             $randomStringer,
         );
 
-        $signUpUserHandler->handle($this->signUpUserCommand);
+        $registerUserHandler->handle($this->registerUserCommand);
     }
 }

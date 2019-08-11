@@ -8,7 +8,7 @@ use Tailgate\Application\Validator\User\UniqueEmail;
 use Tailgate\Application\Validator\User\UniqueUsername;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
 
-class SignUpUserCommandValidator extends AbstractValidator
+class RegisterUserCommandValidator extends AbstractValidator
 {
     private $userViewRepository;
 

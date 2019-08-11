@@ -4,7 +4,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserSignedUp;
+use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\EmailUpdated;
@@ -23,9 +23,9 @@ class PDOUserProjectionTest extends TestCase
         $this->projection = new UserProjection($this->pdoMock);
     }
 
-    public function testItCanProjectUserSignedUp()
+    public function testItCanProjectUserRegistered()
     {
-        $event = new UserSignedUp(UserId::fromString('userId'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
+        $event = new UserRegistered(UserId::fromString('userId'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -50,7 +50,7 @@ class PDOUserProjectionTest extends TestCase
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
 
-        $this->projection->projectUserSignedUp($event);
+        $this->projection->projectUserRegistered($event);
     }
 
     public function testItCanProjectUserActivated()

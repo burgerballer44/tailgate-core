@@ -6,6 +6,8 @@ use Tailgate\Common\Projection\ProjectionInterface;
 
 interface UserProjectionInterface extends ProjectionInterface
 {
-    public function projectUserSignedUp(UserSignedUp $event);
+    public function projectUserRegistered(UserRegistered $event);
     public function projectUserActivated(UserActivated $event);
+    public function projectPasswordUpdated(PasswordUpdated $event);
+    public function projectEmailUpdated(EmailUpdated $event);
 }

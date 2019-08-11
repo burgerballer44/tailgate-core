@@ -4,7 +4,7 @@ namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 
 use PDO;
 use Tailgate\Domain\Model\User\UserProjectionInterface;
-use Tailgate\Domain\Model\User\UserSignedUp;
+use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\EmailUpdated;
@@ -19,7 +19,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
         $this->pdo = $pdo;
     }
 
-    public function projectUserSignedUp(UserSignedUp $event)
+    public function projectUserRegistered(UserRegistered $event)
     {
         $stmt = $this->pdo->prepare(
             'INSERT INTO `user` (user_id, username, password_hash, email, status, role, key, created_at)

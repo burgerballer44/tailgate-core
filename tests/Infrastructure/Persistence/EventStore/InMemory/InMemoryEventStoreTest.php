@@ -6,7 +6,7 @@ use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvents;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserSignedUp;
+use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Infrastructure\Persistence\EventStore\InMemory\EventStore;
 
 class InMemoryEventStoreTest extends TestCase
@@ -18,9 +18,9 @@ class InMemoryEventStoreTest extends TestCase
         $id3 = UserId::fromString('userId3');
 
         $domainEvents = new DomainEvents([
-            new UserSignedUp($id1, 'username1', 'password1', 'email1', 'status', 'role', 'randomString'),
-            new UserSignedUp($id1, 'username2', 'password2', 'email2', 'status', 'role', 'randomString'),
-            new UserSignedUp($id2, 'username3', 'password3', 'email3', 'status', 'role', 'randomString'),
+            new UserRegistered($id1, 'username1', 'password1', 'email1', 'status', 'role', 'randomString'),
+            new UserRegistered($id1, 'username2', 'password2', 'email2', 'status', 'role', 'randomString'),
+            new UserRegistered($id2, 'username3', 'password3', 'email3', 'status', 'role', 'randomString'),
         ]);
         $eventStore = new EventStore;
 

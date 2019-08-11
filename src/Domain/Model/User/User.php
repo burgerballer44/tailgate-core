@@ -55,7 +55,7 @@ class User extends AbstractEntity
         );
 
         $newUser->recordThat(
-            new UserSignedUp(
+            new UserRegistered(
                 $userId,
                 $username,
                 $passwordHash,
@@ -134,7 +134,7 @@ class User extends AbstractEntity
         );
     }
 
-    protected function applyUserSignedUp(UserSignedUp $event)
+    protected function applyUserRegistered(UserRegistered $event)
     {
         $this->username = $event->getUsername();
         $this->passwordHash = $event->getPasswordHash();
