@@ -89,6 +89,12 @@ class RegisterUserHandlerTest extends TestCase
             $randomStringer
         );
 
-        $registerUserHandler->handle($this->registerUserCommand);
+        $user = $registerUserHandler->handle($this->registerUserCommand);
+
+        $this->assertNotEmpty($user['userId']);
+        $this->assertEquals($this->username, $user['username']);
+        $this->assertEquals($this->email, $user['email']);
+        $this->assertEquals(User::STATUS_PENDING, $user['status']);
+        $this->assertEquals(User::ROLE_USER, $user['role']);
     }
 }

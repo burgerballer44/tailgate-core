@@ -38,5 +38,13 @@ class RegisterUserHandler
         );
 
         $this->userRepository->add($user);
+
+        return [
+            'userId'   => $user->getId(),
+            'username' => $user->getUsername(),
+            'email'    => $user->getEmail(),
+            'status'   => $user->getStatus(),
+            'role'     => $user->getRole()
+        ];
     }
 }
