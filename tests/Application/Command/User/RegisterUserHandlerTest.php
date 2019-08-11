@@ -86,7 +86,7 @@ class RegisterUserHandlerTest extends TestCase
         $registerUserHandler = new RegisterUserHandler(
             $userRepository,
             $passwordHashing,
-            $randomStringer,
+            $randomStringer
         );
 
         $registerUserHandler->handle($this->registerUserCommand);
