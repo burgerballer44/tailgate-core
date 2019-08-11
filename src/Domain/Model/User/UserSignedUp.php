@@ -12,6 +12,7 @@ class UserSignedUp implements DomainEvent
     private $email;
     private $status;
     private $role;
+    private $key;
     private $occurredOn;
 
     public function __construct(
@@ -20,7 +21,8 @@ class UserSignedUp implements DomainEvent
         $passwordHash,
         $email,
         $status,
-        $role
+        $role,
+        $key
     ) {
         $this->userId = $userId;
         $this->username = $username;
@@ -28,6 +30,7 @@ class UserSignedUp implements DomainEvent
         $this->email = $email;
         $this->status = $status;
         $this->role = $role;
+        $this->key = $key;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
@@ -59,6 +62,11 @@ class UserSignedUp implements DomainEvent
     public function getRole()
     {
         return $this->role;
+    }
+
+    public function getKey()
+    {
+        return $this->key;
     }
 
     public function getOccurredOn()

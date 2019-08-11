@@ -18,9 +18,9 @@ class InMemoryEventStoreTest extends TestCase
         $id3 = UserId::fromString('userId3');
 
         $domainEvents = new DomainEvents([
-            new UserSignedUp($id1, 'username1', 'password1', 'email1', 'status', 'role'),
-            new UserSignedUp($id1, 'username2', 'password2', 'email2', 'status', 'role'),
-            new UserSignedUp($id2, 'username3', 'password3', 'email3', 'status', 'role'),
+            new UserSignedUp($id1, 'username1', 'password1', 'email1', 'status', 'role', 'randomString'),
+            new UserSignedUp($id1, 'username2', 'password2', 'email2', 'status', 'role', 'randomString'),
+            new UserSignedUp($id2, 'username3', 'password3', 'email3', 'status', 'role', 'randomString'),
         ]);
         $eventStore = new EventStore;
 

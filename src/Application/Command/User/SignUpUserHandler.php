@@ -5,18 +5,22 @@ namespace Tailgate\Application\Command\User;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
+use Tailgate\Common\Security\RandomStringInterface;
 
 class SignUpUserHandler
 {
     private $userRepository;
     private $passwordHashing;
+    private $randomStringer;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
-        PasswordHashingInterface $passwordHashing
+        PasswordHashingInterface $passwordHashing,
+        RandomStringInterface $randomStringer
     ) {
         $this->userRepository = $userRepository;
         $this->passwordHashing = $passwordHashing;
+        $this->randomStringer = $randomStringer;
     }
 
     public function handle(SignUpUserCommand $signUpUserCommand)
@@ -29,7 +33,8 @@ class SignUpUserHandler
             $this->userRepository->nextIdentity(),
             $username,
             $this->passwordHashing->hash($password),
-            $email
+            $email,
+            $this->randomStringer->generate()
         );
 
         $this->userRepository->add($user);

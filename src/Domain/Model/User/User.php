@@ -22,6 +22,7 @@ class User extends AbstractEntity
     private $email;
     private $status;
     private $role;
+    private $key;
 
     protected function __construct(
         $userId,
@@ -29,7 +30,8 @@ class User extends AbstractEntity
         $passwordHash,
         $email,
         $status,
-        $role
+        $role,
+        $key
     ) {
         $this->userId = $userId;
         $this->username = $username;
@@ -37,9 +39,10 @@ class User extends AbstractEntity
         $this->email = $email;
         $this->status = $status;
         $this->role = $role;
+        $this->key = $key;
     }
 
-    public static function create(UserId $userId, $username, $passwordHash, $email)
+    public static function create(UserId $userId, $username, $passwordHash, $email, $key)
     {
         $newUser = new User(
             $userId,
@@ -47,7 +50,8 @@ class User extends AbstractEntity
             $passwordHash,
             $email,
             User::STATUS_PENDING,
-            User::ROLE_USER
+            User::ROLE_USER,
+            $key
         );
 
         $newUser->recordThat(
@@ -57,7 +61,8 @@ class User extends AbstractEntity
                 $passwordHash,
                 $email,
                 User::STATUS_PENDING,
-                User::ROLE_USER
+                User::ROLE_USER,
+                $key
             )
         );
 
@@ -66,7 +71,7 @@ class User extends AbstractEntity
 
     protected static function createEmptyEntity(IdentifiesAggregate $userId)
     {
-        return new User($userId, '', '', '', '', '');
+        return new User($userId, '', '', '', '', '', '');
     }
 
     public function getId()
@@ -99,6 +104,36 @@ class User extends AbstractEntity
         return $this->role;
     }
 
+    public function activate()
+    {
+        $this->applyAndRecordThat(
+            new UserActivated(
+                $this->userId,
+                User::STATUS_ACTIVE
+            )
+        );
+    }
+
+    public function updatePassword($passwordHash)
+    {
+        $this->applyAndRecordThat(
+            new PasswordUpdated(
+                $this->userId,
+                $passwordHash
+            )
+        );
+    }
+
+    public function updateEmail($email)
+    {
+        $this->applyAndRecordThat(
+            new EmailUpdated(
+                $this->userId,
+                $email
+            )
+        );
+    }
+
     protected function applyUserSignedUp(UserSignedUp $event)
     {
         $this->username = $event->getUsername();
@@ -106,5 +141,20 @@ class User extends AbstractEntity
         $this->email = $event->getEmail();
         $this->status = $event->getStatus();
         $this->role = $event->getRole();
+    }
+
+    protected function applyUserActivated(UserActivated $event)
+    {
+        $this->status = $event->getStatus();
+    }
+
+    protected function applyPasswordUpdated(PasswordUpdated $event)
+    {
+        $this->passwordHash = $event->getPasswordHash();
+    }
+
+    protected function applyEmailUpdated(EmailUpdated $event)
+    {
+        $this->email = $event->getEmail();
     }
 }

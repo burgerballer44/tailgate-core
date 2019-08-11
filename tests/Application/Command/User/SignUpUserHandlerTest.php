@@ -9,6 +9,7 @@ use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserSignedUp;
 use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
+use Tailgate\Common\Security\RandomStringInterface;
 use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
 
 class SignUpUserHandlerTest extends TestCase
@@ -17,6 +18,7 @@ class SignUpUserHandlerTest extends TestCase
     private $password = 'password';
     private $confirmPassword = 'password';
     private $email = 'email@email.com';
+    private $key = 'randomKey';
     private $signUpUserCommand;
 
     public function setUp()
@@ -35,6 +37,7 @@ class SignUpUserHandlerTest extends TestCase
         $password = $this->password;
         $confirmPassword = $this->confirmPassword;
         $email = $this->email;
+        $key = $this->key;
 
         // only needs the add method
         $userRepository = $this->getMockBuilder(UserRepository::class)
@@ -51,7 +54,8 @@ class SignUpUserHandlerTest extends TestCase
                 $username,
                 $password,
                 $confirmPassword,
-                $email
+                $email,
+                $key
             ) {
                 $events = $user->getRecordedEvents();
 
@@ -62,6 +66,7 @@ class SignUpUserHandlerTest extends TestCase
                 && $events[0]->getEmail() === $email
                 && $events[0]->getStatus() === User::STATUS_PENDING
                 && $events[0]->getRole() === User::ROLE_USER
+                && $events[0]->getKey() === $key
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));
@@ -72,9 +77,16 @@ class SignUpUserHandlerTest extends TestCase
             ->method('hash')
             ->willReturn($password);
 
+        $randomStringer = $this->createMock(RandomStringInterface::class);
+        $randomStringer
+            ->expects($this->once())
+            ->method('generate')
+            ->willReturn($key);
+
         $signUpUserHandler = new SignUpUserHandler(
             $userRepository,
-            $passwordHashing
+            $passwordHashing,
+            $randomStringer,
         );
 
         $signUpUserHandler->handle($this->signUpUserCommand);

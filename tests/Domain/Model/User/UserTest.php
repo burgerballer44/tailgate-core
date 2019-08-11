@@ -14,6 +14,7 @@ class UserTest extends TestCase
     private $username;
     private $passwordHash;
     private $email;
+    private $key;
 
     public function setUp()
     {
@@ -21,12 +22,13 @@ class UserTest extends TestCase
         $this->username = 'username';
         $this->passwordHash = 'password';
         $this->email = 'email@email.com';
+        $this->email = 'randomString';
     }
 
     public function testUserShouldBeTheSameAfterReconstitution()
     {
         $user = User::create(
-            $this->userId, $this->username, $this->passwordHash, $this->email
+            $this->userId, $this->username, $this->passwordHash, $this->email, $this->key
         );
         $events = $user->getRecordedEvents();
         $user->clearRecordedEvents();
@@ -41,7 +43,7 @@ class UserTest extends TestCase
 
     public function testAUserCanBeCreated()
     {
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email);
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->key);
 
         $this->assertEquals($this->userId, $user->getId());
         $this->assertEquals($this->username, $user->getUsername());
@@ -49,5 +51,36 @@ class UserTest extends TestCase
         $this->assertEquals($this->email, $user->getEmail());
         $this->assertEquals(User::STATUS_PENDING, $user->getStatus());
         $this->assertEquals(User::ROLE_USER, $user->getRole());
+    }
+
+    public function testAUserCanBeActivated()
+    {
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->key);
+
+        $user->activate();
+
+        $this->assertEquals(User::STATUS_ACTIVE, $user->getStatus());
+    }
+
+    public function testAPasswordCanBeUpdated()
+    {
+        $newPassword = 'newPassword';
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->key);
+
+        $user->updatePassword($newPassword);
+
+        $this->assertEquals($newPassword, $user->getPasswordHash());
+        $this->assertNotEquals($this->passwordHash, $user->getPasswordHash());
+    }
+
+    public function testAnEmailCanBeUpdated()
+    {
+        $newEmail = 'email@new.new';
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->key);
+
+        $user->updateEmail($newEmail);
+
+        $this->assertEquals($newEmail, $user->getEmail(),);
+        $this->assertNotEquals($this->email, $user->getEmail());
     }
 }
