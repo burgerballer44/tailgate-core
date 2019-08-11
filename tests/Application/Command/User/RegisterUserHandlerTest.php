@@ -18,7 +18,7 @@ class RegisterUserHandlerTest extends TestCase
     private $password = 'password';
     private $confirmPassword = 'password';
     private $email = 'email@email.com';
-    private $key = 'randomKey';
+    private $uniqueKey = 'randomKey';
     private $registerUserCommand;
 
     public function setUp()
@@ -37,7 +37,7 @@ class RegisterUserHandlerTest extends TestCase
         $password = $this->password;
         $confirmPassword = $this->confirmPassword;
         $email = $this->email;
-        $key = $this->key;
+        $uniqueKey = $this->uniqueKey;
 
         // only needs the add method
         $userRepository = $this->getMockBuilder(UserRepository::class)
@@ -55,7 +55,7 @@ class RegisterUserHandlerTest extends TestCase
                 $password,
                 $confirmPassword,
                 $email,
-                $key
+                $uniqueKey
             ) {
                 $events = $user->getRecordedEvents();
 
@@ -66,7 +66,7 @@ class RegisterUserHandlerTest extends TestCase
                 && $events[0]->getEmail() === $email
                 && $events[0]->getStatus() === User::STATUS_PENDING
                 && $events[0]->getRole() === User::ROLE_USER
-                && $events[0]->getKey() === $key
+                && $events[0]->getUniqueKey() === $uniqueKey
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));
@@ -81,7 +81,7 @@ class RegisterUserHandlerTest extends TestCase
         $randomStringer
             ->expects($this->once())
             ->method('generate')
-            ->willReturn($key);
+            ->willReturn($uniqueKey);
 
         $registerUserHandler = new RegisterUserHandler(
             $userRepository,

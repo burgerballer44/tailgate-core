@@ -14,7 +14,7 @@ class UserTest extends TestCase
     private $username;
     private $passwordHash;
     private $email;
-    private $key;
+    private $uniqueKey;
 
     public function setUp()
     {
@@ -28,7 +28,7 @@ class UserTest extends TestCase
     public function testUserShouldBeTheSameAfterReconstitution()
     {
         $user = User::create(
-            $this->userId, $this->username, $this->passwordHash, $this->email, $this->key
+            $this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey
         );
         $events = $user->getRecordedEvents();
         $user->clearRecordedEvents();
@@ -43,7 +43,7 @@ class UserTest extends TestCase
 
     public function testAUserCanBeCreated()
     {
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->key);
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
 
         $this->assertEquals($this->userId, $user->getId());
         $this->assertEquals($this->username, $user->getUsername());
@@ -55,7 +55,7 @@ class UserTest extends TestCase
 
     public function testAUserCanBeActivated()
     {
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->key);
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
 
         $user->activate();
 
@@ -65,7 +65,7 @@ class UserTest extends TestCase
     public function testAPasswordCanBeUpdated()
     {
         $newPassword = 'newPassword';
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->key);
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
 
         $user->updatePassword($newPassword);
 
@@ -76,7 +76,7 @@ class UserTest extends TestCase
     public function testAnEmailCanBeUpdated()
     {
         $newEmail = 'email@new.new';
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->key);
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
 
         $user->updateEmail($newEmail);
 

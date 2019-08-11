@@ -22,7 +22,7 @@ class User extends AbstractEntity
     private $email;
     private $status;
     private $role;
-    private $key;
+    private $uniqueKey;
 
     protected function __construct(
         $userId,
@@ -31,7 +31,7 @@ class User extends AbstractEntity
         $email,
         $status,
         $role,
-        $key
+        $uniqueKey
     ) {
         $this->userId = $userId;
         $this->username = $username;
@@ -39,10 +39,10 @@ class User extends AbstractEntity
         $this->email = $email;
         $this->status = $status;
         $this->role = $role;
-        $this->key = $key;
+        $this->uniqueKey = $uniqueKey;
     }
 
-    public static function create(UserId $userId, $username, $passwordHash, $email, $key)
+    public static function create(UserId $userId, $username, $passwordHash, $email, $uniqueKey)
     {
         $newUser = new User(
             $userId,
@@ -51,7 +51,7 @@ class User extends AbstractEntity
             $email,
             User::STATUS_PENDING,
             User::ROLE_USER,
-            $key
+            $uniqueKey
         );
 
         $newUser->recordThat(
@@ -62,7 +62,7 @@ class User extends AbstractEntity
                 $email,
                 User::STATUS_PENDING,
                 User::ROLE_USER,
-                $key
+                $uniqueKey
             )
         );
 

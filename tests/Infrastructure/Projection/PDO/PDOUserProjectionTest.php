@@ -31,8 +31,8 @@ class PDOUserProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `user` (user_id, username, password_hash, email, status, role, key, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :key, :created_at)')
+            ->with('INSERT INTO `user` (user_id, username, password_hash, email, status, role, unique_key, created_at)
+            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :unique_key, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -46,7 +46,7 @@ class PDOUserProjectionTest extends TestCase
                 ':email' => $event->getEmail(),
                 ':status' => $event->getStatus(),
                 ':role' => $event->getRole(),
-                ':key' => $event->getKey(),
+                ':unique_key' => $event->getUniqueKey(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
 
