@@ -80,7 +80,7 @@ class UserTest extends TestCase
 
         $user->updateEmail($newEmail);
 
-        $this->assertEquals($newEmail, $user->getEmail(),);
+        $this->assertEquals($newEmail, $user->getEmail());
         $this->assertNotEquals($this->email, $user->getEmail());
     }
 }
