@@ -18,10 +18,12 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
 
     public function get(SeasonId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `season` WHERE season_id = :season_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `season` WHERE season_id = :season_id LIMIT 1');
         $stmt->execute([':season_id' => (string) $id]);
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new \Exception("Season not found.");
+        }
 
         return new SeasonView(
             $row['season_id'],

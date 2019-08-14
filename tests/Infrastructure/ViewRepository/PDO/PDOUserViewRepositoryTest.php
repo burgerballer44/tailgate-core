@@ -20,6 +20,32 @@ class PDOUserViewRepositoryTest extends TestCase
         $this->viewRepository = new UserViewRepository($this->pdoMock);
     }
 
+    public function testUserThatDoesNotExistReturnsException()
+    {
+        $userId = UserId::fromString('userId');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `user` WHERE user_id = :user_id LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':user_id' => (string) $userId]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn(false);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('User not found.');
+        $this->viewRepository->get($userId);
+    }
+
     public function testItCanGetAUser()
     {
         $userId = UserId::fromString('userId');
@@ -28,14 +54,24 @@ class PDOUserViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `user` WHERE user_id = :user_id')
+            ->with('SELECT * FROM `user` WHERE user_id = :user_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
-        // execute method called once
+        // execute and fetch method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
             ->with([':user_id' => (string) $userId]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn([
+                'user_id' => 'blah',
+                'username' => 'blah',
+                'email' => 'blah',
+                'status' => 'blah',
+                'role' => 'blah',
+            ]);
 
         $this->viewRepository->get($userId);
     }

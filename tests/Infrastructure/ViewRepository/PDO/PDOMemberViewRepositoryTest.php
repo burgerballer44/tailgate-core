@@ -20,6 +20,32 @@ class PDOMemberViewRepositoryTest extends TestCase
         $this->viewRepository = new MemberViewRepository($this->pdoMock);
     }
 
+    public function testMemberThatDoesNotExistReturnsException()
+    {
+        $memberId = MemberId::fromString('memberId');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `member` WHERE member_id = :member_id LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':member_id' => (string) $memberId]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn(false);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Member not found.');
+        $this->viewRepository->get($memberId);
+    }
+
     public function testItCanGetAMember()
     {
         $memberId = MemberId::fromString('memberId');
@@ -28,7 +54,7 @@ class PDOMemberViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `member` WHERE member_id = :member_id')
+            ->with('SELECT * FROM `member` WHERE member_id = :member_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -36,6 +62,15 @@ class PDOMemberViewRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with([':member_id' => (string) $memberId]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn([
+                'member_id' => 'blah',
+                'group_id' => 'blah',
+                'user_id' => 'blah',
+                'role' => 'blah',
+            ]);
 
         $this->viewRepository->get($memberId);
     }

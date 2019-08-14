@@ -18,18 +18,20 @@ class UserViewRepository implements UserViewRepositoryInterface
 
     public function get(UserId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `user` WHERE user_id = :user_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `user` WHERE user_id = :user_id LIMIT 1');
         $stmt->execute([':user_id' => (string) $id]);
 
-        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            return new UserView(
-                $row['user_id'],
-                $row['username'],
-                $row['email'],
-                $row['status'],
-                $row['role']
-            );
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new \Exception("User not found.");
         }
+
+        return new UserView(
+            $row['user_id'],
+            $row['username'],
+            $row['email'],
+            $row['status'],
+            $row['role']
+        );
     }
 
     public function all()

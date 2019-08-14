@@ -19,10 +19,12 @@ class MemberViewRepository implements MemberViewRepositoryInterface
 
     public function get(MemberId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `member` WHERE member_id = :member_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `member` WHERE member_id = :member_id LIMIT 1');
         $stmt->execute([':member_id' => (string) $id]);
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new \Exception("Member not found.");
+        }
 
         return new MemberView(
             $row['member_id'],

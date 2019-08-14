@@ -18,10 +18,12 @@ class GroupViewRepository implements GroupViewRepositoryInterface
 
     public function get(GroupId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `group` WHERE group_id = :group_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `group` WHERE group_id = :group_id LIMIT 1');
         $stmt->execute([':group_id' => (string) $id]);
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new \Exception("Group not found.");
+        }
 
         return new GroupView(
             $row['group_id'],

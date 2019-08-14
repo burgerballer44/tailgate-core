@@ -18,10 +18,12 @@ class TeamViewRepository implements TeamViewRepositoryInterface
 
     public function get(TeamId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `team` WHERE team_id = :team_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `team` WHERE team_id = :team_id LIMIT 1');
         $stmt->execute([':team_id' => (string) $id]);
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new \Exception("Team not found.");
+        }
 
         return new TeamView(
             $row['team_id'],

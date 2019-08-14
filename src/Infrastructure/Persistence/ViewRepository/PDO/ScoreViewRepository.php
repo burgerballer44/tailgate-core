@@ -21,10 +21,12 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
 
     public function get(ScoreId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `score` WHERE score_id = :score_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `score` WHERE score_id = :score_id LIMIT 1');
         $stmt->execute([':score_id' => (string) $id]);
 
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new \Exception("Score not found.");
+        }
 
         return new ScoreView(
             $row['score_id'],

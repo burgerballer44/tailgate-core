@@ -20,6 +20,32 @@ class PDOSeasonViewRepositoryTest extends TestCase
         $this->viewRepository = new SeasonViewRepository($this->pdoMock);
     }
 
+    public function testSeasonThatDoesNotExistReturnsException()
+    {
+        $seasonId = SeasonId::fromString('seasonId');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `season` WHERE season_id = :season_id LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':season_id' => (string) $seasonId]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn(false);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Season not found.');
+        $this->viewRepository->get($seasonId);
+    }
+
     public function testItCanGetASeason()
     {
         $seasonId = SeasonId::fromString('seasonId');
@@ -28,7 +54,7 @@ class PDOSeasonViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `season` WHERE season_id = :season_id')
+            ->with('SELECT * FROM `season` WHERE season_id = :season_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -36,6 +62,17 @@ class PDOSeasonViewRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with([':season_id' => (string) $seasonId]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn([
+                'season_id' => 'blah',
+                'sport' => 'blah',
+                'type' => 'blah',
+                'name' => 'blah',
+                'season_start' => 'blah',
+                'season_end' => 'blah',
+            ]);
 
         $this->viewRepository->get($seasonId);
     }
