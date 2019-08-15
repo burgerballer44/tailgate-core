@@ -22,7 +22,7 @@ class UserQueryHandlerTest extends TestCase
         $userViewRepository->expects($this->once())
             ->method('get')
             ->willReturn($userView)
-            ->with($this->callback(function($userQueryUserId) use ($userId) {
+            ->with($this->callback(function ($userQueryUserId) use ($userId) {
                 return (new UserId($userId))->equals($userQueryUserId);
             }));
 

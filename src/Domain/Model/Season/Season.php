@@ -156,7 +156,7 @@ class Season extends AbstractEntity
     }
 
     protected function applyGameScoreAdded(GameScoreAdded $event)
-    {   
+    {
         $game = $this->getGameById($event->getGameId());
         $game->addHomeTeamScore($event->getHomeTeamScore());
         $game->addAwayTeamScore($event->getAwayTeamScore());

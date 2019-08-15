@@ -96,8 +96,8 @@ class PDOScoreViewRepositoryTest extends TestCase
             ->method('execute')
             ->with([':group_id' => (string) $groupId]);
 
-         // fetch method called
-         $this->pdoStatementMock
+        // fetch method called
+        $this->pdoStatementMock
             ->expects($this->atLeastOnce())
             ->method('fetch');
 
@@ -122,8 +122,8 @@ class PDOScoreViewRepositoryTest extends TestCase
             ->method('execute')
             ->with([':group_id' => (string) $groupId, ':user_id' => (string) $userId]);
 
-         // fetch method called
-         $this->pdoStatementMock
+        // fetch method called
+        $this->pdoStatementMock
             ->expects($this->atLeastOnce())
             ->method('fetch');
 
@@ -148,8 +148,8 @@ class PDOScoreViewRepositoryTest extends TestCase
             ->method('execute')
             ->with([':group_id' => (string) $groupId, ':game_id' => (string) $gameId]);
 
-         // fetch method called
-         $this->pdoStatementMock
+        // fetch method called
+        $this->pdoStatementMock
             ->expects($this->atLeastOnce())
             ->method('fetch');
 

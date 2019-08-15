@@ -16,8 +16,7 @@ class SubmitScoreForGroupCommand
         string $gameId,
         int $homeTeamPrediction,
         int $awayTeamPrediction
-    )
-    {
+    ) {
         $this->groupId = $groupId;
         $this->userId = $userId;
         $this->gameId = $gameId;

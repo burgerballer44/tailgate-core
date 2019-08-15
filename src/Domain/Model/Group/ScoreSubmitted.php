@@ -23,8 +23,7 @@ class ScoreSubmitted implements DomainEvent
         GameId $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
-    )
-    {
+    ) {
         $this->scoreId = $scoreId;
         $this->groupId = $groupId;
         $this->userId = $userId;

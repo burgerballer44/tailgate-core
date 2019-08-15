@@ -10,7 +10,8 @@ class EmailUpdated implements DomainEvent
     private $email;
     private $occurredOn;
 
-    public function __construct(UserId $userId, $email) {
+    public function __construct(UserId $userId, $email)
+    {
         $this->userId = $userId;
         $this->email = $email;
         $this->occurredOn = new \DateTimeImmutable();

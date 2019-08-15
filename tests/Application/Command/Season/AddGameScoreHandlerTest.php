@@ -33,7 +33,7 @@ class AddGameScoreHandlerTest extends TestCase
     private $addGameScoreCommand;
 
     public function setUp()
-    {   
+    {
         // create season
         $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01');
         $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28');
@@ -90,20 +90,21 @@ class AddGameScoreHandlerTest extends TestCase
         $seasonRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($season) use (
+            ->with($this->callback(
+                function ($season) use (
                 $homeTeamScore,
                 $awayTeamScore,
                 $game
             ) {
-                $events = $season->getRecordedEvents();
+                    $events = $season->getRecordedEvents();
 
-                return $events[0] instanceof GameScoreAdded
+                    return $events[0] instanceof GameScoreAdded
                 && $events[0]->getAggregateId() instanceof SeasonId
                 && $events[0]->getGameId()->equals($game->getGameId())
                 && $events[0]->getHomeTeamScore() === $homeTeamScore
                 && $events[0]->getAwayTeamScore() === $awayTeamScore
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
 
         $addGameScoreHandler = new AddGameScoreHandler(

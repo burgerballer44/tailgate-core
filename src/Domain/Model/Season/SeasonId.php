@@ -9,7 +9,7 @@ class SeasonId implements IdentifiesAggregate
 {
     private $seasonId;
 
-    public function __construct($seasonId = null) 
+    public function __construct($seasonId = null)
     {
         $this->seasonId = null === $seasonId ? Uuid::uuid4()->toString() : $seasonId;
     }

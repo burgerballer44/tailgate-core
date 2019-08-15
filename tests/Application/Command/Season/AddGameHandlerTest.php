@@ -77,22 +77,23 @@ class AddGameHandlerTest extends TestCase
         $seasonRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($season) use (
+            ->with($this->callback(
+                function ($season) use (
                 $seasonId,
                 $homeTeamId,
                 $awayTeamId,
                 $startDate
             ) {
-                $events = $season->getRecordedEvents();
+                    $events = $season->getRecordedEvents();
 
-                return $events[0] instanceof GameAdded
+                    return $events[0] instanceof GameAdded
                 && $events[0]->getAggregateId() instanceof SeasonId
                 && $events[0]->getGameId() instanceof GameId
                 && $events[0]->getHomeTeamId()->equals(TeamId::fromString($homeTeamId))
                 && $events[0]->getAwayTeamId()->equals(TeamId::fromString($awayTeamId))
                 && $events[0]->getStartDate()->format('Y-m-d') === $startDate->format('Y-m-d')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
 
         $addGameHandler = new AddGameHandler(

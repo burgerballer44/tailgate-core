@@ -14,7 +14,7 @@ abstract class AbstractEntity implements RecordsEvents, IsEventSourced
 {
     private $recordedEvents = [];
 
-    abstract static protected function createEmptyEntity(IdentifiesAggregate $id);
+    abstract protected static function createEmptyEntity(IdentifiesAggregate $id);
 
     public function getRecordedEvents()
     {

@@ -23,7 +23,7 @@ abstract class AbstractValidator
 
         if (!empty($this->errors)) {
             return false;
-        } 
+        }
 
         return true;
     }
@@ -43,7 +43,7 @@ abstract class AbstractValidator
             } catch (\Throwable $ex) {
                 // $this->errors[$field] = $ex->getMessages();
                 // $this->errors[$field] = $ex->findMessages($this->messages);
-                $this->errors[$field] = array_filter($ex->findMessages($this->messages), function($error) {
+                $this->errors[$field] = array_filter($ex->findMessages($this->messages), function ($error) {
                     return !empty($error);
                 });
                 // $this->errors[$field] = $ex->getFullMessage();

@@ -10,7 +10,8 @@ class UserActivated implements DomainEvent
     private $status;
     private $occurredOn;
 
-    public function __construct(UserId $userId, $status) {
+    public function __construct(UserId $userId, $status)
+    {
         $this->userId = $userId;
         $this->status = $status;
         $this->occurredOn = new \DateTimeImmutable();

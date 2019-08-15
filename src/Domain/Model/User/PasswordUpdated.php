@@ -10,7 +10,8 @@ class PasswordUpdated implements DomainEvent
     private $passwordHash;
     private $occurredOn;
 
-    public function __construct(UserId $userId, $passwordHash) {
+    public function __construct(UserId $userId, $passwordHash)
+    {
         $this->userId = $userId;
         $this->passwordHash = $passwordHash;
         $this->occurredOn = new \DateTimeImmutable();

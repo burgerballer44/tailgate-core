@@ -19,6 +19,5 @@ class CreateSeasonCommandValidator extends AbstractValidator
 
     protected function addRules($command)
     {
-        
     }
 }

@@ -39,18 +39,19 @@ class AddTeamHandlerTest extends TestCase
         $teamRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($team) use (
+            ->with($this->callback(
+                function ($team) use (
                 $designation,
                 $mascot
             ) {
-                $events = $team->getRecordedEvents();
+                    $events = $team->getRecordedEvents();
 
-                return $events[0] instanceof TeamAdded
+                    return $events[0] instanceof TeamAdded
                 && $events[0]->getAggregateId() instanceof TeamId
                 && $events[0]->getDesignation() === $designation
                 && $events[0]->getMascot() === $mascot
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
 
         $addTeamHandler = new AddTeamHandler(

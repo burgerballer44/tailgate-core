@@ -25,7 +25,11 @@ class UpdatePasswordHandlerTest extends TestCase
     public function setUp()
     {
         $this->user = User::create(
-            UserId::fromString($this->userId), $this->username, $this->passwordHash, $this->email, $this->key
+            UserId::fromString($this->userId),
+            $this->username,
+            $this->passwordHash,
+            $this->email,
+            $this->key
         );
         $this->user->clearRecordedEvents();
 
@@ -55,17 +59,18 @@ class UpdatePasswordHandlerTest extends TestCase
         $userRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($user) use (
+            ->with($this->callback(
+                function ($user) use (
                 $userId,
                 $newPasswordHash
             ) {
-                $events = $user->getRecordedEvents();
+                    $events = $user->getRecordedEvents();
 
-                return $events[0] instanceof PasswordUpdated
+                    return $events[0] instanceof PasswordUpdated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getPasswordHash() === $newPasswordHash
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
 
         $passwordHashing = $this->createMock(PasswordHashingInterface::class);

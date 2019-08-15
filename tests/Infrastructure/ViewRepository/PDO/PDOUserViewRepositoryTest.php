@@ -90,8 +90,8 @@ class PDOUserViewRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('execute');
 
-         // fetch method called
-         $this->pdoStatementMock
+        // fetch method called
+        $this->pdoStatementMock
             ->expects($this->atLeastOnce())
             ->method('fetch');
 

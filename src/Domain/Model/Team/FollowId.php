@@ -9,7 +9,7 @@ class FollowId implements IdentifiesAggregate
 {
     private $followId;
 
-    public function __construct($followId = null) 
+    public function __construct($followId = null)
     {
         $this->followId = null === $followId ? Uuid::uuid4()->toString() : $followId;
     }

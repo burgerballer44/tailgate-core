@@ -92,8 +92,8 @@ class PDOMemberViewRepositoryTest extends TestCase
             ->method('execute')
             ->with([':group_id' => (string) $groupId]);
 
-         // fetch method called
-         $this->pdoStatementMock
+        // fetch method called
+        $this->pdoStatementMock
             ->expects($this->atLeastOnce())
             ->method('fetch');
 

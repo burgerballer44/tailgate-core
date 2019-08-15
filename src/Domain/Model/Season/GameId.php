@@ -9,7 +9,7 @@ class GameId implements IdentifiesAggregate
 {
     private $gameId;
 
-    public function __construct($gameId = null) 
+    public function __construct($gameId = null)
     {
         $this->gameId = null === $gameId ? Uuid::uuid4()->toString() : $gameId;
     }

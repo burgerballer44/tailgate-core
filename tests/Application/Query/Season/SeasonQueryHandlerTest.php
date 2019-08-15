@@ -22,7 +22,7 @@ class SeasonQueryHandlerTest extends TestCase
         $seasonViewRepository->expects($this->once())
             ->method('get')
             ->willReturn($seasonView)
-            ->with($this->callback(function($seasonQuerySeasonId) use ($seasonId) {
+            ->with($this->callback(function ($seasonQuerySeasonId) use ($seasonId) {
                 return (new SeasonId($seasonId))->equals($seasonQuerySeasonId);
             }));
 

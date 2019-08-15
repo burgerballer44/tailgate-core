@@ -19,6 +19,5 @@ class AddMemberToGroupCommandValidator extends AbstractValidator
 
     protected function addRules($command)
     {
-        
     }
 }

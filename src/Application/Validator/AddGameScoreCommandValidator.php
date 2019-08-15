@@ -19,6 +19,5 @@ class AddGameScoreCommandValidator extends AbstractValidator
 
     protected function addRules($command)
     {
-        
     }
 }

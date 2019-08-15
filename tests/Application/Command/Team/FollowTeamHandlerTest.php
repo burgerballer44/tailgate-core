@@ -55,19 +55,20 @@ class FollowTeamHandlerTest extends TestCase
         $teamRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($team) use (
+            ->with($this->callback(
+                function ($team) use (
                 $teamId,
                 $groupId
             ) {
-                $events = $team->getRecordedEvents();
+                    $events = $team->getRecordedEvents();
 
-                return $events[0] instanceof TeamFollowed
+                    return $events[0] instanceof TeamFollowed
                 && $events[0]->getAggregateId() instanceof GroupId
                 && $events[0]->getFollowId() instanceof FollowId
                 && $events[0]->getGroupId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getTeamId()->equals(TeamId::fromString($teamId))
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
 
         $this->followTeamHandler = new FollowTeamHandler(

@@ -12,20 +12,19 @@ class ScoreView
     private $awayTeamPrediction;
 
     public function __construct(
-      $scoreId,
-      $groupId,
-      $userId,
-      $gameId,
-      $homeTeamPrediction,
-      $awayTeamPrediction
-    )
-    {
-      $this->scoreId = $scoreId;
-      $this->groupId = $groupId;
-      $this->userId = $userId;
-      $this->gameId = $gameId;
-      $this->homeTeamPrediction = $homeTeamPrediction;
-      $this->awayTeamPrediction = $awayTeamPrediction;
+        $scoreId,
+        $groupId,
+        $userId,
+        $gameId,
+        $homeTeamPrediction,
+        $awayTeamPrediction
+    ) {
+        $this->scoreId = $scoreId;
+        $this->groupId = $groupId;
+        $this->userId = $userId;
+        $this->gameId = $gameId;
+        $this->homeTeamPrediction = $homeTeamPrediction;
+        $this->awayTeamPrediction = $awayTeamPrediction;
     }
 
     public function getScoreId()

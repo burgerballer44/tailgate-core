@@ -12,12 +12,12 @@ use Tailgate\Domain\Model\Team\TeamId;
 
 class SeasonTest extends TestCase
 {
-   private $seasonId;
-   private $sport = 'sport';
-   private $seasonType = 'seasonType';
-   private $name = 'name';
-   private $seasonStart;
-   private $seasonEnd;
+    private $seasonId;
+    private $sport = 'sport';
+    private $seasonType = 'seasonType';
+    private $name = 'name';
+    private $seasonStart;
+    private $seasonEnd;
 
     public function setUp()
     {
@@ -43,7 +43,9 @@ class SeasonTest extends TestCase
             new AggregateHistory($this->seasonId, (array) $events)
         );
 
-        $this->assertEquals($season, $reconstitutedSeason,
+        $this->assertEquals(
+            $season,
+            $reconstitutedSeason,
             'the reconstituted season does not match the original season'
         );
     }

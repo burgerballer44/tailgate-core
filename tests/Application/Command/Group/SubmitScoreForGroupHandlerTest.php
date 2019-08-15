@@ -66,17 +66,18 @@ class SubmitScoreForGroupHandlerTest extends TestCase
         $groupRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($group) use (
+            ->with($this->callback(
+                function ($group) use (
                 $groupId,
                 $userId,
                 $gameId,
                 $homeTeamPrediction,
                 $awayTeamPrediction
             ) {
-                $events = $group->getRecordedEvents();
-                $scores = $group->getScores();
+                    $events = $group->getRecordedEvents();
+                    $scores = $group->getScores();
 
-                return $events[0] instanceof ScoreSubmitted
+                    return $events[0] instanceof ScoreSubmitted
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getScoreId() instanceof ScoreId
                 && $events[0]->getUserId()->equals(UserId::fromString($userId))
@@ -86,7 +87,7 @@ class SubmitScoreForGroupHandlerTest extends TestCase
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable
                 && 1 == count($scores)
                 && $scores[0] instanceof Score;
-            }
+                }
         ));
         
         $submitScoreForGroupHandler = new SubmitScoreForGroupHandler(

@@ -24,7 +24,11 @@ class UpdateEmailHandlerTest extends TestCase
     public function setUp()
     {
         $this->user = User::create(
-            UserId::fromString($this->userId), $this->username, $this->passwordHash, $this->email, $this->key
+            UserId::fromString($this->userId),
+            $this->username,
+            $this->passwordHash,
+            $this->email,
+            $this->key
         );
         $this->user->clearRecordedEvents();
 
@@ -54,17 +58,18 @@ class UpdateEmailHandlerTest extends TestCase
         $userRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($user) use (
+            ->with($this->callback(
+                function ($user) use (
                 $userId,
                 $newEmail
             ) {
-                $events = $user->getRecordedEvents();
+                    $events = $user->getRecordedEvents();
 
-                return $events[0] instanceof EmailUpdated
+                    return $events[0] instanceof EmailUpdated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getEmail() === $newEmail
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
 
         $updateEmailHandler = new updateEmailHandler($userRepository);

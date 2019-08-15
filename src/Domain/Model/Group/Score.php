@@ -27,7 +27,7 @@ class Score
         $this->userId = $userId;
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
-        $this->awayTeamPrediction = $awayTeamPrediction; 
+        $this->awayTeamPrediction = $awayTeamPrediction;
     }
 
     public static function create(

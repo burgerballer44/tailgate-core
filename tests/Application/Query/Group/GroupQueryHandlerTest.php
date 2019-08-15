@@ -26,19 +26,19 @@ class GroupQueryHandlerTest extends TestCase
         $groupViewRepository->expects($this->once())
             ->method('get')
             ->willReturn($groupView)
-            ->with($this->callback(function($groupQueryGroupId) use ($groupId) {
+            ->with($this->callback(function ($groupQueryGroupId) use ($groupId) {
                 return (new GroupId($groupId))->equals($groupQueryGroupId);
             }));
         $memberViewRepository->expects($this->once())
             ->method('getAllByGroup')
             ->willReturn($groupView)
-            ->with($this->callback(function($groupQueryGroupId) use ($groupId) {
+            ->with($this->callback(function ($groupQueryGroupId) use ($groupId) {
                 return (new GroupId($groupId))->equals($groupQueryGroupId);
             }));
         $scoreViewRepository->expects($this->once())
             ->method('getAllByGroup')
             ->willReturn($groupView)
-            ->with($this->callback(function($groupQueryGroupId) use ($groupId) {
+            ->with($this->callback(function ($groupQueryGroupId) use ($groupId) {
                 return (new GroupId($groupId))->equals($groupQueryGroupId);
             }));
 

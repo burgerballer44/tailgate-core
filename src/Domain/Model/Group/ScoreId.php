@@ -9,7 +9,7 @@ class ScoreId implements IdentifiesAggregate
 {
     private $scoreId;
 
-    public function __construct($scoreId = null) 
+    public function __construct($scoreId = null)
     {
         $this->scoreId = null === $scoreId ? Uuid::uuid4()->toString() : $scoreId;
     }

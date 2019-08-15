@@ -19,6 +19,5 @@ class SubmitScoreForGroupCommandValidator extends AbstractValidator
 
     protected function addRules($command)
     {
-        
     }
 }

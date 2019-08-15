@@ -28,7 +28,11 @@ class UserTest extends TestCase
     public function testUserShouldBeTheSameAfterReconstitution()
     {
         $user = User::create(
-            $this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey
+            $this->userId,
+            $this->username,
+            $this->passwordHash,
+            $this->email,
+            $this->uniqueKey
         );
         $events = $user->getRecordedEvents();
         $user->clearRecordedEvents();
@@ -37,8 +41,11 @@ class UserTest extends TestCase
             new AggregateHistory($this->userId, (array) $events)
         );
 
-        $this->assertEquals($user, $reconstitutedUser,
-            'the reconstituted user does not match the original user');
+        $this->assertEquals(
+            $user,
+            $reconstitutedUser,
+            'the reconstituted user does not match the original user'
+        );
     }
 
     public function testAUserCanBeCreated()

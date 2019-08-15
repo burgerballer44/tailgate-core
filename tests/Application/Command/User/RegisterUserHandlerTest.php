@@ -50,16 +50,17 @@ class RegisterUserHandlerTest extends TestCase
         $userRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($user) use (
+            ->with($this->callback(
+                function ($user) use (
                 $username,
                 $password,
                 $confirmPassword,
                 $email,
                 $uniqueKey
             ) {
-                $events = $user->getRecordedEvents();
+                    $events = $user->getRecordedEvents();
 
-                return $events[0] instanceof UserRegistered
+                    return $events[0] instanceof UserRegistered
                 && $events[0]->getAggregateId() instanceof UserId
                 && $events[0]->getUsername() === $username
                 && $events[0]->getPasswordHash() === $password
@@ -68,7 +69,7 @@ class RegisterUserHandlerTest extends TestCase
                 && $events[0]->getRole() === User::ROLE_USER
                 && $events[0]->getUniqueKey() === $uniqueKey
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
 
         $passwordHashing = $this->createMock(PasswordHashingInterface::class);

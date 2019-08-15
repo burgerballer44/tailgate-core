@@ -58,19 +58,20 @@ class AddMemberToGroupHandlerTest extends TestCase
         $groupRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($group) use (
+            ->with($this->callback(
+                function ($group) use (
                 $groupId,
                 $userId
             ) {
-                $events = $group->getRecordedEvents();
+                    $events = $group->getRecordedEvents();
 
-                return $events[0] instanceof MemberAdded
+                    return $events[0] instanceof MemberAdded
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getMemberId() instanceof MemberId
                 && $events[0]->getUserId()->equals(UserId::fromString($userId))
                 && $events[0]->getGroupRole() == Group::G_ROLE_MEMBER
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
         
         $addMemberToGroupHandler = new AddMemberToGroupHandler(

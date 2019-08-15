@@ -8,6 +8,7 @@ class ActivateUserCommand
 
     public function __construct(string $userId)
     {
+        $test = true;
         $this->userId = $userId;
     }
 

@@ -44,7 +44,9 @@ class InMemoryEventStoreTest extends TestCase
             $history2 instanceof AggregateHistory,
             'failed to return an AggregateHistory for id2'
         );
-        $this->assertCount(0, $history3,
+        $this->assertCount(
+            0,
+            $history3,
             'failed to return nothing since id3 was not added to event store'
         );
     }

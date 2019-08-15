@@ -51,16 +51,17 @@ class CreateSeasonHandlerTest extends TestCase
         $seasonRepository
             ->expects($this->once())
             ->method('add')
-            ->with($this->callback(function($season) use (
+            ->with($this->callback(
+                function ($season) use (
                 $sport,
                 $seasonType,
                 $name,
                 $seasonStart,
                 $seasonEnd
             ) {
-                $events = $season->getRecordedEvents();
+                    $events = $season->getRecordedEvents();
 
-                return $events[0] instanceof SeasonCreated
+                    return $events[0] instanceof SeasonCreated
                 && $events[0]->getAggregateId() instanceof SeasonId
                 && $events[0]->getSport() === $sport
                 && $events[0]->getSeasonType() === $seasonType
@@ -68,7 +69,7 @@ class CreateSeasonHandlerTest extends TestCase
                 && $events[0]->getSeasonStart()->format('Y-m-d') === $seasonStart->format('Y-m-d')
                 && $events[0]->getSeasonEnd()->format('Y-m-d') === $seasonEnd->format('Y-m-d')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
+                }
         ));
 
         $createSeasonHandler = new CreateSeasonHandler(

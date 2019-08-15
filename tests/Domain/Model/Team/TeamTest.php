@@ -31,7 +31,9 @@ class TeamTest extends TestCase
             new AggregateHistory($this->teamId, (array) $events)
         );
 
-        $this->assertEquals($team, $reconstitutedTeam,
+        $this->assertEquals(
+            $team,
+            $reconstitutedTeam,
             'the reconstituted team does not match the original team'
         );
     }

@@ -22,7 +22,7 @@ class TeamQueryHandlerTest extends TestCase
         $teamViewRepository->expects($this->once())
             ->method('get')
             ->willReturn($teamView)
-            ->with($this->callback(function($teamQueryTeamId) use ($teamId) {
+            ->with($this->callback(function ($teamQueryTeamId) use ($teamId) {
                 return (new TeamId($teamId))->equals($teamQueryTeamId);
             }));
 

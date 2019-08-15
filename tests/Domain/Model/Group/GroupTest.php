@@ -36,7 +36,9 @@ class GroupTest extends TestCase
             new AggregateHistory($this->groupId, (array) $events)
         );
 
-        $this->assertEquals($group, $reconstitutedGroup,
+        $this->assertEquals(
+            $group,
+            $reconstitutedGroup,
             'the reconstituted group does not match the original group'
         );
     }

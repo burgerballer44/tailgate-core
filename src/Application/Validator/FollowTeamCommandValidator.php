@@ -19,6 +19,5 @@ class FollowTeamCommandValidator extends AbstractValidator
 
     protected function addRules($command)
     {
-        
     }
 }
