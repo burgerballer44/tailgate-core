@@ -7,6 +7,7 @@ use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\MemberView;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class MemberViewRepository implements MemberViewRepositoryInterface
 {
@@ -23,7 +24,7 @@ class MemberViewRepository implements MemberViewRepositoryInterface
         $stmt->execute([':member_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new \Exception("Member not found.");
+            throw new RepositoryException("Member not found.");
         }
 
         return new MemberView(

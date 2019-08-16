@@ -6,6 +6,7 @@ use PDO;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupView;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class GroupViewRepository implements GroupViewRepositoryInterface
 {
@@ -22,7 +23,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         $stmt->execute([':group_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new \Exception("Group not found.");
+            throw new RepositoryException("Group not found.");
         }
 
         return new GroupView(

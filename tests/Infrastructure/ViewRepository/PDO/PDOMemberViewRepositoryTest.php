@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\MemberViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class PDOMemberViewRepositoryTest extends TestCase
 {
@@ -41,7 +42,7 @@ class PDOMemberViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(\Exception::class);
+        $this->expectException(RepositoryException::class);
         $this->expectExceptionMessage('Member not found.');
         $this->viewRepository->get($memberId);
     }

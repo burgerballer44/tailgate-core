@@ -6,6 +6,7 @@ use PDO;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class UserViewRepository implements UserViewRepositoryInterface
 {
@@ -22,7 +23,7 @@ class UserViewRepository implements UserViewRepositoryInterface
         $stmt->execute([':user_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new \Exception("User not found.");
+            throw new RepositoryException("User not found.");
         }
 
         return new UserView(

@@ -9,6 +9,7 @@ use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Group\ScoreView;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class ScoreViewRepository implements ScoreViewRepositoryInterface
 {
@@ -25,7 +26,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
         $stmt->execute([':score_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new \Exception("Score not found.");
+            throw new RepositoryException("Score not found.");
         }
 
         return new ScoreView(

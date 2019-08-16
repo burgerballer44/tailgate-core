@@ -6,6 +6,7 @@ use PDO;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class SeasonViewRepository implements SeasonViewRepositoryInterface
 {
@@ -22,7 +23,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         $stmt->execute([':season_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new \Exception("Season not found.");
+            throw new RepositoryException("Season not found.");
         }
 
         return new SeasonView(

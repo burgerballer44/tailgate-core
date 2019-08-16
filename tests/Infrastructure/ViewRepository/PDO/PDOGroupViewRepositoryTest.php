@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupView;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\GroupViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class PDOGroupViewRepositoryTest extends TestCase
 {
@@ -41,7 +42,7 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(\Exception::class);
+        $this->expectException(RepositoryException::class);
         $this->expectExceptionMessage('Group not found.');
         $this->viewRepository->get($groupId);
     }

@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\TeamViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class PDOTeamViewRepositoryTest extends TestCase
 {
@@ -41,7 +42,7 @@ class PDOTeamViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(\Exception::class);
+        $this->expectException(RepositoryException::class);
         $this->expectExceptionMessage('Team not found.');
         $this->viewRepository->get($teamId);
     }

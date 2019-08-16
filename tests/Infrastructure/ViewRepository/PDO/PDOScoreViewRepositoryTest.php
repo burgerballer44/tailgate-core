@@ -8,6 +8,7 @@ use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\ScoreViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class PDOScoreViewRepositoryTest extends TestCase
 {
@@ -43,7 +44,7 @@ class PDOScoreViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(\Exception::class);
+        $this->expectException(RepositoryException::class);
         $this->expectExceptionMessage('Score not found.');
         $this->viewRepository->get($scoreId);
     }

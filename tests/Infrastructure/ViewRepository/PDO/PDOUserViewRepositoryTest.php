@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\UserViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class PDOUserViewRepositoryTest extends TestCase
 {
@@ -41,7 +42,7 @@ class PDOUserViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(\Exception::class);
+        $this->expectException(RepositoryException::class);
         $this->expectExceptionMessage('User not found.');
         $this->viewRepository->get($userId);
     }

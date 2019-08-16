@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\SeasonViewRepository;
+use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
 class PDOSeasonViewRepositoryTest extends TestCase
 {
@@ -41,7 +42,7 @@ class PDOSeasonViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(\Exception::class);
+        $this->expectException(RepositoryException::class);
         $this->expectExceptionMessage('Season not found.');
         $this->viewRepository->get($seasonId);
     }
