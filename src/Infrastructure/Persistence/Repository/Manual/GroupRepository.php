@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Infrastructure\Persistence\Repository;
+namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
+namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
@@ -8,18 +8,19 @@ use Tailgate\Common\EventStore\EventStoreInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Common\EventPublisher\EventPublisherInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
     private $eventStore;
-    private $userProjection;
+    private $domainEventPublisher;
 
     public function __construct(
         EventStoreInterface $eventStore,
-        UserProjectionInterface $userProjection
+        EventPublisherInterface $domainEventPublisher
     ) {
         $this->eventStore = $eventStore;
-        $this->userProjection = $userProjection;
+        $this->domainEventPublisher = $domainEventPublisher;
     }
 
     public function get(IdentifiesAggregate $aggregateId)
@@ -32,8 +33,10 @@ class UserRepository implements UserRepositoryInterface
     public function add(RecordsEvents $user)
     {
         $events = $user->getRecordedEvents();
-        $this->eventStore->commit($events);
-        $this->userProjection->project($events);
+
+        foreach ($events as $event) {
+            $this->domainEventPublisher->publish($event);
+        }
 
         $user->clearRecordedEvents();
     }
