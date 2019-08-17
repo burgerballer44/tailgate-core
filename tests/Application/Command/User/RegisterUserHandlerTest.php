@@ -5,12 +5,12 @@ namespace Tailgate\Test\Application\Command\User;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\RegisterUserCommand;
 use Tailgate\Application\Command\User\RegisterUserHandler;
+use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
+use Tailgate\Common\Security\RandomStringInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
-use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
-use Tailgate\Common\Security\RandomStringInterface;
-use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
+use Tailgate\Domain\Model\User\UserRepositoryInterface;
 
 class RegisterUserHandlerTest extends TestCase
 {
@@ -39,11 +39,13 @@ class RegisterUserHandlerTest extends TestCase
         $email = $this->email;
         $uniqueKey = $this->uniqueKey;
 
-        // only needs the add method
-        $userRepository = $this->getMockBuilder(UserRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['add'])
-            ->getMock();
+        $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
+
+        // the nextIdentity method should be called once and will return a new UserID
+        $userRepository
+           ->expects($this->once())
+           ->method('nextIdentity')
+           ->willReturn(new UserId());
 
         // the add method should be called once
         // the user object should have the UserRegistered event
@@ -58,9 +60,9 @@ class RegisterUserHandlerTest extends TestCase
                 $email,
                 $uniqueKey
             ) {
-                    $events = $user->getRecordedEvents();
+                $events = $user->getRecordedEvents();
 
-                    return $events[0] instanceof UserRegistered
+                return $events[0] instanceof UserRegistered
                 && $events[0]->getAggregateId() instanceof UserId
                 && $events[0]->getUsername() === $username
                 && $events[0]->getPasswordHash() === $password

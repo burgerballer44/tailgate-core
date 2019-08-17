@@ -7,8 +7,8 @@ use Tailgate\Application\Command\Group\CreateGroupCommand;
 use Tailgate\Application\Command\Group\CreateGroupHandler;
 use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
 
 class CreateGroupHandlerTest extends TestCase
 {
@@ -29,11 +29,13 @@ class CreateGroupHandlerTest extends TestCase
         $groupName = $this->groupName;
         $ownerId = $this->ownerId;
 
-        // only needs the add method
-        $groupRepository = $this->getMockBuilder(GroupRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['add'])
-            ->getMock();
+        $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
+
+        // the nextIdentity method should be called once and will return a new GroupId
+        $groupRepository
+            ->expects($this->once())
+            ->method('nextIdentity')
+            ->willReturn(new GroupId());
 
         // the add method should be called once
         // the group object should have the GroupCreated event

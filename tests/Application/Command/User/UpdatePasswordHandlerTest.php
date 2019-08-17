@@ -9,7 +9,7 @@ use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\PasswordUpdated;
-use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
+use Tailgate\Domain\Model\User\UserRepositoryInterface;
 
 class UpdatePasswordHandlerTest extends TestCase
 {
@@ -36,17 +36,13 @@ class UpdatePasswordHandlerTest extends TestCase
         $this->updatePasswordCommand = new UpdatePasswordCommand($this->userId, $this->newPasswordHash);
     }
 
-    public function testItAddsAUserActivatedRepository()
+    public function testItAddsAPasswordUpdatedRepository()
     {
         $userId = $this->userId;
         $newPasswordHash = $this->newPasswordHash;
         $user = $this->user;
 
-        // only needs the get and add method
-        $userRepository = $this->getMockBuilder(UserRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'add'])
-            ->getMock();
+        $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the user
         $userRepository
@@ -64,9 +60,9 @@ class UpdatePasswordHandlerTest extends TestCase
                 $userId,
                 $newPasswordHash
             ) {
-                    $events = $user->getRecordedEvents();
+                $events = $user->getRecordedEvents();
 
-                    return $events[0] instanceof PasswordUpdated
+                return $events[0] instanceof PasswordUpdated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getPasswordHash() === $newPasswordHash
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;

@@ -5,10 +5,10 @@ namespace Tailgate\Test\Application\Command\User;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\UpdateEmailCommand;
 use Tailgate\Application\Command\User\UpdateEmailHandler;
+use Tailgate\Domain\Model\User\EmailUpdated;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\EmailUpdated;
-use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
+use Tailgate\Domain\Model\User\UserRepositoryInterface;
 
 class UpdateEmailHandlerTest extends TestCase
 {
@@ -35,17 +35,13 @@ class UpdateEmailHandlerTest extends TestCase
         $this->updateEmailCommand = new UpdateEmailCommand($this->userId, $this->newEmail);
     }
 
-    public function testItAddsAUserActivatedRepository()
+    public function testItAddsAEmailUpdatedRepository()
     {
         $userId = $this->userId;
         $newEmail = $this->newEmail;
         $user = $this->user;
 
-        // only needs the get and add method
-        $userRepository = $this->getMockBuilder(UserRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'add'])
-            ->getMock();
+        $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the user
         $userRepository
@@ -63,9 +59,9 @@ class UpdateEmailHandlerTest extends TestCase
                 $userId,
                 $newEmail
             ) {
-                    $events = $user->getRecordedEvents();
+                $events = $user->getRecordedEvents();
 
-                    return $events[0] instanceof EmailUpdated
+                return $events[0] instanceof EmailUpdated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getEmail() === $newEmail
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;

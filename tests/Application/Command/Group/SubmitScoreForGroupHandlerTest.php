@@ -12,7 +12,7 @@ use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
+use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 
 class SubmitScoreForGroupHandlerTest extends TestCase
 {
@@ -49,11 +49,7 @@ class SubmitScoreForGroupHandlerTest extends TestCase
         $awayTeamPrediction = $this->awayTeamPrediction;
         $group = $this->group;
 
-        // only needs the get and add method
-        $groupRepository = $this->getMockBuilder(GroupRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'add'])
-            ->getMock();
+        $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
         $groupRepository

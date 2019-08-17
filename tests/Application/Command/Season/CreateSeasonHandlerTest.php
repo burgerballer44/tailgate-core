@@ -7,7 +7,7 @@ use Tailgate\Application\Command\Season\CreateSeasonCommand;
 use Tailgate\Application\Command\Season\CreateSeasonHandler;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonCreated;
-use Tailgate\Infrastructure\Persistence\Repository\SeasonRepository;
+use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 
 class CreateSeasonHandlerTest extends TestCase
 {
@@ -40,11 +40,13 @@ class CreateSeasonHandlerTest extends TestCase
         $seasonStart = $this->seasonStart;
         $seasonEnd = $this->seasonEnd;
 
-        // only needs the add method
-        $seasonRepository = $this->getMockBuilder(SeasonRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['add'])
-            ->getMock();
+        $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
+
+        // the nextIdentity method should be called once and will return a new SeasonID
+        $seasonRepository
+           ->expects($this->once())
+           ->method('nextIdentity')
+           ->willReturn(new SeasonId());
 
         // the add method should be called once
         // the season object should have the SeasonCreated event

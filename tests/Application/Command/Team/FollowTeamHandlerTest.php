@@ -10,7 +10,7 @@ use Tailgate\Domain\Model\Team\FollowId;
 use Tailgate\Domain\Model\Team\TeamFollowed;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Infrastructure\Persistence\Repository\TeamRepository;
+use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
 
 class FollowTeamHandlerTest extends TestCase
 {
@@ -38,11 +38,7 @@ class FollowTeamHandlerTest extends TestCase
         $teamId = $this->teamId;
         $team = $this->team;
 
-        // only needs the get and add method
-        $teamRepository = $this->getMockBuilder(TeamRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'add'])
-            ->getMock();
+        $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
         $teamRepository

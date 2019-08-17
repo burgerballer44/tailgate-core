@@ -10,7 +10,7 @@ use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\MemberAdded;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\Repository\GroupRepository;
+use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 
 class AddMemberToGroupHandlerTest extends TestCase
 {
@@ -41,11 +41,7 @@ class AddMemberToGroupHandlerTest extends TestCase
         $userId = $this->userId;
         $group = $this->group;
 
-        // only needs the get and add method
-        $groupRepository = $this->getMockBuilder(GroupRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'add'])
-            ->getMock();
+        $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
         $groupRepository

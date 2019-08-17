@@ -7,7 +7,7 @@ use Tailgate\Application\Command\Team\AddTeamCommand;
 use Tailgate\Application\Command\Team\AddTeamHandler;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamAdded;
-use Tailgate\Infrastructure\Persistence\Repository\TeamRepository;
+use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
 
 class AddTeamHandlerTest extends TestCase
 {
@@ -28,11 +28,13 @@ class AddTeamHandlerTest extends TestCase
         $designation = $this->designation;
         $mascot = $this->mascot;
 
-        // only needs the add method
-        $teamRepository = $this->getMockBuilder(TeamRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['add'])
-            ->getMock();
+        $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
+
+        // the nextIdentity method should be called once and will return a new TeamID
+        $teamRepository
+           ->expects($this->once())
+           ->method('nextIdentity')
+           ->willReturn(new TeamId());
 
         // the add method should be called once
         // the team object should have the TeamAdded event
@@ -44,9 +46,9 @@ class AddTeamHandlerTest extends TestCase
                 $designation,
                 $mascot
             ) {
-                    $events = $team->getRecordedEvents();
+                $events = $team->getRecordedEvents();
 
-                    return $events[0] instanceof TeamAdded
+                return $events[0] instanceof TeamAdded
                 && $events[0]->getAggregateId() instanceof TeamId
                 && $events[0]->getDesignation() === $designation
                 && $events[0]->getMascot() === $mascot

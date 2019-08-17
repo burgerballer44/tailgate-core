@@ -10,7 +10,7 @@ use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\GameAdded;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Infrastructure\Persistence\Repository\SeasonRepository;
+use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 
 class AddGameHandlerTest extends TestCase
 {
@@ -60,11 +60,7 @@ class AddGameHandlerTest extends TestCase
         $startDate = $this->startDate;
         $season = $this->season;
 
-        // only needs the get and add method
-        $seasonRepository = $this->getMockBuilder(SeasonRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'add'])
-            ->getMock();
+        $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
         $seasonRepository
@@ -84,9 +80,9 @@ class AddGameHandlerTest extends TestCase
                 $awayTeamId,
                 $startDate
             ) {
-                    $events = $season->getRecordedEvents();
+                $events = $season->getRecordedEvents();
 
-                    return $events[0] instanceof GameAdded
+                return $events[0] instanceof GameAdded
                 && $events[0]->getAggregateId() instanceof SeasonId
                 && $events[0]->getGameId() instanceof GameId
                 && $events[0]->getHomeTeamId()->equals(TeamId::fromString($homeTeamId))

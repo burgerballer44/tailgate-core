@@ -8,7 +8,7 @@ use Tailgate\Application\Command\User\ActivateUserHandler;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserActivated;
-use Tailgate\Infrastructure\Persistence\Repository\UserRepository;
+use Tailgate\Domain\Model\User\UserRepositoryInterface;
 
 class ActivateUserHandlerTest extends TestCase
 {
@@ -34,22 +34,15 @@ class ActivateUserHandlerTest extends TestCase
         $this->activateUserCommand = new ActivateUserCommand($this->userId);
     }
 
-    public function testItAddsAUserActivatedRepository()
+    public function testItAddsAUserActivatedToTheRepository()
     {
         $userId = $this->userId;
         $user = $this->user;
 
-        // only needs the get and add method
-        $userRepository = $this->getMockBuilder(UserRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'add'])
-            ->getMock();
+        $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the user
-        $userRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($user);
+        $userRepository->expects($this->once())->method('get')->willReturn($user);
 
         // the add method should be called once
         // the user object should have the UserActivated event
@@ -60,9 +53,9 @@ class ActivateUserHandlerTest extends TestCase
                 function ($user) use (
                 $userId
             ) {
-                    $events = $user->getRecordedEvents();
+                $events = $user->getRecordedEvents();
 
-                    return $events[0] instanceof UserActivated
+                return $events[0] instanceof UserActivated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getStatus() === User::STATUS_ACTIVE
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
