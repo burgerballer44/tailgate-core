@@ -5,7 +5,7 @@ namespace Tailgate\Domain\Model\Group;
 use Buttercup\Protects\DomainEvent;
 use Tailgate\Domain\Model\User\UserId;
 
-class GroupCreated implements DomainEvent
+class GroupCreated implements DomainEvent, GroupDomainEvent
 {
     private $groupId;
     private $name;

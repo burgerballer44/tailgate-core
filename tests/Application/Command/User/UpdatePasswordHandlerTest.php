@@ -60,9 +60,9 @@ class UpdatePasswordHandlerTest extends TestCase
                 $userId,
                 $newPasswordHash
             ) {
-                $events = $user->getRecordedEvents();
+                    $events = $user->getRecordedEvents();
 
-                return $events[0] instanceof PasswordUpdated
+                    return $events[0] instanceof PasswordUpdated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getPasswordHash() === $newPasswordHash
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;

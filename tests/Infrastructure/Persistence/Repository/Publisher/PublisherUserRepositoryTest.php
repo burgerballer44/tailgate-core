@@ -22,13 +22,13 @@ class PublisherUserRepositoryTest extends TestCase
         $this->eventStore = $this->createMock(EventStoreInterface::class);
         $this->domainEventPublisher = $this->createMock(EventPublisherInterface::class);
 
-        // create a user and activate it just so we have an extra event on it 
-        $this->user = User::create(UserId::fromString('userId'),'username','passwordHash','email','uniqueKey');
+        // create a user and activate it just so we have an extra event on it
+        $this->user = User::create(UserId::fromString('userId'), 'username', 'passwordHash', 'email', 'uniqueKey');
         $this->user->activate();
     }
 
     public function testItCanGetAUser()
-    {   
+    {
         $userId = UserId::fromString($this->user->getId());
         $aggregateHistory = new AggregateHistory($userId, (array)$this->user->getRecordedEvents());
 
@@ -44,7 +44,7 @@ class PublisherUserRepositoryTest extends TestCase
 
     public function testItCanAddEventsToTheDomainEventPublisher()
     {
-        // the publish method should be called twice since the user has 2 events 
+        // the publish method should be called twice since the user has 2 events
         $this->domainEventPublisher->expects($this->exactly(2))->method('publish')->with($this->isInstanceOf(DomainEvent::class));
 
         $userRepository = new UserRepository($this->eventStore, $this->domainEventPublisher);

@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Model\User;
 
 use Buttercup\Protects\DomainEvent;
 
-class PasswordUpdated implements DomainEvent
+class PasswordUpdated implements DomainEvent, UserDomainEvent
 {
     private $userId;
     private $passwordHash;

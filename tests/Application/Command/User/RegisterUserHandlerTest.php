@@ -60,9 +60,9 @@ class RegisterUserHandlerTest extends TestCase
                 $email,
                 $uniqueKey
             ) {
-                $events = $user->getRecordedEvents();
+                    $events = $user->getRecordedEvents();
 
-                return $events[0] instanceof UserRegistered
+                    return $events[0] instanceof UserRegistered
                 && $events[0]->getAggregateId() instanceof UserId
                 && $events[0]->getUsername() === $username
                 && $events[0]->getPasswordHash() === $password

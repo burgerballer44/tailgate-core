@@ -44,7 +44,8 @@ class PDOEventStoreTest extends TestCase
                 ':type' => get_class($event),
                 ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
                 ':data' => serialize($event)
-            ]);;
+            ]);
+        ;
 
         $this->eventStore->commitOne($event);
     }

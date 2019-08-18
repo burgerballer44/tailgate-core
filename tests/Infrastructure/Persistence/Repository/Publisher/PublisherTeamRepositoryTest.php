@@ -22,12 +22,12 @@ class PublisherTeamRepositoryTest extends TestCase
         $this->eventStore = $this->createMock(EventStoreInterface::class);
         $this->domainEventPublisher = $this->createMock(EventPublisherInterface::class);
 
-        // create a team so we have an event 
-        $this->team = Team::create(teamId::fromString('teamId'),'dedignation','mascot');
+        // create a team so we have an event
+        $this->team = Team::create(teamId::fromString('teamId'), 'dedignation', 'mascot');
     }
 
     public function testItCanGetATeam()
-    {   
+    {
         $teamId = TeamId::fromString($this->team->getId());
         $aggregateHistory = new AggregateHistory($teamId, (array)$this->team->getRecordedEvents());
 
@@ -43,7 +43,7 @@ class PublisherTeamRepositoryTest extends TestCase
 
     public function testItCanAddEventsToTheDomainEventPublisher()
     {
-        // the publish method should be called twice since the Team has 1 events 
+        // the publish method should be called twice since the Team has 1 events
         $this->domainEventPublisher->expects($this->exactly(1))->method('publish')->with($this->isInstanceOf(DomainEvent::class));
 
         $teamRepository = new TeamRepository($this->eventStore, $this->domainEventPublisher);

@@ -46,9 +46,9 @@ class AddTeamHandlerTest extends TestCase
                 $designation,
                 $mascot
             ) {
-                $events = $team->getRecordedEvents();
+                    $events = $team->getRecordedEvents();
 
-                return $events[0] instanceof TeamAdded
+                    return $events[0] instanceof TeamAdded
                 && $events[0]->getAggregateId() instanceof TeamId
                 && $events[0]->getDesignation() === $designation
                 && $events[0]->getMascot() === $mascot

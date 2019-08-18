@@ -22,7 +22,7 @@ class PublisherSeasonRepositoryTest extends TestCase
         $this->eventStore = $this->createMock(EventStoreInterface::class);
         $this->domainEventPublisher = $this->createMock(EventPublisherInterface::class);
 
-        // create a season so we have an event 
+        // create a season so we have an event
         $this->season = Season::create(
             SeasonId::fromString('SeasonId'),
             'name',
@@ -34,7 +34,7 @@ class PublisherSeasonRepositoryTest extends TestCase
     }
 
     public function testItCanGetASeason()
-    {   
+    {
         $seasonId = SeasonId::fromString($this->season->getId());
         $aggregateHistory = new AggregateHistory($seasonId, (array)$this->season->getRecordedEvents());
 
@@ -50,7 +50,7 @@ class PublisherSeasonRepositoryTest extends TestCase
 
     public function testItCanAddEventsToTheDomainEventPublisher()
     {
-        // the publish method should be called twice since the Season has 1 events 
+        // the publish method should be called twice since the Season has 1 events
         $this->domainEventPublisher->expects($this->exactly(1))->method('publish')->with($this->isInstanceOf(DomainEvent::class));
 
         $seasonRepository = new SeasonRepository($this->eventStore, $this->domainEventPublisher);

@@ -5,7 +5,7 @@ namespace Tailgate\Domain\Model\Team;
 use Buttercup\Protects\DomainEvent;
 use Tailgate\Domain\Model\Group\GroupId;
 
-class TeamFollowed implements DomainEvent
+class TeamFollowed implements DomainEvent, TeamDomainEvent
 {
     private $followId;
     private $teamId;

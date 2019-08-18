@@ -80,9 +80,9 @@ class AddGameHandlerTest extends TestCase
                 $awayTeamId,
                 $startDate
             ) {
-                $events = $season->getRecordedEvents();
+                    $events = $season->getRecordedEvents();
 
-                return $events[0] instanceof GameAdded
+                    return $events[0] instanceof GameAdded
                 && $events[0]->getAggregateId() instanceof SeasonId
                 && $events[0]->getGameId() instanceof GameId
                 && $events[0]->getHomeTeamId()->equals(TeamId::fromString($homeTeamId))

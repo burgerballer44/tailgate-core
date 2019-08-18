@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Model\Season;
 
 use Buttercup\Protects\DomainEvent;
 
-class SeasonCreated implements DomainEvent
+class SeasonCreated implements DomainEvent, SeasonDomainEvent
 {
     private $seasonId;
     private $sport;

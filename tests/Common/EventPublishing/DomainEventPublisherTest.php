@@ -23,7 +23,7 @@ class DomainEventPublisherTest extends TestCase
     }
 
     public function testItShouldNotifySubscriber()
-    {   
+    {
         $subscriber = $this->getSpySubscriber('test-event');
         $domainEvent = $this->getFakeDomainEvent('test-event');
 
@@ -35,7 +35,7 @@ class DomainEventPublisherTest extends TestCase
     }
 
     public function testNotSubscribedSubscribersShouldNotBeNotified()
-    {   
+    {
         $subscriber = $this->getSpySubscriber('test-event');
         $domainEvent = $this->getFakeDomainEvent('different-test-event');
 
@@ -47,7 +47,7 @@ class DomainEventPublisherTest extends TestCase
     }
 
     public function testItShouldUnsubscribeSubscriber()
-    {   
+    {
         $subscriber = $this->getSpySubscriber('test-event');
         $domainEvent = $this->getFakeDomainEvent('test-event');
 
@@ -94,8 +94,9 @@ class DomainEventPublisherTest extends TestCase
                 $this->name = $name;
             }
 
-            public function getAggregateId() {}
+            public function getAggregateId()
+            {
+            }
         };
     }
-
 }

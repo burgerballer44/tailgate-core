@@ -59,9 +59,9 @@ class UpdateEmailHandlerTest extends TestCase
                 $userId,
                 $newEmail
             ) {
-                $events = $user->getRecordedEvents();
+                    $events = $user->getRecordedEvents();
 
-                return $events[0] instanceof EmailUpdated
+                    return $events[0] instanceof EmailUpdated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getEmail() === $newEmail
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;

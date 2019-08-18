@@ -53,9 +53,9 @@ class ActivateUserHandlerTest extends TestCase
                 function ($user) use (
                 $userId
             ) {
-                $events = $user->getRecordedEvents();
+                    $events = $user->getRecordedEvents();
 
-                return $events[0] instanceof UserActivated
+                    return $events[0] instanceof UserActivated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getStatus() === User::STATUS_ACTIVE
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;

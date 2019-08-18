@@ -23,12 +23,12 @@ class PublisherGroupRepositoryTest extends TestCase
         $this->eventStore = $this->createMock(EventStoreInterface::class);
         $this->domainEventPublisher = $this->createMock(EventPublisherInterface::class);
 
-        // create a group so we have an event 
-        $this->group = Group::create(GroupId::fromString('GroupId'),'Groupname', UserId::fromString('userId'));
+        // create a group so we have an event
+        $this->group = Group::create(GroupId::fromString('GroupId'), 'Groupname', UserId::fromString('userId'));
     }
 
     public function testItCanGetAGroup()
-    {   
+    {
         $groupId = GroupId::fromString($this->group->getId());
         $aggregateHistory = new AggregateHistory($groupId, (array)$this->group->getRecordedEvents());
 
@@ -44,7 +44,7 @@ class PublisherGroupRepositoryTest extends TestCase
 
     public function testItCanAddEventsToTheDomainEventPublisher()
     {
-        // the publish method should be called twice since the Group has 2 events 
+        // the publish method should be called twice since the Group has 2 events
         $this->domainEventPublisher->expects($this->exactly(2))->method('publish')->with($this->isInstanceOf(DomainEvent::class));
 
         $groupRepository = new GroupRepository($this->eventStore, $this->domainEventPublisher);

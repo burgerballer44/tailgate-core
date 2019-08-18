@@ -2,6 +2,7 @@
 
 namespace Tailgate\Infrastructure\Persistence\Projection;
 
+use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\DomainEvents;
 use Tailgate\Common\Projection\ProjectionInterface;
 use Verraes\ClassFunctions\ClassFunctions;
@@ -14,5 +15,11 @@ abstract class AbstractProjection implements ProjectionInterface
             $projectMethod = 'project' . ClassFunctions::short($event);
             $this->$projectMethod($event);
         }
+    }
+
+    public function projectOne(DomainEvent $event)
+    {
+        $projectMethod = 'project' . ClassFunctions::short($event);
+        $this->$projectMethod($event);
     }
 }

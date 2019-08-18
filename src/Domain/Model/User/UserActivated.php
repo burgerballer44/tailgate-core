@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Model\User;
 
 use Buttercup\Protects\DomainEvent;
 
-class UserActivated implements DomainEvent
+class UserActivated implements DomainEvent, UserDomainEvent
 {
     private $userId;
     private $status;

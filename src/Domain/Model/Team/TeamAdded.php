@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Model\Team;
 
 use Buttercup\Protects\DomainEvent;
 
-class TeamAdded implements DomainEvent
+class TeamAdded implements DomainEvent, TeamDomainEvent
 {
     private $teamId;
     private $designation;

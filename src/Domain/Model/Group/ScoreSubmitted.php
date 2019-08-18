@@ -6,7 +6,7 @@ use Buttercup\Protects\DomainEvent;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Season\GameId;
 
-class ScoreSubmitted implements DomainEvent
+class ScoreSubmitted implements DomainEvent, GroupDomainEvent
 {
     private $scoreId;
     private $groupId;
