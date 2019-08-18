@@ -5,6 +5,7 @@ namespace Tailgate\Infrastructure\Persistence\Event;
 use Buttercup\Protects\DomainEvent;
 use Tailgate\Common\Event\EventSubscriberInterface;
 use Tailgate\Domain\Model\Season\SeasonDomainEvent;
+use Tailgate\Domain\Model\Season\SeasonProjectionInterface;
 
 class SeasonProjectorEventSubscriber implements EventSubscriberInterface
 {

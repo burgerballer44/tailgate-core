@@ -5,6 +5,7 @@ namespace Tailgate\Infrastructure\Persistence\Event;
 use Buttercup\Protects\DomainEvent;
 use Tailgate\Common\Event\EventSubscriberInterface;
 use Tailgate\Domain\Model\User\UserDomainEvent;
+use Tailgate\Domain\Model\User\UserProjectionInterface;
 
 class UserProjectorEventSubscriber implements EventSubscriberInterface
 {
