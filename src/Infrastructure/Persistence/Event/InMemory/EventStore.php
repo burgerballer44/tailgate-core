@@ -1,16 +1,21 @@
 <?php
 
-namespace Tailgate\Infrastructure\Persistence\EventStore\InMemory;
+namespace Tailgate\Infrastructure\Persistence\Event\InMemory;
 
 use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\DomainEvents;
 use Buttercup\Protects\IdentifiesAggregate;
-use Tailgate\Common\EventStore\EventStoreInterface;
+use Tailgate\Common\Event\EventStoreInterface;
 
 class EventStore implements EventStoreInterface
 {
     private $events = [];
+
+    public function commitOne(DomainEvent $event)
+    {
+        $this->events[] = $event;
+    }
 
     public function commit(DomainEvents $events)
     {

@@ -1,16 +1,39 @@
 <?php
 
-namespace Tailgate\Tests\Infrastructure\Persistence\EventStore\InMemory;
+namespace Tailgate\Tests\Infrastructure\Persistence\Event\InMemory;
 
 use Buttercup\Protects\AggregateHistory;
+use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\DomainEvents;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
-use Tailgate\Infrastructure\Persistence\EventStore\InMemory\EventStore;
+use Tailgate\Infrastructure\Persistence\Event\InMemory\EventStore;
 
 class InMemoryEventStoreTest extends TestCase
 {
+    public function testItCanCommitOneDomainEvent()
+    {
+        $id = UserId::fromString('userId1');
+        $event = new UserRegistered($id, 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
+        $eventStore = new EventStore;
+
+        $history = $eventStore->getAggregateHistoryFor($id);
+        $this->assertEmpty(
+            $history,
+            'failed to return nothing since no events have been added yet'
+        );
+
+        $eventStore->commitOne($event);
+
+        $history = $eventStore->getAggregateHistoryFor($id);
+        $this->assertTrue(
+            $history instanceof AggregateHistory,
+            'failed to return an AggregateHistory even though there are two events for id1'
+        );
+        $this->assertCount(1, $history, 'failed to find the event for id');
+    }
+
     public function testItAddsDomainEventsAndCanReturnAggregateHistory()
     {
         $id1 = UserId::fromString('userId1');

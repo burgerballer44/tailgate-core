@@ -5,12 +5,12 @@ namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
 use Tailgate\Common\Event\EventStoreInterface;
-use Tailgate\Domain\Model\User\User;
-use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Domain\Model\Season\Season;
+use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Common\Event\EventPublisherInterface;
 
-class UserRepository implements UserRepositoryInterface
+class SeasonRepository implements SeasonRepositoryInterface
 {
     private $eventStore;
     private $domainEventPublisher;
@@ -27,22 +27,22 @@ class UserRepository implements UserRepositoryInterface
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return User::reconstituteFrom($eventStream);
+        return Season::reconstituteFrom($eventStream);
     }
 
-    public function add(RecordsEvents $user)
+    public function add(RecordsEvents $season)
     {
-        $events = $user->getRecordedEvents();
-
+        $events = $season->getRecordedEvents();
+        
         foreach ($events as $event) {
             $this->domainEventPublisher->publish($event);
-        }
+        };
 
-        $user->clearRecordedEvents();
+        $season->clearRecordedEvents();
     }
 
     public function nextIdentity()
     {
-        return new UserId();
+        return new SeasonId();
     }
 }

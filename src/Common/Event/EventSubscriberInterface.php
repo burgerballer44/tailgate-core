@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Common\EventPublisher;
+namespace Tailgate\Common\Event;
 
 interface EventSubscriberInterface
 {

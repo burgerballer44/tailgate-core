@@ -1,13 +1,14 @@
 <?php
 
-namespace Tailgate\Tests\Infrastructure\Persistence\EventStore\PDO;
+namespace Tailgate\Tests\Infrastructure\Persistence\Event\PDO;
 
 use Buttercup\Protects\AggregateHistory;
+use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\DomainEvents;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
-use Tailgate\Infrastructure\Persistence\EventStore\PDO\EventStore;
+use Tailgate\Infrastructure\Persistence\Event\PDO\EventStore;
 
 class PDOEventStoreTest extends TestCase
 {
@@ -20,6 +21,32 @@ class PDOEventStoreTest extends TestCase
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
         $this->eventStore = new EventStore($this->pdoMock);
+    }
+
+    public function testItCanCommitADomainEvent()
+    {
+        $event =  new UserRegistered(UserId::fromString('userId1'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('INSERT INTO event (aggregate_id, type, created_at, data)
+            VALUES (:aggregate_id, :type, :created_at, :data)')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+             ->with([
+                ':aggregate_id' => (string) $event->getAggregateId(),
+                ':type' => get_class($event),
+                ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+                ':data' => serialize($event)
+            ]);;
+
+        $this->eventStore->commitOne($event);
     }
 
     public function testItCanCommitDomainEvents()

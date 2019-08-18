@@ -4,7 +4,7 @@ namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
-use Tailgate\Common\EventStore\EventStoreInterface;
+use Tailgate\Common\Event\EventStoreInterface;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;

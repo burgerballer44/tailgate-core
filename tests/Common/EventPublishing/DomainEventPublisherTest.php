@@ -4,8 +4,8 @@ namespace Ddd\Domain;
 
 use Buttercup\Protects\DomainEvent;
 use PHPUnit\Framework\TestCase;
-use Tailgate\Common\EventPublisher\DomainEventPublisher;
-use Tailgate\Common\EventPublisher\EventSubscriberInterface;
+use Tailgate\Common\Event\DomainEventPublisher;
+use Tailgate\Common\Event\EventSubscriberInterface;
 
 class DomainEventPublisherTest extends TestCase
 {

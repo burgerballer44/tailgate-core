@@ -1,9 +1,9 @@
 <?php
 
-namespace Tailgate\Common\EventPublisher;
+namespace Tailgate\Common\Event;
 
 use Buttercup\Protects\DomainEvent;
-use Tailgate\Common\EventPublisher\EventPublisherInterface;
+use Tailgate\Common\Event\EventPublisherInterface;
 
 class DomainEventPublisher implements EventPublisherInterface
 {

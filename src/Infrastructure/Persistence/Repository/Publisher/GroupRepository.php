@@ -5,12 +5,12 @@ namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
 use Tailgate\Common\Event\EventStoreInterface;
-use Tailgate\Domain\Model\User\User;
-use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Domain\Model\Group\Group;
+use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Common\Event\EventPublisherInterface;
 
-class UserRepository implements UserRepositoryInterface
+class GroupRepository implements GroupRepositoryInterface
 {
     private $eventStore;
     private $domainEventPublisher;
@@ -27,22 +27,22 @@ class UserRepository implements UserRepositoryInterface
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return User::reconstituteFrom($eventStream);
+        return Group::reconstituteFrom($eventStream);
     }
 
-    public function add(RecordsEvents $user)
+    public function add(RecordsEvents $group)
     {
-        $events = $user->getRecordedEvents();
-
+        $events = $group->getRecordedEvents();
+        
         foreach ($events as $event) {
             $this->domainEventPublisher->publish($event);
         }
 
-        $user->clearRecordedEvents();
+        $group->clearRecordedEvents();
     }
 
     public function nextIdentity()
     {
-        return new UserId();
+        return new GroupId();
     }
 }
