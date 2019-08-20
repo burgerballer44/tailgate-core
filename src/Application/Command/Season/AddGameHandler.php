@@ -15,12 +15,12 @@ class AddGameHandler
         $this->seasonRepository = $seasonRepository;
     }
 
-    public function handle(AddGameCommand $addGameCommand)
+    public function handle(AddGameCommand $command)
     {
-        $seasonId = $addGameCommand->getSeasonId();
-        $homeTeamId = $addGameCommand->getHomeTeamId();
-        $awayTeamId = $addGameCommand->getAwayTeamId();
-        $startDate = $addGameCommand->getStartDate();
+        $seasonId = $command->getSeasonId();
+        $homeTeamId = $command->getHomeTeamId();
+        $awayTeamId = $command->getAwayTeamId();
+        $startDate = $command->getStartDate();
 
         $season = $this->seasonRepository->get(SeasonId::fromString($seasonId));
 

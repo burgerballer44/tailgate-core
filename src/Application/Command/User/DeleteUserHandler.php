@@ -6,7 +6,7 @@ use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 
-class ActivateUserHandler
+class DeleteUserHandler
 {
     private $userRepository;
 
@@ -15,13 +15,13 @@ class ActivateUserHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(ActivateUserCommand $command)
+    public function handle(DeleteUserCommand $command)
     {
         $userId = $command->getUserId();
 
         $user = $this->userRepository->get(UserId::fromString($userId));
 
-        $user->activate();
+        $user->delete();
 
         $this->userRepository->add($user);
     }

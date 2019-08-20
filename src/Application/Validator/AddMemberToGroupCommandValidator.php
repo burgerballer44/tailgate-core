@@ -4,7 +4,7 @@ namespace Tailgate\Application\Validator;
 
 use Respect\Validation\Validator as V;
 
-class AddMemberToGroupCommandValidator extends AbstractValidator
+class AddMemberToGroupCommandValidator extends AbstractRespectValidator
 {
     public function __construct()
     {

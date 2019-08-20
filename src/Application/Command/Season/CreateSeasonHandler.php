@@ -14,13 +14,13 @@ class CreateSeasonHandler
         $this->seasonRepository = $seasonRepository;
     }
 
-    public function handle(CreateSeasonCommand $createSeasonCommand)
+    public function handle(CreateSeasonCommand $command)
     {
-        $sport = $createSeasonCommand->getSport();
-        $seasonType = $createSeasonCommand->getSeasonType();
-        $name = $createSeasonCommand->getName();
-        $seasonStart = $createSeasonCommand->getSeasonStart();
-        $seasonEnd = $createSeasonCommand->getSeasonEnd();
+        $sport = $command->getSport();
+        $seasonType = $command->getSeasonType();
+        $name = $command->getName();
+        $seasonStart = $command->getSeasonStart();
+        $seasonEnd = $command->getSeasonEnd();
 
         $season = Season::create(
             $this->seasonRepository->nextIdentity(),

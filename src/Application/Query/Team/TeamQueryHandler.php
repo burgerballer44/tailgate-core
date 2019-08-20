@@ -19,9 +19,9 @@ class TeamQueryHandler
         $this->teamViewTransformer = $teamViewTransformer;
     }
 
-    public function handle(TeamQuery $teamQuery)
+    public function handle(TeamQuery $query)
     {
-        $teamView = $this->teamViewRepository->get(TeamId::fromString($teamQuery->getTeamId()));
+        $teamView = $this->teamViewRepository->get(TeamId::fromString($query->getTeamId()));
         return $this->teamViewTransformer->read($teamView);
     }
 }

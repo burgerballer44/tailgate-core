@@ -4,7 +4,7 @@ namespace Tailgate\Application\Validator;
 
 use Respect\Validation\Validator as V;
 
-class AddGameCommandValidator extends AbstractValidator
+class AddGameCommandValidator extends AbstractRespectValidator
 {
     public function __construct()
     {

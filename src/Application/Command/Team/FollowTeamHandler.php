@@ -15,10 +15,10 @@ class FollowTeamHandler
         $this->teamRepository = $teamRepository;
     }
 
-    public function handle(FollowTeamCommand $followTeamCommand)
+    public function handle(FollowTeamCommand $command)
     {
-        $groupId = $followTeamCommand->getGroupId();
-        $teamId = $followTeamCommand->getTeamId();
+        $groupId = $command->getGroupId();
+        $teamId = $command->getTeamId();
 
         $team = $this->teamRepository->get(TeamId::fromString($teamId));
 

@@ -18,7 +18,7 @@ class AllGroupsQueryHandler
         $this->groupViewTransformer = $groupViewTransformer;
     }
 
-    public function handle(AllGroupsQuery $allGroupsQuery)
+    public function handle(AllGroupsQuery $query)
     {
         $groupViews = $this->groupViewRepository->all();
 

@@ -27,9 +27,9 @@ class GroupQueryHandler
         $this->groupViewTransformer = $groupViewTransformer;
     }
 
-    public function handle(GroupQuery $groupQuery)
+    public function handle(GroupQuery $query)
     {
-        $groupId = GroupId::fromString($groupQuery->getGroupId());
+        $groupId = GroupId::fromString($query->getGroupId());
 
         $groupView = $this->groupViewRepository->get($groupId);
         $memberViews = $this->memberViewRepository->getAllByGroup($groupId);

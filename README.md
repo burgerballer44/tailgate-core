@@ -26,3 +26,11 @@
 * limit numbers of teams followed
 
 ### Season
+
+
+
+        //Todo
+        // group can have a rule list that they can choose to follow
+        // cannot submit another score
+        // cannot submit score if game has started
+        // cannot submit score someone else has

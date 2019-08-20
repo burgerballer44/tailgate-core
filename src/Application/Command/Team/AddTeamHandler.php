@@ -14,10 +14,10 @@ class AddTeamHandler
         $this->teamRepository = $teamRepository;
     }
 
-    public function handle(AddTeamCommand $addTeamCommand)
+    public function handle(AddTeamCommand $command)
     {
-        $designation = $addTeamCommand->getDesignation();
-        $mascot = $addTeamCommand->getMascot();
+        $designation = $command->getDesignation();
+        $mascot = $command->getMascot();
 
         $team = Team::create(
             $this->teamRepository->nextIdentity(),

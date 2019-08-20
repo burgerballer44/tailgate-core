@@ -23,11 +23,11 @@ class RegisterUserHandler
         $this->randomStringer = $randomStringer;
     }
 
-    public function handle(RegisterUserCommand $registerUserCommand)
+    public function handle(RegisterUserCommand $command)
     {
-        $username = $registerUserCommand->getUsername();
-        $password = $registerUserCommand->getPassword();
-        $email = $registerUserCommand->getEmail();
+        $username = $command->getUsername();
+        $password = $command->getPassword();
+        $email = $command->getEmail();
 
         $user = User::create(
             $this->userRepository->nextIdentity(),

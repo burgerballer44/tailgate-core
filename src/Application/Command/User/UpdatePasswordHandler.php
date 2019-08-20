@@ -20,10 +20,10 @@ class UpdatePasswordHandler
         $this->passwordHashing = $passwordHashing;
     }
 
-    public function handle(UpdatePasswordCommand $updatePasswordCommand)
+    public function handle(UpdatePasswordCommand $command)
     {
-        $userId = $updatePasswordCommand->getUserId();
-        $password = $updatePasswordCommand->getPassword();
+        $userId = $command->getUserId();
+        $password = $command->getPassword();
 
         $user = $this->userRepository->get(UserId::fromString($userId));
 

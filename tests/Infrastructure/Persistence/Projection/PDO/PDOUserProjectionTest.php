@@ -6,8 +6,10 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserActivated;
+use Tailgate\Domain\Model\User\UserDeleted;
 use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\EmailUpdated;
+use Tailgate\Domain\Model\User\UserUpdated;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\UserProjection;
 
 class PDOUserProjectionTest extends TestCase
@@ -78,6 +80,31 @@ class PDOUserProjectionTest extends TestCase
         $this->projection->projectUserActivated($event);
     }
 
+    public function testItCanProjectUserDeleted()
+    {
+        $event = new UserDeleted(UserId::fromString('userId'), 'status');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('UPDATE `user`
+            SET status = :status
+            WHERE user_id = :user_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':user_id' => $event->getAggregateId(),
+                ':status' => $event->getStatus(),
+            ]);
+
+        $this->projection->projectUserDeleted($event);
+    }
+
     public function testItCanProjectPasswordUpdated()
     {
         $event = new PasswordUpdated(UserId::fromString('userId'), 'password');
@@ -126,5 +153,33 @@ class PDOUserProjectionTest extends TestCase
             ]);
 
         $this->projection->projectEmailUpdated($event);
+    }
+
+    public function testItCanProjectUserUpdated()
+    {
+        $event = new UserUpdated(UserId::fromString('userId'), 'username', 'email@email.com', 'status', 'role');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('UPDATE `user`
+            SET username = :username, email = :email, status = :status, role = :role,
+            WHERE user_id = :user_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':user_id' => $event->getAggregateId(),
+                ':username' => $event->getUsername(),
+                ':email' => $event->getEmail(),
+                ':status' => $event->getStatus(),
+                ':role' => $event->getRole(),
+            ]);
+
+        $this->projection->projectUserUpdated($event);
     }
 }

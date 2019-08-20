@@ -19,9 +19,9 @@ class SeasonQueryHandler
         $this->seasonViewTransformer = $seasonViewTransformer;
     }
 
-    public function handle(seasonQuery $seasonQuery)
+    public function handle(SeasonQuery $query)
     {
-        $seasonView = $this->seasonViewRepository->get(SeasonId::fromString($seasonQuery->getSeasonId()));
+        $seasonView = $this->seasonViewRepository->get(SeasonId::fromString($query->getSeasonId()));
         return $this->seasonViewTransformer->read($seasonView);
     }
 }

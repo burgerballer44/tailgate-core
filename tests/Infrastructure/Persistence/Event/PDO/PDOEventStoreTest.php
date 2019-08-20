@@ -50,7 +50,7 @@ class PDOEventStoreTest extends TestCase
         $this->eventStore->commitOne($event);
     }
 
-    public function testItCanCommitDomainEvents()
+    public function testItCanCommitManyDomainEvents()
     {
         $domainEvents = new DomainEvents([
             new UserRegistered(UserId::fromString('userId1'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString'),

@@ -34,7 +34,7 @@ class InMemoryEventStoreTest extends TestCase
         $this->assertCount(1, $history, 'failed to find the event for id');
     }
 
-    public function testItAddsDomainEventsAndCanReturnAggregateHistory()
+    public function testItCommitManyDomainEventsAndCanReturnAggregateHistory()
     {
         $id1 = UserId::fromString('userId1');
         $id2 = UserId::fromString('userId2');

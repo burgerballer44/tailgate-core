@@ -114,6 +114,16 @@ class User extends AbstractEntity
         );
     }
 
+    public function delete()
+    {
+        $this->applyAndRecordThat(
+            new UserDeleted(
+                $this->userId,
+                User::STATUS_DELETED
+            )
+        );
+    }
+
     public function updatePassword($passwordHash)
     {
         $this->applyAndRecordThat(
@@ -134,6 +144,19 @@ class User extends AbstractEntity
         );
     }
 
+    public function update($username, $email, $status, $role)
+    {
+        $this->applyAndRecordThat(
+            new UserUpdated(
+                $this->userId,
+                $username,
+                $email,
+                $status,
+                $role
+            )
+        );
+    }
+
     protected function applyUserRegistered(UserRegistered $event)
     {
         $this->username = $event->getUsername();
@@ -148,6 +171,11 @@ class User extends AbstractEntity
         $this->status = $event->getStatus();
     }
 
+    protected function applyUserDeleted(UserDeleted $event)
+    {
+        $this->status = $event->getStatus();
+    }
+
     protected function applyPasswordUpdated(PasswordUpdated $event)
     {
         $this->passwordHash = $event->getPasswordHash();
@@ -156,5 +184,13 @@ class User extends AbstractEntity
     protected function applyEmailUpdated(EmailUpdated $event)
     {
         $this->email = $event->getEmail();
+    }
+
+    protected function applyUserUpdated(UserUpdated $event)
+    {
+        $this->username = $event->getUsername();
+        $this->email = $event->getEmail();
+        $this->status = $event->getStatus();
+        $this->role = $event->getRole();
     }
 }

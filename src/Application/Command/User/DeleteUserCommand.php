@@ -2,7 +2,7 @@
 
 namespace Tailgate\Application\Command\User;
 
-class ActivateUserCommand
+class DeleteUserCommand
 {
     private $userId;
 

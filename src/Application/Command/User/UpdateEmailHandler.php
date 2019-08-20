@@ -16,10 +16,10 @@ class UpdateEmailHandler
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UpdateEmailCommand $updateEmailCommand)
+    public function handle(UpdateEmailCommand $command)
     {
-        $userId = $updateEmailCommand->getUserId();
-        $email = $updateEmailCommand->getEmail();
+        $userId = $command->getUserId();
+        $email = $command->getEmail();
 
         $user = $this->userRepository->get(UserId::fromString($userId));
 

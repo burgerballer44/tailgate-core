@@ -4,7 +4,7 @@ namespace Tailgate\Application\Validator;
 
 use Respect\Validation\Validator as V;
 
-class CreateSeasonCommandValidator extends AbstractValidator
+class CreateSeasonCommandValidator extends AbstractRespectValidator
 {
     public function __construct()
     {

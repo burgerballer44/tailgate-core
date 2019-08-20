@@ -15,10 +15,10 @@ class AddMemberToGroupHandler
         $this->groupRepository = $groupRepository;
     }
 
-    public function handle(AddMemberToGroupCommand $addMemberToGroupCommand)
+    public function handle(AddMemberToGroupCommand $command)
     {
-        $groupId = $addMemberToGroupCommand->getGroupId();
-        $userId = $addMemberToGroupCommand->getUserId();
+        $groupId = $command->getGroupId();
+        $userId = $command->getUserId();
 
         $group = $this->groupRepository->get(GroupId::fromString($groupId));
 

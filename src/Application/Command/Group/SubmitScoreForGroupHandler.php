@@ -16,21 +16,15 @@ class SubmitScoreForGroupHandler
         $this->groupRepository = $groupRepository;
     }
 
-    public function handle(SubmitScoreForGroupCommand $submitScoreForGroupCommand)
+    public function handle(SubmitScoreForGroupCommand $command)
     {
-        $groupId = $submitScoreForGroupCommand->getGroupId();
-        $userId = $submitScoreForGroupCommand->getUserId();
-        $gameId = $submitScoreForGroupCommand->getGameId();
-        $homeTeamPrediction = $submitScoreForGroupCommand->getHomeTeamPrediction();
-        $awayTeamPrediction = $submitScoreForGroupCommand->getAwayTeamPrediction();
+        $groupId = $command->getGroupId();
+        $userId = $command->getUserId();
+        $gameId = $command->getGameId();
+        $homeTeamPrediction = $command->getHomeTeamPrediction();
+        $awayTeamPrediction = $command->getAwayTeamPrediction();
 
         $group = $this->groupRepository->get(GroupId::fromString($groupId));
-
-        //Todo
-        // group can have a rule list that they can choose to follow
-        // cannot submit another score
-        // cannot submit score if game has started
-        // cannot submit score someone else has
 
         $group->submitScore(
             UserId::fromString($userId),

@@ -15,12 +15,12 @@ class AddGameScoreHandler
         $this->seasonRepository = $seasonRepository;
     }
 
-    public function handle(AddGameScoreCommand $addGameScoreCommand)
+    public function handle(AddGameScoreCommand $command)
     {
-        $seasonId = $addGameScoreCommand->getSeasonId();
-        $gameId = $addGameScoreCommand->getGameId();
-        $homeTeamScore = $addGameScoreCommand->getHomeTeamScore();
-        $awayTeamScore = $addGameScoreCommand->getAwayTeamScore();
+        $seasonId = $command->getSeasonId();
+        $gameId = $command->getGameId();
+        $homeTeamScore = $command->getHomeTeamScore();
+        $awayTeamScore = $command->getAwayTeamScore();
 
         $season = $this->seasonRepository->get(SeasonId::fromString($seasonId));
 

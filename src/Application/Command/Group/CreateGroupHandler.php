@@ -15,10 +15,10 @@ class CreateGroupHandler
         $this->groupRepository = $groupRepository;
     }
 
-    public function handle(CreateGroupCommand $createGroupCommand)
+    public function handle(CreateGroupCommand $command)
     {
-        $name = $createGroupCommand->getName();
-        $ownerId = $createGroupCommand->getOwnerId();
+        $name = $command->getName();
+        $ownerId = $command->getOwnerId();
 
         $group = Group::create(
             $this->groupRepository->nextIdentity(),

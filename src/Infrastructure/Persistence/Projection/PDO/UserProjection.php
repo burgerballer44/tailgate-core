@@ -6,8 +6,10 @@ use PDO;
 use Tailgate\Domain\Model\User\UserProjectionInterface;
 use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserActivated;
+use Tailgate\Domain\Model\User\UserDeleted;
 use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\EmailUpdated;
+use Tailgate\Domain\Model\User\UserUpdated;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
 class UserProjection extends AbstractProjection implements UserProjectionInterface
@@ -52,6 +54,20 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
         ]);
     }
 
+    public function projectUserDeleted(UserDeleted $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE `user`
+            SET status = :status
+            WHERE user_id = :user_id'
+        );
+
+        $stmt->execute([
+            ':user_id' => $event->getAggregateId(),
+            ':status' => $event->getStatus(),
+        ]);
+    }
+
     public function projectPasswordUpdated(PasswordUpdated $event)
     {
         $stmt = $this->pdo->prepare(
@@ -77,6 +93,23 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
         $stmt->execute([
             ':user_id' => $event->getAggregateId(),
             ':email' => $event->getEmail(),
+        ]);
+    }
+
+    public function projectUserUpdated(UserUpdated $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE `user`
+            SET username = :username, email = :email, status = :status, role = :role,
+            WHERE user_id = :user_id'
+        );
+
+        $stmt->execute([
+            ':user_id' => $event->getAggregateId(),
+            ':username' => $event->getUsername(),
+            ':email' => $event->getEmail(),
+            ':status' => $event->getStatus(),
+            ':role' => $event->getRole(),
         ]);
     }
 }
