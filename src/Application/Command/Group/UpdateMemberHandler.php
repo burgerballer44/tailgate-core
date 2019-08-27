@@ -2,28 +2,32 @@
 
 namespace Tailgate\Application\Command\Group;
 
-use Tailgate\Domain\Model\Group\Group;
+use Tailgate\Domain\Model\Season\GameId;
+use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 
-class DeleteScoreHandler
+class UpdateMemberHandler
 {
-    private $groupRepository;
+    public $groupRepository;
 
     public function __construct(GroupRepositoryInterface $groupRepository)
     {
         $this->groupRepository = $groupRepository;
     }
 
-    public function handle(DeleteGameCommand $command)
+    public function handle(UpdateMemberCommand $command)
     {
         $groupId = $command->getGroupId();
-        $scoreId = $command->getScoreId();
+        $memberId = $command->getMemberId();
+        $groupRole = $command->getGroupRole();
 
         $group = $this->groupRepository->get(GroupId::fromString($groupId));
 
-        $group->deleteScore(ScoreId::fromString($scoreId));
+        $group->updateMember(
+            MemberId::fromString($memberId),
+            $groupRole
+        );
 
         $this->groupRepository->add($group);
     }

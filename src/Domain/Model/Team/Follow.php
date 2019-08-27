@@ -6,32 +6,32 @@ use Tailgate\Domain\Model\Group\GroupId;
 
 class Follow
 {
-    private $followId;
     private $teamId;
+    private $followId;
     private $groupId;
 
-    private function __construct($followId, $teamId, $groupId)
+    private function __construct($teamId, $followId, $groupId)
     {
-        $this->followId = $followId;
         $this->teamId = $teamId;
+        $this->followId = $followId;
         $this->groupId = $groupId;
     }
 
-    public static function create(FollowId $followId, TeamId $teamId, GroupId $groupId)
+    public static function create(TeamId $teamId, FollowId $followId, GroupId $groupId)
     {
-        $newFollow = new Follow($followId, $teamId, $groupId);
+        $newFollow = new Follow($teamId, $followId, $groupId);
 
         return $newFollow;
-    }
-
-    public function getFollowId()
-    {
-        return $this->followId;
     }
 
     public function getTeamId()
     {
         return $this->teamId;
+    }
+
+    public function getFollowId()
+    {
+        return $this->followId;
     }
 
     public function getGroupId()

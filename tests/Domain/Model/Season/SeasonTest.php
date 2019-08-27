@@ -95,7 +95,7 @@ class SeasonTest extends TestCase
         $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
     }
 
-    public function testAGameScoreIsAddedToAGameWhenGameScoreIsAdded()
+    public function testAGameScoreIsUpdatedToAGameWhenGameScoreIsUpdated()
     {
         $season = Season::create(
             $this->seasonId,
@@ -114,7 +114,7 @@ class SeasonTest extends TestCase
         $homeTeamScore = 70;
         $awayTeamScore = 60;
 
-        $season->addGameScore(
+        $season->updateGameScore(
             $games[0]->getGameId(),
             $homeTeamScore,
             $awayTeamScore
@@ -127,5 +127,90 @@ class SeasonTest extends TestCase
         $this->assertEquals($awayTeamScore, $games[0]->getAwayTeamScore());
         $this->assertTrue($games[0]->getStartDate() === $startDate);
         $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
+    }
+
+    public function testAGameCanBeRemovedFromASeason()
+    {
+        // create a season and add three games
+        $season = Season::create(
+            $this->seasonId,
+            $this->sport,
+            $this->seasonType,
+            $this->name,
+            $this->seasonStart,
+            $this->seasonEnd
+        );
+        $homeTeamId = TeamId::fromString('homeTeamId');
+        $awayTeamId = TeamId::fromString('awayTeamId');
+        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+
+        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $games = $season->getGames();
+        $this->assertCount(3, $games);
+
+        $gameId1 = $games[0]->getGameId();
+        $gameId2 = $games[1]->getGameId();
+        $gameId3 = $games[2]->getGameId();
+
+        $season->deleteGame($gameId2);
+
+        $games = $season->getGames();
+
+        $this->assertCount(2, $games);
+        $this->assertTrue($games[0]->getGameId()->equals($gameId1));
+        $this->assertTrue($games[1]->getGameId()->equals($gameId3));
+    }
+
+    public function testThereAreNoGamesInADeletedSeason()
+    {
+        // create a season and add a game
+        $season = Season::create(
+            $this->seasonId,
+            $this->sport,
+            $this->seasonType,
+            $this->name,
+            $this->seasonStart,
+            $this->seasonEnd
+        );
+        $homeTeamId = TeamId::fromString('homeTeamId');
+        $awayTeamId = TeamId::fromString('awayTeamId');
+        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+
+        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $games = $season->getGames();
+        $this->assertCount(1, $games);
+
+        $season->delete();
+
+        $games = $season->getGames();
+
+        $this->assertCount(0, $games);
+    }
+
+    public function testASeasonCanBeUpdated()
+    {
+        $sport = 'updatedsport';
+        $seasonType = 'updatedseasonType';
+        $name = 'updatedname';
+        $seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
+        $seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
+        $season = Season::create(
+            $this->seasonId,
+            $this->sport,
+            $this->seasonType,
+            $this->name,
+            $this->seasonStart,
+            $this->seasonEnd
+        );
+
+        $season->update($sport, $seasonType, $name, $seasonStart, $seasonEnd);
+
+        $this->assertEquals($sport, $season->getSport());
+        $this->assertEquals($seasonType, $season->getSeasonType());
+        $this->assertEquals($name, $season->getName());
+        $this->assertEquals($seasonStart, $season->getSeasonStart());
+        $this->assertEquals($seasonEnd, $season->getSeasonEnd());
     }
 }

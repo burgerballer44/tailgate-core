@@ -7,6 +7,11 @@ use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupProjectionInterface;
 use Tailgate\Domain\Model\Group\MemberAdded;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
+use Tailgate\Domain\Model\Group\GroupUpdated;
+use Tailgate\Domain\Model\Group\MemberDeleted;
+use Tailgate\Domain\Model\Group\ScoreDeleted;
+use Tailgate\Domain\Model\Group\GroupScoreUpdated;
+use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
 class GroupProjection extends AbstractProjection implements GroupProjectionInterface
@@ -26,7 +31,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
         );
 
         $stmt->execute([
-           ':group_id' => $event->getAggregateId(),
+            ':group_id' => $event->getAggregateId(),
             ':name' => $event->getName(),
             ':owner_id' => $event->getOwnerId(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
@@ -57,13 +62,69 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
         );
 
         $stmt->execute([
-            'score_id' => $event->getScoreId(),
-            ':group_id' => $event->getGroupId(),
+            ':score_id' => $event->getScoreId(),
+            ':group_id' => $event->getAggregateId(),
             ':user_id' => $event->getUserId(),
             ':game_id' => $event->getGameId(),
             ':home_team_prediction' => $event->getHomeTeamPrediction(),
             ':away_team_prediction' => $event->getAwayTeamPrediction(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+        ]);
+    }
+
+    public function projectGroupUpdated(GroupUpdated $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE `group` (name, owner_id)
+            VALUES (:name, :owner_id)
+            WHERE :group_id = group_id'
+        );
+
+        $stmt->execute([
+            ':group_id' => $event->getAggregateId(),
+            ':name' => $event->getName(),
+            ':owner_id' => $event->getOwnerId(),
+        ]);
+    }
+
+    public function projectMemberDeleted(MemberDeleted $event)
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM `member` WHERE :member_id = member_id');
+
+        $stmt->execute([':member_id' => $event->getMemberId()]);
+    }
+
+    public function projectScoreDeleted(ScoreDeleted $event)
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE :score_id = score_id');
+
+        $stmt->execute([':score_id' => $event->getScoreId()]);
+    }
+
+    public function projectGroupDeleted(GroupDeleted $event)
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE :group_id = group_id');
+        $stmt->execute([':group_id' => $event->getScoreId()]);
+
+        $stmt = $this->pdo->prepare('DELETE FROM `member` WHERE :group_id = group_id');
+        $stmt->execute([':group_id' => $event->getScoreId()]);
+
+        $stmt = $this->pdo->prepare('DELETE FROM `group` WHERE :group_id = group_id');
+        $stmt->execute([':group_id' => $event->getScoreId()]);
+    }
+
+    public function projectGroupScoreUpdated(GroupScoreUpdated $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE `score` (home_team_prediction, away_team_prediction)
+            VALUES (:home_team_prediction, :away_team_prediction)
+            WHERE :score_id = score_id'
+        );
+
+        $stmt->execute([
+            ':score_id' => $event->getScoreId(),
+            ':home_team_prediction' => $event->getHomeTeamPrediction(),
+            ':away_team_prediction' => $event->getAwayTeamPrediction(),
         ]);
     }
 }

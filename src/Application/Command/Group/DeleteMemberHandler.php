@@ -16,7 +16,7 @@ class DeleteMemberHandler
         $this->groupRepository = $groupRepository;
     }
 
-    public function handle(DeleteGameCommand $command)
+    public function handle(DeleteMemberCommand $command)
     {
         $groupId = $command->getGroupId();
         $memberId = $command->getMemberId();

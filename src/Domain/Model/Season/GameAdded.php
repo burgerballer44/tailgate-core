@@ -7,22 +7,22 @@ use Tailgate\Domain\Model\Team\TeamId;
 
 class GameAdded implements DomainEvent, SeasonDomainEvent
 {
-    private $gameId;
     private $seasonId;
+    private $gameId;
     private $homeTeamId;
     private $awayTeamId;
     private $startDate;
     private $occurredOn;
 
     public function __construct(
-        GameId $gameId,
         SeasonId $seasonId,
+        GameId $gameId,
         TeamId $homeTeamId,
         TeamId $awayTeamId,
         \DateTimeImmutable $startDate
     ) {
-        $this->gameId = $gameId;
         $this->seasonId = $seasonId;
+        $this->gameId = $gameId;
         $this->homeTeamId = $homeTeamId;
         $this->awayTeamId = $awayTeamId;
         $this->startDate = $startDate;
@@ -37,11 +37,6 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
     public function getGameId()
     {
         return $this->gameId;
-    }
-
-    public function getSeasonId()
-    {
-        return $this->seasonId;
     }
 
     public function getHomeTeamId()

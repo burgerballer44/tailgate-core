@@ -21,7 +21,7 @@ class Season extends AbstractEntity
     private $name;
     private $seasonStart;
     private $seasonEnd;
-    private $games;
+    private $games = [];
 
     protected function __construct(
         $seasonId,
@@ -110,12 +110,31 @@ class Season extends AbstractEntity
         return $this->games;
     }
 
+    public function update(
+        $sport,
+        $seasonType,
+        $name,
+        \DateTimeImmutable $seasonStart,
+        \DateTimeImmutable $seasonEnd
+    ) {
+        $this->applyAndRecordThat(
+            new SeasonUpdated(
+                $this->seasonId,
+                $sport,
+                $seasonType,
+                $name,
+                $seasonStart,
+                $seasonEnd
+            )
+        );
+    }
+
     public function addGame(TeamId $homeTeamId, TeamId $awayTeamId, \DateTimeImmutable $startDate)
     {
         $this->applyAndRecordThat(
             new GameAdded(
-                new GameId(),
                 $this->seasonId,
+                new GameId(),
                 $homeTeamId,
                 $awayTeamId,
                 $startDate
@@ -123,14 +142,31 @@ class Season extends AbstractEntity
         );
     }
 
-    public function addGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore)
+    public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore)
     {
         $this->applyAndRecordThat(
-            new GameScoreAdded(
-                $gameId,
+            new GameScoreUpdated(
                 $this->seasonId,
+                $gameId,
                 $homeTeamScore,
                 $awayTeamScore
+            )
+        );
+    }
+
+    public function delete()
+    {
+        $this->applyAndRecordThat(
+            new SeasonDeleted($this->seasonId)
+        );
+    }
+
+    public function deleteGame(GameId $gameId)
+    {
+        $this->applyAndRecordThat(
+            new GameDeleted(
+                $this->seasonId,
+                $gameId,
             )
         );
     }
@@ -144,18 +180,27 @@ class Season extends AbstractEntity
         $this->seasonEnd = $event->getSeasonEnd();
     }
 
+    protected function applySeasonUpdated(SeasonUpdated $event)
+    {
+        $this->sport = $event->getSport();
+        $this->seasonType = $event->getSeasonType();
+        $this->name = $event->getName();
+        $this->seasonStart = $event->getSeasonStart();
+        $this->seasonEnd = $event->getSeasonEnd();
+    }
+
     protected function applyGameAdded(GameAdded $event)
     {
         $this->games[] = Game::create(
+            $event->getAggregateId(),
             $event->getGameId(),
-            $event->getSeasonId(),
             $event->getHomeTeamId(),
             $event->getAwayTeamId(),
             $event->getStartDate()
         );
     }
 
-    protected function applyGameScoreAdded(GameScoreAdded $event)
+    protected function applyGameScoreUpdated(GameScoreUpdated $event)
     {
         $game = $this->getGameById($event->getGameId());
         $game->addHomeTeamScore($event->getHomeTeamScore());
@@ -171,5 +216,17 @@ class Season extends AbstractEntity
         }
         // Todo
         // throw notfoundexception
+    }
+
+    protected function applyGameDeleted(GameDeleted $event)
+    {
+        $this->games = array_values(array_filter($this->games, function ($game) use ($event) {
+            return !$game->getGameId()->equals($event->getGameId());
+        }));
+    }
+
+    protected function applySeasonDeleted(SeasonDeleted $event)
+    {
+        $this->games = [];
     }
 }

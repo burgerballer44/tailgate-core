@@ -8,8 +8,8 @@ use Tailgate\Domain\Model\Season\GameId;
 
 class ScoreSubmitted implements DomainEvent, GroupDomainEvent
 {
-    private $scoreId;
     private $groupId;
+    private $scoreId;
     private $userId;
     private $gameId;
     private $homeTeamPrediction;
@@ -17,15 +17,15 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
     private $occurredOn;
 
     public function __construct(
-        ScoreId $scoreId,
         GroupId $groupId,
+        ScoreId $scoreId,
         UserId $userId,
         GameId $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
     ) {
-        $this->scoreId = $scoreId;
         $this->groupId = $groupId;
+        $this->scoreId = $scoreId;
         $this->userId = $userId;
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
@@ -41,11 +41,6 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
     public function getScoreId()
     {
         return $this->scoreId;
-    }
-
-    public function getGroupId()
-    {
-        return $this->groupId;
     }
 
     public function getUserId()

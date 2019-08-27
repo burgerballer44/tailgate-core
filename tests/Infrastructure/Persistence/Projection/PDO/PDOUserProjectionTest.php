@@ -164,7 +164,7 @@ class PDOUserProjectionTest extends TestCase
             ->expects($this->once())
             ->method('prepare')
             ->with('UPDATE `user`
-            SET username = :username, email = :email, status = :status, role = :role,
+            SET username = :username, email = :email, status = :status, role = :role
             WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 

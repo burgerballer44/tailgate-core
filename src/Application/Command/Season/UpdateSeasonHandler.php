@@ -6,7 +6,7 @@ use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\SeasonId;
 
-class AddGameScoreHandler
+class UpdateSeasonHandler
 {
     public $seasonRepository;
 
@@ -15,19 +15,23 @@ class AddGameScoreHandler
         $this->seasonRepository = $seasonRepository;
     }
 
-    public function handle(AddGameScoreCommand $command)
+    public function handle(UpdateSeasonCommand $command)
     {
         $seasonId = $command->getSeasonId();
-        $gameId = $command->getGameId();
-        $homeTeamScore = $command->getHomeTeamScore();
-        $awayTeamScore = $command->getAwayTeamScore();
+        $sport = $command->getSport();
+        $seasonType = $command->getSeasonType();
+        $name = $command->getName();
+        $seasonStart = $command->getSeasonStart();
+        $seasonEnd = $command->getSeasonEnd();
 
         $season = $this->seasonRepository->get(SeasonId::fromString($seasonId));
 
-        $season->addGameScore(
-            GameId::fromString($gameId),
-            $homeTeamScore,
-            $awayTeamScore
+        $season->update(
+            $sport,
+            $seasonType,
+            $name,
+            \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart),
+            \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd),
         );
         
         $this->seasonRepository->add($season);

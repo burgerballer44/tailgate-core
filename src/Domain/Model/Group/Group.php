@@ -17,7 +17,6 @@ class Group extends AbstractEntity
     private $ownerId;
     private $scores = [];
     private $members = [];
-    private $follows = [];
 
     protected function __construct($groupId, $name, $ownerId)
     {
@@ -36,8 +35,8 @@ class Group extends AbstractEntity
 
         $newGroup->applyAndRecordThat(
             new MemberAdded(
-                new MemberId(),
                 $groupId,
+                new MemberId(),
                 $ownerId,
                 Group::G_ROLE_ADMIN
             )
@@ -76,19 +75,51 @@ class Group extends AbstractEntity
         return $this->members;
     }
 
-    public function getFollows()
+    public function delete()
     {
-        return $this->follows;
+        $this->applyAndRecordThat(new GroupDeleted($this->groupId));
+    }
+
+    public function deleteScore(ScoreId $scoreId)
+    {
+        $this->applyAndRecordThat(
+            new ScoreDeleted(
+                $this->groupId,
+                $scoreId,
+            )
+        );
+    }
+
+    public function deleteMember(MemberId $memberId)
+    {
+        $this->applyAndRecordThat(
+            new MemberDeleted(
+                $this->groupId,
+                $memberId,
+            )
+        );
     }
 
     public function submitScore(UserId $userId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
     {
         $this->applyAndRecordThat(
             new ScoreSubmitted(
-                new ScoreId(),
                 $this->groupId,
+                new ScoreId(),
                 $userId,
                 $gameId,
+                $homeTeamPrediction,
+                $awayTeamPrediction
+            )
+        );
+    }
+
+    public function updateScore(ScoreId $scoreId, $homeTeamPrediction, $awayTeamPrediction)
+    {
+        $this->applyAndRecordThat(
+            new GroupScoreUpdated(
+                $this->groupId,
+                $scoreId,
                 $homeTeamPrediction,
                 $awayTeamPrediction
             )
@@ -99,10 +130,28 @@ class Group extends AbstractEntity
     {
         $this->applyAndRecordThat(
             new MemberAdded(
-                new MemberId(),
                 $this->groupId,
+                new MemberId(),
                 $userId,
                 Group::G_ROLE_MEMBER
+            )
+        );
+    }
+
+    public function update($name, UserId $ownerId)
+    {
+        $this->applyAndRecordThat(
+            new GroupUpdated($this->groupId, $name, $ownerId)
+        );
+    }
+
+    public function updateMember(MemberId $memberId, $groupRole)
+    {
+        $this->applyAndRecordThat(
+            new MemberUpdated(
+                $this->groupId,
+                $memberId,
+                $groupRole
             )
         );
     }
@@ -113,11 +162,17 @@ class Group extends AbstractEntity
         $this->ownerId = $event->getOwnerId();
     }
 
+    protected function applyGroupUpdated(GroupUpdated $event)
+    {
+        $this->name = $event->getName();
+        $this->ownerId = $event->getOwnerId();
+    }
+
     protected function applyScoreSubmitted(ScoreSubmitted $event)
     {
         $this->scores[] = Score::create(
+            $event->getAggregateId(),
             $event->getScoreId(),
-            $event->getGroupId(),
             $event->getUserId(),
             $event->getGameId(),
             $event->getHomeTeamPrediction(),
@@ -128,10 +183,64 @@ class Group extends AbstractEntity
     protected function applyMemberAdded(MemberAdded $event)
     {
         $this->members[] = Member::create(
+            $event->getAggregateId(),
             $event->getMemberId(),
-            $event->getGroupId(),
             $event->getUserId(),
             $event->getGroupRole()
         );
+    }
+
+    protected function applyGroupDeleted(GroupDeleted $event)
+    {
+        $this->members = [];
+        $this->scores = [];
+    }
+
+    protected function applyMemberUpdated(MemberUpdated $event)
+    {
+        $member = $this->getMemberById($event->getMemberId());
+        $member->updateGroupRole($event->getGroupRole());
+    }
+
+    protected function applyGroupScoreUpdated(GroupScoreUpdated $event)
+    {
+        $score = $this->getScoreById($event->getScoreId());
+        $score->update($event->getHomeTeamPrediction(), $event->getAwayTeamPrediction());
+    }
+
+    private function getMemberById(MemberId $memberId)
+    {
+        foreach ($this->members as $member) {
+            if ($member->getMemberId() == $memberId) {
+                return $member;
+            }
+        }
+        // Todo
+        // throw notfoundexception
+    }
+
+    private function getScoreById(ScoreId $scoreId)
+    {
+        foreach ($this->scores as $score) {
+            if ($score->getScoreId() == $scoreId) {
+                return $score;
+            }
+        }
+        // Todo
+        // throw notfoundexception
+    }
+
+    protected function applyMemberDeleted(MemberDeleted $event)
+    {
+        $this->members = array_values(array_filter($this->members, function ($member) use ($event) {
+            return !$member->getMemberId()->equals($event->getMemberId());
+        }));
+    }
+
+    protected function applyScoreDeleted(ScoreDeleted $event)
+    {
+        $this->scores = array_values(array_filter($this->scores, function ($score) use ($event) {
+            return !$score->getScoreId()->equals($event->getScoreId());
+        }));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tailgate\Application\Command\Season;
 
-class AddGameScoreCommand
+class UpdateGameScoreCommand
 {
     private $seasonId;
     private $gameId;

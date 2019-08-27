@@ -4,7 +4,6 @@ namespace Tailgate\Application\Command\Season;
 
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
-use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 
 class DeleteSeasonHandler

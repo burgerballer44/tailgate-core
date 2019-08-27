@@ -61,4 +61,51 @@ class TeamTest extends TestCase
         $this->assertTrue($followers[0]->getGroupId()->equals($groupId));
         $this->assertTrue($followers[0]->getTeamId()->equals($this->teamId));
     }
+
+    public function testATeamCanBeUpdated()
+    {
+        $designation = 'updatedDesignaton';
+        $mascot = 'updatedMascot';
+        $team = Team::create($this->teamId, $this->designation, $this->mascot);
+
+        $team->update($designation, $mascot);
+
+        $this->assertEquals($designation, $team->getDesignation());
+        $this->assertEquals($mascot, $team->getMascot());
+    }
+
+    public function testATeamCanBeDeleted()
+    {
+        $team = Team::create($this->teamId, $this->designation, $this->mascot);
+
+        $team->delete();
+
+        // deleting a team does not affect anything on the entity yet but we need an assertion
+        $this->assertTrue(true);
+    }
+
+    public function testAFollowCanBeDeleted()
+    {
+        // create a team, add two followers
+        $team = Team::create($this->teamId, $this->designation, $this->mascot);
+        $groupId1 = GroupId::fromString('groupId1');
+        $groupId2 = GroupId::fromString('groupId2');
+        $team->followTeam($groupId1);
+        $team->followTeam($groupId2);
+
+        // confirm there are two followers for the team
+        $followers = $team->getFollowers();
+        $this->assertCount(2, $followers);
+
+        // get the two followerIds, delete one, confirm the other is still asociated o the team
+        $followerId1 = $followers[0]->getFollowId();
+        $followerId2 = $followers[1]->getFollowId();
+
+        $team->deleteFollow($followerId1);
+
+        $followers = $team->getFollowers();
+
+        $this->assertCount(1, $followers);
+        $this->assertTrue($followers[0]->getFollowId()->equals($followerId2));
+    }
 }

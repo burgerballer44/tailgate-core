@@ -3,16 +3,16 @@
 namespace Tailgate\Test\Application\Command\Season;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Application\Command\Season\AddGameScoreCommand;
-use Tailgate\Application\Command\Season\AddGameScoreHandler;
+use Tailgate\Application\Command\Season\UpdateGameScoreCommand;
+use Tailgate\Application\Command\Season\UpdateGameScoreHandler;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\SeasonId;
-use Tailgate\Domain\Model\Season\GameScoreAdded;
+use Tailgate\Domain\Model\Season\GameScoreUpdated;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 
-class AddGameScoreHandlerTest extends TestCase
+class UpdateGameScoreHandlerTest extends TestCase
 {
     private $homeTeamScore = 70;
     private $awayTeamScore = 60;
@@ -30,7 +30,7 @@ class AddGameScoreHandlerTest extends TestCase
 
     private $season;
     private $game;
-    private $addGameScoreCommand;
+    private $UpdateGameScoreCommand;
 
     public function setUp()
     {
@@ -58,7 +58,7 @@ class AddGameScoreHandlerTest extends TestCase
         $this->game = $games[0];
 
 
-        $this->addGameScoreCommand = new AddGameScoreCommand(
+        $this->UpdateGameScoreCommand = new UpdateGameScoreCommand(
             SeasonId::fromString($this->seasonId),
             $this->game->getGameId(),
             $this->homeTeamScore,
@@ -66,7 +66,7 @@ class AddGameScoreHandlerTest extends TestCase
         );
     }
 
-    public function testItAddsAGameScoreAddedEventToTheSeasonRepository()
+    public function testItAddsAGameScoreUpdatedEventToTheSeasonRepository()
     {
         $homeTeamScore = $this->homeTeamScore;
         $awayTeamScore = $this->awayTeamScore;
@@ -82,7 +82,7 @@ class AddGameScoreHandlerTest extends TestCase
            ->willReturn($season);
 
         // the add method should be called once
-        // the season object should have the GameScoreAdded event
+        // the season object should have the GameScoreUpdated event
         $seasonRepository
             ->expects($this->once())
             ->method('add')
@@ -94,7 +94,7 @@ class AddGameScoreHandlerTest extends TestCase
             ) {
                     $events = $season->getRecordedEvents();
 
-                    return $events[0] instanceof GameScoreAdded
+                    return $events[0] instanceof GameScoreUpdated
                 && $events[0]->getAggregateId() instanceof SeasonId
                 && $events[0]->getGameId()->equals($game->getGameId())
                 && $events[0]->getHomeTeamScore() === $homeTeamScore
@@ -103,10 +103,10 @@ class AddGameScoreHandlerTest extends TestCase
                 }
         ));
 
-        $addGameScoreHandler = new AddGameScoreHandler(
+        $UpdateGameScoreHandler = new UpdateGameScoreHandler(
             $seasonRepository
         );
 
-        $addGameScoreHandler->handle($this->addGameScoreCommand);
+        $UpdateGameScoreHandler->handle($this->UpdateGameScoreCommand);
     }
 }

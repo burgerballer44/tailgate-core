@@ -11,7 +11,7 @@ class Team extends AbstractEntity
     private $teamId;
     private $designation;
     private $mascot;
-    private $followers;
+    private $followers = [];
 
     protected function __construct(
         $teamId,
@@ -67,13 +67,41 @@ class Team extends AbstractEntity
         return $this->followers;
     }
 
+    public function update($designation, $mascot)
+    {
+        $this->applyAndRecordThat(
+            new TeamUpdated(
+                $this->teamId,
+                $designation,
+                $mascot
+            )
+        );
+    }
+
     public function followTeam(GroupId $groupId)
     {
         $this->applyAndRecordThat(
             new TeamFollowed(
-                new FollowId(),
                 $this->teamId,
+                new FollowId(),
                 $groupId
+            )
+        );
+    }
+
+    public function delete()
+    {
+        $this->applyAndRecordThat(
+            new TeamDeleted($this->teamId)
+        );
+    }
+
+    public function deleteFollow(FollowId $followId)
+    {
+        $this->applyAndRecordThat(
+            new FollowDeleted(
+                $this->teamId,
+                $followId,
             )
         );
     }
@@ -84,12 +112,29 @@ class Team extends AbstractEntity
         $this->mascot = $event->getMascot();
     }
 
+    protected function applyTeamUpdated(TeamUpdated $event)
+    {
+        $this->designation = $event->getDesignation();
+        $this->mascot = $event->getMascot();
+    }
+
     protected function applyTeamFollowed(TeamFollowed $event)
     {
         $this->followers[] = Follow::create(
+            $event->getAggregateId(),
             $event->getFollowId(),
-            $event->getTeamId(),
             $event->getGroupId()
         );
+    }
+
+    protected function applyFollowDeleted(FollowDeleted $event)
+    {
+        $this->followers = array_values(array_filter($this->followers, function ($follower) use ($event) {
+            return !$follower->getFollowId()->equals($event->getFollowId());
+        }));
+    }
+
+    protected function applyTeamDeleted(TeamDeleted $event)
+    {
     }
 }

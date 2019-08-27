@@ -104,4 +104,114 @@ class GroupTest extends TestCase
         $this->assertTrue($members[1]->getUserId()->equals($userId));
         $this->assertEquals($members[1]->getGroupRole(), Group::G_ROLE_MEMBER);
     }
+
+    public function testThereAreNoMembersAndScoresWhenGroupIsDeleted()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $userId = UserId::fromString('userID');
+        $gameId = GameId::fromString('gameID');
+        $homeTeamPrediction = '70';
+        $awayTeamPrediction = '60';
+        $group->addMember($userId);
+        $group->submitScore($userId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
+
+        $group->delete();
+
+        $scores = $group->getScores();
+        $members = $group->getMembers();
+
+        $this->assertCount(0, $members);
+        $this->assertCount(0, $scores);
+    }
+
+    public function testAMemberIsRemovedWhenAMemberIsDeleted()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $userId2 = UserId::fromString('userId2');
+        $userId3 = UserId::fromString('userId3');
+        $group->addMember($userId2);
+        $group->addMember($userId3);
+        $members = $group->getMembers();
+        $this->assertCount(3, $members);
+
+        $memberId2 = $members[1]->getMemberId();
+        $memberId3 = $members[2]->getMemberId();
+
+        $group->deleteMember($memberId3);
+
+        $members = $group->getMembers();
+
+        $this->assertCount(2, $members);
+        $this->assertTrue($members[1]->getMemberId()->equals($memberId2));
+    }
+
+    public function testAScoreIsRemovedWhenAScoreIsDeleted()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $gameId = GameId::fromString('gameID');
+        $homeTeamPrediction = '70';
+        $awayTeamPrediction = '60';
+        $group->submitScore($this->ownerId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
+        $scores = $group->getScores();
+        $this->assertCount(1, $scores);
+
+        $scoreId = $scores[0]->getScoreId();
+
+        $group->deleteScore($scoreId);
+
+        $scores = $group->getScores();
+
+        $this->assertCount(0, $scores);
+    }
+
+    public function testAGroupCanBeUpdated()
+    {
+        $groupName = 'updatedgroupName';
+        $ownerId = UserId::fromString('updatedownerId');
+
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+
+        $group->update($groupName, $ownerId);
+
+        $this->assertEquals($this->groupId, $group->getId());
+        $this->assertEquals($groupName, $group->getName());
+        $this->assertEquals($ownerId, $group->getOwnerId());
+        $this->assertCount(1, $group->getMembers());
+        $this->assertEmpty($group->getScores());
+    }
+
+    public function testAMemberCanBeUpdated()
+    {
+        $groupName = 'updatedgroupName';
+        $ownerId = UserId::fromString('updatedownerId');
+
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+
+        $group->update($groupName, $ownerId);
+
+        $this->assertEquals($this->groupId, $group->getId());
+        $this->assertEquals($groupName, $group->getName());
+        $this->assertEquals($ownerId, $group->getOwnerId());
+        $this->assertCount(1, $group->getMembers());
+        $this->assertEmpty($group->getScores());
+    }
+
+    public function testAScoreCanBeUpdated()
+    {
+        $homeTeamPrediction = '700';
+        $awayTeamPrediction = '600';
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $gameId = GameId::fromString('gameID');
+        $group->submitScore($this->ownerId, $gameId, 1, 2);
+        $scores = $group->getScores();
+        $scoreId = $scores[0]->getScoreId();
+
+
+        $group->updateScore($scoreId, $homeTeamPrediction, $awayTeamPrediction);
+
+        $scores = $group->getScores();
+
+        $this->assertEquals($homeTeamPrediction, $scores[0]->getHomeTeamPrediction());
+        $this->assertEquals($awayTeamPrediction, $scores[0]->getAwayTeamPrediction());
+    }
 }

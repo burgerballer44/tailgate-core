@@ -100,7 +100,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     {
         $stmt = $this->pdo->prepare(
             'UPDATE `user`
-            SET username = :username, email = :email, status = :status, role = :role,
+            SET username = :username, email = :email, status = :status, role = :role
             WHERE user_id = :user_id'
         );
 

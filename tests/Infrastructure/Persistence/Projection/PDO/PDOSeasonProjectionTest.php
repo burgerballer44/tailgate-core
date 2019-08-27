@@ -5,7 +5,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Season\GameAdded;
 use Tailgate\Domain\Model\Season\GameId;
-use Tailgate\Domain\Model\Season\GameScoreAdded;
+use Tailgate\Domain\Model\Season\GameScoreUpdated;
 use Tailgate\Domain\Model\Season\SeasonCreated;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -63,8 +63,8 @@ class PDOSeasonProjectionTest extends TestCase
     public function testItCanProjectGameAdded()
     {
         $event = new GameAdded(
-            GameId::fromString('gameId'),
             SeasonId::fromString('seasonId'),
+            GameId::fromString('gameId'),
             TeamId::fromString('homeTeamId'),
             TeamId::fromString('awayTeamId'),
             \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01')
@@ -95,11 +95,11 @@ class PDOSeasonProjectionTest extends TestCase
     }
 
 
-    public function testItCanProjectGameScoreAdded()
+    public function testItCanProjectGameScoreUpdated()
     {
-        $event = new GameScoreAdded(
-            GameId::fromString('gameId'),
+        $event = new GameScoreUpdated(
             SeasonId::fromString('seasonId'),
+            GameId::fromString('gameId'),
             80,
             70
         );
@@ -123,6 +123,6 @@ class PDOSeasonProjectionTest extends TestCase
                 ':away_team_score' => $event->getAwayTeamScore()
             ]);
 
-        $this->projection->projectGameScoreAdded($event);
+        $this->projection->projectGameScoreUpdated($event);
     }
 }

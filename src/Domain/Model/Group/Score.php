@@ -31,8 +31,8 @@ class Score
     }
 
     public static function create(
-        ScoreId $scoreId,
         GroupId $groupId,
+        ScoreId $scoreId,
         UserId $userId,
         GameId $gameId,
         $homeTeamPrediction,
@@ -78,5 +78,11 @@ class Score
     public function getAwayTeamPrediction()
     {
         return $this->awayTeamPrediction;
+    }
+
+    public function update($homeTeamPrediction, $awayTeamPrediction)
+    {
+        $this->homeTeamPrediction = $homeTeamPrediction;
+        $this->awayTeamPrediction = $awayTeamPrediction;
     }
 }

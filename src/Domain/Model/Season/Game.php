@@ -6,8 +6,8 @@ use Tailgate\Domain\Model\Team\TeamId;
 
 class Game
 {
-    private $gameId;
     private $seasonId;
+    private $gameId;
     private $homeTeamId;
     private $awayTeamId;
     private $homeTeamScore;
@@ -15,29 +15,29 @@ class Game
     private $startDate;
 
     private function __construct(
-        $gameId,
         $seasonId,
+        $gameId,
         $homeTeamId,
         $awayTeamId,
         $startDate
     ) {
-        $this->gameId = $gameId;
         $this->seasonId = $seasonId;
+        $this->gameId = $gameId;
         $this->homeTeamId = $homeTeamId;
         $this->awayTeamId = $awayTeamId;
         $this->startDate = $startDate;
     }
 
     public static function create(
-        GameId $gameId,
         SeasonId $seasonId,
+        GameId $gameId,
         TeamId $homeTeamId,
         TeamId $awayTeamId,
         \DateTimeImmutable $startDate
     ) {
         $newGame = new Game(
-            $gameId,
             $seasonId,
+            $gameId,
             $homeTeamId,
             $awayTeamId,
             $startDate
@@ -46,14 +46,14 @@ class Game
         return $newGame;
     }
 
-    public function getGameId()
-    {
-        return $this->gameId;
-    }
-
     public function getSeasonId()
     {
         return $this->seasonId;
+    }
+
+    public function getGameId()
+    {
+        return $this->gameId;
     }
 
     public function getHomeTeamId()

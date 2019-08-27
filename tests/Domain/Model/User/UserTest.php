@@ -90,4 +90,20 @@ class UserTest extends TestCase
         $this->assertEquals($newEmail, $user->getEmail());
         $this->assertNotEquals($this->email, $user->getEmail());
     }
+
+    public function testAUserCanBeUpdated()
+    {
+        $username = 'updatedUsername';
+        $email = 'updatedEmail';
+        $status = 'updatedStatus';
+        $role = 'updatedRole';
+        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
+
+        $user->update($username, $email, $status, $role);
+
+        $this->assertEquals($username, $user->getUsername());
+        $this->assertEquals($email, $user->getEmail());
+        $this->assertEquals($status, $user->getStatus());
+        $this->assertEquals($role, $user->getRole());
+    }
 }

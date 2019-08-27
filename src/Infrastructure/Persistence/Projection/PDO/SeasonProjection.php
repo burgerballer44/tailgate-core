@@ -4,8 +4,11 @@ namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 
 use PDO;
 use Tailgate\Domain\Model\Season\GameAdded;
-use Tailgate\Domain\Model\Season\GameScoreAdded;
+use Tailgate\Domain\Model\Season\GameScoreUpdated;
 use Tailgate\Domain\Model\Season\SeasonCreated;
+use Tailgate\Domain\Model\Season\SeasonDeleted;
+use Tailgate\Domain\Model\Season\SeasonUpdated;
+use Tailgate\Domain\Model\Season\GameDeleted;
 use Tailgate\Domain\Model\Season\SeasonProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
@@ -53,7 +56,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
         ]);
     }
 
-    public function projectGameScoreAdded(GameScoreAdded $event)
+    public function projectGameScoreUpdated(GameScoreUpdated $event)
     {
         $stmt = $this->pdo->prepare(
             'UPDATE `game` (home_team_score, away_team_score)
@@ -65,6 +68,40 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':game_id' => $event->getGameId(),
             ':home_team_score' => $event->getHomeTeamScore(),
             ':away_team_score' => $event->getAwayTeamScore()
+        ]);
+    }
+
+    public function projectGameDeleted(GameDeleted $event)
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM `game` WHERE game_id = :game_id');
+
+        $stmt->execute([':game_id' => $event->getGameId()]);
+    }
+
+    public function projectSeasonDeleted(SeasonDeleted $event)
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM `game` WHERE season_id = :season_id');
+        $stmt->execute([':season_id' => $event->getGameId()]);
+
+        $stmt = $this->pdo->prepare('DELETE FROM `season` WHERE season_id = :season_id');
+        $stmt->execute([':season_id' => $event->getGameId()]);
+    }
+
+    public function projectSeasonUpdated(SeasonUpdated $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE `season` (sport, type, name, season_start, season_end)
+            VALUES (:sport, :type, :name, :season_start, :season_end)
+            WHERE :season_id = season_id'
+        );
+
+        $stmt->execute([
+            ':season_id' => $event->getAggregateId(),
+            ':sport' => $event->getSport(),
+            ':type' => $event->getSeasonType(),
+            ':name' => $event->getName(),
+            ':season_start' => $event->getSeasonStart()->format('Y-m-d H:i:s'),
+            ':season_end' => $event->getSeasonEnd()->format('Y-m-d H:i:s')
         ]);
     }
 }

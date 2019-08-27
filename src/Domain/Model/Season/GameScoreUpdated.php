@@ -4,22 +4,22 @@ namespace Tailgate\Domain\Model\Season;
 
 use Buttercup\Protects\DomainEvent;
 
-class GameScoreAdded implements DomainEvent, SeasonDomainEvent
+class GameScoreUpdated implements DomainEvent, SeasonDomainEvent
 {
-    private $gameId;
     private $seasonId;
+    private $gameId;
     private $homeTeamScore;
     private $awayTeamScore;
     private $occurredOn;
 
     public function __construct(
-        GameId $gameId,
         SeasonId $seasonId,
+        GameId $gameId,
         $homeTeamScore,
         $awayTeamScore
     ) {
-        $this->gameId = $gameId;
         $this->seasonId = $seasonId;
+        $this->gameId = $gameId;
         $this->homeTeamScore = $homeTeamScore;
         $this->awayTeamScore = $awayTeamScore;
         $this->occurredOn = new \DateTimeImmutable();
@@ -33,11 +33,6 @@ class GameScoreAdded implements DomainEvent, SeasonDomainEvent
     public function getGameId()
     {
         return $this->gameId;
-    }
-
-    public function getSeasonId()
-    {
-        return $this->seasonId;
     }
 
     public function getHomeTeamScore()

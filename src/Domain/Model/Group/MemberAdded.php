@@ -14,13 +14,13 @@ class MemberAdded implements DomainEvent, GroupDomainEvent
     private $occurredOn;
 
     public function __construct(
-        MemberId $memberId,
         GroupId $groupId,
+        MemberId $memberId,
         UserId $userId,
         $groupRole
     ) {
-        $this->memberId = $memberId;
         $this->groupId = $groupId;
+        $this->memberId = $memberId;
         $this->userId = $userId;
         $this->groupRole = $groupRole;
         $this->occurredOn = new \DateTimeImmutable();
@@ -34,11 +34,6 @@ class MemberAdded implements DomainEvent, GroupDomainEvent
     public function getMemberId()
     {
         return $this->memberId;
-    }
-
-    public function getGroupId()
-    {
-        return $this->groupId;
     }
 
     public function getUserId()

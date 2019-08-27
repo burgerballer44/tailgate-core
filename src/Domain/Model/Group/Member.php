@@ -6,32 +6,32 @@ use Tailgate\Domain\Model\User\UserId;
 
 class Member
 {
-    private $memberId;
     private $groupId;
+    private $memberId;
     private $userId;
     private $groupRole;
 
     private function __construct(
-        $memberId,
         $groupId,
+        $memberId,
         $userId,
         $groupRole
     ) {
-        $this->memberId = $memberId;
         $this->groupId = $groupId;
+        $this->memberId = $memberId;
         $this->userId = $userId;
         $this->groupRole = $groupRole;
     }
 
     public static function create(
-        MemberId $memberId,
         GroupId $groupId,
+        MemberId $memberId,
         UserId $userId,
         $groupRole
     ) {
         $newMember = new Member(
-            $memberId,
             $groupId,
+            $memberId,
             $userId,
             $groupRole
         );
@@ -57,5 +57,10 @@ class Member
     public function getGroupRole()
     {
         return $this->groupRole;
+    }
+
+    public function updateGroupRole(string $groupRole)
+    {
+        $this->groupRole = $groupRole;
     }
 }

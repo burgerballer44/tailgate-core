@@ -59,8 +59,8 @@ class PDOGroupProjectionTest extends TestCase
     public function testItCanProjectMemberAdded()
     {
         $event = new MemberAdded(
-            MemberId::fromString('memberId'),
             GroupId::fromString('groupId'),
+            MemberId::fromString('memberId'),
             UserId::fromString('userId'),
             'role'
         );
@@ -92,8 +92,8 @@ class PDOGroupProjectionTest extends TestCase
     public function testItCanProjectScoreSubmitted()
     {
         $event = new ScoreSubmitted(
-            ScoreId::fromString('scoreId'),
             GroupId::fromString('groupId'),
+            ScoreId::fromString('scoreId'),
             UserId::fromString('userId'),
             GameId::fromString('gameId'),
             80,
@@ -113,8 +113,8 @@ class PDOGroupProjectionTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->with([
-                'score_id' => $event->getScoreId(),
-                ':group_id' => $event->getGroupId(),
+                ':group_id' => $event->getAggregateId(),
+                ':score_id' => $event->getScoreId(),
                 ':user_id' => $event->getUserId(),
                 ':game_id' => $event->getGameId(),
                 ':home_team_prediction' => $event->getHomeTeamPrediction(),
