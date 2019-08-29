@@ -35,7 +35,7 @@ class DeleteMemberHandlerTest extends TestCase
 
         $this->deleteMemberCommand = new DeleteMemberCommand(
             $this->groupId,
-            $this->memberId,
+            $this->memberId
         );
     }
 
