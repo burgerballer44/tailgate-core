@@ -27,17 +27,14 @@ class UpdateScoreForGroupHandlerTest extends TestCase
 
     public function setUp()
     {
+        // create a group, add a score, and clear events
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
             UserId::fromString($this->userId)
         );
-        $gameId = GameId::fromString('gameID');
-        $this->group->submitScore(UserId::fromString($this->userId), $gameId, 1, 2);
-
+        $this->group->submitScore(UserId::fromString($this->userId), GameId::fromString('gameId'), 1, 2);
         $this->scoreId = $this->group->getScores()[0]->getScoreId();
-        $this->group->clearRecordedEvents();
-
         $this->group->clearRecordedEvents();
 
         $this->updateScoreForGroupCommand = new UpdateScoreForGroupCommand(
@@ -59,37 +56,24 @@ class UpdateScoreForGroupHandlerTest extends TestCase
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $groupRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($group);
+        $groupRepository->expects($this->once())->method('get')->willReturn($group);
 
         // the add method should be called once
         // the group object should have the GroupScoreUpdated event
-        $groupRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($group) use (
-                $groupId,
-                $scoreId,
-                $homeTeamPrediction,
-                $awayTeamPrediction
-            ) {
-                    $events = $group->getRecordedEvents();
+        $groupRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($group) use ($groupId, $scoreId, $homeTeamPrediction, $awayTeamPrediction) {
+                $events = $group->getRecordedEvents();
 
-                    return $events[0] instanceof GroupScoreUpdated
+                return $events[0] instanceof GroupScoreUpdated
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getScoreId() instanceof ScoreId
                 && $events[0]->getHomeTeamPrediction() == $homeTeamPrediction
                 && $events[0]->getAwayTeamPrediction() == $awayTeamPrediction
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
         
-        $updateScoreForGroupHandler = new UpdateScoreForGroupHandler(
-            $groupRepository
-        );
+        $updateScoreForGroupHandler = new UpdateScoreForGroupHandler($groupRepository);
 
         $updateScoreForGroupHandler->handle($this->updateScoreForGroupCommand);
     }

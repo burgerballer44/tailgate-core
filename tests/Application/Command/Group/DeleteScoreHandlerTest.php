@@ -24,16 +24,13 @@ class DeleteScoreHandlerTest extends TestCase
 
     public function setUp()
     {
+        // create a game, add a score, and clear events
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
             UserId::fromString($this->userId)
         );
-        $gameId = GameId::fromString('gameID');
-        $homeTeamPrediction = '70';
-        $awayTeamPrediction = '60';
-        $this->group->submitScore(UserId::fromString($this->userId), $gameId, $homeTeamPrediction, $awayTeamPrediction);
-
+        $this->group->submitScore(UserId::fromString($this->userId), GameId::fromString('gameID'), 70, 60);
         $this->scoreId = $this->group->getScores()[0]->getScoreId();
         $this->group->clearRecordedEvents();
 
@@ -52,30 +49,22 @@ class DeleteScoreHandlerTest extends TestCase
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $groupRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($group);
+        $groupRepository->expects($this->once())->method('get')->willReturn($group);
 
         // the add method should be called once
         // the group object should have the ScoreDeleted event
-        $groupRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($group) use ($groupId, $scoreId) {
-                    $events = $group->getRecordedEvents();
+        $groupRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($group) use ($groupId, $scoreId) {
+                $events = $group->getRecordedEvents();
 
-                    return $events[0] instanceof ScoreDeleted
+                return $events[0] instanceof ScoreDeleted
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getScoreId() instanceof ScoreId
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $deleteScoreHandler = new DeleteScoreHandler(
-            $groupRepository
-        );
+        $deleteScoreHandler = new DeleteScoreHandler($groupRepository);
 
         $deleteScoreHandler->handle($this->deleteScoreCommand);
     }

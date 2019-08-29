@@ -20,12 +20,11 @@ class DeleteTeamHandlerTest extends TestCase
 
     public function setUp()
     {
+        // create a team and clear events
         $this->team = Team::create(TeamId::fromString($this->teamId), $this->designation, $this->mascot);
         $this->team->clearRecordedEvents();
 
-        $this->deleteTeamCommand = new DeleteTeamCommand(
-            $this->teamId
-        );
+        $this->deleteTeamCommand = new DeleteTeamCommand($this->teamId);
     }
 
     public function testItAttemptsToAddATeamDeletedEventToTheTeamRepository()
@@ -36,29 +35,21 @@ class DeleteTeamHandlerTest extends TestCase
         $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $teamRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($team);
+        $teamRepository->expects($this->once())->method('get')->willReturn($team);
 
         // the add method should be called once
         // the team object should have the TeamDeleted event
-        $teamRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($team) use ($teamId) {
-                    $events = $team->getRecordedEvents();
+        $teamRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($team) use ($teamId) {
+                $events = $team->getRecordedEvents();
 
-                    return $events[0] instanceof TeamDeleted
+                return $events[0] instanceof TeamDeleted
                 && $events[0]->getAggregateId()->equals(TeamId::fromString($teamId))
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $this->deleteTeamHandler = new DeleteTeamHandler(
-            $teamRepository
-        );
+        $this->deleteTeamHandler = new DeleteTeamHandler($teamRepository);
 
         $this->deleteTeamHandler->handle($this->deleteTeamCommand);
     }

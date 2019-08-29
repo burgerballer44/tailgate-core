@@ -23,7 +23,7 @@ class UpdateSeasonHandlerTest extends TestCase
 
     public function setUp()
     {
-        // create season
+        // create season and clear events
         $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-09-01');
         $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
         $this->season = Season::create(
@@ -59,28 +59,15 @@ class UpdateSeasonHandlerTest extends TestCase
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
 
         // the nextIdentity method should be called once and will return a the season
-        $seasonRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($season);
+        $seasonRepository->expects($this->once())->method('get')->willReturn($season);
 
         // the add method should be called once
         // the season object should have the SeasonUpdated event
-        $seasonRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($season) use (
-                $seasonId,
-                $sport,
-                $seasonType,
-                $name,
-                $seasonStart,
-                $seasonEnd
-            ) {
-                    $events = $season->getRecordedEvents();
+        $seasonRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($season) use ($seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd) {
+                $events = $season->getRecordedEvents();
 
-                    return $events[0] instanceof SeasonUpdated
+                return $events[0] instanceof SeasonUpdated
                 && $events[0]->getAggregateId()->equals(SeasonId::fromString($seasonId))
                 && $events[0]->getSport() === $sport
                 && $events[0]->getSeasonType() === $seasonType
@@ -88,12 +75,10 @@ class UpdateSeasonHandlerTest extends TestCase
                 && $events[0]->getSeasonStart()->format('Y-m-d') === $seasonStart->format('Y-m-d')
                 && $events[0]->getSeasonEnd()->format('Y-m-d') === $seasonEnd->format('Y-m-d')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $updateSeasonHandler = new UpdateSeasonHandler(
-            $seasonRepository
-        );
+        $updateSeasonHandler = new UpdateSeasonHandler($seasonRepository);
 
         $updateSeasonHandler->handle($this->updateSeasonCommand);
     }

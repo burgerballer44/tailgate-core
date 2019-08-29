@@ -29,6 +29,7 @@ class DeleteGameHandlerTest extends TestCase
         $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01');
         $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28');
 
+        // create a season, add a game, and clear events
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
             $this->sport,
@@ -37,14 +38,12 @@ class DeleteGameHandlerTest extends TestCase
             $this->seasonStart,
             $this->seasonEnd
         );
-
-        $homeTeamId = TeamId::fromString('homeTeamId');
-        $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
-
-        $this->season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $this->season->addGame(
+            TeamId::fromString('homeTeamId'),
+            TeamId::fromString('awayTeamId'),
+            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01')
+        );
         $this->gameId = $this->season->getGames()[0]->getGameId();
-
         $this->season->clearRecordedEvents();
 
         $this->deleteGameCommand = new DeleteGameCommand(
@@ -62,33 +61,22 @@ class DeleteGameHandlerTest extends TestCase
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $seasonRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($season);
+        $seasonRepository->expects($this->once())->method('get')->willReturn($season);
 
         // the add method should be called once
         // the season object should have the GameDeleted event
-        $seasonRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($season) use (
-                $seasonId,
-                $gameId
-            ) {
-                    $events = $season->getRecordedEvents();
+        $seasonRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($season) use ($seasonId, $gameId) {
+                $events = $season->getRecordedEvents();
 
-                    return $events[0] instanceof GameDeleted
+                return $events[0] instanceof GameDeleted
                 && $events[0]->getAggregateId()->equals(SeasonId::fromString($seasonId))
                 && $events[0]->getGameId() instanceof GameId
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $deleteGameHandler = new DeleteGameHandler(
-            $seasonRepository
-        );
+        $deleteGameHandler = new DeleteGameHandler($seasonRepository);
 
         $deleteGameHandler->handle($this->deleteGameCommand);
     }

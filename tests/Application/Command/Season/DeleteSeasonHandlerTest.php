@@ -23,7 +23,7 @@ class DeleteSeasonHandlerTest extends TestCase
 
     public function setUp()
     {
-        // create season
+        // create season and clear events
         $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-09-01');
         $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
         $this->season = Season::create(
@@ -49,29 +49,21 @@ class DeleteSeasonHandlerTest extends TestCase
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
 
         // the nextIdentity method should be called once and will return a the season
-        $seasonRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($season);
+        $seasonRepository->expects($this->once())->method('get')->willReturn($season);
 
         // the add method should be called once
         // the season object should have the SeasonDeleted event
-        $seasonRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($season) use ($seasonId) {
-                    $events = $season->getRecordedEvents();
+        $seasonRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($season) use ($seasonId) {
+                $events = $season->getRecordedEvents();
 
-                    return $events[0] instanceof SeasonDeleted
+                return $events[0] instanceof SeasonDeleted
                 && $events[0]->getAggregateId()->equals(SeasonId::fromString($seasonId))
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $deleteSeasonHandler = new DeleteSeasonHandler(
-            $seasonRepository
-        );
+        $deleteSeasonHandler = new DeleteSeasonHandler($seasonRepository);
 
         $deleteSeasonHandler->handle($this->deleteSeasonCommand);
     }

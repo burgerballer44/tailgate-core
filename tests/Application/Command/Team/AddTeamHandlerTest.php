@@ -17,10 +17,7 @@ class AddTeamHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->addTeamCommand = new AddTeamCommand(
-            $this->designation,
-            $this->mascot
-        );
+        $this->addTeamCommand = new AddTeamCommand($this->designation, $this->mascot);
     }
 
     public function testItAddsATeamAddedEventToTheTeamRepository()
@@ -31,34 +28,23 @@ class AddTeamHandlerTest extends TestCase
         $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
 
         // the nextIdentity method should be called once and will return a new TeamID
-        $teamRepository
-           ->expects($this->once())
-           ->method('nextIdentity')
-           ->willReturn(new TeamId());
+        $teamRepository->expects($this->once())->method('nextIdentity')->willReturn(new TeamId());
 
         // the add method should be called once
         // the team object should have the TeamAdded event
-        $teamRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($team) use (
-                $designation,
-                $mascot
-            ) {
-                    $events = $team->getRecordedEvents();
+        $teamRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($team) use ($designation, $mascot) {
+                $events = $team->getRecordedEvents();
 
-                    return $events[0] instanceof TeamAdded
+                return $events[0] instanceof TeamAdded
                 && $events[0]->getAggregateId() instanceof TeamId
                 && $events[0]->getDesignation() === $designation
                 && $events[0]->getMascot() === $mascot
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $addTeamHandler = new AddTeamHandler(
-            $teamRepository
-        );
+        $addTeamHandler = new AddTeamHandler($teamRepository);
 
         $addTeamHandler->handle($this->addTeamCommand);
     }

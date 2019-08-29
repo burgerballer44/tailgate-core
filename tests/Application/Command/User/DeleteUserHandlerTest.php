@@ -22,6 +22,7 @@ class DeleteUserHandlerTest extends TestCase
 
     public function setUp()
     {
+        // create a team and clear events
         $this->user = User::create(
             UserId::fromString($this->userId),
             $this->username,
@@ -46,20 +47,15 @@ class DeleteUserHandlerTest extends TestCase
 
         // the add method should be called once
         // the user object should have the UserDeleted event
-        $userRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($user) use (
-                $userId
-            ) {
-                    $events = $user->getRecordedEvents();
+        $userRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($user) use ($userId) {
+                $events = $user->getRecordedEvents();
 
-                    return $events[0] instanceof UserDeleted
+                return $events[0] instanceof UserDeleted
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getStatus() === User::STATUS_DELETED
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
         $deleteUserHandler = new DeleteUserHandler($userRepository);

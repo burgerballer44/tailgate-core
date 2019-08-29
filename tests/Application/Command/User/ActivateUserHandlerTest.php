@@ -22,6 +22,7 @@ class ActivateUserHandlerTest extends TestCase
 
     public function setUp()
     {
+        // create a user and clear events
         $this->user = User::create(
             UserId::fromString($this->userId),
             $this->username,
@@ -46,20 +47,15 @@ class ActivateUserHandlerTest extends TestCase
 
         // the add method should be called once
         // the user object should have the UserActivated event
-        $userRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($user) use (
-                $userId
-            ) {
-                    $events = $user->getRecordedEvents();
+        $userRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($user) use ($userId) {
+                $events = $user->getRecordedEvents();
 
-                    return $events[0] instanceof UserActivated
+                return $events[0] instanceof UserActivated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getStatus() === User::STATUS_ACTIVE
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
         $activateUserHandler = new ActivateUserHandler($userRepository);

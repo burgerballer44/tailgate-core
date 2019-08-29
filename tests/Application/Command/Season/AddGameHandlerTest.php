@@ -33,6 +33,7 @@ class AddGameHandlerTest extends TestCase
         $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01');
         $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28');
 
+        // create a season and clear events
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
             $this->sport,
@@ -42,8 +43,8 @@ class AddGameHandlerTest extends TestCase
             $this->seasonEnd
         );
         $this->season->clearRecordedEvents();
-        $this->startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
 
+        $this->startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
         $this->addGameCommand = new AddGameCommand(
             $this->seasonId,
             $this->homeTeamId,
@@ -63,38 +64,25 @@ class AddGameHandlerTest extends TestCase
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $seasonRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($season);
+        $seasonRepository->expects($this->once())->method('get')->willReturn($season);
 
         // the add method should be called once
         // the season object should have the GameAdded event
-        $seasonRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($season) use (
-                $seasonId,
-                $homeTeamId,
-                $awayTeamId,
-                $startDate
-            ) {
-                    $events = $season->getRecordedEvents();
+        $seasonRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($season) use ($seasonId, $homeTeamId, $awayTeamId, $startDate) {
+                $events = $season->getRecordedEvents();
 
-                    return $events[0] instanceof GameAdded
-                && $events[0]->getAggregateId() instanceof SeasonId
+                return $events[0] instanceof GameAdded
+                && $events[0]->getAggregateId()->equals(SeasonId::fromString($seasonId))
                 && $events[0]->getGameId() instanceof GameId
                 && $events[0]->getHomeTeamId()->equals(TeamId::fromString($homeTeamId))
                 && $events[0]->getAwayTeamId()->equals(TeamId::fromString($awayTeamId))
                 && $events[0]->getStartDate()->format('Y-m-d') === $startDate->format('Y-m-d')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $addGameHandler = new AddGameHandler(
-            $seasonRepository
-        );
+        $addGameHandler = new AddGameHandler($seasonRepository);
 
         $addGameHandler->handle($this->addGameCommand);
     }

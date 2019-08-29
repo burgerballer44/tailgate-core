@@ -104,13 +104,13 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectGroupDeleted(GroupDeleted $event)
     {
         $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE :group_id = group_id');
-        $stmt->execute([':group_id' => $event->getScoreId()]);
+        $stmt->execute([':group_id' => $event->getAggregateId()]);
 
         $stmt = $this->pdo->prepare('DELETE FROM `member` WHERE :group_id = group_id');
-        $stmt->execute([':group_id' => $event->getScoreId()]);
+        $stmt->execute([':group_id' => $event->getAggregateId()]);
 
         $stmt = $this->pdo->prepare('DELETE FROM `group` WHERE :group_id = group_id');
-        $stmt->execute([':group_id' => $event->getScoreId()]);
+        $stmt->execute([':group_id' => $event->getAggregateId()]);
     }
 
     public function projectGroupScoreUpdated(GroupScoreUpdated $event)

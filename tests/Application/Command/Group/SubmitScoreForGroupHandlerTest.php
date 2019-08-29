@@ -27,7 +27,12 @@ class SubmitScoreForGroupHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->group = Group::create(GroupId::fromString($this->groupId), $this->groupName, UserId::fromString($this->userId));
+        // create a group and clear events
+        $this->group = Group::create(
+            GroupId::fromString($this->groupId),
+            $this->groupName,
+            UserId::fromString($this->userId)
+        );
         $this->group->clearRecordedEvents();
 
         $this->submitScoreForGroupCommand = new SubmitScoreForGroupCommand(
@@ -52,43 +57,26 @@ class SubmitScoreForGroupHandlerTest extends TestCase
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $groupRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($group);
+        $groupRepository->expects($this->once())->method('get')->willReturn($group);
 
         // the add method should be called once
         // the group object should have the ScoreSubmitted event
-        $groupRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($group) use (
-                $groupId,
-                $userId,
-                $gameId,
-                $homeTeamPrediction,
-                $awayTeamPrediction
-            ) {
-                    $events = $group->getRecordedEvents();
-                    $scores = $group->getScores();
+        $groupRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($group) use ($groupId, $userId, $gameId, $homeTeamPrediction, $awayTeamPrediction) {
+                $events = $group->getRecordedEvents();
 
-                    return $events[0] instanceof ScoreSubmitted
+                return $events[0] instanceof ScoreSubmitted
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getScoreId() instanceof ScoreId
                 && $events[0]->getUserId()->equals(UserId::fromString($userId))
                 && $events[0]->getGameId()->equals(GameId::fromString($gameId))
                 && $events[0]->getHomeTeamPrediction() == $homeTeamPrediction
                 && $events[0]->getAwayTeamPrediction() == $awayTeamPrediction
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable
-                && 1 == count($scores)
-                && $scores[0] instanceof Score;
-                }
+                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
+            }
         ));
         
-        $submitScoreForGroupHandler = new SubmitScoreForGroupHandler(
-            $groupRepository
-        );
+        $submitScoreForGroupHandler = new SubmitScoreForGroupHandler($groupRepository);
 
         $submitScoreForGroupHandler->handle($this->submitScoreForGroupCommand);
     }

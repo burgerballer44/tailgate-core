@@ -10,6 +10,11 @@ use Tailgate\Domain\Model\Group\MemberAdded;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
+use Tailgate\Domain\Model\Group\GroupUpdated;
+use Tailgate\Domain\Model\Group\MemberDeleted;
+use Tailgate\Domain\Model\Group\ScoreDeleted;
+use Tailgate\Domain\Model\Group\GroupScoreUpdated;
+use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\GroupProjection;
 
@@ -123,5 +128,142 @@ class PDOGroupProjectionTest extends TestCase
             ]);
 
         $this->projection->projectScoreSubmitted($event);
+    }
+
+    public function testItCanProjectGroupUpdated()
+    {
+        $event = new GroupUpdated(
+            GroupId::fromString('groupId'),
+            'name',
+            UserId::fromString('userId')
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('UPDATE `group` (name, owner_id)
+            VALUES (:name, :owner_id)
+            WHERE :group_id = group_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':group_id' => $event->getAggregateId(),
+                ':name' => $event->getName(),
+                ':owner_id' => $event->getOwnerId(),
+            ]);
+
+        $this->projection->projectGroupUpdated($event);
+    }
+
+    public function testItCanProjectMemberDeleted()
+    {
+        $event = new MemberDeleted(
+            GroupId::fromString('groupId'),
+            MemberId::fromString('memberId')
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('DELETE FROM `member` WHERE :member_id = member_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':member_id' => $event->getMemberId()]);
+
+        $this->projection->projectMemberDeleted($event);
+    }
+
+    public function testItCanProjectScoreDeleted()
+    {
+        $event = new ScoreDeleted(
+            GroupId::fromString('groupId'),
+            ScoreId::fromString('scoreId')
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('DELETE FROM `score` WHERE :score_id = score_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':score_id' => $event->getScoreId()]);
+
+        $this->projection->projectScoreDeleted($event);
+    }
+
+    public function testItCanProjectGroupDeleted()
+    {
+        $event = new GroupDeleted(GroupId::fromString('groupId'));
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->at(0))
+            ->method('prepare')
+            ->with('DELETE FROM `score` WHERE :group_id = group_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(1))
+            ->method('prepare')
+            ->with('DELETE FROM `member` WHERE :group_id = group_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(2))
+            ->method('prepare')
+            ->with('DELETE FROM `group` WHERE :group_id = group_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->exactly(3))
+            ->method('execute')
+            ->with([':group_id' => $event->getAggregateId()]);
+
+        $this->projection->projectGroupDeleted($event);
+    }
+
+    public function testItCanProjectGroupScoreUpdated()
+    {
+        $event = new GroupScoreUpdated(
+            GroupId::fromString('groupId'),
+            ScoreId::fromString('scoreId'),
+            70,
+            60,
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('UPDATE `score` (home_team_prediction, away_team_prediction)
+            VALUES (:home_team_prediction, :away_team_prediction)
+            WHERE :score_id = score_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':score_id' => $event->getScoreId(),
+                ':home_team_prediction' => $event->getHomeTeamPrediction(),
+                ':away_team_prediction' => $event->getAwayTeamPrediction(),
+            ]);
+
+        $this->projection->projectGroupScoreUpdated($event);
     }
 }

@@ -42,27 +42,15 @@ class RegisterUserHandlerTest extends TestCase
         $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
 
         // the nextIdentity method should be called once and will return a new UserID
-        $userRepository
-           ->expects($this->once())
-           ->method('nextIdentity')
-           ->willReturn(new UserId());
+        $userRepository->expects($this->once())->method('nextIdentity')->willReturn(new UserId());
 
         // the add method should be called once
         // the user object should have the UserRegistered event
-        $userRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($user) use (
-                $username,
-                $password,
-                $confirmPassword,
-                $email,
-                $uniqueKey
-            ) {
-                    $events = $user->getRecordedEvents();
+        $userRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($user) use ($username, $password, $confirmPassword, $email, $uniqueKey) {
+                $events = $user->getRecordedEvents();
 
-                    return $events[0] instanceof UserRegistered
+                return $events[0] instanceof UserRegistered
                 && $events[0]->getAggregateId() instanceof UserId
                 && $events[0]->getUsername() === $username
                 && $events[0]->getPasswordHash() === $password
@@ -71,20 +59,14 @@ class RegisterUserHandlerTest extends TestCase
                 && $events[0]->getRole() === User::ROLE_USER
                 && $events[0]->getUniqueKey() === $uniqueKey
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
         $passwordHashing = $this->createMock(PasswordHashingInterface::class);
-        $passwordHashing
-            ->expects($this->once())
-            ->method('hash')
-            ->willReturn($password);
+        $passwordHashing->expects($this->once())->method('hash')->willReturn($password);
 
         $randomStringer = $this->createMock(RandomStringInterface::class);
-        $randomStringer
-            ->expects($this->once())
-            ->method('generate')
-            ->willReturn($uniqueKey);
+        $randomStringer->expects($this->once())->method('generate')->willReturn($uniqueKey);
 
         $registerUserHandler = new RegisterUserHandler(
             $userRepository,

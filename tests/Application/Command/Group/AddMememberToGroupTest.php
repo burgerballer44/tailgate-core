@@ -22,6 +22,7 @@ class AddMemberToGroupHandlerTest extends TestCase
 
     public function setUp()
     {
+        // create a group and clear events
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
@@ -44,35 +45,24 @@ class AddMemberToGroupHandlerTest extends TestCase
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $groupRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($group);
+        $groupRepository->expects($this->once())->method('get')->willReturn($group);
 
         // the add method should be called once
         // the group object should have the MemberAdded event
-        $groupRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($group) use (
-                $groupId,
-                $userId
-            ) {
-                    $events = $group->getRecordedEvents();
+        $groupRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($group) use ($groupId, $userId) {
+                $events = $group->getRecordedEvents();
 
-                    return $events[0] instanceof MemberAdded
+                return $events[0] instanceof MemberAdded
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getMemberId() instanceof MemberId
                 && $events[0]->getUserId()->equals(UserId::fromString($userId))
                 && $events[0]->getGroupRole() == Group::G_ROLE_MEMBER
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
         
-        $addMemberToGroupHandler = new AddMemberToGroupHandler(
-            $groupRepository
-        );
+        $addMemberToGroupHandler = new AddMemberToGroupHandler($groupRepository);
 
         $addMemberToGroupHandler->handle($this->addMemberToGroupCommand);
     }

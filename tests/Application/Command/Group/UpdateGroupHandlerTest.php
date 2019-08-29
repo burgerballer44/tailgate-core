@@ -21,6 +21,7 @@ class UpdateGroupHandlerTest extends TestCase
 
     public function setUp()
     {
+        // create a group and clear events
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             'groupName',
@@ -45,35 +46,23 @@ class UpdateGroupHandlerTest extends TestCase
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $groupRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($group);
+        $groupRepository->expects($this->once())->method('get')->willReturn($group);
 
         // the add method should be called once
         // the group object should have the GroupUpdated event
-        $groupRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($group) use (
-                $groupId,
-                $groupName,
-                $ownerId
-            ) {
-                    $events = $group->getRecordedEvents();
+        $groupRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($group) use ($groupId, $groupName, $ownerId) {
+                $events = $group->getRecordedEvents();
 
-                    return $events[0] instanceof GroupUpdated
+                return $events[0] instanceof GroupUpdated
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getName() === $groupName
                 && $events[0]->getOwnerId()->equals(UserId::fromString($ownerId))
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $updateGroupHandler = new UpdateGroupHandler(
-            $groupRepository
-        );
+        $updateGroupHandler = new UpdateGroupHandler($groupRepository);
 
         $updateGroupHandler->handle($this->updateGroupCommand);
     }

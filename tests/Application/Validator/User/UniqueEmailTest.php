@@ -17,10 +17,7 @@ class UniqueEmailTest extends TestCase
             ->setMethods(['byEmail'])
             ->getMock();
 
-        $userViewRepository
-            ->expects($this->once())
-            ->method('byEmail')
-            ->willReturn(false);
+        $userViewRepository->expects($this->once())->method('byEmail')->willReturn(false);
 
         $validator = new UniqueEmail($userViewRepository);
         $this->assertTrue($validator->validate('emailNotExist@email.com'));
@@ -36,10 +33,7 @@ class UniqueEmailTest extends TestCase
             ->setMethods(['byEmail'])
             ->getMock();
 
-        $userViewRepository
-            ->expects($this->once())
-            ->method('byEmail')
-            ->willReturn(true);
+        $userViewRepository->expects($this->once())->method('byEmail')->willReturn(true);
 
         $validator = new UniqueEmail($userViewRepository);
         $this->assertFalse($validator->validate($input));

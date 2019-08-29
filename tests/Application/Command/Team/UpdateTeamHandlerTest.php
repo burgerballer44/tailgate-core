@@ -24,11 +24,7 @@ class UpdateTeamHandlerTest extends TestCase
         $this->team = Team::create(TeamId::fromString($this->teamId), 'designation', 'mascot');
         $this->team->clearRecordedEvents();
 
-        $this->updateTeamCommand = new UpdateTeamCommand(
-            $this->teamId,
-            $this->designation,
-            $this->mascot
-        );
+        $this->updateTeamCommand = new UpdateTeamCommand($this->teamId, $this->designation, $this->mascot);
     }
 
     public function testItAttemptsToAddATeamUpdatedEventToTheTeamRepository()
@@ -41,30 +37,20 @@ class UpdateTeamHandlerTest extends TestCase
         $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the team
-        $teamRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($team);
+        $teamRepository->expects($this->once())->method('get')->willReturn($team);
 
         // the add method should be called once
         // the team object should have the TeamUpdated event
-        $teamRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($team) use (
-                $teamId,
-                $designation,
-                $mascot
-            ) {
-                    $events = $team->getRecordedEvents();
+        $teamRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($team) use ($teamId, $designation, $mascot) {
+                $events = $team->getRecordedEvents();
 
-                    return $events[0] instanceof TeamUpdated
+                return $events[0] instanceof TeamUpdated
                 && $events[0]->getAggregateId()->equals(TeamId::fromString($teamId))
                 && $events[0]->getDesignation() === $designation
                 && $events[0]->getMascot() === $mascot
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
         $this->updateTeamHandler = new UpdateTeamHandler($teamRepository);

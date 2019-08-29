@@ -23,13 +23,11 @@ class FollowTeamHandlerTest extends TestCase
 
     public function setUp()
     {
+        // create a team and clear events
         $this->team = Team::create(TeamId::fromString($this->teamId), $this->designation, $this->mascot);
         $this->team->clearRecordedEvents();
 
-        $this->followTeamCommand = new FollowTeamCommand(
-            $this->groupId,
-            $this->teamId
-        );
+        $this->followTeamCommand = new FollowTeamCommand($this->groupId, $this->teamId);
     }
 
     public function testItAttemptsToAddATeamFollowedEventToTheTeamRepository()
@@ -41,34 +39,23 @@ class FollowTeamHandlerTest extends TestCase
         $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
 
         // the get method should be called once and will return the group
-        $teamRepository
-           ->expects($this->once())
-           ->method('get')
-           ->willReturn($team);
+        $teamRepository->expects($this->once())->method('get')->willReturn($team);
 
         // the add method should be called once
         // the team object should have the TeamFollowed event
-        $teamRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($team) use (
-                $teamId,
-                $groupId
-            ) {
-                    $events = $team->getRecordedEvents();
+        $teamRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($team) use ($teamId, $groupId) {
+                $events = $team->getRecordedEvents();
 
-                    return $events[0] instanceof TeamFollowed
+                return $events[0] instanceof TeamFollowed
                 && $events[0]->getAggregateId()->equals(TeamId::fromString($teamId))
                 && $events[0]->getFollowId() instanceof FollowId
                 && $events[0]->getGroupId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $this->followTeamHandler = new FollowTeamHandler(
-            $teamRepository
-        );
+        $this->followTeamHandler = new FollowTeamHandler($teamRepository);
 
         $this->followTeamHandler->handle($this->followTeamCommand);
     }

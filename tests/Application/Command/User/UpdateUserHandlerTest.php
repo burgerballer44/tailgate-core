@@ -55,27 +55,18 @@ class UpdateUserHandlerTest extends TestCase
 
         // the add method should be called once
         // the user object should have the UserUpdated event
-        $userRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($user) use (
-                $userId,
-                $username,
-                $email,
-                $status,
-                $role
-            ) {
-                    $events = $user->getRecordedEvents();
+        $userRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($user) use ($userId, $username, $email, $status, $role) {
+                $events = $user->getRecordedEvents();
 
-                    return $events[0] instanceof UserUpdated
+                return $events[0] instanceof UserUpdated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
                 && $events[0]->getUsername() === $username
                 && $events[0]->getEmail() === $email
                 && $events[0]->getStatus() === $status
                 && $events[0]->getRole() === $role
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
         $updateUserHandler = new UpdateUserHandler($userRepository);

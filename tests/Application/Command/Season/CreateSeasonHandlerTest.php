@@ -43,27 +43,15 @@ class CreateSeasonHandlerTest extends TestCase
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
 
         // the nextIdentity method should be called once and will return a new SeasonID
-        $seasonRepository
-           ->expects($this->once())
-           ->method('nextIdentity')
-           ->willReturn(new SeasonId());
+        $seasonRepository->expects($this->once())->method('nextIdentity')->willReturn(new SeasonId());
 
         // the add method should be called once
         // the season object should have the SeasonCreated event
-        $seasonRepository
-            ->expects($this->once())
-            ->method('add')
-            ->with($this->callback(
-                function ($season) use (
-                $sport,
-                $seasonType,
-                $name,
-                $seasonStart,
-                $seasonEnd
-            ) {
-                    $events = $season->getRecordedEvents();
+        $seasonRepository->expects($this->once())->method('add')->with($this->callback(
+            function ($season) use ($sport, $seasonType, $name, $seasonStart, $seasonEnd) {
+                $events = $season->getRecordedEvents();
 
-                    return $events[0] instanceof SeasonCreated
+                return $events[0] instanceof SeasonCreated
                 && $events[0]->getAggregateId() instanceof SeasonId
                 && $events[0]->getSport() === $sport
                 && $events[0]->getSeasonType() === $seasonType
@@ -71,12 +59,10 @@ class CreateSeasonHandlerTest extends TestCase
                 && $events[0]->getSeasonStart()->format('Y-m-d') === $seasonStart->format('Y-m-d')
                 && $events[0]->getSeasonEnd()->format('Y-m-d') === $seasonEnd->format('Y-m-d')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-                }
+            }
         ));
 
-        $createSeasonHandler = new CreateSeasonHandler(
-            $seasonRepository
-        );
+        $createSeasonHandler = new CreateSeasonHandler($seasonRepository);
 
         $createSeasonHandler->handle($this->createSeasonCommand);
     }

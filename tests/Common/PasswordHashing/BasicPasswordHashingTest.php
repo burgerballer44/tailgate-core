@@ -8,7 +8,7 @@ use Tailgate\Common\PasswordHashing\BasicPasswordHashing;
 class BasicPasswordHashingTest extends TestCase
 {
     private $password = 'password';
-    // a hash of 'password'
+    // a hash of he text 'password'
     private $passwordHash = '$2y$10$QaQC1BqV8O9N.NPeimP4yugJNDL60TIVQWb7eK24FR3dYsXQecT8u';
     private $passwordHashing;
 
