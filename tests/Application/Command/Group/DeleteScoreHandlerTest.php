@@ -36,7 +36,7 @@ class DeleteScoreHandlerTest extends TestCase
 
         $this->deleteScoreCommand = new DeleteScoreCommand(
             $this->groupId,
-            $this->scoreId,
+            $this->scoreId
         );
     }
 
