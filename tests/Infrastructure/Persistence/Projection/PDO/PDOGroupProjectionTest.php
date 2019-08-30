@@ -242,7 +242,7 @@ class PDOGroupProjectionTest extends TestCase
             GroupId::fromString('groupId'),
             ScoreId::fromString('scoreId'),
             70,
-            60,
+            60
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
