@@ -17,38 +17,34 @@ class User extends AbstractEntity
     const STATUS_DELETED = 'Deleted'; // user who is deleted
 
     private $userId;
-    private $username;
-    private $passwordHash;
     private $email;
+    private $passwordHash;
     private $status;
     private $role;
     private $uniqueKey;
 
     protected function __construct(
         $userId,
-        $username,
-        $passwordHash,
         $email,
+        $passwordHash,
         $status,
         $role,
         $uniqueKey
     ) {
         $this->userId = $userId;
-        $this->username = $username;
-        $this->passwordHash = $passwordHash;
         $this->email = $email;
+        $this->passwordHash = $passwordHash;
         $this->status = $status;
         $this->role = $role;
         $this->uniqueKey = $uniqueKey;
     }
 
-    public static function create(UserId $userId, $username, $passwordHash, $email, $uniqueKey)
+    public static function create(UserId $userId, $email, $passwordHash, $uniqueKey)
     {
         $newUser = new User(
             $userId,
-            $username,
-            $passwordHash,
             $email,
+            $passwordHash,
             User::STATUS_PENDING,
             User::ROLE_USER,
             $uniqueKey
@@ -57,9 +53,8 @@ class User extends AbstractEntity
         $newUser->recordThat(
             new UserRegistered(
                 $userId,
-                $username,
-                $passwordHash,
                 $email,
+                $passwordHash,
                 User::STATUS_PENDING,
                 User::ROLE_USER,
                 $uniqueKey
@@ -71,7 +66,7 @@ class User extends AbstractEntity
 
     protected static function createEmptyEntity(IdentifiesAggregate $userId)
     {
-        return new User($userId, '', '', '', '', '', '');
+        return new User($userId, '', '', '', '', '');
     }
 
     public function getId()
@@ -79,19 +74,14 @@ class User extends AbstractEntity
         return (string) $this->userId;
     }
 
-    public function getUsername()
+    public function getEmail()
     {
-        return $this->username;
+        return $this->email;
     }
 
     public function getPasswordHash()
     {
         return $this->passwordHash;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     public function getStatus()
@@ -144,12 +134,11 @@ class User extends AbstractEntity
         );
     }
 
-    public function update($username, $email, $status, $role)
+    public function update($email, $status, $role)
     {
         $this->applyAndRecordThat(
             new UserUpdated(
                 $this->userId,
-                $username,
                 $email,
                 $status,
                 $role
@@ -159,9 +148,8 @@ class User extends AbstractEntity
 
     protected function applyUserRegistered(UserRegistered $event)
     {
-        $this->username = $event->getUsername();
-        $this->passwordHash = $event->getPasswordHash();
         $this->email = $event->getEmail();
+        $this->passwordHash = $event->getPasswordHash();
         $this->status = $event->getStatus();
         $this->role = $event->getRole();
     }
@@ -188,7 +176,6 @@ class User extends AbstractEntity
 
     protected function applyUserUpdated(UserUpdated $event)
     {
-        $this->username = $event->getUsername();
         $this->email = $event->getEmail();
         $this->status = $event->getStatus();
         $this->role = $event->getRole();

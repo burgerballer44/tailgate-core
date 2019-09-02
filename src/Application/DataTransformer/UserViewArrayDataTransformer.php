@@ -11,7 +11,6 @@ class UserViewArrayDataTransformer implements UserDataTransformerInterface
     {
         return [
             'userId'   => $userView->getUserId(),
-            'username' => $userView->getUsername(),
             'email'    => $userView->getEmail(),
             'status'   => $userView->getStatus(),
             'role'     => $userView->getRole(),

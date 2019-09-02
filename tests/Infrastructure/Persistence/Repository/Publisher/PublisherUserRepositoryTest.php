@@ -23,7 +23,7 @@ class PublisherUserRepositoryTest extends TestCase
         $this->domainEventPublisher = $this->createMock(EventPublisherInterface::class);
 
         // create a user and activate it just so we have an extra event on it
-        $this->user = User::create(UserId::fromString('userId'), 'username', 'passwordHash', 'email', 'uniqueKey');
+        $this->user = User::create(UserId::fromString('userId'), 'email', 'passwordHash', 'uniqueKey');
         $this->user->activate();
     }
 

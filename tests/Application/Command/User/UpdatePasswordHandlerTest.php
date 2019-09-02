@@ -14,7 +14,6 @@ use Tailgate\Domain\Model\User\UserRepositoryInterface;
 class UpdatePasswordHandlerTest extends TestCase
 {
     private $userId = 'userId';
-    private $username = 'username';
     private $passwordHash = 'password';
     private $email = 'email@email.com';
     private $key = 'randomKey';
@@ -27,9 +26,8 @@ class UpdatePasswordHandlerTest extends TestCase
         // create a team and clear events
         $this->user = User::create(
             UserId::fromString($this->userId),
-            $this->username,
-            $this->passwordHash,
             $this->email,
+            $this->passwordHash,
             $this->key
         );
         $this->user->clearRecordedEvents();

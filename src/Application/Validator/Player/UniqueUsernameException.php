@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Application\Validator\User;
+namespace Tailgate\Application\Validator\Player;
 
 use Respect\Validation\Exceptions\ValidationException;
 

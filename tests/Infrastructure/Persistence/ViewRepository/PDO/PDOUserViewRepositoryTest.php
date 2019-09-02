@@ -68,7 +68,6 @@ class PDOUserViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn([
                 'user_id' => 'blah',
-                'username' => 'blah',
                 'email' => 'blah',
                 'status' => 'blah',
                 'role' => 'blah',

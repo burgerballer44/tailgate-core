@@ -3,46 +3,49 @@
 namespace Tailgate\Test\Application\Command\Group;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Application\Command\Group\DeleteMemberCommand;
-use Tailgate\Application\Command\Group\DeleteMemberHandler;
-use Tailgate\Domain\Model\Group\MemberDeleted;
+use Tailgate\Application\Command\Group\AddPlayerToGroupCommand;
+use Tailgate\Application\Command\Group\AddPlayerToGroupHandler;
 use Tailgate\Domain\Model\Group\Group;
-use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\MemberId;
-use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
+use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\PlayerAdded;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 
-class DeleteMemberHandlerTest extends TestCase
+class AddPlayerToGroupHandlerTest extends TestCase
 {
     private $groupId = 'groupId';
-    private $memberId;
     private $userId = 'userId';
     private $groupName = 'groupName';
+    private $memberId = 'memberId';
+    private $username = 'username';
     private $group;
-    private $deleteMemberCommand;
+    private $addPlayerToGroupCommand;
 
     public function setUp()
     {
-        // create a group, add a member, and clear events
+        // create a group and clear events
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
             UserId::fromString($this->userId)
         );
-        $this->group->addMember(UserId::fromString('userId2'));
         $this->memberId = (string) $this->group->getMembers()[0]->getMemberId();
         $this->group->clearRecordedEvents();
 
-        $this->deleteMemberCommand = new DeleteMemberCommand(
+        $this->addPlayerToGroupCommand = new AddPlayerToGroupCommand(
             $this->groupId,
-            $this->memberId
+            $this->memberId,
+            $this->username
         );
     }
 
-    public function testItAddsAMemberDeletedEventToTheGroupRepository()
+    public function testItAddsAPlayerAddedEventToAGroupInTheGroupRepository()
     {
         $groupId = $this->groupId;
         $memberId = $this->memberId;
+        $username = $this->username;
         $group = $this->group;
 
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
@@ -51,20 +54,22 @@ class DeleteMemberHandlerTest extends TestCase
         $groupRepository->expects($this->once())->method('get')->willReturn($group);
 
         // the add method should be called once
-        // the group object should have the MemberDeleted event
+        // the group object should have the PlayerAdded event
         $groupRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($group) use ($groupId, $memberId) {
+            function ($group) use ($groupId, $memberId, $username) {
                 $events = $group->getRecordedEvents();
 
-                return $events[0] instanceof MemberDeleted
+                return $events[0] instanceof PlayerAdded
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
+                && $events[0]->getPlayerId() instanceof PlayerId
                 && $events[0]->getMemberId()->equals(MemberId::fromString($memberId))
+                && $events[0]->getUsername() == $username
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));
+        
+        $addPlayerToGroupHandler = new AddPlayerToGroupHandler($groupRepository);
 
-        $deleteMemberHandler = new DeleteMemberHandler($groupRepository);
-
-        $deleteMemberHandler->handle($this->deleteMemberCommand);
+        $addPlayerToGroupHandler->handle($this->addPlayerToGroupCommand);
     }
 }

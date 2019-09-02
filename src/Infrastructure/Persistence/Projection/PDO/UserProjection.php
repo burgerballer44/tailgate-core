@@ -24,13 +24,12 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectUserRegistered(UserRegistered $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `user` (user_id, username, password_hash, email, status, role, unique_key, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :unique_key, :created_at)'
+            'INSERT INTO `user` (user_id, password_hash, email, status, role, unique_key, created_at)
+            VALUES (:user_id, :password_hash, :email, :status, :role, :unique_key, :created_at)'
         );
 
         $stmt->execute([
             ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
             ':password_hash' => $event->getPasswordHash(),
             ':email' => $event->getEmail(),
             ':status' => $event->getStatus(),
@@ -100,13 +99,12 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     {
         $stmt = $this->pdo->prepare(
             'UPDATE `user`
-            SET username = :username, email = :email, status = :status, role = :role
+            SET email = :email, status = :status, role = :role
             WHERE user_id = :user_id'
         );
 
         $stmt->execute([
             ':user_id' => $event->getAggregateId(),
-            ':username' => $event->getUsername(),
             ':email' => $event->getEmail(),
             ':status' => $event->getStatus(),
             ':role' => $event->getRole(),

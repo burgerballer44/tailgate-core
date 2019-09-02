@@ -7,7 +7,6 @@ use Buttercup\Protects\DomainEvent;
 class UserUpdated implements DomainEvent, UserDomainEvent
 {
     private $userId;
-    private $username;
     private $email;
     private $status;
     private $role;
@@ -15,13 +14,11 @@ class UserUpdated implements DomainEvent, UserDomainEvent
 
     public function __construct(
         UserId $userId,
-        $username,
         $email,
         $status,
         $role
     ) {
         $this->userId = $userId;
-        $this->username = $username;
         $this->email = $email;
         $this->status = $status;
         $this->role = $role;
@@ -31,11 +28,6 @@ class UserUpdated implements DomainEvent, UserDomainEvent
     public function getAggregateId()
     {
         return $this->userId;
-    }
-
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     public function getEmail()

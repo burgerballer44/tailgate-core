@@ -8,6 +8,8 @@ use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\Member;
 use Tailgate\Domain\Model\Group\MemberId;
+use Tailgate\Domain\Model\Group\Player;
+use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\Score;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
@@ -213,5 +215,25 @@ class GroupTest extends TestCase
 
         $this->assertEquals($homeTeamPrediction, $scores[0]->getHomeTeamPrediction());
         $this->assertEquals($awayTeamPrediction, $scores[0]->getAwayTeamPrediction());
+    }
+
+    public function testGroupGetsAPlayerWhenPlayerIsAdded()
+    {   
+        $username = 'username';
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $members = $group->getMembers();
+        $players = $group->getPlayers();
+        $this->assertCount(0, $players);
+
+        $memberId = $members[0]->getMemberId();
+
+        $group->addPlayer($memberId, $username);
+
+        $players = $group->getPlayers();
+        $this->assertCount(1, $players);
+        $this->assertTrue($players[0] instanceof Player);
+        $this->assertTrue($players[0]->getMemberId()->equals($memberId));
+        $this->assertTrue($players[0]->getGroupId()->equals($this->groupId));
+        $this->assertEquals($username, $players[0]->getUsername());
     }
 }

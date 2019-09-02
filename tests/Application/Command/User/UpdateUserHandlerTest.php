@@ -13,7 +13,6 @@ use Tailgate\Domain\Model\User\UserRepositoryInterface;
 class UpdateUserHandlerTest extends TestCase
 {
     private $userId = 'userId';
-    private $username = 'usernameUpdated';
     private $email = 'updated@email.com';
     private $status = 'statusUpdated';
     private $role = 'roleUpdated';
@@ -24,16 +23,14 @@ class UpdateUserHandlerTest extends TestCase
     {
         $this->user = User::create(
             UserId::fromString($this->userId),
-            'username',
-            'password',
             'email@email.com',
+            'password',
             'randomKey'
         );
         $this->user->clearRecordedEvents();
 
         $this->updateUserCommand = new UpdateUserCommand(
             $this->userId,
-            $this->username,
             $this->email,
             $this->status,
             $this->role
@@ -43,7 +40,6 @@ class UpdateUserHandlerTest extends TestCase
     public function testItAddsAUserUpdatedToTheUserRepository()
     {
         $userId = $this->userId;
-        $username = $this->username;
         $email = $this->email;
         $status = $this->status;
         $role = $this->role;
@@ -56,12 +52,11 @@ class UpdateUserHandlerTest extends TestCase
         // the add method should be called once
         // the user object should have the UserUpdated event
         $userRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($user) use ($userId, $username, $email, $status, $role) {
+            function ($user) use ($userId, $email, $status, $role) {
                 $events = $user->getRecordedEvents();
 
                 return $events[0] instanceof UserUpdated
                 && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
-                && $events[0]->getUsername() === $username
                 && $events[0]->getEmail() === $email
                 && $events[0]->getStatus() === $status
                 && $events[0]->getRole() === $role

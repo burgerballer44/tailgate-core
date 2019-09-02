@@ -31,7 +31,7 @@ class DeleteScoreHandlerTest extends TestCase
             UserId::fromString($this->userId)
         );
         $this->group->submitScore(UserId::fromString($this->userId), GameId::fromString('gameID'), 70, 60);
-        $this->scoreId = $this->group->getScores()[0]->getScoreId();
+        $this->scoreId = (string) $this->group->getScores()[0]->getScoreId();
         $this->group->clearRecordedEvents();
 
         $this->deleteScoreCommand = new DeleteScoreCommand(
@@ -59,7 +59,7 @@ class DeleteScoreHandlerTest extends TestCase
 
                 return $events[0] instanceof ScoreDeleted
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
-                && $events[0]->getScoreId() instanceof ScoreId
+                && $events[0]->getScoreId()->equals(ScoreId::fromString($scoreId))
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

@@ -7,7 +7,6 @@ use Buttercup\Protects\DomainEvent;
 class UserRegistered implements DomainEvent, UserDomainEvent
 {
     private $userId;
-    private $username;
     private $passwordHash;
     private $email;
     private $status;
@@ -17,17 +16,15 @@ class UserRegistered implements DomainEvent, UserDomainEvent
 
     public function __construct(
         UserId $userId,
-        $username,
-        $passwordHash,
         $email,
+        $passwordHash,
         $status,
         $role,
         $uniqueKey
     ) {
         $this->userId = $userId;
-        $this->username = $username;
-        $this->passwordHash = $passwordHash;
         $this->email = $email;
+        $this->passwordHash = $passwordHash;
         $this->status = $status;
         $this->role = $role;
         $this->uniqueKey = $uniqueKey;
@@ -37,11 +34,6 @@ class UserRegistered implements DomainEvent, UserDomainEvent
     public function getAggregateId()
     {
         return $this->userId;
-    }
-
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     public function getPasswordHash()

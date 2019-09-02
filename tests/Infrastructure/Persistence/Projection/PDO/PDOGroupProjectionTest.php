@@ -15,6 +15,8 @@ use Tailgate\Domain\Model\Group\MemberDeleted;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\GroupScoreUpdated;
 use Tailgate\Domain\Model\Group\GroupDeleted;
+use Tailgate\Domain\Model\Group\PlayerId;
+use Tailgate\Domain\Model\Group\PlayerAdded;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\GroupProjection;
 
@@ -265,5 +267,38 @@ class PDOGroupProjectionTest extends TestCase
             ]);
 
         $this->projection->projectGroupScoreUpdated($event);
+    }
+
+
+    public function testItCanProjectPlayerAdded()
+    {
+        $event = new PlayerAdded(
+            GroupId::fromString('groupId'),
+            PLayerId::fromString('playerId'),
+            MemberId::fromString('memberId'),
+            'username'
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('INSERT INTO `player` (player_id, member_id, group_id, username, created_at)
+            VALUES (:player_id, :member_id, :group_id, :username, :created_at)')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':group_id' => $event->getAggregateId(),
+                ':player_id' => $event->getPlayerId(),
+                ':member_id' => $event->getMemberId(),
+                ':username' => $event->getUsername(),
+                ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ]);
+
+        $this->projection->projectPlayerAdded($event);
     }
 }

@@ -3,26 +3,19 @@
 namespace Tailgate\Test\Application\Validator\User;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Application\Validator\User\UniqueUsername;
-use Tailgate\Application\Validator\User\UniqueUsernameException;
-use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\UserViewRepository;
+use Tailgate\Application\Validator\Player\UniqueUsername;
+use Tailgate\Application\Validator\Player\UniqueUsernameException;
+use Tailgate\Domain\Model\Group\PlayerViewRepositoryInterface;
 
 class UniqueUsernameTest extends TestCase
 {
     public function testItReturnsTrueWhenUserNameDoesNotExist()
     {
-        // only needs the byUsername method
-        $userViewRepository = $this->getMockBuilder(UserViewRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['byUsername'])
-            ->getMock();
+        $playerViewRepository = $this->createMock(PlayerViewRepositoryInterface::class);
 
-        $userViewRepository
-            ->expects($this->once())
-            ->method('byUsername')
-            ->willReturn(false);
+        $playerViewRepository->expects($this->once())->method('byUsername')->willReturn(false);
 
-        $validator = new UniqueUsername($userViewRepository);
+        $validator = new UniqueUsername($playerViewRepository);
         $this->assertTrue($validator->validate('burger1'));
     }
 
@@ -30,18 +23,11 @@ class UniqueUsernameTest extends TestCase
     {
         $input = 'burger';
 
-        // only needs the byUsername method
-        $userViewRepository = $this->getMockBuilder(UserViewRepository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['byUsername'])
-            ->getMock();
+        $playerViewRepository = $this->createMock(PlayerViewRepositoryInterface::class);
 
-        $userViewRepository
-            ->expects($this->once())
-            ->method('byUsername')
-            ->willReturn(true);
+        $playerViewRepository->expects($this->once())->method('byUsername')->willReturn(true);
 
-        $validator = new UniqueUsername($userViewRepository);
+        $validator = new UniqueUsername($playerViewRepository);
         $this->assertFalse($validator->validate($input));
     }
 }

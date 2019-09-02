@@ -5,15 +5,13 @@ namespace Tailgate\Domain\Model\User;
 class UserView
 {
     private $userId;
-    private $username;
     private $email;
     private $status;
     private $role;
 
-    public function __construct($userId, $username, $email, $status, $role)
+    public function __construct($userId, $email, $status, $role)
     {
         $this->userId = $userId;
-        $this->username = $username;
         $this->email = $email;
         $this->status = $status;
         $this->role = $role;
@@ -22,11 +20,6 @@ class UserView
     public function getUserId()
     {
         return $this->userId;
-    }
-
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     public function getEmail()

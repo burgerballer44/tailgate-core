@@ -27,14 +27,14 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectUserRegistered()
     {
-        $event = new UserRegistered(UserId::fromString('userId'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
+        $event = new UserRegistered(UserId::fromString('userId'), 'email1', 'password1', 'status', 'role', 'randomString');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `user` (user_id, username, password_hash, email, status, role, unique_key, created_at)
-            VALUES (:user_id, :username, :password_hash, :email, :status, :role, :unique_key, :created_at)')
+            ->with('INSERT INTO `user` (user_id, password_hash, email, status, role, unique_key, created_at)
+            VALUES (:user_id, :password_hash, :email, :status, :role, :unique_key, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -43,9 +43,8 @@ class PDOUserProjectionTest extends TestCase
             ->method('execute')
             ->with([
                 ':user_id' => $event->getAggregateId(),
-                ':username' => $event->getUsername(),
-                ':password_hash' => $event->getPasswordHash(),
                 ':email' => $event->getEmail(),
+                ':password_hash' => $event->getPasswordHash(),
                 ':status' => $event->getStatus(),
                 ':role' => $event->getRole(),
                 ':unique_key' => $event->getUniqueKey(),
@@ -157,14 +156,14 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectUserUpdated()
     {
-        $event = new UserUpdated(UserId::fromString('userId'), 'username', 'email@email.com', 'status', 'role');
+        $event = new UserUpdated(UserId::fromString('userId'), 'email@email.com', 'status', 'role');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
             ->with('UPDATE `user`
-            SET username = :username, email = :email, status = :status, role = :role
+            SET email = :email, status = :status, role = :role
             WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 
@@ -174,7 +173,6 @@ class PDOUserProjectionTest extends TestCase
             ->method('execute')
             ->with([
                 ':user_id' => $event->getAggregateId(),
-                ':username' => $event->getUsername(),
                 ':email' => $event->getEmail(),
                 ':status' => $event->getStatus(),
                 ':role' => $event->getRole(),

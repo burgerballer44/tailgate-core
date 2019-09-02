@@ -25,7 +25,7 @@ class PDOEventStoreTest extends TestCase
 
     public function testItCanCommitADomainEvent()
     {
-        $event =  new UserRegistered(UserId::fromString('userId1'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
+        $event =  new UserRegistered(UserId::fromString('userId1'), 'email1', 'password1', 'status', 'role', 'randomString');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -53,9 +53,9 @@ class PDOEventStoreTest extends TestCase
     public function testItCanCommitManyDomainEvents()
     {
         $domainEvents = new DomainEvents([
-            new UserRegistered(UserId::fromString('userId1'), 'username1', 'password1', 'email1', 'status', 'role', 'randomString'),
-            new UserRegistered(UserId::fromString('userId2'), 'username2', 'password2', 'email2', 'status', 'role', 'randomString'),
-            new UserRegistered(UserId::fromString('userId3'), 'username3', 'password3', 'email3', 'status', 'role', 'randomString'),
+            new UserRegistered(UserId::fromString('userId1'), 'email1', 'password1', 'status', 'role', 'randomString'),
+            new UserRegistered(UserId::fromString('userId2'), 'email2', 'password2', 'status', 'role', 'randomString'),
+            new UserRegistered(UserId::fromString('userId3'), 'email3', 'password3', 'status', 'role', 'randomString'),
         ]);
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -77,8 +77,8 @@ class PDOEventStoreTest extends TestCase
     public function testItCanGetAnAggregateHistory()
     {
         $id = UserId::fromString('userId');
-        $event1 = new UserRegistered($id, 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
-        $event2 = new UserRegistered($id, 'username2', 'password2', 'email2', 'status', 'role', 'randomString');
+        $event1 = new UserRegistered($id, 'email1', 'password1', 'status', 'role', 'randomString');
+        $event2 = new UserRegistered($id, 'email2', 'password2', 'status', 'role', 'randomString');
         $serializedEvent1 = serialize($event1);
         $serializedEvent2 = serialize($event2);
 

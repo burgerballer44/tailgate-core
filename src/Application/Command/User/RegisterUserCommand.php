@@ -4,32 +4,25 @@ namespace Tailgate\Application\Command\User;
 
 class RegisterUserCommand
 {
-    private $username;
-    private $password;
     private $email;
+    private $password;
     private $confirmPassword;
 
-    public function __construct(string $username, string $password, string $email, string $confirmPassword)
+    public function __construct(string $email, string $password, string $confirmPassword)
     {
-        $this->username = $username;
-        $this->password = $password;
         $this->email = $email;
+        $this->password = $password;
         $this->confirmPassword = $confirmPassword;
-    }
-
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
     }
 
     public function getEmail()
     {
         return $this->email;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
     }
     
     public function getConfirmPassword()

@@ -30,7 +30,7 @@ class UpdateMemberHandlerTest extends TestCase
             $this->groupName,
             UserId::fromString($this->userId)
         );
-        $this->memberId = $this->group->getMembers()[0]->getMemberId();
+        $this->memberId = (string) $this->group->getMembers()[0]->getMemberId();
         $this->group->clearRecordedEvents();
 
         $this->updateMemberCommand = new UpdateMemberCommand(
@@ -60,7 +60,7 @@ class UpdateMemberHandlerTest extends TestCase
 
                 return $events[0] instanceof MemberUpdated
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
-                && $events[0]->getMemberId() instanceof MemberId
+                && $events[0]->getMemberId()->equals(MemberId::fromString($memberId))
                 && $events[0]->getGroupRole() == $groupRole
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }

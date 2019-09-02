@@ -25,15 +25,13 @@ class RegisterUserHandler
 
     public function handle(RegisterUserCommand $command)
     {
-        $username = $command->getUsername();
-        $password = $command->getPassword();
         $email = $command->getEmail();
+        $password = $command->getPassword();
 
         $user = User::create(
             $this->userRepository->nextIdentity(),
-            $username,
-            $this->passwordHashing->hash($password),
             $email,
+            $this->passwordHashing->hash($password),
             $this->randomStringer->generate()
         );
 
@@ -41,7 +39,6 @@ class RegisterUserHandler
 
         return [
             'userId'   => $user->getId(),
-            'username' => $user->getUsername(),
             'email'    => $user->getEmail(),
             'status'   => $user->getStatus(),
             'role'     => $user->getRole()

@@ -12,6 +12,7 @@ use Tailgate\Domain\Model\Group\MemberDeleted;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\GroupScoreUpdated;
 use Tailgate\Domain\Model\Group\GroupDeleted;
+use Tailgate\Domain\Model\Group\PlayerAdded;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
 class GroupProjection extends AbstractProjection implements GroupProjectionInterface
@@ -125,6 +126,22 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':score_id' => $event->getScoreId(),
             ':home_team_prediction' => $event->getHomeTeamPrediction(),
             ':away_team_prediction' => $event->getAwayTeamPrediction(),
+        ]);
+    }
+
+    public function projectPlayerAdded(PlayerAdded $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO `player` (player_id, member_id, group_id, username, created_at)
+            VALUES (:player_id, :member_id, :group_id, :username, :created_at)'
+        );
+
+        $stmt->execute([
+            ':group_id' => $event->getAggregateId(),
+            ':player_id' => $event->getPlayerId(),
+            ':member_id' => $event->getMemberId(),
+            ':username' => $event->getUsername(),
+            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }
 }

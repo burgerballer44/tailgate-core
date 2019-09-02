@@ -28,7 +28,6 @@ class UserViewRepository implements UserViewRepositoryInterface
 
         return new UserView(
             $row['user_id'],
-            $row['username'],
             $row['email'],
             $row['status'],
             $row['role']
@@ -45,7 +44,6 @@ class UserViewRepository implements UserViewRepositoryInterface
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $users[] = new UserView(
                 $row['user_id'],
-                $row['username'],
                 $row['email'],
                 $row['status'],
                 $row['role']
@@ -53,24 +51,6 @@ class UserViewRepository implements UserViewRepositoryInterface
         }
 
         return $users;
-    }
-
-    public function byUsername($username)
-    {
-        $stmt = $this->pdo->prepare('SELECT * FROM `user` WHERE username = :username');
-        $stmt->execute([':username' => (string) $username]);
-
-        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            return new UserView(
-                $row['user_id'],
-                $row['username'],
-                $row['email'],
-                $row['status'],
-                $row['role']
-            );
-        }
-
-        return false;
     }
 
     public function byEmail($email)
@@ -81,7 +61,6 @@ class UserViewRepository implements UserViewRepositoryInterface
         if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             return new UserView(
                 $row['user_id'],
-                $row['username'],
                 $row['email'],
                 $row['status'],
                 $row['role']

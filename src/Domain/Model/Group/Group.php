@@ -17,6 +17,7 @@ class Group extends AbstractEntity
     private $ownerId;
     private $scores = [];
     private $members = [];
+    private $players = [];
 
     protected function __construct($groupId, $name, $ownerId)
     {
@@ -75,6 +76,11 @@ class Group extends AbstractEntity
         return $this->members;
     }
 
+    public function getPlayers()
+    {
+        return $this->players;
+    }
+
     public function delete()
     {
         $this->applyAndRecordThat(new GroupDeleted($this->groupId));
@@ -110,6 +116,18 @@ class Group extends AbstractEntity
                 $gameId,
                 $homeTeamPrediction,
                 $awayTeamPrediction
+            )
+        );
+    }
+
+    public function addPlayer(MemberId $memberId, $username)
+    {
+        $this->applyAndRecordThat(
+            new PlayerAdded(
+                $this->groupId,
+                new PlayerId(),
+                $memberId,
+                $username
             )
         );
     }
@@ -177,6 +195,16 @@ class Group extends AbstractEntity
             $event->getGameId(),
             $event->getHomeTeamPrediction(),
             $event->getAwayTeamPrediction()
+        );
+    }
+
+    protected function applyPlayerAdded(PlayerAdded $event)
+    {
+        $this->players[] = Player::create(
+            $event->getAggregateId(),
+            $event->getPlayerId(),
+            $event->getMemberId(),
+            $event->getUsername()
         );
     }
 

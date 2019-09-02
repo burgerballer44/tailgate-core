@@ -19,14 +19,13 @@ class UpdateUserHandler
     public function handle(UpdateUserCommand $command)
     {
         $userId = $command->getUserId();
-        $username = $command->getUsername();
         $email = $command->getEmail();
         $status = $command->getStatus();
         $role = $command->getRole();
 
         $user = $this->userRepository->get(UserId::fromString($userId));
 
-        $user->update($username, $email, $status, $role);
+        $user->update($email, $status, $role);
 
         $this->userRepository->add($user);
     }

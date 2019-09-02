@@ -34,7 +34,7 @@ class UpdateScoreForGroupHandlerTest extends TestCase
             UserId::fromString($this->userId)
         );
         $this->group->submitScore(UserId::fromString($this->userId), GameId::fromString('gameId'), 1, 2);
-        $this->scoreId = $this->group->getScores()[0]->getScoreId();
+        $this->scoreId = (string) $this->group->getScores()[0]->getScoreId();
         $this->group->clearRecordedEvents();
 
         $this->updateScoreForGroupCommand = new UpdateScoreForGroupCommand(
@@ -66,7 +66,7 @@ class UpdateScoreForGroupHandlerTest extends TestCase
 
                 return $events[0] instanceof GroupScoreUpdated
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
-                && $events[0]->getScoreId() instanceof ScoreId
+                && $events[0]->getScoreId()->equals(ScoreId::fromString($scoreId))
                 && $events[0]->getHomeTeamPrediction() == $homeTeamPrediction
                 && $events[0]->getAwayTeamPrediction() == $awayTeamPrediction
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;

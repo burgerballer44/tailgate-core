@@ -11,7 +11,6 @@ use Tailgate\Domain\Model\User\UserRegistered;
 class UserTest extends TestCase
 {
     private $userId;
-    private $username;
     private $passwordHash;
     private $email;
     private $uniqueKey;
@@ -19,19 +18,16 @@ class UserTest extends TestCase
     public function setUp()
     {
         $this->userId = UserId::fromString('userId');
-        $this->username = 'username';
-        $this->passwordHash = 'password';
         $this->email = 'email@email.com';
-        $this->email = 'randomString';
+        $this->passwordHash = 'password';
     }
 
     public function testUserShouldBeTheSameAfterReconstitution()
     {
         $user = User::create(
             $this->userId,
-            $this->username,
-            $this->passwordHash,
             $this->email,
+            $this->passwordHash,
             $this->uniqueKey
         );
         $events = $user->getRecordedEvents();
@@ -50,10 +46,9 @@ class UserTest extends TestCase
 
     public function testAUserCanBeCreated()
     {
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
 
         $this->assertEquals($this->userId, $user->getId());
-        $this->assertEquals($this->username, $user->getUsername());
         $this->assertEquals($this->passwordHash, $user->getPasswordHash());
         $this->assertEquals($this->email, $user->getEmail());
         $this->assertEquals(User::STATUS_PENDING, $user->getStatus());
@@ -62,7 +57,7 @@ class UserTest extends TestCase
 
     public function testAUserCanBeActivated()
     {
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
 
         $user->activate();
 
@@ -72,7 +67,7 @@ class UserTest extends TestCase
     public function testAPasswordCanBeUpdated()
     {
         $newPassword = 'newPassword';
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
 
         $user->updatePassword($newPassword);
 
@@ -83,7 +78,7 @@ class UserTest extends TestCase
     public function testAnEmailCanBeUpdated()
     {
         $newEmail = 'email@new.new';
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
 
         $user->updateEmail($newEmail);
 
@@ -93,15 +88,13 @@ class UserTest extends TestCase
 
     public function testAUserCanBeUpdated()
     {
-        $username = 'updatedUsername';
         $email = 'updatedEmail';
         $status = 'updatedStatus';
         $role = 'updatedRole';
-        $user = User::create($this->userId, $this->username, $this->passwordHash, $this->email, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
 
-        $user->update($username, $email, $status, $role);
+        $user->update($email, $status, $role);
 
-        $this->assertEquals($username, $user->getUsername());
         $this->assertEquals($email, $user->getEmail());
         $this->assertEquals($status, $user->getStatus());
         $this->assertEquals($role, $user->getRole());

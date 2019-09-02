@@ -15,7 +15,7 @@ class InMemoryEventStoreTest extends TestCase
     public function testItCanCommitOneDomainEvent()
     {
         $id = UserId::fromString('userId1');
-        $event = new UserRegistered($id, 'username1', 'password1', 'email1', 'status', 'role', 'randomString');
+        $event = new UserRegistered($id, 'email1', 'password1', 'status', 'role', 'randomString');
         $eventStore = new EventStore;
 
         $history = $eventStore->getAggregateHistoryFor($id);
@@ -41,9 +41,9 @@ class InMemoryEventStoreTest extends TestCase
         $id3 = UserId::fromString('userId3');
 
         $domainEvents = new DomainEvents([
-            new UserRegistered($id1, 'username1', 'password1', 'email1', 'status', 'role', 'randomString'),
-            new UserRegistered($id1, 'username2', 'password2', 'email2', 'status', 'role', 'randomString'),
-            new UserRegistered($id2, 'username3', 'password3', 'email3', 'status', 'role', 'randomString'),
+            new UserRegistered($id1, 'email1', 'password1', 'status', 'role', 'randomString'),
+            new UserRegistered($id1, 'email2', 'password2', 'status', 'role', 'randomString'),
+            new UserRegistered($id2, 'email3', 'password3', 'status', 'role', 'randomString'),
         ]);
         $eventStore = new EventStore;
 
