@@ -8,13 +8,15 @@ class MemberView
     private $groupId;
     private $userId;
     private $role;
+    private $allowMultiplePlayers;
 
-    public function __construct($memberId, $groupId, $userId, $role)
+    public function __construct($memberId, $groupId, $userId, $role, $allowMultiplePlayers)
     {
         $this->memberId = $memberId;
         $this->groupId = $groupId;
         $this->userId = $userId;
         $this->role = $role;
+        $this->allowMultiplePlayers = $allowMultiplePlayers;
     }
 
     public function getMemberId()
@@ -35,5 +37,10 @@ class MemberView
     public function getRole()
     {
         return $this->role;
+    }
+
+    public function getAllowMultiplePlayers()
+    {
+        return $this->allowMultiplePlayers;
     }
 }

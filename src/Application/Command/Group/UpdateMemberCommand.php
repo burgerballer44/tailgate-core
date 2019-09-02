@@ -7,12 +7,14 @@ class UpdateMemberCommand
     private $groupId;
     private $memberId;
     private $groupRole;
+    private $allowMultiplePlayers;
 
-    public function __construct(string $groupId, string $memberId, string $groupRole)
+    public function __construct(string $groupId, string $memberId, string $groupRole, string $allowMultiplePlayers)
     {
         $this->groupId = $groupId;
         $this->memberId = $memberId;
         $this->groupRole = $groupRole;
+        $this->allowMultiplePlayers = $allowMultiplePlayers;
     }
 
     public function getGroupId()
@@ -28,5 +30,10 @@ class UpdateMemberCommand
     public function getGroupRole()
     {
         return $this->groupRole;
+    }
+
+    public function getAllowMultiplePlayers()
+    {
+        return $this->allowMultiplePlayers;
     }
 }

@@ -10,13 +10,15 @@ class MemberUpdated implements DomainEvent, GroupDomainEvent
     private $groupId;
     private $memberId;
     private $groupRole;
+    private $allowMultiplePlayers;
     private $occurredOn;
 
-    public function __construct(GroupId $groupId, MemberId $memberId, $groupRole)
+    public function __construct(GroupId $groupId, MemberId $memberId, $groupRole, $allowMultiplePlayers)
     {
         $this->groupId = $groupId;
         $this->memberId = $memberId;
         $this->groupRole = $groupRole;
+        $this->allowMultiplePlayers = $allowMultiplePlayers;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
@@ -33,6 +35,11 @@ class MemberUpdated implements DomainEvent, GroupDomainEvent
     public function getGroupRole()
     {
         return $this->groupRole;
+    }
+
+    public function getAllowMultiplePlayers()
+    {
+        return $this->allowMultiplePlayers;
     }
 
     public function getOccurredOn()

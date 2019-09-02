@@ -31,7 +31,8 @@ class MemberViewRepository implements MemberViewRepositoryInterface
             $row['member_id'],
             $row['group_id'],
             $row['user_id'],
-            $row['role']
+            $row['role'],
+            $row['allow_multiple']
         );
     }
 
@@ -47,7 +48,8 @@ class MemberViewRepository implements MemberViewRepositoryInterface
                 $row['member_id'],
                 $row['group_id'],
                 $row['user_id'],
-                $row['role']
+                $row['role'],
+                $row['allow_multiple']
             );
         }
 

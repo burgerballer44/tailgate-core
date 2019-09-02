@@ -8,6 +8,7 @@ use Tailgate\Domain\Model\Group\GroupProjectionInterface;
 use Tailgate\Domain\Model\Group\MemberAdded;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Domain\Model\Group\GroupUpdated;
+use Tailgate\Domain\Model\Group\MemberUpdated;
 use Tailgate\Domain\Model\Group\MemberDeleted;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\GroupScoreUpdated;
@@ -42,8 +43,8 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectMemberAdded(MemberAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `member` (member_id, group_id, user_id, role, created_at)
-            VALUES (:member_id, :group_id, :user_id, :role, :created_at)'
+            'INSERT INTO `member` (member_id, group_id, user_id, role, allow_multiple, created_at)
+            VALUES (:member_id, :group_id, :user_id, :role, :allow_multiple, :created_at)'
         );
 
         $stmt->execute([
@@ -51,6 +52,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':member_id' => $event->getMemberId(),
             ':user_id' => $event->getUserId(),
             ':role' => $event->getGroupRole(),
+            ':allow_multiple' => $event->getAllowMultiplePlayers(),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
         ]);
     }
@@ -112,6 +114,21 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
 
         $stmt = $this->pdo->prepare('DELETE FROM `group` WHERE :group_id = group_id');
         $stmt->execute([':group_id' => $event->getAggregateId()]);
+    }
+
+    public function projectMemberUpdated(MemberUpdated $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE `member` (member_id, role, allow_multiple)
+            VALUES (:member_id, :role, :allow_multiple)
+            WHERE :member_id = member_id'
+        );
+
+        $stmt->execute([
+            ':member_id' => $event->getMemberId(),
+            ':role' => $event->getGroupRole(),
+            ':allow_multiple' => $event->getAllowMultiplePlayers()
+        ]);
     }
 
     public function projectGroupScoreUpdated(GroupScoreUpdated $event)

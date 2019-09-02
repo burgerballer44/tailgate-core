@@ -105,6 +105,7 @@ class GroupTest extends TestCase
         $this->assertTrue($members[1]->getGroupId()->equals($this->groupId));
         $this->assertTrue($members[1]->getUserId()->equals($userId));
         $this->assertEquals($members[1]->getGroupRole(), Group::G_ROLE_MEMBER);
+        $this->assertEquals($members[1]->getAllowMultiplePlayers(), Group::SINGLE_PLAYER);
     }
 
     public function testThereAreNoMembersAndScoresWhenGroupIsDeleted()
@@ -184,18 +185,21 @@ class GroupTest extends TestCase
 
     public function testAMemberCanBeUpdated()
     {
-        $groupName = 'updatedgroupName';
-        $ownerId = UserId::fromString('updatedownerId');
-
+        $groupRole = 'updatedgroupRole';
+        $allowMultiplePlayers = 'updatedAllowMultiplePlayers';
         $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
 
-        $group->update($groupName, $ownerId);
+        $members = $group->getMembers();
+        $this->assertNotEquals($groupRole, $members[0]->getGroupRole());
+        $this->assertNotEquals($allowMultiplePlayers, $members[0]->getAllowMultiplePlayers());
 
-        $this->assertEquals($this->groupId, $group->getId());
-        $this->assertEquals($groupName, $group->getName());
-        $this->assertEquals($ownerId, $group->getOwnerId());
-        $this->assertCount(1, $group->getMembers());
-        $this->assertEmpty($group->getScores());
+        $memberId = $group->getMembers()[0]->getMemberId();
+        $group->updateMember($memberId, $groupRole, $allowMultiplePlayers);
+
+        $members = $group->getMembers();
+        $this->assertEquals($this->groupId, $members[0]->getGroupId());
+        $this->assertEquals($groupRole, $members[0]->getGroupRole());
+        $this->assertEquals($allowMultiplePlayers, $members[0]->getAllowMultiplePlayers());
     }
 
     public function testAScoreCanBeUpdated()

@@ -9,31 +9,36 @@ class Member
     private $groupId;
     private $memberId;
     private $userId;
+    private $allowMultiplePlayers;
     private $groupRole;
 
     private function __construct(
         $groupId,
         $memberId,
         $userId,
-        $groupRole
+        $groupRole,
+        $allowMultiplePlayers
     ) {
         $this->groupId = $groupId;
         $this->memberId = $memberId;
         $this->userId = $userId;
         $this->groupRole = $groupRole;
+        $this->allowMultiplePlayers = $allowMultiplePlayers;
     }
 
     public static function create(
         GroupId $groupId,
         MemberId $memberId,
         UserId $userId,
-        $groupRole
+        $groupRole,
+        $allowMultiplePlayers
     ) {
         $newMember = new Member(
             $groupId,
             $memberId,
             $userId,
-            $groupRole
+            $groupRole,
+            $allowMultiplePlayers
         );
 
         return $newMember;
@@ -59,8 +64,18 @@ class Member
         return $this->groupRole;
     }
 
+    public function getAllowMultiplePlayers()
+    {
+        return $this->allowMultiplePlayers;
+    }
+
     public function updateGroupRole(string $groupRole)
     {
         $this->groupRole = $groupRole;
+    }
+
+    public function updateAllowMultiplePlayers(string $allowMultiplePlayers)
+    {
+        $this->allowMultiplePlayers = $allowMultiplePlayers;
     }
 }

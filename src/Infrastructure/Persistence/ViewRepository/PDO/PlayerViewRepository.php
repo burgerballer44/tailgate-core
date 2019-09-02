@@ -25,7 +25,7 @@ class PlayerViewRepository implements PlayerViewRepositoryInterface
         $stmt->execute([':player_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("User not found.");
+            throw new RepositoryException("Player not found.");
         }
 
         return new PlayerView(

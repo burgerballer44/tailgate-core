@@ -18,6 +18,7 @@ class UpdateMemberHandlerTest extends TestCase
     private $userId = 'userId';
     private $groupName = 'groupName';
     private $groupRole = 'groupRole';
+    private $allowMultiplePlayers = 'pizza';
     private $group;
     private $memberId;
     private $updateMemberCommand;
@@ -36,7 +37,8 @@ class UpdateMemberHandlerTest extends TestCase
         $this->updateMemberCommand = new UpdateMemberCommand(
             $this->groupId,
             $this->memberId,
-            $this->groupRole
+            $this->groupRole,
+            $this->allowMultiplePlayers
         );
     }
 
@@ -45,6 +47,7 @@ class UpdateMemberHandlerTest extends TestCase
         $groupId = $this->groupId;
         $memberId = $this->memberId;
         $groupRole = $this->groupRole;
+        $allowMultiplePlayers = $this->allowMultiplePlayers;
         $group = $this->group;
 
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
@@ -55,13 +58,14 @@ class UpdateMemberHandlerTest extends TestCase
         // the add method should be called once
         // the group object should have the MemberUpdated event
         $groupRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($group) use ($groupId, $memberId, $groupRole) {
+            function ($group) use ($groupId, $memberId, $groupRole, $allowMultiplePlayers) {
                 $events = $group->getRecordedEvents();
 
                 return $events[0] instanceof MemberUpdated
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getMemberId()->equals(MemberId::fromString($memberId))
                 && $events[0]->getGroupRole() == $groupRole
+                && $events[0]->getAllowMultiplePlayers() == $allowMultiplePlayers
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

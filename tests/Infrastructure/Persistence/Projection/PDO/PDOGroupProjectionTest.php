@@ -11,6 +11,7 @@ use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Domain\Model\Group\GroupUpdated;
+use Tailgate\Domain\Model\Group\MemberUpdated;
 use Tailgate\Domain\Model\Group\MemberDeleted;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\GroupScoreUpdated;
@@ -69,15 +70,16 @@ class PDOGroupProjectionTest extends TestCase
             GroupId::fromString('groupId'),
             MemberId::fromString('memberId'),
             UserId::fromString('userId'),
-            'role'
+            'role',
+            0
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `member` (member_id, group_id, user_id, role, created_at)
-            VALUES (:member_id, :group_id, :user_id, :role, :created_at)')
+            ->with('INSERT INTO `member` (member_id, group_id, user_id, role, allow_multiple, created_at)
+            VALUES (:member_id, :group_id, :user_id, :role, :allow_multiple, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -89,10 +91,42 @@ class PDOGroupProjectionTest extends TestCase
                 ':member_id' => $event->getMemberId(),
                 ':user_id' => $event->getUserId(),
                 ':role' => $event->getGroupRole(),
+                ':allow_multiple' => $event->getAllowMultiplePlayers(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
 
         $this->projection->projectMemberAdded($event);
+    }
+
+    public function testItCanProjectMemberUpdated()
+    {
+        $event = new MemberUpdated(
+            GroupId::fromString('groupId'),
+            MemberId::fromString('memberId'),
+            'role',
+            0
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('UPDATE `member` (member_id, role, allow_multiple)
+            VALUES (:member_id, :role, :allow_multiple)
+            WHERE :member_id = member_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':member_id' => $event->getMemberId(),
+                ':role' => $event->getGroupRole(),
+                ':allow_multiple' => $event->getAllowMultiplePlayers()
+            ]);
+
+        $this->projection->projectMemberUpdated($event);
     }
 
 

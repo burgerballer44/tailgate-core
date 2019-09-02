@@ -21,12 +21,14 @@ class UpdateMemberHandler
         $groupId = $command->getGroupId();
         $memberId = $command->getMemberId();
         $groupRole = $command->getGroupRole();
+        $allowMultiplePlayers = $command->getAllowMultiplePlayers();
 
         $group = $this->groupRepository->get(GroupId::fromString($groupId));
 
         $group->updateMember(
             MemberId::fromString($memberId),
-            $groupRole
+            $groupRole,
+            $allowMultiplePlayers
         );
 
         $this->groupRepository->add($group);

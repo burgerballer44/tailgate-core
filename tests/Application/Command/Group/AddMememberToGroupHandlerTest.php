@@ -58,6 +58,7 @@ class AddMemberToGroupHandlerTest extends TestCase
                 && $events[0]->getMemberId() instanceof MemberId
                 && $events[0]->getUserId()->equals(UserId::fromString($userId))
                 && $events[0]->getGroupRole() == Group::G_ROLE_MEMBER
+                && $events[0]->getAllowMultiplePlayers() == Group::SINGLE_PLAYER
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

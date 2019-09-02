@@ -12,6 +12,9 @@ class Group extends AbstractEntity
     const G_ROLE_ADMIN = 'Group-Admin'; // someone who can do manage the gorup
     const G_ROLE_MEMBER = 'Group-Member'; // regular user who can submit scores
 
+    const SINGLE_PLAYER = 0;  // member can not add multiple players to group
+    const MULTIPLE_PLAYERS = 1;  // member can add multiple players to group
+
     private $groupId;
     private $name;
     private $ownerId;
@@ -39,7 +42,8 @@ class Group extends AbstractEntity
                 $groupId,
                 new MemberId(),
                 $ownerId,
-                Group::G_ROLE_ADMIN
+                Group::G_ROLE_ADMIN,
+                Group::MULTIPLE_PLAYERS,
             )
         );
 
@@ -151,7 +155,8 @@ class Group extends AbstractEntity
                 $this->groupId,
                 new MemberId(),
                 $userId,
-                Group::G_ROLE_MEMBER
+                Group::G_ROLE_MEMBER,
+                Group::SINGLE_PLAYER,
             )
         );
     }
@@ -163,13 +168,14 @@ class Group extends AbstractEntity
         );
     }
 
-    public function updateMember(MemberId $memberId, $groupRole)
+    public function updateMember(MemberId $memberId, $groupRole, $allowMultiple)
     {
         $this->applyAndRecordThat(
             new MemberUpdated(
                 $this->groupId,
                 $memberId,
-                $groupRole
+                $groupRole,
+                $allowMultiple
             )
         );
     }
@@ -214,7 +220,8 @@ class Group extends AbstractEntity
             $event->getAggregateId(),
             $event->getMemberId(),
             $event->getUserId(),
-            $event->getGroupRole()
+            $event->getGroupRole(),
+            $event->getAllowMultiplePlayers()
         );
     }
 
@@ -228,6 +235,7 @@ class Group extends AbstractEntity
     {
         $member = $this->getMemberById($event->getMemberId());
         $member->updateGroupRole($event->getGroupRole());
+        $member->updateAllowMultiplePlayers($event->getAllowMultiplePlayers());
     }
 
     protected function applyGroupScoreUpdated(GroupScoreUpdated $event)

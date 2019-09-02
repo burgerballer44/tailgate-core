@@ -71,6 +71,7 @@ class PDOMemberViewRepositoryTest extends TestCase
                 'group_id' => 'blah',
                 'user_id' => 'blah',
                 'role' => 'blah',
+                'allow_multiple' => 'blah',
             ]);
 
         $this->viewRepository->get($memberId);
