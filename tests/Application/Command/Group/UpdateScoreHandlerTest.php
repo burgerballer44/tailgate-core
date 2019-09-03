@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\UpdateScoreForGroupCommand;
 use Tailgate\Application\Command\Group\UpdateScoreForGroupHandler;
 use Tailgate\Domain\Model\Group\Group;
+use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -21,6 +22,7 @@ class UpdateScoreForGroupHandlerTest extends TestCase
     private $groupRole = 'groupRole';
     private $homeTeamPrediction = '70';
     private $awayTeamPrediction = '60';
+    private $playerId = '';
     private $group;
     private $scoreId;
     private $updateScoreForGroupCommand;
@@ -33,7 +35,10 @@ class UpdateScoreForGroupHandlerTest extends TestCase
             $this->groupName,
             UserId::fromString($this->userId)
         );
-        $this->group->submitScore(UserId::fromString($this->userId), GameId::fromString('gameId'), 1, 2);
+        $memberId = $this->group->getMembers()[0]->getMemberId();
+        $this->group->addPlayer($memberId, 'username');
+        $playerId = $this->group->getPlayers()[0]->getPlayerId();
+        $this->group->submitScore($playerId, GameId::fromString('gameId'), 1, 2);
         $this->scoreId = (string) $this->group->getScores()[0]->getScoreId();
         $this->group->clearRecordedEvents();
 

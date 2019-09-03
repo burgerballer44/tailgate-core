@@ -77,14 +77,18 @@ class GroupTest extends TestCase
         $homeTeamPrediction = '70';
         $awayTeamPrediction = '60';
 
-        $group->submitScore($userId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
+        $memberId = $group->getMembers()[0]->getMemberId();
+        $group->addPlayer($memberId, 'username');
+        $playerId = $group->getPlayers()[0]->getPlayerId();
+
+        $group->submitScore($playerId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
         $scores = $group->getScores();
 
         $this->assertCount(1, $scores);
         $this->assertTrue($scores[0] instanceof Score);
         $this->assertTrue($scores[0]->getScoreId() instanceof ScoreId);
         $this->assertTrue($scores[0]->getGroupId()->equals($this->groupId));
-        $this->assertTrue($scores[0]->getUserId()->equals($userId));
+        $this->assertTrue($scores[0]->getPlayerId()->equals($playerId));
         $this->assertTrue($scores[0]->getGameId()->equals($gameId));
         $this->assertEquals($homeTeamPrediction, $scores[0]->getHomeTeamPrediction());
         $this->assertEquals($awayTeamPrediction, $scores[0]->getAwayTeamPrediction());
@@ -116,7 +120,12 @@ class GroupTest extends TestCase
         $homeTeamPrediction = '70';
         $awayTeamPrediction = '60';
         $group->addMember($userId);
-        $group->submitScore($userId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
+
+        $memberId = $group->getMembers()[0]->getMemberId();
+        $group->addPlayer($memberId, 'username');
+        $playerId = $group->getPlayers()[0]->getPlayerId();
+
+        $group->submitScore($playerId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
 
         $group->delete();
 
@@ -154,7 +163,12 @@ class GroupTest extends TestCase
         $gameId = GameId::fromString('gameID');
         $homeTeamPrediction = '70';
         $awayTeamPrediction = '60';
-        $group->submitScore($this->ownerId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
+
+        $memberId = $group->getMembers()[0]->getMemberId();
+        $group->addPlayer($memberId, 'username');
+        $playerId = $group->getPlayers()[0]->getPlayerId();
+
+        $group->submitScore($playerId, $gameId, $homeTeamPrediction, $awayTeamPrediction);
         $scores = $group->getScores();
         $this->assertCount(1, $scores);
 
@@ -208,7 +222,12 @@ class GroupTest extends TestCase
         $awayTeamPrediction = '600';
         $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
         $gameId = GameId::fromString('gameID');
-        $group->submitScore($this->ownerId, $gameId, 1, 2);
+
+        $memberId = $group->getMembers()[0]->getMemberId();
+        $group->addPlayer($memberId, 'username');
+        $playerId = $group->getPlayers()[0]->getPlayerId();
+
+        $group->submitScore($playerId, $gameId, 1, 2);
         $scores = $group->getScores();
         $scoreId = $scores[0]->getScoreId();
 
@@ -222,7 +241,7 @@ class GroupTest extends TestCase
     }
 
     public function testGroupGetsAPlayerWhenPlayerIsAdded()
-    {   
+    {
         $username = 'username';
         $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
         $members = $group->getMembers();

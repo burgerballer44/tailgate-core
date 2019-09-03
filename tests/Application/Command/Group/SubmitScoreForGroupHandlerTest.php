@@ -7,6 +7,7 @@ use Tailgate\Application\Command\Group\SubmitScoreForGroupCommand;
 use Tailgate\Application\Command\Group\SubmitScoreForGroupHandler;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\Score;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
@@ -17,9 +18,12 @@ use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 class SubmitScoreForGroupHandlerTest extends TestCase
 {
     private $groupId = 'groupId';
+    private $playerId = '';
     private $userId = 'userId';
     private $gameId = 'gameId';
     private $groupName = 'groupName';
+    private $memberId = '';
+    private $username = 'username';
     private $homeTeamPrediction = '70';
     private $awayTeamPrediction = '60';
     private $group;
@@ -27,17 +31,22 @@ class SubmitScoreForGroupHandlerTest extends TestCase
 
     public function setUp()
     {
-        // create a group and clear events
+        // create a group, add a player for the group owner, and clear events
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
             UserId::fromString($this->userId)
         );
+        $memberId = $this->group->getMembers()[0]->getMemberId();
+        $this->memberId = (string) $memberId;
+        $this->group->addPlayer($memberId, $this->username);
         $this->group->clearRecordedEvents();
+
+        $this->playerId = (string) $this->group->getPlayers()[0]->getPlayerId();
 
         $this->submitScoreForGroupCommand = new SubmitScoreForGroupCommand(
             $this->groupId,
-            $this->userId,
+            $this->playerId,
             $this->gameId,
             $this->homeTeamPrediction,
             $this->awayTeamPrediction
@@ -47,7 +56,7 @@ class SubmitScoreForGroupHandlerTest extends TestCase
     public function testItAddsScoreSubmittedEventToAGroupInTheGroupRepository()
     {
         $groupId = $this->groupId;
-        $userId = $this->userId;
+        $playerId = $this->playerId;
         $gameId = $this->gameId;
         $groupName = $this->groupName;
         $homeTeamPrediction = $this->homeTeamPrediction;
@@ -62,13 +71,13 @@ class SubmitScoreForGroupHandlerTest extends TestCase
         // the add method should be called once
         // the group object should have the ScoreSubmitted event
         $groupRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($group) use ($groupId, $userId, $gameId, $homeTeamPrediction, $awayTeamPrediction) {
+            function ($group) use ($groupId, $playerId, $gameId, $homeTeamPrediction, $awayTeamPrediction) {
                 $events = $group->getRecordedEvents();
 
                 return $events[0] instanceof ScoreSubmitted
                 && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
                 && $events[0]->getScoreId() instanceof ScoreId
-                && $events[0]->getUserId()->equals(UserId::fromString($userId))
+                && $events[0]->getPlayerId()->equals(PlayerId::fromString($playerId))
                 && $events[0]->getGameId()->equals(GameId::fromString($gameId))
                 && $events[0]->getHomeTeamPrediction() == $homeTeamPrediction
                 && $events[0]->getAwayTeamPrediction() == $awayTeamPrediction

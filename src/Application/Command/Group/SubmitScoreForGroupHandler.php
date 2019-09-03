@@ -5,7 +5,7 @@ namespace Tailgate\Application\Command\Group;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Group\PlayerId;
 
 class SubmitScoreForGroupHandler
 {
@@ -19,7 +19,7 @@ class SubmitScoreForGroupHandler
     public function handle(SubmitScoreForGroupCommand $command)
     {
         $groupId = $command->getGroupId();
-        $userId = $command->getUserId();
+        $playerId = $command->getPlayerId();
         $gameId = $command->getGameId();
         $homeTeamPrediction = $command->getHomeTeamPrediction();
         $awayTeamPrediction = $command->getAwayTeamPrediction();
@@ -27,7 +27,7 @@ class SubmitScoreForGroupHandler
         $group = $this->groupRepository->get(GroupId::fromString($groupId));
 
         $group->submitScore(
-            UserId::fromString($userId),
+            PlayerId::fromString($playerId),
             GameId::fromString($gameId),
             $homeTeamPrediction,
             $awayTeamPrediction

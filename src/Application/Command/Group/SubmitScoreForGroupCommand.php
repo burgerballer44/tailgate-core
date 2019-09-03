@@ -5,20 +5,20 @@ namespace Tailgate\Application\Command\Group;
 class SubmitScoreForGroupCommand
 {
     private $groupId;
-    private $userId;
+    private $playerId;
     private $gameId;
     private $homeTeamPrediction;
     private $awayTeamPrediction;
 
     public function __construct(
         string $groupId,
-        string $userId,
+        string $playerId,
         string $gameId,
         int $homeTeamPrediction,
         int $awayTeamPrediction
     ) {
         $this->groupId = $groupId;
-        $this->userId = $userId;
+        $this->playerId = $playerId;
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
         $this->awayTeamPrediction = $awayTeamPrediction;
@@ -29,9 +29,9 @@ class SubmitScoreForGroupCommand
         return $this->groupId;
     }
     
-    public function getUserId()
+    public function getPlayerId()
     {
-        return $this->userId;
+        return $this->playerId;
     }
 
     public function getGameId()

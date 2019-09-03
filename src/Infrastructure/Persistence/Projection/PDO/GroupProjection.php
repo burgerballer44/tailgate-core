@@ -60,14 +60,14 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectScoreSubmitted(ScoreSubmitted $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `score` (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
-            VALUES (:score_id, :group_id, :user_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)'
+            'INSERT INTO `score` (score_id, group_id, player_id, game_id, home_team_prediction, away_team_prediction, created_at)
+            VALUES (:score_id, :group_id, :player_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)'
         );
 
         $stmt->execute([
             ':score_id' => $event->getScoreId(),
             ':group_id' => $event->getAggregateId(),
-            ':user_id' => $event->getUserId(),
+            ':player_id' => $event->getPlayerId(),
             ':game_id' => $event->getGameId(),
             ':home_team_prediction' => $event->getHomeTeamPrediction(),
             ':away_team_prediction' => $event->getAwayTeamPrediction(),

@@ -2,14 +2,13 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Season\GameId;
 
 class Score
 {
     private $scoreId;
     private $groupId;
-    private $userId;
+    private $playerId;
     private $gameId;
     private $homeTeamPrediction;
     private $awayTeamPrediction;
@@ -17,14 +16,14 @@ class Score
     private function __construct(
         $scoreId,
         $groupId,
-        $userId,
+        $playerId,
         $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
     ) {
         $this->scoreId = $scoreId;
         $this->groupId = $groupId;
-        $this->userId = $userId;
+        $this->playerId = $playerId;
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
         $this->awayTeamPrediction = $awayTeamPrediction;
@@ -33,7 +32,7 @@ class Score
     public static function create(
         GroupId $groupId,
         ScoreId $scoreId,
-        UserId $userId,
+        PlayerId $playerId,
         GameId $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
@@ -41,7 +40,7 @@ class Score
         $newScore = new Score(
             $scoreId,
             $groupId,
-            $userId,
+            $playerId,
             $gameId,
             $homeTeamPrediction,
             $awayTeamPrediction
@@ -60,9 +59,9 @@ class Score
         return $this->groupId;
     }
 
-    public function getUserId()
+    public function getPlayerId()
     {
-        return $this->userId;
+        return $this->playerId;
     }
 
     public function getGameId()

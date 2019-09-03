@@ -17,6 +17,7 @@ class DeleteScoreHandlerTest extends TestCase
 {
     private $groupId = 'groupId';
     private $userId = 'userId';
+    private $playerId = '';
     private $scoreId;
     private $groupName = 'groupName';
     private $group;
@@ -30,7 +31,10 @@ class DeleteScoreHandlerTest extends TestCase
             $this->groupName,
             UserId::fromString($this->userId)
         );
-        $this->group->submitScore(UserId::fromString($this->userId), GameId::fromString('gameID'), 70, 60);
+        $memberId = $this->group->getMembers()[0]->getMemberId();
+        $this->group->addPlayer($memberId, 'username');
+        $playerId = $this->group->getPlayers()[0]->getPlayerId();
+        $this->group->submitScore($playerId, GameId::fromString('gameID'), 70, 60);
         $this->scoreId = (string) $this->group->getScores()[0]->getScoreId();
         $this->group->clearRecordedEvents();
 

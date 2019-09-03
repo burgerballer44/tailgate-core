@@ -21,7 +21,7 @@ class DeleteUserHandlerTest extends TestCase
 
     public function setUp()
     {
-        // create a team and clear events
+        // create a user and clear events
         $this->user = User::create(
             UserId::fromString($this->userId),
             $this->email,

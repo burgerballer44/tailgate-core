@@ -75,5 +75,4 @@ class PDOPlayerViewRepositoryTest extends TestCase
 
         $this->viewRepository->get($playerId);
     }
-
 }

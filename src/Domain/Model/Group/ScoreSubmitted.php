@@ -3,14 +3,14 @@
 namespace Tailgate\Domain\Model\Group;
 
 use Buttercup\Protects\DomainEvent;
-use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Season\GameId;
 
 class ScoreSubmitted implements DomainEvent, GroupDomainEvent
 {
     private $groupId;
     private $scoreId;
-    private $userId;
+    private $playerId;
     private $gameId;
     private $homeTeamPrediction;
     private $awayTeamPrediction;
@@ -19,14 +19,14 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
     public function __construct(
         GroupId $groupId,
         ScoreId $scoreId,
-        UserId $userId,
+        PlayerId $playerId,
         GameId $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
     ) {
         $this->groupId = $groupId;
         $this->scoreId = $scoreId;
-        $this->userId = $userId;
+        $this->playerId = $playerId;
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
         $this->awayTeamPrediction = $awayTeamPrediction;
@@ -43,9 +43,9 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
         return $this->scoreId;
     }
 
-    public function getUserId()
+    public function getPlayerId()
     {
-        return $this->userId;
+        return $this->playerId;
     }
 
     public function getGameId()

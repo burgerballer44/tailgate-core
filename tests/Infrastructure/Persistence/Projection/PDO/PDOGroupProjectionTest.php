@@ -135,7 +135,7 @@ class PDOGroupProjectionTest extends TestCase
         $event = new ScoreSubmitted(
             GroupId::fromString('groupId'),
             ScoreId::fromString('scoreId'),
-            UserId::fromString('userId'),
+            PlayerId::fromString('playerId'),
             GameId::fromString('gameId'),
             80,
             70
@@ -145,8 +145,8 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `score` (score_id, group_id, user_id, game_id, home_team_prediction, away_team_prediction, created_at)
-            VALUES (:score_id, :group_id, :user_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)')
+            ->with('INSERT INTO `score` (score_id, group_id, player_id, game_id, home_team_prediction, away_team_prediction, created_at)
+            VALUES (:score_id, :group_id, :player_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -156,7 +156,7 @@ class PDOGroupProjectionTest extends TestCase
             ->with([
                 ':group_id' => $event->getAggregateId(),
                 ':score_id' => $event->getScoreId(),
-                ':user_id' => $event->getUserId(),
+                ':player_id' => $event->getPlayerId(),
                 ':game_id' => $event->getGameId(),
                 ':home_team_prediction' => $event->getHomeTeamPrediction(),
                 ':away_team_prediction' => $event->getAwayTeamPrediction(),

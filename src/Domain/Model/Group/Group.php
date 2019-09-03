@@ -110,13 +110,13 @@ class Group extends AbstractEntity
         );
     }
 
-    public function submitScore(UserId $userId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
+    public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
     {
         $this->applyAndRecordThat(
             new ScoreSubmitted(
                 $this->groupId,
                 new ScoreId(),
-                $userId,
+                $playerId,
                 $gameId,
                 $homeTeamPrediction,
                 $awayTeamPrediction
@@ -197,7 +197,7 @@ class Group extends AbstractEntity
         $this->scores[] = Score::create(
             $event->getAggregateId(),
             $event->getScoreId(),
-            $event->getUserId(),
+            $event->getPlayerId(),
             $event->getGameId(),
             $event->getHomeTeamPrediction(),
             $event->getAwayTeamPrediction()
