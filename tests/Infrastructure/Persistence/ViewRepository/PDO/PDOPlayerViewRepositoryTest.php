@@ -75,4 +75,29 @@ class PDOPlayerViewRepositoryTest extends TestCase
 
         $this->viewRepository->get($playerId);
     }
+
+    public function testItCanGetAllPlayersOfAGroup()
+    {
+        $groupId = GroupId::fromString('groupId');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `player` WHERE group_id = :group_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':group_id' => (string) $groupId]);
+
+        // fetch method called
+        $this->pdoStatementMock
+            ->expects($this->atLeastOnce())
+            ->method('fetch');
+
+        $this->viewRepository->getAllByGroup($groupId);
+    }
 }

@@ -8,6 +8,7 @@ class GroupView
     private $name;
     private $ownerId;
     private $members = [];
+    private $players = [];
     private $scores = [];
 
     public function __construct($groupId, $name, $ownerId)
@@ -37,6 +38,11 @@ class GroupView
         return $this->members;
     }
 
+    public function getPlayers()
+    {
+        return $this->players;
+    }
+
     public function getScores()
     {
         return $this->scores;
@@ -48,6 +54,15 @@ class GroupView
             $this->members = $memberView;
         } else {
             $this->members[] = $memberView;
+        }
+    }
+
+    public function addPlayerViews($playerView)
+    {
+        if (is_array($playerView)) {
+            $this->players = $playerView;
+        } else {
+            $this->players[] = $playerView;
         }
     }
 

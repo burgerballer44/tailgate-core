@@ -36,8 +36,7 @@ class EventStore implements EventStoreInterface
     public function commit(DomainEvents $events)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO event (aggregate_id, type, created_at, data)
-            VALUES (:aggregate_id, :type, :created_at, :data)'
+            'INSERT INTO event (aggregate_id, type, created_at, data) VALUES (:aggregate_id, :type, :created_at, :data)'
         );
 
         foreach ($events as $event) {

@@ -62,8 +62,7 @@ class PDOEventStoreTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO event (aggregate_id, type, created_at, data)
-            VALUES (:aggregate_id, :type, :created_at, :data)')
+            ->with('INSERT INTO event (aggregate_id, type, created_at, data) VALUES (:aggregate_id, :type, :created_at, :data)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called three times

@@ -36,10 +36,10 @@ class PlayerViewRepository implements PlayerViewRepositoryInterface
         );
     }
 
-    public function all()
+    public function getAllByGroup(GroupId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `player`');
-        $stmt->execute();
+        $stmt = $this->pdo->prepare('SELECT * FROM `player` WHERE group_id = :group_id');
+        $stmt->execute([':group_id' => (string) $id]);
 
         $players = [];
 
