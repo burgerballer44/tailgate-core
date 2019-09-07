@@ -6,11 +6,13 @@ class UpdatePasswordCommand
 {
     private $userId;
     private $password;
+    private $confirmPassword;
 
-    public function __construct(string $userId, string $password)
+    public function __construct(string $userId, string $password, string $confirmPassword)
     {
         $this->userId = $userId;
         $this->password = $password;
+        $this->confirmPassword = $confirmPassword;
     }
 
     public function getUserId()
@@ -21,5 +23,10 @@ class UpdatePasswordCommand
     public function getPassword()
     {
         return $this->password;
+    }
+
+    public function getConfirmPassword()
+    {
+        return $this->confirmPassword;
     }
 }

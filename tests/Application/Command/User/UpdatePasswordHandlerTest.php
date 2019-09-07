@@ -20,6 +20,7 @@ class UpdatePasswordHandlerTest extends TestCase
     private $user;
     private $updatePasswordCommand;
     private $newPasswordHash = 'newPassword';
+    private $newPasswordHashConfirm = 'newPassword';
 
     public function setUp()
     {
@@ -32,7 +33,7 @@ class UpdatePasswordHandlerTest extends TestCase
         );
         $this->user->clearRecordedEvents();
 
-        $this->updatePasswordCommand = new UpdatePasswordCommand($this->userId, $this->newPasswordHash);
+        $this->updatePasswordCommand = new UpdatePasswordCommand($this->userId, $this->newPasswordHash, $this->newPasswordHashConfirm);
     }
 
     public function testItAddsAPasswordUpdatedRepository()
