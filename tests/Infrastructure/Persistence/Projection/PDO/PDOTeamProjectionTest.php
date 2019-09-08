@@ -72,8 +72,7 @@ class PDOTeamProjectionTest extends TestCase
             ->with([
                 ':team_id' => $event->getAggregateId(),
                 ':designation' => $event->getDesignation(),
-                ':mascot' => $event->getMascot(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':mascot' => $event->getMascot()
             ]);
 
         $this->projection->projectTeamUpdated($event);

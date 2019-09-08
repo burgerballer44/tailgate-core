@@ -44,8 +44,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
         $stmt->execute([
             ':team_id' => $event->getAggregateId(),
             ':designation' => $event->getDesignation(),
-            ':mascot' => $event->getMascot(),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':mascot' => $event->getMascot()
         ]);
     }
 
