@@ -111,8 +111,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `member` (member_id, role, allow_multiple)
-            VALUES (:member_id, :role, :allow_multiple)
+            ->with('UPDATE `member` SET member_id = :member_id, role =:role, allow_multiple = :allow_multiple
             WHERE :member_id = member_id')
             ->willReturn($this->pdoStatementMock);
 
@@ -178,8 +177,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `group` (name, owner_id)
-            VALUES (:name, :owner_id)
+            ->with('UPDATE `group` SET name = :name, owner_id = :owner_id
             WHERE :group_id = group_id')
             ->willReturn($this->pdoStatementMock);
 
@@ -285,8 +283,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `score` (home_team_prediction, away_team_prediction)
-            VALUES (:home_team_prediction, :away_team_prediction)
+            ->with('UPDATE `score` SET home_team_prediction = :home_team_prediction, away_team_prediction = :away_team_prediction
             WHERE :score_id = score_id')
             ->willReturn($this->pdoStatementMock);
 

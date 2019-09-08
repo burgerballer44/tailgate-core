@@ -111,8 +111,7 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `game` (home_team_score, away_team_score)
-            SET (:home_team_score, :away_team_score)
+            ->with('UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score
             WHERE game_id = :game_id')
             ->willReturn($this->pdoStatementMock);
 
@@ -189,8 +188,7 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `season` (sport, type, name, season_start, season_end)
-            VALUES (:sport, :type, :name, :season_start, :season_end)
+            ->with('UPDATE `season` SET sport = :sport, type = :type, name = :name, season_start = :season_start, season_end = :season_end)
             WHERE :season_id = season_id')
             ->willReturn($this->pdoStatementMock);
 

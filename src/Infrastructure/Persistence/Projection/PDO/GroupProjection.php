@@ -78,8 +78,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectGroupUpdated(GroupUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `group` (name, owner_id)
-            VALUES (:name, :owner_id)
+            'UPDATE `group` SET name = :name, owner_id = :owner_id
             WHERE :group_id = group_id'
         );
 
@@ -119,8 +118,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectMemberUpdated(MemberUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `member` (member_id, role, allow_multiple)
-            VALUES (:member_id, :role, :allow_multiple)
+            'UPDATE `member` SET member_id = :member_id, role =:role, allow_multiple = :allow_multiple
             WHERE :member_id = member_id'
         );
 
@@ -134,8 +132,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectGroupScoreUpdated(GroupScoreUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `score` (home_team_prediction, away_team_prediction)
-            VALUES (:home_team_prediction, :away_team_prediction)
+            'UPDATE `score` SET home_team_prediction = :home_team_prediction, away_team_prediction = :away_team_prediction
             WHERE :score_id = score_id'
         );
 

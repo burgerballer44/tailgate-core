@@ -59,8 +59,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectGameScoreUpdated(GameScoreUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `game` (home_team_score, away_team_score)
-            SET (:home_team_score, :away_team_score)
+            'UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score
             WHERE game_id = :game_id'
         );
 
@@ -90,8 +89,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectSeasonUpdated(SeasonUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `season` (sport, type, name, season_start, season_end)
-            VALUES (:sport, :type, :name, :season_start, :season_end)
+            'UPDATE `season` SET sport = :sport, type = :type, name = :name, season_start = :season_start, season_end = :season_end)
             WHERE :season_id = season_id'
         );
 
