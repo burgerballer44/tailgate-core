@@ -12,7 +12,7 @@ class ScoreViewArrayDataTransformer implements ScoreDataTransformerInterface
         return [
             'scoreId' => $scoreView->getScoreId(),
             'groupId' => $scoreView->getGroupId(),
-            'userId' => $scoreView->getUserId(),
+            'playerId' => $scoreView->getPlayerId(),
             'gameId' => $scoreView->getGameId(),
             'homeTeamPrediction' => $scoreView->getHomeTeamPrediction(),
             'awayTeamPrediction' => $scoreView->getAwayTeamPrediction()

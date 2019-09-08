@@ -6,7 +6,7 @@ class ScoreView
 {
     private $scoreId;
     private $groupId;
-    private $userId;
+    private $playerId;
     private $gameId;
     private $homeTeamPrediction;
     private $awayTeamPrediction;
@@ -14,14 +14,14 @@ class ScoreView
     public function __construct(
         $scoreId,
         $groupId,
-        $userId,
+        $playerId,
         $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
     ) {
         $this->scoreId = $scoreId;
         $this->groupId = $groupId;
-        $this->userId = $userId;
+        $this->playerId = $playerId;
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
         $this->awayTeamPrediction = $awayTeamPrediction;
@@ -37,9 +37,9 @@ class ScoreView
         return $this->groupId;
     }
 
-    public function getUserId()
+    public function getPlayerId()
     {
-        return $this->userId;
+        return $this->playerId;
     }
 
     public function getGameId()

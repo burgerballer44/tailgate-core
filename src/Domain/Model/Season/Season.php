@@ -210,7 +210,7 @@ class Season extends AbstractEntity
     private function getGameById(GameId $gameId)
     {
         foreach ($this->games as $game) {
-            if ($game->getGameId() == $gameId) {
+            if ($game->getGameId()->equals($gameId)) {
                 return $game;
             }
         }

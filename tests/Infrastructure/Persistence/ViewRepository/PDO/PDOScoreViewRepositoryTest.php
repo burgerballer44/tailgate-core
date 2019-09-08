@@ -4,7 +4,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\ScoreViewRepository;
@@ -71,7 +71,7 @@ class PDOScoreViewRepositoryTest extends TestCase
             ->willReturn([
                 'score_id' => 'blah',
                 'group_id' => 'blah',
-                'user_id' => 'blah',
+                'player_id' => 'blah',
                 'game_id' => 'blah',
                 'home_team_prediction' => 'blah',
                 'away_team_prediction' => 'blah',
@@ -105,30 +105,30 @@ class PDOScoreViewRepositoryTest extends TestCase
         $this->viewRepository->getAllByGroup($groupId);
     }
 
-    public function testItCanGetAllScoresOfAUserInTheGroup()
+    public function testItCanGetAllScoresOfAPlayersInTheGroup()
     {
         $groupId = GroupId::fromString('groupId');
-        $userId = UserId::fromString('userId');
+        $playerId = PlayerId::fromString('playerId');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `score` WHERE group_id = :group_id AND user_id = :user_id')
+            ->with('SELECT * FROM `score` WHERE group_id = :group_id AND player_id = :player_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
-            ->with([':group_id' => (string) $groupId, ':user_id' => (string) $userId]);
+            ->with([':group_id' => (string) $groupId, ':player_id' => (string) $playerId]);
 
         // fetch method called
         $this->pdoStatementMock
             ->expects($this->atLeastOnce())
             ->method('fetch');
 
-        $this->viewRepository->getAllByGroupUser($groupId, $userId);
+        $this->viewRepository->getAllByGroupPlayer($groupId, $playerId);
     }
 
     public function testItCanGetAllScoresOfAGameInTheGroup()

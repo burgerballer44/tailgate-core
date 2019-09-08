@@ -247,7 +247,7 @@ class Group extends AbstractEntity
     private function getMemberById(MemberId $memberId)
     {
         foreach ($this->members as $member) {
-            if ($member->getMemberId() == $memberId) {
+            if ($member->getMemberId()->equals($memberId)) {
                 return $member;
             }
         }
@@ -258,7 +258,7 @@ class Group extends AbstractEntity
     private function getScoreById(ScoreId $scoreId)
     {
         foreach ($this->scores as $score) {
-            if ($score->getScoreId() == $scoreId) {
+            if ($score->getScoreId()->equals($scoreId)) {
                 return $score;
             }
         }

@@ -4,7 +4,7 @@ namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Group\ScoreView;
@@ -32,7 +32,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
         return new ScoreView(
             $row['score_id'],
             $row['group_id'],
-            $row['user_id'],
+            $row['player_id'],
             $row['game_id'],
             $row['home_team_prediction'],
             $row['away_team_prediction']
@@ -50,7 +50,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
             $scores[] = new ScoreView(
                 $row['score_id'],
                 $row['group_id'],
-                $row['user_id'],
+                $row['player_id'],
                 $row['game_id'],
                 $row['home_team_prediction'],
                 $row['away_team_prediction']
@@ -60,10 +60,10 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
         return $scores;
     }
 
-    public function getAllByGroupUser(GroupId $id, UserId $userId)
+    public function getAllByGroupPlayer(GroupId $id, PlayerId $playerId)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `score` WHERE group_id = :group_id AND user_id = :user_id');
-        $stmt->execute([':group_id' => (string) $id, ':user_id' => (string) $userId]);
+        $stmt = $this->pdo->prepare('SELECT * FROM `score` WHERE group_id = :group_id AND player_id = :player_id');
+        $stmt->execute([':group_id' => (string) $id, ':player_id' => (string) $playerId]);
 
         $scores = [];
 
@@ -71,7 +71,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
             $scores[] = new ScoreView(
                 $row['score_id'],
                 $row['group_id'],
-                $row['user_id'],
+                $row['player_id'],
                 $row['game_id'],
                 $row['home_team_prediction'],
                 $row['away_team_prediction']
@@ -92,7 +92,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
             $scores[] = new ScoreView(
                 $row['score_id'],
                 $row['group_id'],
-                $row['user_id'],
+                $row['player_id'],
                 $row['game_id'],
                 $row['home_team_prediction'],
                 $row['away_team_prediction']
