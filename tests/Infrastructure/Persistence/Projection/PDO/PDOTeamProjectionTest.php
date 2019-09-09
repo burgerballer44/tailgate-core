@@ -90,7 +90,7 @@ class PDOTeamProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `follow` (follow_id, team_id, group_id)
+            ->with('INSERT INTO `follow` (follow_id, team_id, group_id, created_at)
             VALUES (:follow_id, :team_id, :group_id)')
             ->willReturn($this->pdoStatementMock);
 

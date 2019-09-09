@@ -51,7 +51,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
     public function projectTeamFollowed(TeamFollowed $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `follow` (follow_id, team_id, group_id)
+            'INSERT INTO `follow` (follow_id, team_id, group_id, created_at)
             VALUES (:follow_id, :team_id, :group_id)'
         );
 
