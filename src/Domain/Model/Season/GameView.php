@@ -12,7 +12,7 @@ class GameView
     private $awayTeamScore;
     private $startDate;
 
-    private function __construct(
+    public function __construct(
         $seasonId,
         $gameId,
         $homeTeamId,

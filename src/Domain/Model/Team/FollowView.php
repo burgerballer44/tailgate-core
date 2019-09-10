@@ -8,7 +8,7 @@ class FollowView
     private $followId;
     private $groupId;
 
-    private function __construct($teamId, $followId, $groupId)
+    public function __construct($teamId, $followId, $groupId)
     {
         $this->teamId = $teamId;
         $this->followId = $followId;
