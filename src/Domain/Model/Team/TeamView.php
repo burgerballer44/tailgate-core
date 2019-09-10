@@ -7,7 +7,7 @@ class TeamView
     private $teamId;
     private $designation;
     private $mascot;
-    private $follows;
+    private $follows = [];
 
     public function __construct($teamId, $designation, $mascot)
     {
