@@ -43,11 +43,9 @@ class FollowViewRepository implements FollowViewRepositoryInterface
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $follows[] = new FollowView(
-                $row['follow_id'],
                 $row['team_id'],
-                $row['user_id'],
-                $row['role'],
-                $row['allow_multiple']
+                $row['follow_id'],
+                $row['group_id']
             );
         }
 
