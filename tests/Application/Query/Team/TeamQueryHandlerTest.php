@@ -8,6 +8,7 @@ use Tailgate\Application\Query\Team\TeamQueryHandler;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
+use Tailgate\Domain\Model\Team\FollowViewRepositoryInterface;
 use Tailgate\Application\DataTransformer\TeamDataTransformerInterface;
 
 class TeamQueryHandlerTest extends TestCase
@@ -17,6 +18,7 @@ class TeamQueryHandlerTest extends TestCase
         $teamId = 'teamId';
 
         $teamViewRepository = $this->createMock(TeamViewRepositoryInterface::class);
+        $followViewRepository = $this->createMock(FollowViewRepositoryInterface::class);
         $teamViewTransformer = $this->createMock(TeamDataTransformerInterface::class);
         $teamView = $this->createMock(TeamView::class);
         $teamViewRepository->expects($this->once())
@@ -27,7 +29,7 @@ class TeamQueryHandlerTest extends TestCase
             }));
 
         $teamQuery = new TeamQuery($teamId);
-        $teamQueryHandler = new TeamQueryHandler($teamViewRepository, $teamViewTransformer);
+        $teamQueryHandler = new TeamQueryHandler($teamViewRepository, $followViewRepository, $teamViewTransformer);
         $teamQueryHandler->handle($teamQuery);
     }
 }

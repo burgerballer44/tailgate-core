@@ -53,13 +53,13 @@ class TeamTest extends TestCase
         $groupId = GroupId::fromString('groupId');
 
         $team->followTeam($groupId);
-        $followers = $team->getFollowers();
+        $follows = $team->getFollows();
 
-        $this->assertCount(1, $followers);
-        $this->assertTrue($followers[0] instanceof Follow);
-        $this->assertTrue($followers[0]->getFollowId() instanceof FollowId);
-        $this->assertTrue($followers[0]->getGroupId()->equals($groupId));
-        $this->assertTrue($followers[0]->getTeamId()->equals($this->teamId));
+        $this->assertCount(1, $follows);
+        $this->assertTrue($follows[0] instanceof Follow);
+        $this->assertTrue($follows[0]->getFollowId() instanceof FollowId);
+        $this->assertTrue($follows[0]->getGroupId()->equals($groupId));
+        $this->assertTrue($follows[0]->getTeamId()->equals($this->teamId));
     }
 
     public function testATeamCanBeUpdated()
@@ -86,26 +86,26 @@ class TeamTest extends TestCase
 
     public function testAFollowCanBeDeleted()
     {
-        // create a team, add two followers
+        // create a team, add two follows
         $team = Team::create($this->teamId, $this->designation, $this->mascot);
         $groupId1 = GroupId::fromString('groupId1');
         $groupId2 = GroupId::fromString('groupId2');
         $team->followTeam($groupId1);
         $team->followTeam($groupId2);
 
-        // confirm there are two followers for the team
-        $followers = $team->getFollowers();
-        $this->assertCount(2, $followers);
+        // confirm there are two follows for the team
+        $follows = $team->getFollows();
+        $this->assertCount(2, $follows);
 
-        // get the two followerIds, delete one, confirm the other is still asociated o the team
-        $followerId1 = $followers[0]->getFollowId();
-        $followerId2 = $followers[1]->getFollowId();
+        // get the two followIds, delete one, confirm the other is still asociated o the team
+        $followId1 = $follows[0]->getFollowId();
+        $followId2 = $follows[1]->getFollowId();
 
-        $team->deleteFollow($followerId1);
+        $team->deleteFollow($followId1);
 
-        $followers = $team->getFollowers();
+        $follows = $team->getFollows();
 
-        $this->assertCount(1, $followers);
-        $this->assertTrue($followers[0]->getFollowId()->equals($followerId2));
+        $this->assertCount(1, $follows);
+        $this->assertTrue($follows[0]->getFollowId()->equals($followId2));
     }
 }

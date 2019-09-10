@@ -11,7 +11,7 @@ class Team extends AbstractEntity
     private $teamId;
     private $designation;
     private $mascot;
-    private $followers = [];
+    private $follows = [];
 
     protected function __construct(
         $teamId,
@@ -62,9 +62,9 @@ class Team extends AbstractEntity
         return $this->mascot;
     }
 
-    public function getFollowers()
+    public function getFollows()
     {
-        return $this->followers;
+        return $this->follows;
     }
 
     public function update($designation, $mascot)
@@ -120,7 +120,7 @@ class Team extends AbstractEntity
 
     protected function applyTeamFollowed(TeamFollowed $event)
     {
-        $this->followers[] = Follow::create(
+        $this->follows[] = Follow::create(
             $event->getAggregateId(),
             $event->getFollowId(),
             $event->getGroupId()
@@ -129,8 +129,8 @@ class Team extends AbstractEntity
 
     protected function applyFollowDeleted(FollowDeleted $event)
     {
-        $this->followers = array_values(array_filter($this->followers, function ($follower) use ($event) {
-            return !$follower->getFollowId()->equals($event->getFollowId());
+        $this->follows = array_values(array_filter($this->follows, function ($follow) use ($event) {
+            return !$follow->getFollowId()->equals($event->getFollowId());
         }));
     }
 

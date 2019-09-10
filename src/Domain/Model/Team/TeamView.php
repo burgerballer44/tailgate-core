@@ -7,6 +7,7 @@ class TeamView
     private $teamId;
     private $designation;
     private $mascot;
+    private $follows;
 
     public function __construct($teamId, $designation, $mascot)
     {
@@ -28,5 +29,19 @@ class TeamView
     public function getMascot()
     {
         return $this->mascot;
+    }
+
+    public function getFollows()
+    {
+        return $this->follows;
+    }
+
+    public function addFollowViews($followView)
+    {
+        if (is_array($followView)) {
+            $this->follows = $followView;
+        } else {
+            $this->follows[] = $followView;
+        }
     }
 }

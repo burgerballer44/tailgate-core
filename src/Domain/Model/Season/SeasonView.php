@@ -10,6 +10,7 @@ class SeasonView
     private $name;
     private $season_start;
     private $season_end;
+    private $games = [];
 
     public function __construct(
         $season_id,
@@ -55,5 +56,19 @@ class SeasonView
     public function getSeasonEnd()
     {
         return $this->season_end;
+    }
+
+    public function getGames()
+    {
+        return $this->games;
+    }
+
+    public function addGameViews($gameView)
+    {
+        if (is_array($gameView)) {
+            $this->games = $gameView;
+        } else {
+            $this->games[] = $gameView;
+        }
     }
 }

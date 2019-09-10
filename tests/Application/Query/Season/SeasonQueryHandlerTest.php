@@ -8,6 +8,7 @@ use Tailgate\Application\Query\Season\SeasonQueryHandler;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
+use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Application\DataTransformer\SeasonDataTransformerInterface;
 
 class SeasonQueryHandlerTest extends TestCase
@@ -17,6 +18,7 @@ class SeasonQueryHandlerTest extends TestCase
         $seasonId = 'seasonId';
 
         $seasonViewRepository = $this->createMock(SeasonViewRepositoryInterface::class);
+        $gameViewRepository = $this->createMock(GameViewRepositoryInterface::class);
         $seasonViewTransformer = $this->createMock(SeasonDataTransformerInterface::class);
         $seasonView = $this->createMock(SeasonView::class);
         $seasonViewRepository->expects($this->once())
@@ -27,7 +29,7 @@ class SeasonQueryHandlerTest extends TestCase
             }));
 
         $seasonQuery = new SeasonQuery($seasonId);
-        $seasonQueryHandler = new SeasonQueryHandler($seasonViewRepository, $seasonViewTransformer);
+        $seasonQueryHandler = new SeasonQueryHandler($seasonViewRepository, $gameViewRepository, $seasonViewTransformer);
         $seasonQueryHandler->handle($seasonQuery);
     }
 }
