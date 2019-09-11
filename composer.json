@@ -16,8 +16,7 @@
         "php": "^7.1.3",
         "ramsey/uuid": "^3.8",
         "buttercup/protects": "dev-master",
-        "mathiasverraes/classfunctions": "1.*",
-        "respect/validation": "^1.1"
+        "mathiasverraes/classfunctions": "1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5",
@@ -37,6 +36,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/burgerballer44/protects"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/burgerballer44/classfunctions"
         }
     ]
 }
