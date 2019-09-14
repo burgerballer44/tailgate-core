@@ -82,7 +82,7 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2019-10-01 12:12:12');
 
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
         $games = $season->getGames();

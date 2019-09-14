@@ -44,12 +44,12 @@ class AddGameHandlerTest extends TestCase
         );
         $this->season->clearRecordedEvents();
 
-        $this->startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+        $this->startDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2019-10-01 19:30:13');
         $this->addGameCommand = new AddGameCommand(
             $this->seasonId,
             $this->homeTeamId,
             $this->awayTeamId,
-            $this->startDate->format('Y-m-d')
+            $this->startDate->format('Y-m-d H:i:s')
         );
     }
 
