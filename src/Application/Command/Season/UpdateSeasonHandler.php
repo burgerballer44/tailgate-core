@@ -31,7 +31,7 @@ class UpdateSeasonHandler
             $seasonType,
             $name,
             \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart),
-            \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd),
+            \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd)
         );
         
         $this->seasonRepository->add($season);
