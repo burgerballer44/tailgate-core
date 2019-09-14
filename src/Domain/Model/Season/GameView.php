@@ -64,5 +64,4 @@ class GameView
     {
         return $this->startDate;
     }
-
 }

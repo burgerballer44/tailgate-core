@@ -24,15 +24,15 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectSeasonCreated(SeasonCreated $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `season` (season_id, sport, type, name, season_start, season_end, created_at)
-            VALUES (:season_id, :sport, :type, :name, :season_start, :season_end, :created_at)'
+            'INSERT INTO `season` (season_id, name, sport, type, season_start, season_end, created_at)
+            VALUES (:season_id, :name, :sport, :type, :season_start, :season_end, :created_at)'
         );
 
         $stmt->execute([
             ':season_id' => $event->getAggregateId(),
+            ':name' => $event->getName(),
             ':sport' => $event->getSport(),
             ':type' => $event->getSeasonType(),
-            ':name' => $event->getName(),
             ':season_start' => $event->getSeasonStart()->format('Y-m-d H:i:s'),
             ':season_end' => $event->getSeasonEnd()->format('Y-m-d H:i:s'),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
@@ -89,15 +89,15 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectSeasonUpdated(SeasonUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `season` SET sport = :sport, type = :type, name = :name, season_start = :season_start, season_end = :season_end
+            'UPDATE `season` SET name = :name, sport = :sport, type = :type, season_start = :season_start, season_end = :season_end
             WHERE season_id = :season_id'
         );
 
         $stmt->execute([
             ':season_id' => $event->getAggregateId(),
+            ':name' => $event->getName(),
             ':sport' => $event->getSport(),
             ':type' => $event->getSeasonType(),
-            ':name' => $event->getName(),
             ':season_start' => $event->getSeasonStart()->format('Y-m-d H:i:s'),
             ':season_end' => $event->getSeasonEnd()->format('Y-m-d H:i:s')
         ]);

@@ -9,6 +9,7 @@ class Score
     private $scoreId;
     private $groupId;
     private $playerId;
+    private $memberId;
     private $gameId;
     private $homeTeamPrediction;
     private $awayTeamPrediction;
@@ -17,6 +18,7 @@ class Score
         $scoreId,
         $groupId,
         $playerId,
+        $memberId,
         $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
@@ -24,6 +26,7 @@ class Score
         $this->scoreId = $scoreId;
         $this->groupId = $groupId;
         $this->playerId = $playerId;
+        $this->memberId = $memberId;
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
         $this->awayTeamPrediction = $awayTeamPrediction;
@@ -33,6 +36,7 @@ class Score
         GroupId $groupId,
         ScoreId $scoreId,
         PlayerId $playerId,
+        MemberId $memberId,
         GameId $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
@@ -41,6 +45,7 @@ class Score
             $scoreId,
             $groupId,
             $playerId,
+            $memberId,
             $gameId,
             $homeTeamPrediction,
             $awayTeamPrediction
@@ -62,6 +67,11 @@ class Score
     public function getPlayerId()
     {
         return $this->playerId;
+    }
+
+    public function getMemberId()
+    {
+        return $this->memberId;
     }
 
     public function getGameId()

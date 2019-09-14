@@ -19,9 +19,9 @@ class AddGameHandlerTest extends TestCase
     private $awayTeamId = 'awayTeamId';
     private $startDate;
 
-    private $sport = 'sport';
-    private $seasonType = 'seasonType';
     private $name = 'name';
+    private $sport = Season::SPORT_FOOTBALL;
+    private $seasonType = Season::SEASON_TYPE_REG;
     private $seasonStart;
     private $seasonEnd;
 
@@ -36,9 +36,9 @@ class AddGameHandlerTest extends TestCase
         // create a season and clear events
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
+            $this->name,
             $this->sport,
             $this->seasonType,
-            $this->name,
             $this->seasonStart,
             $this->seasonEnd
         );

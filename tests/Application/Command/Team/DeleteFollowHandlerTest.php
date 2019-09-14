@@ -5,6 +5,7 @@ namespace Tailgate\Test\Application\Command\Team;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\DeleteFollowCommand;
 use Tailgate\Application\Command\Team\DeleteFollowHandler;
+use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Team\FollowId;
 use Tailgate\Domain\Model\Team\FollowDeleted;
 use Tailgate\Domain\Model\Team\Team;
@@ -13,7 +14,7 @@ use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
 
 class DeleteFollowHandlerTest extends TestCase
 {
-    private $followId = 'followId';
+    private $followId = '';
     private $teamId = 'teamId';
     private $designation = 'designation';
     private $mascot = 'mascot';
@@ -22,9 +23,13 @@ class DeleteFollowHandlerTest extends TestCase
 
     public function setUp()
     {
-        // create a team and clear events
+        // create a team
         $this->team = Team::create(TeamId::fromString($this->teamId), $this->designation, $this->mascot);
+        // add a follow
+        $this->team->followTeam(GroupId::fromString('groupId'));
         $this->team->clearRecordedEvents();
+
+        $this->followId = (string) $this->team->getFollows()[0]->getFollowId();
 
         $this->deleteFollowCommand = new DeleteFollowCommand($this->teamId, $this->followId);
     }
@@ -48,7 +53,7 @@ class DeleteFollowHandlerTest extends TestCase
 
                 return $events[0] instanceof FollowDeleted
                 && $events[0]->getAggregateId()->equals(TeamId::fromString($teamId))
-                && $events[0]->getFollowId() instanceof FollowId
+                && $events[0]->getFollowId()->equals(FollowId::fromString($followId))
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

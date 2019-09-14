@@ -16,17 +16,17 @@ class CreateSeasonHandler
 
     public function handle(CreateSeasonCommand $command)
     {
+        $name = $command->getName();
         $sport = $command->getSport();
         $seasonType = $command->getSeasonType();
-        $name = $command->getName();
         $seasonStart = $command->getSeasonStart();
         $seasonEnd = $command->getSeasonEnd();
 
         $season = Season::create(
             $this->seasonRepository->nextIdentity(),
+            $name,
             $sport,
             $seasonType,
-            $name,
             \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart),
             \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd)
         );

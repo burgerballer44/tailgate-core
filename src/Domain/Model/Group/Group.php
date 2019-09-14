@@ -2,18 +2,25 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Tailgate\Domain\Model\AbstractEntity;
-use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\Season\GameId;
 use Buttercup\Protects\IdentifiesAggregate;
+use Tailgate\Domain\Model\AbstractEntity;
+use Tailgate\Domain\Model\ModelException;
+use Tailgate\Domain\Model\Season\GameId;
+use Tailgate\Domain\Model\User\UserId;
 
 class Group extends AbstractEntity
 {
-    const G_ROLE_ADMIN = 'Group-Admin'; // someone who can do manage the gorup
+    const G_ROLE_ADMIN = 'Group-Admin'; // someone who can manage the gorup
     const G_ROLE_MEMBER = 'Group-Member'; // regular user who can submit scores
 
     const SINGLE_PLAYER = 0;  // member can not add multiple players to group
     const MULTIPLE_PLAYERS = 1;  // member can add multiple players to group
+
+    const MEMBER_LIMIT = 30;  // maximum number of members in a group
+
+    const PLAYER_LIMIT = 5;  // maximum number of players for a player who can have multiple
+
+    const MIN_NUMBER_ADMINS = 1;  // minimum number of admins that have to be in a group
 
     private $groupId;
     private $name;
@@ -29,27 +36,31 @@ class Group extends AbstractEntity
         $this->ownerId = $ownerId;
     }
 
+    /**
+     * create a group
+     * @param  GroupId $groupId [description]
+     * @param  [type]  $name    [description]
+     * @param  UserId  $ownerId [description]
+     * @return [type]           [description]
+     */
     public static function create(GroupId $groupId, $name, UserId $ownerId)
     {
         $newGroup = new Group($groupId, $name, $ownerId);
 
-        $newGroup->recordThat(
-            new GroupCreated($groupId, $name, $ownerId)
-        );
+        $newGroup->recordThat(new GroupCreated($groupId, $name, $ownerId));
 
         $newGroup->applyAndRecordThat(
-            new MemberAdded(
-                $groupId,
-                new MemberId(),
-                $ownerId,
-                Group::G_ROLE_ADMIN,
-                Group::MULTIPLE_PLAYERS,
-            )
+            new MemberAdded($groupId, new MemberId(), $ownerId, Group::G_ROLE_ADMIN, Group::MULTIPLE_PLAYERS)
         );
 
         return $newGroup;
     }
 
+    /**
+     * create an empty group
+     * @param  IdentifiesAggregate $groupId [description]
+     * @return [type]                       [description]
+     */
     protected static function createEmptyEntity(IdentifiesAggregate $groupId)
     {
         return new Group($groupId, '', '');
@@ -85,38 +96,26 @@ class Group extends AbstractEntity
         return $this->players;
     }
 
-    public function delete()
-    {
-        $this->applyAndRecordThat(new GroupDeleted($this->groupId));
-    }
-
-    public function deleteScore(ScoreId $scoreId)
-    {
-        $this->applyAndRecordThat(
-            new ScoreDeleted(
-                $this->groupId,
-                $scoreId,
-            )
-        );
-    }
-
-    public function deleteMember(MemberId $memberId)
-    {
-        $this->applyAndRecordThat(
-            new MemberDeleted(
-                $this->groupId,
-                $memberId,
-            )
-        );
-    }
-
+    /**
+     * adds a score
+     * @param  PlayerId $playerId           [description]
+     * @param  GameId   $gameId             [description]
+     * @param  [type]   $homeTeamPrediction [description]
+     * @param  [type]   $awayTeamPrediction [description]
+     * @return [type]                       [description]
+     */
     public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
     {
+        if (!$player = $this->getPlayerById($playerId)) {
+            throw new ModelException('The player submitting the score does not exist.');
+        }
+
         $this->applyAndRecordThat(
             new ScoreSubmitted(
                 $this->groupId,
                 new ScoreId(),
                 $playerId,
+                $player->getMemberId(),
                 $gameId,
                 $homeTeamPrediction,
                 $awayTeamPrediction
@@ -124,43 +123,69 @@ class Group extends AbstractEntity
         );
     }
 
+    /**
+     * add a player
+     * @param MemberId $memberId [description]
+     * @param [type]   $username [description]
+     */
     public function addPlayer(MemberId $memberId, $username)
     {
+        if (!$member = $this->getMemberById($memberId)) {
+            throw new ModelException('The member does not exist. Cannot add the player.');
+        }
+
+        if (count($this->getPlayersByMemberId($memberId)) >= self::PLAYER_LIMIT) {
+            throw new ModelException('Player limit reached for member.');
+        }
+
         $this->applyAndRecordThat(
-            new PlayerAdded(
-                $this->groupId,
-                new PlayerId(),
-                $memberId,
-                $username
-            )
+            new PlayerAdded($this->groupId, new PlayerId(), $memberId, $username)
         );
     }
 
+    /**
+     * changes a score to something else
+     * @param  ScoreId $scoreId            [description]
+     * @param  [type]  $homeTeamPrediction [description]
+     * @param  [type]  $awayTeamPrediction [description]
+     * @return [type]                      [description]
+     */
     public function updateScore(ScoreId $scoreId, $homeTeamPrediction, $awayTeamPrediction)
     {
+        if (!$score = $this->getScoreById($scoreId)) {
+            throw new ModelException('The score does not exist. Cannot update the score.');
+        }
+
         $this->applyAndRecordThat(
-            new GroupScoreUpdated(
-                $this->groupId,
-                $scoreId,
-                $homeTeamPrediction,
-                $awayTeamPrediction
-            )
+            new GroupScoreUpdated($this->groupId, $scoreId, $homeTeamPrediction, $awayTeamPrediction)
         );
     }
 
+    /**
+     * add a member
+     * @param UserId $userId [description]
+     */
     public function addMember(UserId $userId)
     {
+        if ($user = $this->getMemberByUserId($userId)) {
+            throw new ModelException('The member is already in the group.');
+        }
+
+        if (count($this->members) >= self::MEMBER_LIMIT) {
+            throw new ModelException('Group member limit reached.');
+        }
+
         $this->applyAndRecordThat(
-            new MemberAdded(
-                $this->groupId,
-                new MemberId(),
-                $userId,
-                Group::G_ROLE_MEMBER,
-                Group::SINGLE_PLAYER,
-            )
+            new MemberAdded($this->groupId, new MemberId(), $userId, Group::G_ROLE_MEMBER, Group::SINGLE_PLAYER)
         );
     }
 
+    /**
+     * updates the group name, and owner
+     * @param  [type] $name    [description]
+     * @param  UserId $ownerId [description]
+     * @return [type]          [description]
+     */
     public function update($name, UserId $ownerId)
     {
         $this->applyAndRecordThat(
@@ -168,15 +193,122 @@ class Group extends AbstractEntity
         );
     }
 
+    /**
+     * updates a member role, and if they can add multiple players
+     * @param  MemberId $memberId      [description]
+     * @param  [type]   $groupRole     [description]
+     * @param  [type]   $allowMultiple [description]
+     * @return [type]                  [description]
+     */
     public function updateMember(MemberId $memberId, $groupRole, $allowMultiple)
     {
+        if (!$member = $this->getMemberById($memberId)) {
+            throw new ModelException('The member does not exist.');
+        }
+
+        if (!in_array($groupRole, $this->getValidGroupRoles())) {
+            throw new ModelException('Invalid group role. Group role does not exist.');
+        }
+
+        // get all admin members
+        $adminMembers = $this->getMembersThatAreAdmin();
+
+        // get their member ids
+        $adminMemberIds = array_map(function ($member) {
+            return (string) $member->getMemberId();
+        }, $adminMembers);
+
+        // if there is only one admin
+        // and that admin is the member we are trying to update
+        // and we are updating away from being an admin
+        if (
+            count($adminMemberIds) == self::MIN_NUMBER_ADMINS
+            && in_array($memberId, $adminMemberIds)
+            && ($groupRole != self::G_ROLE_ADMIN)
+        ) {
+            throw new ModelException('Cannot change the last admin in the group to not be an admin.');
+        }
+
+        // set single player by default. no need for exception
+        if (!in_array($allowMultiple, [self::SINGLE_PLAYER, self::MULTIPLE_PLAYERS])) {
+            $allowMultiple = self::SINGLE_PLAYER;
+        }
+
         $this->applyAndRecordThat(
-            new MemberUpdated(
-                $this->groupId,
-                $memberId,
-                $groupRole,
-                $allowMultiple
-            )
+            new MemberUpdated($this->groupId, $memberId, $groupRole, $allowMultiple)
+        );
+    }
+
+    /**
+     * remove all members, players, and scores from a group
+     * @return [type] [description]
+     */
+    public function delete()
+    {
+        $this->applyAndRecordThat(new GroupDeleted($this->groupId));
+    }
+
+    /**
+     * delete a member, all players the member has, and all scores from each player
+     * @param  MemberId $memberId [description]
+     * @return [type]             [description]
+     */
+    public function deleteMember(MemberId $memberId)
+    {
+        if (!$member = $this->getMemberById($memberId)) {
+            throw new ModelException('The member does not exist.');
+        }
+
+        // get all admin members
+        $adminMembers = $this->getMembersThatAreAdmin();
+
+        // get their member ids
+        $adminMemberIds = array_map(function ($member) {
+            return (string) $member->getMemberId();
+        }, $adminMembers);
+
+        // if there is only one admin and that admin is the member we are trying to delete
+        if (
+            count($adminMemberIds) == self::MIN_NUMBER_ADMINS
+            && in_array($memberId, $adminMemberIds)
+        ) {
+            throw new ModelException('Cannot remove the last admin in a group.');
+        }
+
+        $this->applyAndRecordThat(
+            new MemberDeleted($this->groupId, $memberId)
+        );
+    }
+
+    /**
+     * delete a player, and all of their scores
+     * @param  PlayerId $playerId [description]
+     * @return [type]             [description]
+     */
+    public function deletePlayer(PlayerId $playerId)
+    {
+        if (!$player = $this->getPlayerById($playerId)) {
+            throw new ModelException('The player does not exist.');
+        }
+
+        $this->applyAndRecordThat(
+            new PlayerDeleted($this->groupId, $playerId)
+        );
+    }
+
+    /**
+     * delete a score
+     * @param  ScoreId $scoreId [description]
+     * @return [type]           [description]
+     */
+    public function deleteScore(ScoreId $scoreId)
+    {
+        if (!$score = $this->getScoreById($scoreId)) {
+            throw new ModelException('The score does not exist. Cannot update the score.');
+        }
+
+        $this->applyAndRecordThat(
+            new ScoreDeleted($this->groupId, $scoreId)
         );
     }
 
@@ -198,6 +330,7 @@ class Group extends AbstractEntity
             $event->getAggregateId(),
             $event->getScoreId(),
             $event->getPlayerId(),
+            $event->getMemberId(),
             $event->getGameId(),
             $event->getHomeTeamPrediction(),
             $event->getAwayTeamPrediction()
@@ -228,6 +361,7 @@ class Group extends AbstractEntity
     protected function applyGroupDeleted(GroupDeleted $event)
     {
         $this->members = [];
+        $this->players = [];
         $this->scores = [];
     }
 
@@ -244,32 +378,29 @@ class Group extends AbstractEntity
         $score->update($event->getHomeTeamPrediction(), $event->getAwayTeamPrediction());
     }
 
-    private function getMemberById(MemberId $memberId)
-    {
-        foreach ($this->members as $member) {
-            if ($member->getMemberId()->equals($memberId)) {
-                return $member;
-            }
-        }
-        // Todo
-        // throw notfoundexception
-    }
-
-    private function getScoreById(ScoreId $scoreId)
-    {
-        foreach ($this->scores as $score) {
-            if ($score->getScoreId()->equals($scoreId)) {
-                return $score;
-            }
-        }
-        // Todo
-        // throw notfoundexception
-    }
-
     protected function applyMemberDeleted(MemberDeleted $event)
     {
         $this->members = array_values(array_filter($this->members, function ($member) use ($event) {
             return !$member->getMemberId()->equals($event->getMemberId());
+        }));
+
+        $this->players = array_values(array_filter($this->players, function ($player) use ($event) {
+            return !$player->getMemberId()->equals($event->getMemberId());
+        }));
+
+        $this->scores = array_values(array_filter($this->scores, function ($score) use ($event) {
+            return !$score->getMemberId()->equals($event->getMemberId());
+        }));
+    }
+
+    protected function applyPlayerDeleted(PlayerDeleted $event)
+    {
+        $this->players = array_values(array_filter($this->players, function ($player) use ($event) {
+            return !$player->getPlayerId()->equals($event->getPlayerId());
+        }));
+        
+        $this->scores = array_values(array_filter($this->scores, function ($score) use ($event) {
+            return !$score->getPlayerId()->equals($event->getPlayerId());
         }));
     }
 
@@ -278,5 +409,96 @@ class Group extends AbstractEntity
         $this->scores = array_values(array_filter($this->scores, function ($score) use ($event) {
             return !$score->getScoreId()->equals($event->getScoreId());
         }));
+    }
+
+    /**
+     * [getMemberByUserId description]
+     * @param  UserId $userId [description]
+     * @return [type]         [description]
+     */
+    private function getMemberByUserId(UserId $userId)
+    {
+        foreach ($this->members as $member) {
+            if ($member->getUserId()->equals($userId)) {
+                return $member;
+            }
+        }
+    }
+
+    /**
+     * [getPlayersByMemberId description]
+     * @param  MemberId $memberId [description]
+     * @return [type]             [description]
+     */
+    private function getPlayersByMemberId(MemberId $memberId)
+    {
+        return array_filter($this->players, function ($player) use ($memberId) {
+            return $player->getMemberId()->equals($memberId);
+        });
+    }
+
+    /**
+     * [getMemberById description]
+     * @param  MemberId $memberId [description]
+     * @return [type]             [description]
+     */
+    private function getMemberById(MemberId $memberId)
+    {
+        foreach ($this->members as $member) {
+            if ($member->getMemberId()->equals($memberId)) {
+                return $member;
+            }
+        }
+    }
+
+    /**
+     * [getPlayerById description]
+     * @param  PlayerId $playerId [description]
+     * @return [type]             [description]
+     */
+    private function getPlayerById(PlayerId $playerId)
+    {
+        foreach ($this->players as $player) {
+            if ($player->getPlayerId()->equals($playerId)) {
+                return $player;
+            }
+        }
+    }
+
+    /**
+     * [getScoreById description]
+     * @param  ScoreId $scoreId [description]
+     * @return [type]           [description]
+     */
+    private function getScoreById(ScoreId $scoreId)
+    {
+        foreach ($this->scores as $score) {
+            if ($score->getScoreId()->equals($scoreId)) {
+                return $score;
+            }
+        }
+    }
+
+    /**
+     * [getMembersThatAreAdmin description]
+     * @return [type] [description]
+     */
+    private function getMembersThatAreAdmin()
+    {
+        return array_filter($this->members, function ($member) {
+            return $member->getGroupRole() == self::G_ROLE_ADMIN;
+        });
+    }
+
+    /**
+     * return valid group roles
+     * @return [type] [description]
+     */
+    public static function getValidGroupRoles()
+    {
+        return [
+            self::G_ROLE_ADMIN,
+            self::G_ROLE_MEMBER,
+        ];
     }
 }

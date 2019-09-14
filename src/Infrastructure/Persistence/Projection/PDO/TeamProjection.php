@@ -72,8 +72,10 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
 
     public function projectTeamDeleted(TeamDeleted $event)
     {
-        $stmt = $this->pdo->prepare('DELETE FROM `team` WHERE team_id = :team_id');
+        $stmt = $this->pdo->prepare('DELETE FROM `follow` WHERE team_id = :team_id');
+        $stmt->execute([':team_id' => $event->getAggregateId()]);
 
+        $stmt = $this->pdo->prepare('DELETE FROM `team` WHERE team_id = :team_id');
         $stmt->execute([':team_id' => $event->getAggregateId()]);
     }
 }

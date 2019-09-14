@@ -16,9 +16,9 @@ class DeleteGameHandlerTest extends TestCase
 {
     private $seasonId = 'seasonId';
     private $gameId;
-    private $sport = 'sport';
-    private $seasonType = 'seasonType';
     private $name = 'name';
+    private $sport = Season::SPORT_FOOTBALL;
+    private $seasonType = Season::SEASON_TYPE_REG;
     private $seasonStart;
     private $seasonEnd;
     private $season;
@@ -32,9 +32,9 @@ class DeleteGameHandlerTest extends TestCase
         // create a season, add a game, and clear events
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
+            $this->name,
             $this->sport,
             $this->seasonType,
-            $this->name,
             $this->seasonStart,
             $this->seasonEnd
         );

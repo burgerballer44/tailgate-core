@@ -13,8 +13,8 @@ use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 class UpdateSeasonHandlerTest extends TestCase
 {
     private $seasonId = 'seasonId';
-    private $sport = 'updatedSport';
-    private $seasonType = 'updatedSeasonType';
+    private $sport = Season::SPORT_FOOTBALL;
+    private $seasonType = Season::SEASON_TYPE_REG;
     private $name = 'updatedname';
     private $seasonStart;
     private $seasonEnd;
@@ -28,9 +28,9 @@ class UpdateSeasonHandlerTest extends TestCase
         $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
-            'Sport',
-            'SeasonType',
             'Name',
+            Season::SPORT_FOOTBALL,
+            Season::SEASON_TYPE_REG,
             \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01'),
             \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01')
         );

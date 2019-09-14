@@ -5,15 +5,16 @@ namespace Tailgate\Test\Application\Command\Season;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Season\CreateSeasonCommand;
 use Tailgate\Application\Command\Season\CreateSeasonHandler;
+use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonCreated;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 
 class CreateSeasonHandlerTest extends TestCase
 {
-    private $sport = 'sport';
-    private $seasonType = 'seasonType';
     private $name = 'name';
+    private $sport = Season::SPORT_FOOTBALL;
+    private $seasonType = Season::SEASON_TYPE_REG;
     private $seasonStart;
     private $seasonEnd;
     private $createSeasonCommand;
@@ -24,9 +25,9 @@ class CreateSeasonHandlerTest extends TestCase
         $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28');
 
         $this->createSeasonCommand = new CreateSeasonCommand(
+            $this->name,
             $this->sport,
             $this->seasonType,
-            $this->name,
             $this->seasonStart->format('Y-m-d'),
             $this->seasonEnd->format('Y-m-d')
         );
@@ -34,9 +35,9 @@ class CreateSeasonHandlerTest extends TestCase
 
     public function testItAddsASeasonCreatedEventToTheSeasonRepository()
     {
+        $name = $this->name;
         $sport = $this->sport;
         $seasonType = $this->seasonType;
-        $name = $this->name;
         $seasonStart = $this->seasonStart;
         $seasonEnd = $this->seasonEnd;
 
@@ -48,14 +49,14 @@ class CreateSeasonHandlerTest extends TestCase
         // the add method should be called once
         // the season object should have the SeasonCreated event
         $seasonRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($season) use ($sport, $seasonType, $name, $seasonStart, $seasonEnd) {
+            function ($season) use ($name, $seasonType, $sport, $seasonStart, $seasonEnd) {
                 $events = $season->getRecordedEvents();
 
                 return $events[0] instanceof SeasonCreated
                 && $events[0]->getAggregateId() instanceof SeasonId
+                && $events[0]->getName() === $name
                 && $events[0]->getSport() === $sport
                 && $events[0]->getSeasonType() === $seasonType
-                && $events[0]->getName() === $name
                 && $events[0]->getSeasonStart()->format('Y-m-d') === $seasonStart->format('Y-m-d')
                 && $events[0]->getSeasonEnd()->format('Y-m-d') === $seasonEnd->format('Y-m-d')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;

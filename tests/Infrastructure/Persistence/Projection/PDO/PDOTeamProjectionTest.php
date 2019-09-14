@@ -134,14 +134,19 @@ class PDOTeamProjectionTest extends TestCase
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->once())
+            ->expects($this->at(0))
+            ->method('prepare')
+            ->with('DELETE FROM `follow` WHERE team_id = :team_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(1))
             ->method('prepare')
             ->with('DELETE FROM `team` WHERE team_id = :team_id')
             ->willReturn($this->pdoStatementMock);
 
-        // execute method called once
+        // execute method called twice
         $this->pdoStatementMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('execute')
             ->with([':team_id' => $event->getAggregateId()]);
 

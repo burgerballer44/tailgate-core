@@ -13,9 +13,9 @@ use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 class DeleteSeasonHandlerTest extends TestCase
 {
     private $seasonId = 'seasonId';
-    private $sport = 'sport';
-    private $seasonType = 'seasonType';
     private $name = 'name';
+    private $sport = Season::SPORT_FOOTBALL;
+    private $seasonType = Season::SEASON_TYPE_REG;
     private $seasonStart;
     private $seasonEnd;
     private $season;
@@ -28,9 +28,9 @@ class DeleteSeasonHandlerTest extends TestCase
         $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
+            $this->name,
             $this->sport,
             $this->seasonType,
-            $this->name,
             $this->seasonStart,
             $this->seasonEnd
         );

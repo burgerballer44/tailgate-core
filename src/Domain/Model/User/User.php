@@ -2,8 +2,9 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Tailgate\Domain\Model\AbstractEntity;
 use Buttercup\Protects\IdentifiesAggregate;
+use Tailgate\Domain\Model\AbstractEntity;
+use Tailgate\Domain\Model\ModelException;
 
 class User extends AbstractEntity
 {
@@ -13,7 +14,6 @@ class User extends AbstractEntity
 
     const STATUS_ACTIVE = 'Active'; // can use the app
     const STATUS_PENDING = 'Pending'; // user who signs up but needs to confirm email
-    const STATUS_INVITED = 'Invited'; // user who was invited by an admin
     const STATUS_DELETED = 'Deleted'; // user who is deleted
 
     private $userId;
@@ -23,14 +23,8 @@ class User extends AbstractEntity
     private $role;
     private $uniqueKey;
 
-    protected function __construct(
-        $userId,
-        $email,
-        $passwordHash,
-        $status,
-        $role,
-        $uniqueKey
-    ) {
+    protected function __construct($userId, $email, $passwordHash, $status, $role, $uniqueKey)
+    {
         $this->userId = $userId;
         $this->email = $email;
         $this->passwordHash = $passwordHash;
@@ -39,31 +33,30 @@ class User extends AbstractEntity
         $this->uniqueKey = $uniqueKey;
     }
 
+    /**
+     * create a user
+     * @param  UserId $userId       [description]
+     * @param  [type] $email        [description]
+     * @param  [type] $passwordHash [description]
+     * @param  [type] $uniqueKey    [description]
+     * @return [type]               [description]
+     */
     public static function create(UserId $userId, $email, $passwordHash, $uniqueKey)
     {
-        $newUser = new User(
-            $userId,
-            $email,
-            $passwordHash,
-            User::STATUS_PENDING,
-            User::ROLE_USER,
-            $uniqueKey
-        );
+        $newUser = new User($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, $uniqueKey);
 
         $newUser->recordThat(
-            new UserRegistered(
-                $userId,
-                $email,
-                $passwordHash,
-                User::STATUS_PENDING,
-                User::ROLE_USER,
-                $uniqueKey
-            )
+            new UserRegistered($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, $uniqueKey)
         );
 
         return $newUser;
     }
 
+    /**
+     * create an empty user
+     * @param  IdentifiesAggregate $userId [description]
+     * @return [type]                      [description]
+     */
     protected static function createEmptyEntity(IdentifiesAggregate $userId)
     {
         return new User($userId, '', '', '', '', '');
@@ -94,56 +87,62 @@ class User extends AbstractEntity
         return $this->role;
     }
 
+    /**
+     * set status to active
+     * @return [type] [description]
+     */
     public function activate()
     {
-        $this->applyAndRecordThat(
-            new UserActivated(
-                $this->userId,
-                User::STATUS_ACTIVE
-            )
-        );
+        $this->applyAndRecordThat(new UserActivated($this->userId, User::STATUS_ACTIVE));
     }
 
+    /**
+     * set status to deleted
+     * @return [type] [description]
+     */
     public function delete()
     {
-        $this->applyAndRecordThat(
-            new UserDeleted(
-                $this->userId,
-                User::STATUS_DELETED
-            )
-        );
+        $this->applyAndRecordThat(new UserDeleted($this->userId, User::STATUS_DELETED));
     }
 
+    /**
+     * updates the password hash
+     * @param  [type] $passwordHash [description]
+     * @return [type]               [description]
+     */
     public function updatePassword($passwordHash)
     {
-        $this->applyAndRecordThat(
-            new PasswordUpdated(
-                $this->userId,
-                $passwordHash
-            )
-        );
+        $this->applyAndRecordThat(new PasswordUpdated($this->userId, $passwordHash));
     }
 
+    /**
+     * updates the email
+     * @param  [type] $email [description]
+     * @return [type]        [description]
+     */
     public function updateEmail($email)
     {
-        $this->applyAndRecordThat(
-            new EmailUpdated(
-                $this->userId,
-                $email
-            )
-        );
+        $this->applyAndRecordThat(new EmailUpdated($this->userId, $email));
     }
 
+    /**
+     * updates email, status, and role
+     * @param  [type] $email  [description]
+     * @param  [type] $status [description]
+     * @param  [type] $role   [description]
+     * @return [type]         [description]
+     */
     public function update($email, $status, $role)
     {
-        $this->applyAndRecordThat(
-            new UserUpdated(
-                $this->userId,
-                $email,
-                $status,
-                $role
-            )
-        );
+        if (!in_array($role, $this->getValidRoles())) {
+            throw new ModelException('Invalid role. Role does not exist.');
+        }
+
+        if (!in_array($status, $this->getValidStatuses())) {
+            throw new ModelException('Invalid status. Status does not exist.');
+        }
+        
+        $this->applyAndRecordThat(new UserUpdated($this->userId, $email, $status, $role));
     }
 
     protected function applyUserRegistered(UserRegistered $event)
@@ -179,5 +178,31 @@ class User extends AbstractEntity
         $this->email = $event->getEmail();
         $this->status = $event->getStatus();
         $this->role = $event->getRole();
+    }
+
+    /**
+     * returns all roles
+     * @return [type] [description]
+     */
+    public static function getValidRoles()
+    {
+        return [
+            self::ROLE_USER,
+            self::ROLE_ADMIN,
+            // self::ROLE_DEVELOPER,
+        ];
+    }
+
+    /**
+     * return all statuses
+     * @return [type] [description]
+     */
+    public static function getValidStatuses()
+    {
+        return [
+            self::STATUS_ACTIVE,
+            self::STATUS_PENDING,
+            self::STATUS_DELETED,
+        ];
     }
 }

@@ -7,19 +7,18 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
+use Tailgate\Domain\Model\ModelException;
 
 class UserTest extends TestCase
 {
     private $userId;
-    private $passwordHash;
-    private $email;
-    private $uniqueKey;
+    private $passwordHash = 'passwordHashBlahBlah';
+    private $email = 'emailAddress';
+    private $uniqueKey = '';
 
     public function setUp()
     {
         $this->userId = UserId::fromString('userId');
-        $this->email = 'email@email.com';
-        $this->passwordHash = 'password';
     }
 
     public function testUserShouldBeTheSameAfterReconstitution()
@@ -88,9 +87,9 @@ class UserTest extends TestCase
 
     public function testAUserCanBeUpdated()
     {
-        $email = 'updatedEmail';
-        $status = 'updatedStatus';
-        $role = 'updatedRole';
+        $email = 'email@email.com';
+        $status = User::STATUS_PENDING;
+        $role = User::ROLE_ADMIN;
         $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
 
         $user->update($email, $status, $role);
@@ -98,5 +97,18 @@ class UserTest extends TestCase
         $this->assertEquals($email, $user->getEmail());
         $this->assertEquals($status, $user->getStatus());
         $this->assertEquals($role, $user->getRole());
+    }
+
+    public function testUpdatingAUserThrowsExceptionsWithInvalidValues()
+    {
+        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
+
+        $this->expectException(ModelException::class);
+        $this->expectExceptionMessage('Invalid role. Role does not exist.');
+        $user->update('email@email.com', User::STATUS_PENDING, 'invalideRole');
+
+        $this->expectException(ModelException::class);
+        $this->expectExceptionMessage('Invalid status. Status does not exist.');
+        $user->update('email@email.com', 'invalidStatus', User::ROLE_ADMIN);
     }
 }

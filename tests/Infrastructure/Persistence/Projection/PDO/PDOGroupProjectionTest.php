@@ -1,23 +1,24 @@
 <?php
 
-namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
+namespace Infrastructure\Persistence\Projection\PDO;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Domain\Model\Season\GameId;
-use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupCreated;
+use Tailgate\Domain\Model\Group\GroupDeleted;
+use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupScoreUpdated;
+use Tailgate\Domain\Model\Group\GroupUpdated;
 use Tailgate\Domain\Model\Group\MemberAdded;
+use Tailgate\Domain\Model\Group\MemberDeleted;
 use Tailgate\Domain\Model\Group\MemberId;
+use Tailgate\Domain\Model\Group\MemberUpdated;
+use Tailgate\Domain\Model\Group\PlayerAdded;
+use Tailgate\Domain\Model\Group\PlayerDeleted;
+use Tailgate\Domain\Model\Group\PlayerId;
+use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
-use Tailgate\Domain\Model\Group\GroupUpdated;
-use Tailgate\Domain\Model\Group\MemberUpdated;
-use Tailgate\Domain\Model\Group\MemberDeleted;
-use Tailgate\Domain\Model\Group\ScoreDeleted;
-use Tailgate\Domain\Model\Group\GroupScoreUpdated;
-use Tailgate\Domain\Model\Group\GroupDeleted;
-use Tailgate\Domain\Model\Group\PlayerId;
-use Tailgate\Domain\Model\Group\PlayerAdded;
+use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\GroupProjection;
 
@@ -112,7 +113,7 @@ class PDOGroupProjectionTest extends TestCase
             ->expects($this->once())
             ->method('prepare')
             ->with('UPDATE `member` SET member_id = :member_id, role =:role, allow_multiple = :allow_multiple
-            WHERE :member_id = member_id')
+            WHERE member_id = :member_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -135,6 +136,7 @@ class PDOGroupProjectionTest extends TestCase
             GroupId::fromString('groupId'),
             ScoreId::fromString('scoreId'),
             PlayerId::fromString('playerId'),
+            MemberId::fromString('memberId'),
             GameId::fromString('gameId'),
             80,
             70
@@ -144,8 +146,8 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `score` (score_id, group_id, player_id, game_id, home_team_prediction, away_team_prediction, created_at)
-            VALUES (:score_id, :group_id, :player_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)')
+            ->with('INSERT INTO `score` (score_id, group_id, player_id, member_id, game_id, home_team_prediction, away_team_prediction, created_at)
+            VALUES (:score_id, :group_id, :player_id, :member_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -156,6 +158,7 @@ class PDOGroupProjectionTest extends TestCase
                 ':group_id' => $event->getAggregateId(),
                 ':score_id' => $event->getScoreId(),
                 ':player_id' => $event->getPlayerId(),
+                ':member_id' => $event->getMemberId(),
                 ':game_id' => $event->getGameId(),
                 ':home_team_prediction' => $event->getHomeTeamPrediction(),
                 ':away_team_prediction' => $event->getAwayTeamPrediction(),
@@ -178,7 +181,7 @@ class PDOGroupProjectionTest extends TestCase
             ->expects($this->once())
             ->method('prepare')
             ->with('UPDATE `group` SET name = :name, owner_id = :owner_id
-            WHERE :group_id = group_id')
+            WHERE group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -203,18 +206,56 @@ class PDOGroupProjectionTest extends TestCase
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('prepare')
-            ->with('DELETE FROM `member` WHERE :member_id = member_id')
+            ->with('DELETE FROM `score` WHERE member_id = :member_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(1))
+            ->method('prepare')
+            ->with('DELETE FROM `player` WHERE member_id = :member_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(2))
+            ->method('prepare')
+            ->with('DELETE FROM `member` WHERE member_id = :member_id')
             ->willReturn($this->pdoStatementMock);
 
-        // execute method called once
+        // execute method called thee times
         $this->pdoStatementMock
-            ->expects($this->once())
+            ->expects($this->exactly(3))
             ->method('execute')
             ->with([':member_id' => $event->getMemberId()]);
 
         $this->projection->projectMemberDeleted($event);
+    }
+
+    public function testItCanProjectPlayerDeleted()
+    {
+        $event = new PlayerDeleted(
+            GroupId::fromString('groupId'),
+            PlayerId::fromString('playerId')
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->at(0))
+            ->method('prepare')
+            ->with('DELETE FROM `score` WHERE player_id = :player_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(1))
+            ->method('prepare')
+            ->with('DELETE FROM `player` WHERE player_id = :player_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->exactly(2))
+            ->method('execute')
+            ->with([':player_id' => $event->getPlayerId()]);
+
+        $this->projection->projectPlayerDeleted($event);
     }
 
     public function testItCanProjectScoreDeleted()
@@ -228,7 +269,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE :score_id = score_id')
+            ->with('DELETE FROM `score` WHERE score_id = :score_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -248,22 +289,22 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->at(0))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE :group_id = group_id')
+            ->with('DELETE FROM `score` WHERE group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(1))
             ->method('prepare')
-            ->with('DELETE FROM `player` WHERE :group_id = group_id')
+            ->with('DELETE FROM `player` WHERE group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(2))
             ->method('prepare')
-            ->with('DELETE FROM `member` WHERE :group_id = group_id')
+            ->with('DELETE FROM `member` WHERE group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(3))
             ->method('prepare')
-            ->with('DELETE FROM `group` WHERE :group_id = group_id')
+            ->with('DELETE FROM `group` WHERE group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -289,7 +330,7 @@ class PDOGroupProjectionTest extends TestCase
             ->expects($this->once())
             ->method('prepare')
             ->with('UPDATE `score` SET home_team_prediction = :home_team_prediction, away_team_prediction = :away_team_prediction
-            WHERE :score_id = score_id')
+            WHERE score_id = :score_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once

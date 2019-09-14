@@ -26,8 +26,8 @@ class PublisherSeasonRepositoryTest extends TestCase
         $this->season = Season::create(
             SeasonId::fromString('SeasonId'),
             'name',
-            'sport',
-            'type',
+            'Football',
+            Season::SEASON_TYPE_REG,
             new \DateTimeImmutable(),
             new \DateTimeImmutable()
         );

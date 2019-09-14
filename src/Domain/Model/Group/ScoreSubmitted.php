@@ -4,6 +4,7 @@ namespace Tailgate\Domain\Model\Group;
 
 use Buttercup\Protects\DomainEvent;
 use Tailgate\Domain\Model\Group\PlayerId;
+use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Season\GameId;
 
 class ScoreSubmitted implements DomainEvent, GroupDomainEvent
@@ -11,6 +12,7 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
     private $groupId;
     private $scoreId;
     private $playerId;
+    private $memberId;
     private $gameId;
     private $homeTeamPrediction;
     private $awayTeamPrediction;
@@ -20,6 +22,7 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
         GroupId $groupId,
         ScoreId $scoreId,
         PlayerId $playerId,
+        MemberId $memberId,
         GameId $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction
@@ -27,6 +30,7 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
         $this->groupId = $groupId;
         $this->scoreId = $scoreId;
         $this->playerId = $playerId;
+        $this->memberId = $memberId;
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
         $this->awayTeamPrediction = $awayTeamPrediction;
@@ -46,6 +50,11 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
     public function getPlayerId()
     {
         return $this->playerId;
+    }
+
+    public function getMemberId()
+    {
+        return $this->memberId;
     }
 
     public function getGameId()

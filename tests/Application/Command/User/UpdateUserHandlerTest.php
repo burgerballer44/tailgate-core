@@ -14,8 +14,8 @@ class UpdateUserHandlerTest extends TestCase
 {
     private $userId = 'userId';
     private $email = 'updated@email.com';
-    private $status = 'statusUpdated';
-    private $role = 'roleUpdated';
+    private $status = User::STATUS_PENDING;
+    private $role = User::ROLE_ADMIN;
     private $user;
     private $updateUserCommand;
 

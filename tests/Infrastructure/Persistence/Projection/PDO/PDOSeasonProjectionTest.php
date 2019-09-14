@@ -42,8 +42,8 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `season` (season_id, sport, type, name, season_start, season_end, created_at)
-            VALUES (:season_id, :sport, :type, :name, :season_start, :season_end, :created_at)')
+            ->with('INSERT INTO `season` (season_id, name, sport, type, season_start, season_end, created_at)
+            VALUES (:season_id, :name, :sport, :type, :season_start, :season_end, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -164,7 +164,7 @@ class PDOSeasonProjectionTest extends TestCase
             ->with('DELETE FROM `season` WHERE season_id = :season_id')
             ->willReturn($this->pdoStatementMock);
 
-        // execute method called once
+        // execute method called twice
         $this->pdoStatementMock
             ->expects($this->exactly(2))
             ->method('execute')
@@ -188,7 +188,7 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `season` SET sport = :sport, type = :type, name = :name, season_start = :season_start, season_end = :season_end
+            ->with('UPDATE `season` SET name = :name, sport = :sport, type = :type, season_start = :season_start, season_end = :season_end
             WHERE season_id = :season_id')
             ->willReturn($this->pdoStatementMock);
 

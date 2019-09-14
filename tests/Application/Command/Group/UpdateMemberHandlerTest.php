@@ -17,7 +17,7 @@ class UpdateMemberHandlerTest extends TestCase
     private $groupId = 'groupId';
     private $userId = 'userId';
     private $groupName = 'groupName';
-    private $groupRole = 'groupRole';
+    private $groupRole = Group::G_ROLE_ADMIN;
     private $allowMultiplePlayers = 'pizza';
     private $group;
     private $memberId;

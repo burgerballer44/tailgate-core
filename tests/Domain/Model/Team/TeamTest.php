@@ -5,6 +5,7 @@ namespace Tailgate\Test\Domain\Model\Team;
 use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\ModelException;
 use Tailgate\Domain\Model\Team\Follow;
 use Tailgate\Domain\Model\Team\FollowId;
 use Tailgate\Domain\Model\Team\Team;
@@ -77,11 +78,12 @@ class TeamTest extends TestCase
     public function testATeamCanBeDeleted()
     {
         $team = Team::create($this->teamId, $this->designation, $this->mascot);
+        $groupId1 = GroupId::fromString('groupId1');
+        $team->followTeam($groupId1);
 
         $team->delete();
 
-        // deleting a team does not affect anything on the entity yet but we need an assertion
-        $this->assertTrue(true);
+        $this->assertEquals([], $team->getFollows());
     }
 
     public function testAFollowCanBeDeleted()
@@ -107,5 +109,27 @@ class TeamTest extends TestCase
 
         $this->assertCount(1, $follows);
         $this->assertTrue($follows[0]->getFollowId()->equals($followId2));
+    }
+
+    public function testExceptionThrownWhenDeletingFollowThatDoesNotExist()
+    {
+        // create a team, add two follows
+        $team = Team::create($this->teamId, $this->designation, $this->mascot);
+        $groupId1 = GroupId::fromString('groupId1');
+        $groupId2 = GroupId::fromString('groupId2');
+        $team->followTeam($groupId1);
+        $team->followTeam($groupId2);
+
+        // confirm there are two follows for the team
+        $follows = $team->getFollows();
+        $this->assertCount(2, $follows);
+
+        // get the two followIds, delete one, confirm the other is still asociated o the team
+        $followId1 = $follows[0]->getFollowId();
+        $followId2 = $follows[1]->getFollowId();
+
+        $this->expectException(ModelException::class);
+        $this->expectExceptionMessage('The follow does not exist.');
+        $team->deleteFollow(FollowId::fromString('followThatDoesNotExist'));
     }
 }

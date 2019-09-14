@@ -16,6 +16,7 @@ class AddMemberToGroupHandlerTest extends TestCase
 {
     private $groupId = 'groupId';
     private $userId = 'userId';
+    private $userId2 = 'userId2';
     private $groupName = 'groupName';
     private $group;
     private $addMemberToGroupCommand;
@@ -32,14 +33,14 @@ class AddMemberToGroupHandlerTest extends TestCase
 
         $this->addMemberToGroupCommand = new AddMemberToGroupCommand(
             $this->groupId,
-            $this->userId
+            $this->userId2
         );
     }
 
     public function testItAddsAMemberAddedEventToAGroupInTheGroupRepository()
     {
         $groupId = $this->groupId;
-        $userId = $this->userId;
+        $userId = $this->userId2;
         $group = $this->group;
 
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();

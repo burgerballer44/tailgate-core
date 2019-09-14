@@ -2,9 +2,10 @@
 
 namespace Tailgate\Domain\Model\Team;
 
-use Tailgate\Domain\Model\AbstractEntity;
 use Buttercup\Protects\IdentifiesAggregate;
+use Tailgate\Domain\Model\AbstractEntity;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\ModelException;
 
 class Team extends AbstractEntity
 {
@@ -13,35 +14,34 @@ class Team extends AbstractEntity
     private $mascot;
     private $follows = [];
 
-    protected function __construct(
-        $teamId,
-        $designation,
-        $mascot
-    ) {
+    protected function __construct($teamId, $designation, $mascot)
+    {
         $this->teamId = $teamId;
         $this->designation = $designation;
         $this->mascot = $mascot;
     }
 
+    /**
+     * create a team
+     * @param  TeamId $teamId      [description]
+     * @param  [type] $designation [description]
+     * @param  [type] $mascot      [description]
+     * @return [type]              [description]
+     */
     public static function create(TeamId $teamId, $designation, $mascot)
     {
-        $newTeam = new Team(
-            $teamId,
-            $designation,
-            $mascot
-        );
+        $newTeam = new Team($teamId, $designation, $mascot);
 
-        $newTeam->recordThat(
-            new TeamAdded(
-                $teamId,
-                $designation,
-                $mascot
-            )
-        );
+        $newTeam->recordThat(new TeamAdded($teamId, $designation, $mascot));
 
         return $newTeam;
     }
 
+    /**
+     * create an empty team
+     * @param  IdentifiesAggregate $teamId [description]
+     * @return [type]                      [description]
+     */
     protected static function createEmptyEntity(IdentifiesAggregate $teamId)
     {
         return new Team($teamId, '', '');
@@ -67,43 +67,48 @@ class Team extends AbstractEntity
         return $this->follows;
     }
 
+    /**
+     * updates the team's designation adn mascot
+     * @param  [type] $designation [description]
+     * @param  [type] $mascot      [description]
+     * @return [type]              [description]
+     */
     public function update($designation, $mascot)
     {
-        $this->applyAndRecordThat(
-            new TeamUpdated(
-                $this->teamId,
-                $designation,
-                $mascot
-            )
-        );
+        $this->applyAndRecordThat(new TeamUpdated($this->teamId, $designation, $mascot));
     }
 
+    /**
+     * gave a group follow a team
+     * @param  GroupId $groupId [description]
+     * @return [type]           [description]
+     */
     public function followTeam(GroupId $groupId)
     {
-        $this->applyAndRecordThat(
-            new TeamFollowed(
-                $this->teamId,
-                new FollowId(),
-                $groupId
-            )
-        );
+        $this->applyAndRecordThat(new TeamFollowed($this->teamId, new FollowId(), $groupId));
     }
 
+    /**
+     * delete all follows the team
+     * @return [type] [description]
+     */
     public function delete()
     {
-        $this->applyAndRecordThat(
-            new TeamDeleted($this->teamId)
-        );
+        $this->applyAndRecordThat(new TeamDeleted($this->teamId));
     }
 
+    /**
+     * remove a follow
+     * @param  FollowId $followId [description]
+     * @return [type]             [description]
+     */
     public function deleteFollow(FollowId $followId)
     {
-        $this->applyAndRecordThat(
-            new FollowDeleted(
-                $this->teamId,
-                $followId,
-            )
-        );
+        if (!$follow = $this->getFollowById($followId)) {
+            throw new ModelException('The follow does not exist.');
+        }
+
+        $this->applyAndRecordThat(new FollowDeleted($this->teamId, $followId));
     }
 
     protected function applyTeamAdded(TeamAdded $event)
@@ -136,5 +141,15 @@ class Team extends AbstractEntity
 
     protected function applyTeamDeleted(TeamDeleted $event)
     {
+        $this->follows = [];
+    }
+
+    private function getFollowById(FollowId $followId)
+    {
+        foreach ($this->follows as $follow) {
+            if ($follow->getFollowId()->equals($followId)) {
+                return $follow;
+            }
+        }
     }
 }
