@@ -3,6 +3,7 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PHPUnit\Framework\TestCase;
+use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\GameViewRepository;
@@ -102,5 +103,30 @@ class PDOGameViewRepositoryTest extends TestCase
             ->method('fetch');
 
         $this->viewRepository->getAllBySeason($seasonId);
+    }
+
+    public function testItCanGetAllGamesOfATeam()
+    {
+        $teamId = TeamId::fromString('teamId');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `game` WHERE home_team_id = :team_id OR away_team_id = :team_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':team_id' => (string) $teamId]);
+
+        // fetch method called
+        $this->pdoStatementMock
+            ->expects($this->atLeastOnce())
+            ->method('fetch');
+
+        $this->viewRepository->getAllByteam($teamId);
     }
 }

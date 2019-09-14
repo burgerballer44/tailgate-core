@@ -16,7 +16,7 @@ class LoggerDomainEventSubscriber implements EventSubscriberInterface
 
     public function handle($event)
     {
-        $this->logger->info(json_encode($event));
+        $this->logger->info(get_class($event));
     }
 
     public function isSubscribedTo($event)
