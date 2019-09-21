@@ -38,9 +38,9 @@ class UpdateSeasonHandlerTest extends TestCase
 
         $this->updateSeasonCommand = new UpdateSeasonCommand(
             SeasonId::fromString($this->seasonId),
+            $this->name,
             $this->sport,
             $this->seasonType,
-            $this->name,
             $this->seasonStart->format('Y-m-d'),
             $this->seasonEnd->format('Y-m-d')
         );

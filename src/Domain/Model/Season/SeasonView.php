@@ -6,7 +6,7 @@ class SeasonView
 {
     private $season_id;
     private $sport;
-    private $type;
+    private $seasonType;
     private $name;
     private $season_start;
     private $season_end;
@@ -15,14 +15,14 @@ class SeasonView
     public function __construct(
         $season_id,
         $sport,
-        $type,
+        $seasonType,
         $name,
         $season_start,
         $season_end
     ) {
         $this->season_id = $season_id;
         $this->sport = $sport;
-        $this->type = $type;
+        $this->seasonType = $seasonType;
         $this->name = $name;
         $this->season_start = $season_start;
         $this->season_end = $season_end;
@@ -38,9 +38,9 @@ class SeasonView
         return $this->sport;
     }
 
-    public function getType()
+    public function getSeasonType()
     {
-        return $this->type;
+        return $this->seasonType;
     }
 
     public function getName()

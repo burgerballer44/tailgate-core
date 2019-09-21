@@ -13,16 +13,16 @@ class UpdateSeasonCommand
 
     public function __construct(
         string $seasonId,
+        string $name,
         string $sport,
         string $seasonType,
-        string $name,
         string $seasonStart,
         string $seasonEnd
     ) {
+        $this->name = $name;
         $this->seasonId = $seasonId;
         $this->sport = $sport;
         $this->seasonType = $seasonType;
-        $this->name = $name;
         $this->seasonStart = $seasonStart;
         $this->seasonEnd = $seasonEnd;
     }
@@ -30,6 +30,11 @@ class UpdateSeasonCommand
     public function getSeasonId()
     {
         return $this->seasonId;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function getSport()
@@ -40,11 +45,6 @@ class UpdateSeasonCommand
     public function getSeasonType()
     {
         return $this->seasonType;
-    }
-
-    public function getName()
-    {
-        return $this->name;
     }
 
     public function getSeasonStart()

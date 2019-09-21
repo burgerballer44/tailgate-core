@@ -25,7 +25,7 @@ class SeasonViewArrayDataTransformer implements SeasonDataTransformerInterface
         return [
             'seasonId'    => $seasonView->getSeasonId(),
             'sport'       => $seasonView->getSport(),
-            'type'        => $seasonView->getType(),
+            'seasonType'  => $seasonView->getSeasonType(),
             'name'        => $seasonView->getName(),
             'seasonStart' => $seasonView->getSeasonStart(),
             'seasonEnd'   => $seasonView->getSeasonEnd(),

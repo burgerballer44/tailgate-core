@@ -12,9 +12,7 @@ class Season extends AbstractEntity
     const SPORT_FOOTBALL = 'Football';
     const SPORT_BASKETBALL = 'Basketball';
 
-    const SEASON_TYPE_PRE = 'Pre-Season';
     const SEASON_TYPE_REG = 'Regular-Season';
-    const SEASON_TYPE_POST = 'Post-Season';
 
     private $seasonId;
     private $sport;
@@ -267,9 +265,7 @@ class Season extends AbstractEntity
     public static function getValidSeasonTypes()
     {
         return [
-            self::SEASON_TYPE_PRE,
             self::SEASON_TYPE_REG,
-            self::SEASON_TYPE_POST,
         ];
     }
 }
