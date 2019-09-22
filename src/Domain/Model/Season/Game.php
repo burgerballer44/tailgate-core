@@ -90,4 +90,9 @@ class Game
     {
         $this->awayTeamScore = $awayTeamScore;
     }
+
+    public function addStartDate(\DateTimeImmutable $startDate)
+    {
+        $this->startDate = $startDate;
+    }
 }

@@ -21,13 +21,15 @@ class UpdateGameScoreHandler
         $gameId = $command->getGameId();
         $homeTeamScore = $command->getHomeTeamScore();
         $awayTeamScore = $command->getAwayTeamScore();
+        $startDate = $command->getStartDate();
 
         $season = $this->seasonRepository->get(SeasonId::fromString($seasonId));
 
         $season->updateGameScore(
             GameId::fromString($gameId),
             $homeTeamScore,
-            $awayTeamScore
+            $awayTeamScore,
+            \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)
         );
         
         $this->seasonRepository->add($season);

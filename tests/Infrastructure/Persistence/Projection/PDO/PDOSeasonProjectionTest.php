@@ -70,7 +70,7 @@ class PDOSeasonProjectionTest extends TestCase
             GameId::fromString('gameId'),
             TeamId::fromString('homeTeamId'),
             TeamId::fromString('awayTeamId'),
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01')
+            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-10-01 19:30')
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -104,14 +104,15 @@ class PDOSeasonProjectionTest extends TestCase
             SeasonId::fromString('seasonId'),
             GameId::fromString('gameId'),
             80,
-            70
+            70,
+            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-09-01 19:30'),
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score
+            ->with('UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score, start_date = :start_date
             WHERE game_id = :game_id')
             ->willReturn($this->pdoStatementMock);
 
@@ -122,7 +123,8 @@ class PDOSeasonProjectionTest extends TestCase
             ->with([
                 ':game_id' => $event->getGameId(),
                 ':home_team_score' => $event->getHomeTeamScore(),
-                ':away_team_score' => $event->getAwayTeamScore()
+                ':away_team_score' => $event->getAwayTeamScore(),
+                ':start_date' => $event->getStartDate()->format('Y-m-d H:i:s')
             ]);
 
         $this->projection->projectGameScoreUpdated($event);

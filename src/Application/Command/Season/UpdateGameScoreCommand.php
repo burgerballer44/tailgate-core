@@ -8,17 +8,20 @@ class UpdateGameScoreCommand
     private $gameId;
     private $homeTeamScore;
     private $awayTeamScore;
+    private $startDate;
 
     public function __construct(
         string $seasonId,
         string $gameId,
         int $homeTeamScore,
-        int $awayTeamScore
+        int $awayTeamScore,
+        string $startDate
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;
         $this->homeTeamScore = $homeTeamScore;
         $this->awayTeamScore = $awayTeamScore;
+        $this->startDate = $startDate;
     }
 
     public function getSeasonId()
@@ -39,5 +42,10 @@ class UpdateGameScoreCommand
     public function getAwayTeamScore()
     {
         return $this->awayTeamScore;
+    }
+
+    public function getStartDate()
+    {
+        return $this->startDate;
     }
 }

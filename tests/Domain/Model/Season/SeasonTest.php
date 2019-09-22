@@ -108,17 +108,19 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-10-01 19:30');
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
         $games = $season->getGames();
 
         $homeTeamScore = 70;
         $awayTeamScore = 60;
+        $newStartDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-12-01 19:30');
 
         $season->updateGameScore(
             $games[0]->getGameId(),
             $homeTeamScore,
-            $awayTeamScore
+            $awayTeamScore,
+            $newStartDate
         );
 
         $this->assertCount(1, $games);
@@ -126,7 +128,7 @@ class SeasonTest extends TestCase
         $this->assertTrue($games[0]->getGameId() instanceof GameId);
         $this->assertEquals($homeTeamScore, $games[0]->getHomeTeamScore());
         $this->assertEquals($awayTeamScore, $games[0]->getAwayTeamScore());
-        $this->assertTrue($games[0]->getStartDate() === $startDate);
+        $this->assertTrue($games[0]->getStartDate()->format('Y-m-d H:i') === $newStartDate->format('Y-m-d H:i'));
         $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
     }
 
@@ -147,7 +149,12 @@ class SeasonTest extends TestCase
  
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('The game does not exist. Cannot update the game score.');
-        $season->updateGameScore(GameId::fromString('gameThatDoesNoExist'), 12, 23);
+        $season->updateGameScore(
+            GameId::fromString('gameThatDoesNoExist'),
+            12,
+            23,
+            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-12-01')
+        );
     }
 
     public function testAGameCanBeRemovedFromASeason()

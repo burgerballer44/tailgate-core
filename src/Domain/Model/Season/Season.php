@@ -154,15 +154,16 @@ class Season extends AbstractEntity
      * @param  GameId $gameId        [description]
      * @param  [type] $homeTeamScore [description]
      * @param  [type] $awayTeamScore [description]
+     * @param  [type] $startDate [description]
      * @return [type]                [description]
      */
-    public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore)
+    public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore, $startDate)
     {
         if (!$game = $this->getGameById($gameId)) {
             throw new ModelException('The game does not exist. Cannot update the game score.');
         }
 
-        $this->applyAndRecordThat(new GameScoreUpdated($this->seasonId, $gameId, $homeTeamScore, $awayTeamScore));
+        $this->applyAndRecordThat(new GameScoreUpdated($this->seasonId, $gameId, $homeTeamScore, $awayTeamScore, $startDate));
     }
 
     /**
@@ -222,6 +223,7 @@ class Season extends AbstractEntity
         $game = $this->getGameById($event->getGameId());
         $game->addHomeTeamScore($event->getHomeTeamScore());
         $game->addAwayTeamScore($event->getAwayTeamScore());
+        $game->addStartDate($event->getStartDate());
     }
 
 
