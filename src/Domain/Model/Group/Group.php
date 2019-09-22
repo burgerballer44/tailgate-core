@@ -110,6 +110,10 @@ class Group extends AbstractEntity
             throw new ModelException('The player submitting the score does not exist.');
         }
 
+        if ($score = $this->getScoreByPlayerIdAndGameId($playerId, $gameId)) {
+            throw new ModelException('The player already submitted a score for this game.');
+        }
+
         $this->applyAndRecordThat(
             new ScoreSubmitted(
                 $this->groupId,
@@ -474,6 +478,21 @@ class Group extends AbstractEntity
     {
         foreach ($this->scores as $score) {
             if ($score->getScoreId()->equals($scoreId)) {
+                return $score;
+            }
+        }
+    }
+
+    /**
+     * [getScoreByPlayerIdAndGameId description]
+     * @param  PlayerId $playerId [description]
+     * @param  GameId   $gameId   [description]
+     * @return [type]             [description]
+     */
+    private function getScoreByPlayerIdAndGameId(PlayerId $playerId, GameId $gameId)
+    {
+        foreach ($this->scores as $score) {
+            if ($score->getPlayerId()->equals($playerId) && $score->getGameId()->equals($gameId)) {
                 return $score;
             }
         }

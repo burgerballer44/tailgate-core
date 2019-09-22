@@ -429,6 +429,21 @@ class GroupTest extends TestCase
         $group->submitScore(PlayerId::fromString('playerIdThatDoesNotExist'), GameId::fromString('gameId'), 1, 2);
     }
 
+    public function testAnExceptionThrownForPlayerThatHasAlreadySubmitAScoreForGame()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $gameId = GameId::fromString('gameId');
+        $memberId = $group->getMembers()[0]->getMemberId();
+        $group->addPlayer($memberId, 'username');
+        $playerId = $group->getPlayers()[0]->getPlayerId();
+        $group->submitScore($playerId, $gameId, 1, 2);
+
+
+        $this->expectException(ModelException::class);
+        $this->expectExceptionMessage('The player already submitted a score for this game.');
+        $group->submitScore($playerId, $gameId, 1, 2);
+    }
+
     public function testAnExceptionThrownForMemberThatDoesntExistWhenAddingPlayer()
     {
         $group = Group::create($this->groupId, $this->groupName, $this->ownerId);

@@ -85,6 +85,10 @@ class Team extends AbstractEntity
      */
     public function followTeam(GroupId $groupId)
     {
+        if ($team = $this->getFollowByGroupId($groupId)) {
+            throw new ModelException('The group already follows this team.');
+        }
+
         $this->applyAndRecordThat(new TeamFollowed($this->teamId, new FollowId(), $groupId));
     }
 
@@ -142,6 +146,15 @@ class Team extends AbstractEntity
     protected function applyTeamDeleted(TeamDeleted $event)
     {
         $this->follows = [];
+    }
+
+    private function getFollowByGroupId(GroupId $groupId)
+    {
+        foreach ($this->follows as $follow) {
+            if ($follow->getGroupId()->equals($groupId)) {
+                return $follow;
+            }
+        }
     }
 
     private function getFollowById(FollowId $followId)

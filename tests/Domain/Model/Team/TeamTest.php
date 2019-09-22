@@ -63,6 +63,18 @@ class TeamTest extends TestCase
         $this->assertTrue($follows[0]->getTeamId()->equals($this->teamId));
     }
 
+    public function testExceptionThrownWhenTeamIsAlreadyFollowedByGroup()
+    {
+        // create a team, and add a follow
+        $team = Team::create($this->teamId, $this->designation, $this->mascot);
+        $groupId1 = GroupId::fromString('groupId1');
+        $team->followTeam($groupId1);
+
+        $this->expectException(ModelException::class);
+        $this->expectExceptionMessage('The group already follows this team.');
+        $team->followTeam($groupId1);
+    }
+
     public function testATeamCanBeUpdated()
     {
         $designation = 'updatedDesignaton';
