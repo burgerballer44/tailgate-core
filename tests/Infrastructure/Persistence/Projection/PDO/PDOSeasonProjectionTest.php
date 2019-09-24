@@ -105,7 +105,7 @@ class PDOSeasonProjectionTest extends TestCase
             GameId::fromString('gameId'),
             80,
             70,
-            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-09-01 19:30'),
+            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-09-01 19:30')
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
