@@ -37,6 +37,11 @@ class TeamView
         return $this->follows;
     }
 
+    public function getGames()
+    {
+        return $this->games;
+    }
+
     public function addFollowViews($followView)
     {
         if (is_array($followView)) {
