@@ -73,13 +73,20 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
 
     public function projectGameDeleted(GameDeleted $event)
     {
-        $stmt = $this->pdo->prepare('DELETE FROM `game` WHERE game_id = :game_id');
+        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE game_id = :game_id');
+        $stmt->execute([':game_id' => $event->getGameId()]);
 
+        $stmt = $this->pdo->prepare('DELETE FROM `game` WHERE game_id = :game_id');
         $stmt->execute([':game_id' => $event->getGameId()]);
     }
 
     public function projectSeasonDeleted(SeasonDeleted $event)
     {
+        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE game_id IN (
+            SELECT game_id FROM game WHERE season_id = :season_id
+        )');
+        $stmt->execute([':season_id' => $event->getAggregateId()]);
+
         $stmt = $this->pdo->prepare('DELETE FROM `game` WHERE season_id = :season_id');
         $stmt->execute([':season_id' => $event->getAggregateId()]);
 

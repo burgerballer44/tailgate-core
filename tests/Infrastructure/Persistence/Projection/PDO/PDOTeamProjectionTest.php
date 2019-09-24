@@ -136,17 +136,29 @@ class PDOTeamProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->at(0))
             ->method('prepare')
-            ->with('DELETE FROM `follow` WHERE team_id = :team_id')
+            ->with('DELETE FROM `score` WHERE game_id IN (
+            SELECT game_id FROM game WHERE home_team_id = :team_id OR away_team_id = :team_id
+        )')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(1))
             ->method('prepare')
+            ->with('DELETE FROM `game` WHERE home_team_id = :team_id OR away_team_id = :team_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(2))
+            ->method('prepare')
+            ->with('DELETE FROM `follow` WHERE team_id = :team_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(3))
+            ->method('prepare')
             ->with('DELETE FROM `team` WHERE team_id = :team_id')
             ->willReturn($this->pdoStatementMock);
 
-        // execute method called twice
+        // execute method called 4 times
         $this->pdoStatementMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(4))
             ->method('execute')
             ->with([':team_id' => $event->getAggregateId()]);
 

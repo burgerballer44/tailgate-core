@@ -136,14 +136,19 @@ class PDOSeasonProjectionTest extends TestCase
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->once())
+            ->expects($this->at(0))
+            ->method('prepare')
+            ->with('DELETE FROM `score` WHERE game_id = :game_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(1))
             ->method('prepare')
             ->with('DELETE FROM `game` WHERE game_id = :game_id')
             ->willReturn($this->pdoStatementMock);
 
-        // execute method called once
+        // execute method called twice
         $this->pdoStatementMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('execute')
             ->with([':game_id' => $event->getGameId()]);
 
@@ -158,17 +163,24 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->at(0))
             ->method('prepare')
-            ->with('DELETE FROM `game` WHERE season_id = :season_id')
+            ->with('DELETE FROM `score` WHERE game_id IN (
+            SELECT game_id FROM game WHERE season_id = :season_id
+        )')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(1))
             ->method('prepare')
+            ->with('DELETE FROM `game` WHERE season_id = :season_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(2))
+            ->method('prepare')
             ->with('DELETE FROM `season` WHERE season_id = :season_id')
             ->willReturn($this->pdoStatementMock);
 
-        // execute method called twice
+        // execute method called three times
         $this->pdoStatementMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('execute')
             ->with([':season_id' => $event->getAggregateId()]);
 
