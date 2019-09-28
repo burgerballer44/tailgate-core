@@ -20,7 +20,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
 
     public function get(FollowId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `follow` WHERE follow_id = :follow_id LIMIT 1');
+        $stmt = $this->pdo->prepare('SELECT * FROM `follow`
+            JOIN `group` on `group`.group_id = `follow`.group_id
+            JOIN `team` on `team`.team_id = `follow`.team_id
+            WHERE `follow`.follow_id = :follow_id LIMIT 1');
         $stmt->execute([':follow_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -30,13 +33,19 @@ class FollowViewRepository implements FollowViewRepositoryInterface
         return new FollowView(
             $row['team_id'],
             $row['follow_id'],
-            $row['group_id']
+            $row['group_id'],
+            $row['name'],
+            $row['designation'],
+            $row['mascot']
         );
     }
 
     public function getAllByTeam(TeamId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `follow` WHERE team_id = :team_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `follow`
+            JOIN `group` on `group`.group_id = `follow`.group_id
+            JOIN `team` on `team`.team_id = `follow`.team_id
+            WHERE `follow`.team_id = :team_id');
         $stmt->execute([':team_id' => (string) $id]);
 
         $follows = [];
@@ -45,7 +54,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             $follows[] = new FollowView(
                 $row['team_id'],
                 $row['follow_id'],
-                $row['group_id']
+                $row['group_id'],
+                $row['name'],
+                $row['designation'],
+                $row['mascot']
             );
         }
 

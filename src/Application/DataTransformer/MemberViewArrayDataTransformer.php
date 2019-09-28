@@ -14,7 +14,8 @@ class MemberViewArrayDataTransformer implements MemberDataTransformerInterface
             'groupId' => $memberView->getGroupId(),
             'userId' => $memberView->getUserId(),
             'role' => $memberView->getRole(),
-            'allowMultiplePlayers' => $memberView->getAllowMultiplePlayers()
+            'allowMultiplePlayers' => $memberView->getAllowMultiplePlayers(),
+            'email' => $memberView->getEmail()
         ];
     }
 }

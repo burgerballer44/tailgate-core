@@ -15,7 +15,13 @@ class ScoreViewArrayDataTransformer implements ScoreDataTransformerInterface
             'playerId' => $scoreView->getPlayerId(),
             'gameId' => $scoreView->getGameId(),
             'homeTeamPrediction' => $scoreView->getHomeTeamPrediction(),
-            'awayTeamPrediction' => $scoreView->getAwayTeamPrediction()
+            'awayTeamPrediction' => $scoreView->getAwayTeamPrediction(),
+            'homeTeamId' => $scoreView->getHomeTeamId(),
+            'awayTeamId' => $scoreView->getAwayTeamId(),
+            'homeDesignation' => $scoreView->getHomeDesignation(),
+            'homeMascot' => $scoreView->getHomeMascot(),
+            'awayDesignation' => $scoreView->getAwayDesignation(),
+            'awayMascot' => $scoreView->getAwayMascot()
         ];
     }
 }

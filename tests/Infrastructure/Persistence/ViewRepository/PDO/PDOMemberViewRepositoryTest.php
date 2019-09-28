@@ -29,7 +29,9 @@ class PDOMemberViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `member` WHERE member_id = :member_id LIMIT 1')
+            ->with('SELECT * FROM `member`
+            JOIN `user` on `user`.user_id = `member`.user_id
+            WHERE `member`.member_id = :member_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
         // execute and fetch method called once
@@ -55,7 +57,9 @@ class PDOMemberViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `member` WHERE member_id = :member_id LIMIT 1')
+            ->with('SELECT * FROM `member`
+            JOIN `user` on `user`.user_id = `member`.user_id
+            WHERE `member`.member_id = :member_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -72,6 +76,7 @@ class PDOMemberViewRepositoryTest extends TestCase
                 'user_id' => 'blah',
                 'role' => 'blah',
                 'allow_multiple' => 'blah',
+                'email' => 'blah',
             ]);
 
         $this->viewRepository->get($memberId);
@@ -85,7 +90,9 @@ class PDOMemberViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `member` WHERE group_id = :group_id')
+            ->with('SELECT * FROM `member`
+            JOIN `user` on `user`.user_id = `member`.user_id
+            WHERE `member`.group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once

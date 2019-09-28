@@ -20,7 +20,9 @@ class MemberViewRepository implements MemberViewRepositoryInterface
 
     public function get(MemberId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `member` WHERE member_id = :member_id LIMIT 1');
+        $stmt = $this->pdo->prepare('SELECT * FROM `member`
+            JOIN `user` on `user`.user_id = `member`.user_id
+            WHERE `member`.member_id = :member_id LIMIT 1');
         $stmt->execute([':member_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -32,13 +34,16 @@ class MemberViewRepository implements MemberViewRepositoryInterface
             $row['group_id'],
             $row['user_id'],
             $row['role'],
-            $row['allow_multiple']
+            $row['allow_multiple'],
+            $row['email']
         );
     }
 
     public function getAllByGroup(GroupId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `member` WHERE group_id = :group_id');
+        $stmt = $this->pdo->prepare('SELECT * FROM `member`
+            JOIN `user` on `user`.user_id = `member`.user_id
+            WHERE `member`.group_id = :group_id');
         $stmt->execute([':group_id' => (string) $id]);
 
         $members = [];
@@ -49,7 +54,8 @@ class MemberViewRepository implements MemberViewRepositoryInterface
                 $row['group_id'],
                 $row['user_id'],
                 $row['role'],
-                $row['allow_multiple']
+                $row['allow_multiple'],
+                $row['email']
             );
         }
 

@@ -29,7 +29,10 @@ class PDOFollowViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `follow` WHERE follow_id = :follow_id LIMIT 1')
+            ->with('SELECT * FROM `follow`
+            JOIN `group` on `group`.group_id = `follow`.group_id
+            JOIN `team` on `team`.team_id = `follow`.team_id
+            WHERE `follow`.follow_id = :follow_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
         // execute and fetch method called once
@@ -55,7 +58,10 @@ class PDOFollowViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `follow` WHERE follow_id = :follow_id LIMIT 1')
+            ->with('SELECT * FROM `follow`
+            JOIN `group` on `group`.group_id = `follow`.group_id
+            JOIN `team` on `team`.team_id = `follow`.team_id
+            WHERE `follow`.follow_id = :follow_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -69,7 +75,10 @@ class PDOFollowViewRepositoryTest extends TestCase
             ->willReturn([
                 'team_id' => 'blah',
                 'follow_id' => 'blah',
-                'group_id' => 'blah'
+                'group_id' => 'blah',
+                'name' => 'blah',
+                'designation' => 'blah',
+                'mascot' => 'blah'
             ]);
 
         $this->viewRepository->get($followId);
@@ -83,7 +92,10 @@ class PDOFollowViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `follow` WHERE team_id = :team_id')
+            ->with('SELECT * FROM `follow`
+            JOIN `group` on `group`.group_id = `follow`.group_id
+            JOIN `team` on `team`.team_id = `follow`.team_id
+            WHERE `follow`.team_id = :team_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once

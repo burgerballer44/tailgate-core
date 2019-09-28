@@ -10,6 +10,12 @@ class ScoreView
     private $gameId;
     private $homeTeamPrediction;
     private $awayTeamPrediction;
+    private $homeTeamId;
+    private $awayTeamId;
+    private $homeDesignation;
+    private $homeMascot;
+    private $awayDesignation;
+    private $awayMascot;
 
     public function __construct(
         $scoreId,
@@ -17,7 +23,13 @@ class ScoreView
         $playerId,
         $gameId,
         $homeTeamPrediction,
-        $awayTeamPrediction
+        $awayTeamPrediction,
+        $homeTeamId,
+        $awayTeamId,
+        $homeDesignation,
+        $homeMascot,
+        $awayDesignation,
+        $awayMascot
     ) {
         $this->scoreId = $scoreId;
         $this->groupId = $groupId;
@@ -25,6 +37,12 @@ class ScoreView
         $this->gameId = $gameId;
         $this->homeTeamPrediction = $homeTeamPrediction;
         $this->awayTeamPrediction = $awayTeamPrediction;
+        $this->homeTeamId = $homeTeamId;
+        $this->awayTeamId = $awayTeamId;
+        $this->homeDesignation = $homeDesignation;
+        $this->homeMascot = $homeMascot;
+        $this->awayDesignation = $awayDesignation;
+        $this->awayMascot = $awayMascot;
     }
 
     public function getScoreId()
@@ -55,5 +73,34 @@ class ScoreView
     public function getAwayTeamPrediction()
     {
         return $this->awayTeamPrediction;
+    }
+    public function getHomeTeamId()
+    {
+        return $this->homeTeamId;
+    }
+
+    public function getAwayTeamId()
+    {
+        return $this->awayTeamId;
+    }
+
+    public function getHomeDesignation()
+    {
+        return $this->homeDesignation;
+    }
+
+    public function getHomeMascot()
+    {
+        return $this->homeMascot;
+    }
+
+    public function getAwayDesignation()
+    {
+        return $this->awayDesignation;
+    }
+
+    public function getAwayMascot()
+    {
+        return $this->awayMascot;
     }
 }

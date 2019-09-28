@@ -11,6 +11,10 @@ class GameView
     private $homeTeamScore;
     private $awayTeamScore;
     private $startDate;
+    private $homeDesignation;
+    private $homeMascot;
+    private $awayDesignation;
+    private $awayMascot;
 
     public function __construct(
         $seasonId,
@@ -19,7 +23,11 @@ class GameView
         $awayTeamId,
         $homeTeamScore,
         $awayTeamScore,
-        $startDate
+        $startDate,
+        $homeDesignation,
+        $homeMascot,
+        $awayDesignation,
+        $awayMascot
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;
@@ -28,6 +36,10 @@ class GameView
         $this->homeTeamScore = $homeTeamScore;
         $this->awayTeamScore = $awayTeamScore;
         $this->startDate = $startDate;
+        $this->homeDesignation = $homeDesignation;
+        $this->homeMascot = $homeMascot;
+        $this->awayDesignation = $awayDesignation;
+        $this->awayMascot = $awayMascot;
     }
 
     public function getSeasonId()
@@ -63,5 +75,25 @@ class GameView
     public function getStartDate()
     {
         return $this->startDate;
+    }
+
+    public function getHomeDesignation()
+    {
+        return $this->homeDesignation;
+    }
+
+    public function getHomeMascot()
+    {
+        return $this->homeMascot;
+    }
+
+    public function getAwayDesignation()
+    {
+        return $this->awayDesignation;
+    }
+
+    public function getAwayMascot()
+    {
+        return $this->awayMascot;
     }
 }

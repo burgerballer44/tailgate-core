@@ -10,13 +10,17 @@ class GameViewArrayDataTransformer implements GameDataTransformerInterface
     public function read(GameView $gameView)
     {
         return [
-            'seasonId'      => $gameView->getSeasonId(),
-            'gameId'        => $gameView->getGameId(),
-            'homeTeamId'    => $gameView->getHomeTeamId(),
-            'awayTeamId'    => $gameView->getAwayTeamId(),
-            'homeTeamScore' => $gameView->getHomeTeamScore(),
-            'awayTeamScore' => $gameView->getAwayTeamScore(),
-            'startDate'     => $gameView->getStartDate(),
+            'seasonId'        => $gameView->getSeasonId(),
+            'gameId'          => $gameView->getGameId(),
+            'homeTeamId'      => $gameView->getHomeTeamId(),
+            'awayTeamId'      => $gameView->getAwayTeamId(),
+            'homeTeamScore'   => $gameView->getHomeTeamScore(),
+            'awayTeamScore'   => $gameView->getAwayTeamScore(),
+            'startDate'       => $gameView->getStartDate(),
+            'homeDesignation' => $gameView->getHomeDesignation(),
+            'homeMascot'      => $gameView->getHomeMascot(),
+            'awayDesignation' => $gameView->getAwayDesignation(),
+            'awayMascot'      => $gameView->getAwayMascot(),
         ];
     }
 }
