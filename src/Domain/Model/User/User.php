@@ -9,8 +9,7 @@ use Tailgate\Domain\Model\ModelException;
 class User extends AbstractEntity
 {
     const ROLE_USER = 'Normal'; // the average user, normal people who sign up
-    const ROLE_ADMIN = 'Admin'; // an important person who can mostly do whatever
-    const ROLE_DEVELOPER = 'Developer'; // more than an admin who can do whatever
+    const ROLE_ADMIN = 'Admin'; // an important person who can do whatever
 
     const STATUS_ACTIVE = 'Active'; // can use the app
     const STATUS_PENDING = 'Pending'; // user who signs up but needs to confirm email
@@ -189,7 +188,6 @@ class User extends AbstractEntity
         return [
             self::ROLE_USER,
             self::ROLE_ADMIN,
-            // self::ROLE_DEVELOPER,
         ];
     }
 
