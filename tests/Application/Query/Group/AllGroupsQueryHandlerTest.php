@@ -10,7 +10,7 @@ use Tailgate\Application\DataTransformer\GroupDataTransformerInterface;
 
 class AllGroupsQueryHandlerTest extends TestCase
 {
-    public function testItAttemptsToGetAllGroupsFromUserViewRepository()
+    public function testItAttemptsToGetAllGroupsFromGroupViewRepository()
     {
         $groupViewRepository = $this->createMock(GroupViewRepositoryInterface::class);
         $groupViewTransformer = $this->createMock(GroupDataTransformerInterface::class);

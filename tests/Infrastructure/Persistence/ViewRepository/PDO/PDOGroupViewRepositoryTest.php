@@ -101,29 +101,29 @@ class PDOGroupViewRepositoryTest extends TestCase
         $this->viewRepository->all();
     }
 
-    public function testItCanGetAllGroupsAUserBelongsTo()
+    public function testItCanQueryGroups()
     {
         $userId = UserId::fromString('userId');
+        $name = 'name';
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT group.group_id, group.name, group.owner_id FROM `group`
-            JOIN `member` on `member`.group_id = `group`.group_id
-            WHERE `member`.user_id = :user_id')
+            ->with("SELECT * FROM `group`
+            JOIN `member` on `member`.group_id = `group`.group_id WHERE 1=1  AND  user_id = :user_id  AND  name LIKE '%:name%' ")
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
-            ->with([':user_id' => (string) $userId]);
+            ->with([':user_id' => (string) $userId, ':name' => $name]);
 
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('fetch');
 
-        $this->viewRepository->getAllByUser($userId);
+        $this->viewRepository->query($userId, $name);
     }
 }
