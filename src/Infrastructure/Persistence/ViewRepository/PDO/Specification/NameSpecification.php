@@ -16,6 +16,6 @@ class NameSpecification extends SpecificationDecorator
 
     public function toSql(): string
     {
-        return $this->specification->toSql() . " name LIKE '%:name%' ";
+        return $this->specification->toSql() . " name LIKE :name ";
     }
 }

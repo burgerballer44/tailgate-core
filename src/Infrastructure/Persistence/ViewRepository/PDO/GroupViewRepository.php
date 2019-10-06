@@ -70,7 +70,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         if ($name) {
             $specification = new AndSpecification($specification);
             $specification = new NameSpecification($specification);
-            $params[':name'] = $name;
+            $params[':name'] = "%{$name}%";
         }
 
         $stmt = $this->pdo->prepare('SELECT * FROM `group`

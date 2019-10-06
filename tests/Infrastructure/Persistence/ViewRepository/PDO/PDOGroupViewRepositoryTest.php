@@ -111,14 +111,14 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('prepare')
             ->with("SELECT * FROM `group`
-            JOIN `member` on `member`.group_id = `group`.group_id WHERE 1=1  AND  user_id = :user_id  AND  name LIKE '%:name%' ")
+            JOIN `member` on `member`.group_id = `group`.group_id WHERE 1=1  AND  user_id = :user_id  AND  name LIKE :name ")
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
-            ->with([':user_id' => (string) $userId, ':name' => $name]);
+            ->with([':user_id' => (string) $userId, ':name' => "%{$name}%"]);
 
         $this->pdoStatementMock
             ->expects($this->once())
