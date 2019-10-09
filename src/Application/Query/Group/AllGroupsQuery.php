@@ -4,4 +4,15 @@ namespace Tailgate\Application\Query\Group;
 
 class AllGroupsQuery
 {
+    private $userId;
+
+    public function __construct(string $userId)
+    {
+        $this->userId = $userId;
+    }
+
+    public function getUserId()
+    {
+        return $this->userId;
+    }
 }

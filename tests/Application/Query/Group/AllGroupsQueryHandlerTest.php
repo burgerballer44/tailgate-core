@@ -12,11 +12,13 @@ class AllGroupsQueryHandlerTest extends TestCase
 {
     public function testItAttemptsToGetAllGroupsFromGroupViewRepository()
     {
+        $userId = 'userId';
+
         $groupViewRepository = $this->createMock(GroupViewRepositoryInterface::class);
         $groupViewTransformer = $this->createMock(GroupDataTransformerInterface::class);
         $groupViewRepository->expects($this->once())->method('all')->willReturn([]);
 
-        $allGroupsQuery = new AllGroupsQuery();
+        $allGroupsQuery = new AllGroupsQuery($userId);
         $allGroupsQueryHandler = new AllGroupsQueryHandler($groupViewRepository, $groupViewTransformer);
         $allGroupsQueryHandler->handle($allGroupsQuery);
     }

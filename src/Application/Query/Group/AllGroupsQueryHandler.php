@@ -2,8 +2,9 @@
 
 namespace Tailgate\Application\Query\Group;
 
-use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Application\DataTransformer\GroupDataTransformerInterface;
+use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
+use Tailgate\Domain\Model\User\UserId;
 
 class AllGroupsQueryHandler
 {
@@ -20,7 +21,9 @@ class AllGroupsQueryHandler
 
     public function handle(AllGroupsQuery $query)
     {
-        $groupViews = $this->groupViewRepository->all();
+        $userId = UserId::fromString($query->getUserId());
+
+        $groupViews = $this->groupViewRepository->all($userId);
 
         $groups = [];
 

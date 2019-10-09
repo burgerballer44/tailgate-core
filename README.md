@@ -3,34 +3,3 @@
 
 ## Composer
 `composer install`
-
-## Todo List
-
-#### User
-* invite codes to invite someone to use the site as part of your group
-* password reset token for resetting passwords
-* authorization key for auth stuff
-* user update their own info
-
-### Group
-* generate access code so other users can search for and join group
-* message for describing the group
-* change group role of members
-* limit numbers of members in group
-* create rules/rule list that a group can follow
-* validation - groups must have unique name
-* validation - confirm group and user exists when adding member
-* validation - confirm the team and group exists when following
-
-### Team
-* limit numbers of teams followed
-
-### Season
-
-
-
-        //Todo
-        // group can have a rule list that they can choose to follow
-        // cannot submit another score
-        // cannot submit score if game has started
-        // cannot submit score someone else has

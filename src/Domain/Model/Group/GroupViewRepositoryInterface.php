@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\User\UserId;
 
 interface GroupViewRepositoryInterface
 {
-    public function query(UserId $userId, string $name);
+    public function query(UserId $id, string $name);
     public function get(GroupId $id);
-    public function all();
+    public function all(UserId $id);
 }

@@ -38,10 +38,13 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         );
     }
 
-    public function all()
+    public function all(UserId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `group`');
-        $stmt->execute();
+        $stmt = $this->pdo->prepare('SELECT group_id, name, owner_id
+            FROM `group`
+            JOIN `member` on `member`.user_id = `group`.user_id
+            WHERE `member`.user_id = :user_id');
+        $stmt->execute([':user_id' => (string) $id]);
 
         $groups = [];
 
@@ -88,25 +91,5 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         }
 
         return $groups;
-    }
-
-    public function getAllByUser(UserId $id)
-    {
-        $stmt = $this->pdo->prepare('SELECT group.group_id, group.name, group.owner_id FROM `group`
-            JOIN `member` on `member`.group_id = `group`.group_id
-            WHERE `member`.user_id = :user_id');
-        $stmt->execute([':user_id' => (string) $id]);
-
-        $members = [];
-
-       while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-           $groups[] = new GroupView(
-               $row['group_id'],
-               $row['name'],
-               $row['owner_id']
-           );
-       }
-
-        return $members;
     }
 }
