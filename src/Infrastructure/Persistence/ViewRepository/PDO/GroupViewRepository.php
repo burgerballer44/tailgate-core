@@ -40,9 +40,9 @@ class GroupViewRepository implements GroupViewRepositoryInterface
 
     public function all(UserId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT group_id, name, owner_id
+        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.owner_id
             FROM `group`
-            JOIN `member` on `member`.user_id = `group`.user_id
+            JOIN `member` on `member`.group_id = `group`.group_id
             WHERE `member`.user_id = :user_id');
         $stmt->execute([':user_id' => (string) $id]);
 
