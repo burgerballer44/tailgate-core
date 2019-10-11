@@ -136,9 +136,8 @@ class PDOTeamProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->at(0))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE game_id IN (
-            SELECT game_id FROM game WHERE home_team_id = :team_id OR away_team_id = :team_id
-        )')
+            ->with('DELETE FROM `score` WHERE game_id IN
+            (SELECT game_id FROM game WHERE home_team_id = :team_id OR away_team_id = :team_id)')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(1))

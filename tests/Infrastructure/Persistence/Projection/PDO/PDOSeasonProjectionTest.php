@@ -163,9 +163,8 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->at(0))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE game_id IN (
-            SELECT game_id FROM game WHERE season_id = :season_id
-        )')
+            ->with('DELETE FROM `score` WHERE game_id IN
+            (SELECT game_id FROM game WHERE season_id = :season_id)')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(1))

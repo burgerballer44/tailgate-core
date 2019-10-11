@@ -37,7 +37,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':group_id' => $event->getAggregateId(),
             ':name' => $event->getName(),
             ':owner_id' => $event->getOwnerId(),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
 
@@ -54,7 +54,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':user_id' => $event->getUserId(),
             ':role' => $event->getGroupRole(),
             ':allow_multiple' => $event->getAllowMultiplePlayers(),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
 
@@ -73,7 +73,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':game_id' => $event->getGameId(),
             ':home_team_prediction' => $event->getHomeTeamPrediction(),
             ':away_team_prediction' => $event->getAwayTeamPrediction(),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
 
@@ -173,7 +173,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':player_id' => $event->getPlayerId(),
             ':member_id' => $event->getMemberId(),
             ':username' => $event->getUsername(),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
 }

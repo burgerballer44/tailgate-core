@@ -33,9 +33,9 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':name' => $event->getName(),
             ':sport' => $event->getSport(),
             ':type' => $event->getSeasonType(),
-            ':season_start' => $event->getSeasonStart()->format('Y-m-d H:i:s'),
-            ':season_end' => $event->getSeasonEnd()->format('Y-m-d H:i:s'),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':season_start' => $event->getSeasonStart()->format(self::DATE_FORMAT),
+            ':season_end' => $event->getSeasonEnd()->format(self::DATE_FORMAT),
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
 
@@ -51,8 +51,8 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':game_id' => $event->getGameId(),
             ':home_team_id' => $event->getHomeTeamId(),
             ':away_team_id' => $event->getAwayTeamId(),
-            ':start_date' => $event->getStartDate()->format('Y-m-d H:i:s'),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':start_date' => $event->getStartDate()->format(self::DATE_FORMAT),
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
 
@@ -67,7 +67,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':game_id' => $event->getGameId(),
             ':home_team_score' => $event->getHomeTeamScore(),
             ':away_team_score' => $event->getAwayTeamScore(),
-            ':start_date' => $event->getStartDate()->format('Y-m-d H:i:s')
+            ':start_date' => $event->getStartDate()->format(self::DATE_FORMAT)
         ]);
     }
 
@@ -82,9 +82,8 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
 
     public function projectSeasonDeleted(SeasonDeleted $event)
     {
-        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE game_id IN (
-            SELECT game_id FROM game WHERE season_id = :season_id
-        )');
+        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE game_id IN
+            (SELECT game_id FROM game WHERE season_id = :season_id)');
         $stmt->execute([':season_id' => $event->getAggregateId()]);
 
         $stmt = $this->pdo->prepare('DELETE FROM `game` WHERE season_id = :season_id');
@@ -106,8 +105,8 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':name' => $event->getName(),
             ':sport' => $event->getSport(),
             ':type' => $event->getSeasonType(),
-            ':season_start' => $event->getSeasonStart()->format('Y-m-d H:i:s'),
-            ':season_end' => $event->getSeasonEnd()->format('Y-m-d H:i:s')
+            ':season_start' => $event->getSeasonStart()->format(self::DATE_FORMAT),
+            ':season_end' => $event->getSeasonEnd()->format(self::DATE_FORMAT)
         ]);
     }
 }

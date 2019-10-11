@@ -31,7 +31,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
             ':team_id' => $event->getAggregateId(),
             ':designation' => $event->getDesignation(),
             ':mascot' => $event->getMascot(),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
 
@@ -59,7 +59,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
             ':follow_id' => $event->getFollowId(),
             ':group_id' => $event->getGroupId(),
             ':team_id' => $event->getAggregateId(),
-            ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
 
@@ -72,9 +72,8 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
 
     public function projectTeamDeleted(TeamDeleted $event)
     {
-        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE game_id IN (
-            SELECT game_id FROM game WHERE home_team_id = :team_id OR away_team_id = :team_id
-        )');
+        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE game_id IN
+            (SELECT game_id FROM game WHERE home_team_id = :team_id OR away_team_id = :team_id)');
         $stmt->execute([':team_id' => $event->getAggregateId()]);
 
         $stmt = $this->pdo->prepare('DELETE FROM `game` WHERE home_team_id = :team_id OR away_team_id = :team_id');

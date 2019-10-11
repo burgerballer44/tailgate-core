@@ -9,6 +9,8 @@ use Verraes\ClassFunctions\ClassFunctions;
 
 abstract class AbstractProjection implements ProjectionInterface
 {
+    const DATE_FORMAT = 'Y-m-d H:i:s';
+
     public function project(DomainEvents $eventStream)
     {
         foreach ($eventStream as $event) {
