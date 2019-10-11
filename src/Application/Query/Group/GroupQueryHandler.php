@@ -2,6 +2,7 @@
 
 namespace Tailgate\Application\Query\Group;
 
+use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
@@ -33,9 +34,10 @@ class GroupQueryHandler
 
     public function handle(GroupQuery $query)
     {
+        $userId = UserId::fromString($query->getUserId());
         $groupId = GroupId::fromString($query->getGroupId());
 
-        $groupView = $this->groupViewRepository->get($groupId);
+        $groupView = $this->groupViewRepository->get($userId, $groupId);
         $memberViews = $this->memberViewRepository->getAllByGroup($groupId);
         $playerViews = $this->playerViewRepository->getAllByGroup($groupId);
         $scoreViews = $this->scoreViewRepository->getAllByGroup($groupId);

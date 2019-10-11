@@ -24,20 +24,26 @@ class PDOGroupViewRepositoryTest extends TestCase
 
     public function testGroupThatDoesNotExistReturnsException()
     {
+        $userId = UserId::fromString('userId');
         $groupId = GroupId::fromString('groupId');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `group` WHERE group_id = :group_id LIMIT 1')
+            ->with('SELECT `group`.group_id, `group`.name, `group`.owner_id
+            FROM `group`
+            JOIN `member` on `member`.group_id = `group`.group_id
+            WHERE `member`.user_id = :user_id
+            AND `group`.group_id = :group_id
+            LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
         // execute and fetch method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
-            ->with([':group_id' => (string) $groupId]);
+            ->with([':user_id' => (string) $userId, ':group_id' => (string) $groupId]);
 
         $this->pdoStatementMock
             ->expects($this->once())
@@ -46,25 +52,31 @@ class PDOGroupViewRepositoryTest extends TestCase
 
         $this->expectException(RepositoryException::class);
         $this->expectExceptionMessage('Group not found.');
-        $this->viewRepository->get($groupId);
+        $this->viewRepository->get($userId, $groupId);
     }
 
     public function testItCanGetAGroup()
     {
+        $userId = UserId::fromString('userId');
         $groupId = GroupId::fromString('groupId');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `group` WHERE group_id = :group_id LIMIT 1')
+            ->with('SELECT `group`.group_id, `group`.name, `group`.owner_id
+            FROM `group`
+            JOIN `member` on `member`.group_id = `group`.group_id
+            WHERE `member`.user_id = :user_id
+            AND `group`.group_id = :group_id
+            LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
-        // execute method called once
+        // execute and fetch method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
-            ->with([':group_id' => (string) $groupId]);
+            ->with([':user_id' => (string) $userId, ':group_id' => (string) $groupId]);
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('fetch')
@@ -74,7 +86,7 @@ class PDOGroupViewRepositoryTest extends TestCase
                 'owner_id' => 'blah',
             ]);
 
-        $this->viewRepository->get($groupId);
+        $this->viewRepository->get($userId, $groupId);
     }
 
     public function testItCanGetAllGroupsForAUser()

@@ -22,10 +22,18 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         $this->pdo = $pdo;
     }
 
-    public function get(GroupId $id)
+    public function get(UserId $userId, GroupId $groupId)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `group` WHERE group_id = :group_id LIMIT 1');
-        $stmt->execute([':group_id' => (string) $id]);
+        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.owner_id
+            FROM `group`
+            JOIN `member` on `member`.group_id = `group`.group_id
+            WHERE `member`.user_id = :user_id
+            AND `group`.group_id = :group_id
+            LIMIT 1');
+        $stmt->execute([
+            ':user_id' => (string) $userId,
+            ':group_id' => (string) $groupId
+        ]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RepositoryException("Group not found.");
