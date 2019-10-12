@@ -20,7 +20,8 @@ class MemberViewRepository implements MemberViewRepositoryInterface
 
     public function get(MemberId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `member`
+        $stmt = $this->pdo->prepare('SELECT `member`.member_id, `member`.group_id, `member`.user_id, `member`.role, `member`.allow_multiple, `user`.email
+            FROM `member`
             JOIN `user` on `user`.user_id = `member`.user_id
             WHERE `member`.member_id = :member_id LIMIT 1');
         $stmt->execute([':member_id' => (string) $id]);
@@ -41,7 +42,8 @@ class MemberViewRepository implements MemberViewRepositoryInterface
 
     public function getAllByGroup(GroupId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `member`
+        $stmt = $this->pdo->prepare('SELECT `member`.member_id, `member`.group_id, `member`.user_id, `member`.role, `member`.allow_multiple, `user`.email
+            FROM `member`
             JOIN `user` on `user`.user_id = `member`.user_id
             WHERE `member`.group_id = :group_id');
         $stmt->execute([':group_id' => (string) $id]);
