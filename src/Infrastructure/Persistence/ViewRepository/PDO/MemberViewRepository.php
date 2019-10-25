@@ -3,6 +3,7 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\MemberView;
@@ -47,6 +48,30 @@ class MemberViewRepository implements MemberViewRepositoryInterface
             JOIN `user` on `user`.user_id = `member`.user_id
             WHERE `member`.group_id = :group_id');
         $stmt->execute([':group_id' => (string) $id]);
+
+        $members = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $members[] = new MemberView(
+                $row['member_id'],
+                $row['group_id'],
+                $row['user_id'],
+                $row['role'],
+                $row['allow_multiple'],
+                $row['email']
+            );
+        }
+
+        return $members;
+    }
+
+    public function getAllByUser(UserId $id)
+    {
+        $stmt = $this->pdo->prepare('SELECT `member`.member_id, `member`.group_id, `member`.user_id, `member`.role, `member`.allow_multiple, `user`.email
+            FROM `member`
+            JOIN `user` on `user`.user_id = `member`.user_id
+            WHERE `member`.user_id = :user_id');
+        $stmt->execute([':user_id' => (string) $id]);
 
         $members = [];
 

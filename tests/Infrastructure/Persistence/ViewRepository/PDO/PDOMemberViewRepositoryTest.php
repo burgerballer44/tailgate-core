@@ -3,6 +3,7 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PHPUnit\Framework\TestCase;
+use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\MemberViewRepository;
@@ -110,5 +111,33 @@ class PDOMemberViewRepositoryTest extends TestCase
             ->method('fetch');
 
         $this->viewRepository->getAllByGroup($groupId);
+    }
+
+    public function testItCanGetAllMembersByUser()
+    {
+        $userId = UserId::fromString('userId');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT `member`.member_id, `member`.group_id, `member`.user_id, `member`.role, `member`.allow_multiple, `user`.email
+            FROM `member`
+            JOIN `user` on `user`.user_id = `member`.user_id
+            WHERE `member`.user_id = :user_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':user_id' => (string) $userId]);
+
+        // fetch method called
+        $this->pdoStatementMock
+            ->expects($this->atLeastOnce())
+            ->method('fetch');
+
+        $this->viewRepository->getAllByUser($userId);
     }
 }
