@@ -5,6 +5,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\FollowId;
+use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\FollowViewRepository;
 use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
 
@@ -110,5 +111,33 @@ class PDOFollowViewRepositoryTest extends TestCase
             ->method('fetch');
 
         $this->viewRepository->getAllByTeam($teamId);
+    }
+
+    public function testItCanGetAllFollowsOfAGroup()
+    {
+        $groupId = GroupId::fromString('groupId');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `follow`
+            JOIN `group` on `group`.group_id = `follow`.group_id
+            JOIN `team` on `team`.team_id = `follow`.team_id
+            WHERE `follow`.group_id = :group_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':group_id' => (string) $groupId]);
+
+        // fetch method called
+        $this->pdoStatementMock
+            ->expects($this->atLeastOnce())
+            ->method('fetch');
+
+        $this->viewRepository->getAllByGroup($groupId);
     }
 }
