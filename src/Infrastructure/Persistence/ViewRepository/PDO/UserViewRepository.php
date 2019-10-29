@@ -58,16 +58,16 @@ class UserViewRepository implements UserViewRepositoryInterface
         $stmt = $this->pdo->prepare('SELECT * FROM `user` WHERE email = :email LIMIT 1');
         $stmt->execute([':email' => (string) $email]);
 
-        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            return new UserView(
-                $row['user_id'],
-                $row['email'],
-                $row['status'],
-                $row['role']
-            );
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new RepositoryException("User not found by email.");
         }
 
-        return false;
+        return new UserView(
+            $row['user_id'],
+            $row['email'],
+            $row['status'],
+            $row['role']
+        );
     }
 
     public function byPasswordResetToken($passwordResetToken)

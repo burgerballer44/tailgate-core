@@ -127,6 +127,32 @@ class PDOUserViewRepositoryTest extends TestCase
         $this->viewRepository->byEmail($email);
     }
 
+    public function testEmailThatDoesNotExistThrowsException()
+    {
+        $email = 'email@email.com';
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `user` WHERE email = :email LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':email' => (string) $email]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn(false);
+
+        $this->expectException(RepositoryException::class);
+        $this->expectExceptionMessage('User not found by email.');
+        $this->viewRepository->byEmail($email);
+    }
+
     public function testItCanGetAUserByPasswordResetToken()
     {
         $passwordResetToken = 'assa;ldkjsadfj;l';
