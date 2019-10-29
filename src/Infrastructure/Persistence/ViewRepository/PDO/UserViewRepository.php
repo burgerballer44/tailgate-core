@@ -55,7 +55,7 @@ class UserViewRepository implements UserViewRepositoryInterface
 
     public function byEmail($email)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `user` WHERE email = :email');
+        $stmt = $this->pdo->prepare('SELECT * FROM `user` WHERE email = :email LIMIT 1');
         $stmt->execute([':email' => (string) $email]);
 
         if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -68,5 +68,22 @@ class UserViewRepository implements UserViewRepositoryInterface
         }
 
         return false;
+    }
+
+    public function byPasswordResetToken($passwordResetToken)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM `user` WHERE password_reset_token = :password_reset_token LIMIT 1');
+        $stmt->execute([':password_reset_token' => (string) $passwordResetToken]);
+
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new RepositoryException("User not found by reset token.");
+        }
+
+        return new UserView(
+            $row['user_id'],
+            $row['email'],
+            $row['status'],
+            $row['role']
+        );
     }
 }

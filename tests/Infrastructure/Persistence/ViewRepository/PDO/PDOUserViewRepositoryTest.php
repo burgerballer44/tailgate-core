@@ -97,4 +97,88 @@ class PDOUserViewRepositoryTest extends TestCase
 
         $this->viewRepository->all();
     }
+
+    public function testItCanGetAUserByEmail()
+    {
+        $email = 'email@email.com';
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `user` WHERE email = :email LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':email' => (string) $email]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn([
+                'user_id' => 'blah',
+                'email' => 'blah',
+                'status' => 'blah',
+                'role' => 'blah',
+            ]);
+
+        $this->viewRepository->byEmail($email);
+    }
+
+    public function testItCanGetAUserByPasswordResetToken()
+    {
+        $passwordResetToken = 'assa;ldkjsadfj;l';
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `user` WHERE password_reset_token = :password_reset_token LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':password_reset_token' => (string) $passwordResetToken]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn([
+                'user_id' => 'blah',
+                'email' => 'blah',
+                'status' => 'blah',
+                'role' => 'blah',
+            ]);
+
+        $this->viewRepository->byPasswordResetToken($passwordResetToken);
+    }
+
+    public function testPasswordResetTokenThatDoesNotExistReturnsException()
+    {
+        $passwordResetToken = 'assa;ldkjsadfj;l';
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `user` WHERE password_reset_token = :password_reset_token LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':password_reset_token' => (string) $passwordResetToken]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn(false);
+
+        $this->expectException(RepositoryException::class);
+        $this->expectExceptionMessage('User not found by reset token.');
+        $this->viewRepository->byPasswordResetToken($passwordResetToken);
+    }
 }

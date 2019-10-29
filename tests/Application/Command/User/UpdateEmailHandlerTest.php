@@ -15,7 +15,6 @@ class UpdateEmailHandlerTest extends TestCase
     private $userId = 'userId';
     private $passwordHash = 'password';
     private $email = 'email@email.com';
-    private $key = 'randomKey';
     private $user;
     private $updateEmailCommand;
     private $newEmail = 'newEmail@email.coim';
@@ -26,8 +25,7 @@ class UpdateEmailHandlerTest extends TestCase
         $this->user = User::create(
             UserId::fromString($this->userId),
             $this->email,
-            $this->passwordHash,
-            $this->key
+            $this->passwordHash
         );
         $this->user->clearRecordedEvents();
 

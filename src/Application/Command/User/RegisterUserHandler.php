@@ -11,16 +11,13 @@ class RegisterUserHandler
 {
     private $userRepository;
     private $passwordHashing;
-    private $randomStringer;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
-        PasswordHashingInterface $passwordHashing,
-        RandomStringInterface $randomStringer
+        PasswordHashingInterface $passwordHashing
     ) {
         $this->userRepository = $userRepository;
         $this->passwordHashing = $passwordHashing;
-        $this->randomStringer = $randomStringer;
     }
 
     public function handle(RegisterUserCommand $command)
@@ -31,8 +28,7 @@ class RegisterUserHandler
         $user = User::create(
             $this->userRepository->nextIdentity(),
             $email,
-            $this->passwordHashing->hash($password),
-            $this->randomStringer->generate()
+            $this->passwordHashing->hash($password)
         );
 
         $this->userRepository->add($user);

@@ -24,8 +24,8 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectUserRegistered(UserRegistered $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `user` (user_id, password_hash, email, status, role, unique_key, created_at)
-            VALUES (:user_id, :password_hash, :email, :status, :role, :unique_key, :created_at)'
+            'INSERT INTO `user` (user_id, password_hash, email, status, role, password_reset_token, created_at)
+            VALUES (:user_id, :password_hash, :email, :status, :role, :password_reset_token, :created_at)'
         );
 
         $stmt->execute([
@@ -34,7 +34,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
             ':email' => $event->getEmail(),
             ':status' => $event->getStatus(),
             ':role' => $event->getRole(),
-            ':unique_key' => $event->getUniqueKey(),
+            ':password_reset_token' => $event->getPasswordResetToken(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }

@@ -2,33 +2,36 @@
 
 namespace Tailgate\Application\Command\User;
 
-use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Common\Security\RandomStringInterface;
 
-class UpdatePasswordHandler
+class RequestPasswordResetHandler
 {
     private $userRepository;
-    private $passwordHashing;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
-        PasswordHashingInterface $passwordHashing
+        RandomStringInterface $randomStringer
     ) {
         $this->userRepository = $userRepository;
-        $this->passwordHashing = $passwordHashing;
+        $this->randomStringer = $randomStringer;
     }
 
-    public function handle(UpdatePasswordCommand $command)
+    public function handle(RequestPasswordResetCommand $command)
     {
         $userId = $command->getUserId();
-        $password = $command->getPassword();
 
         $user = $this->userRepository->get(UserId::fromString($userId));
 
-        $user->updatePassword($this->passwordHashing->hash($password));
+        $user->createPasswordResetToken($this->randomStringer->generate());
 
         $this->userRepository->add($user);
+
+        return [
+            'userId'             => $user->getId(),
+            'passwordResetToken' => $user->getPasswordResetToken()
+        ];
     }
 }

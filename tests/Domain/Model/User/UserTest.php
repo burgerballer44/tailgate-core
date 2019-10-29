@@ -14,7 +14,6 @@ class UserTest extends TestCase
     private $userId;
     private $passwordHash = 'passwordHashBlahBlah';
     private $email = 'emailAddress';
-    private $uniqueKey = '';
 
     public function setUp()
     {
@@ -26,8 +25,7 @@ class UserTest extends TestCase
         $user = User::create(
             $this->userId,
             $this->email,
-            $this->passwordHash,
-            $this->uniqueKey
+            $this->passwordHash
         );
         $events = $user->getRecordedEvents();
         $user->clearRecordedEvents();
@@ -45,7 +43,7 @@ class UserTest extends TestCase
 
     public function testAUserCanBeCreated()
     {
-        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash);
 
         $this->assertEquals($this->userId, $user->getId());
         $this->assertEquals($this->passwordHash, $user->getPasswordHash());
@@ -56,7 +54,7 @@ class UserTest extends TestCase
 
     public function testAUserCanBeActivated()
     {
-        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash);
 
         $user->activate();
 
@@ -66,7 +64,7 @@ class UserTest extends TestCase
     public function testAPasswordCanBeUpdated()
     {
         $newPassword = 'newPassword';
-        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash);
 
         $user->updatePassword($newPassword);
 
@@ -77,7 +75,7 @@ class UserTest extends TestCase
     public function testAnEmailCanBeUpdated()
     {
         $newEmail = 'email@new.new';
-        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash);
 
         $user->updateEmail($newEmail);
 
@@ -90,7 +88,7 @@ class UserTest extends TestCase
         $email = 'email@email.com';
         $status = User::STATUS_PENDING;
         $role = User::ROLE_ADMIN;
-        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash);
 
         $user->update($email, $status, $role);
 
@@ -101,7 +99,7 @@ class UserTest extends TestCase
 
     public function testUpdatingAUserThrowsExceptionsWithInvalidValues()
     {
-        $user = User::create($this->userId, $this->email, $this->passwordHash, $this->uniqueKey);
+        $user = User::create($this->userId, $this->email, $this->passwordHash);
 
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('Invalid role. Role does not exist.');
@@ -110,5 +108,36 @@ class UserTest extends TestCase
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('Invalid status. Status does not exist.');
         $user->update('email@email.com', 'invalidStatus', User::ROLE_ADMIN);
+    }
+
+    public function testAUserCanHaveAPasswordResetTokenCreated()
+    {
+        $email = 'email@email.com';
+        $status = User::STATUS_PENDING;
+        $role = User::ROLE_ADMIN;
+        $user = User::create($this->userId, $this->email, $this->passwordHash);
+
+        $randomString = 'randomString';
+        $user->createPasswordResetToken($randomString);
+
+        $result = $user->getPasswordResetToken();
+        // randomString
+        $this->assertEquals($randomString, substr($result, 0, strlen($randomString)));
+        // _
+        $this->assertEquals('_', substr($result, strlen($randomString), 1));
+        // 1572211329 (the time)
+        $this->assertEquals(10, strlen(substr($result, strlen($randomString) + 1)));
+    }
+
+    public function testAPasswordResetTokenIsInvalidIfOlderThanOneHour()
+    {
+        $passwordResetToken = 'randomString' . "_" . strtotime("1 hour 1 minute ago");
+        $this->assertFalse(User::isPasswordResetTokenValid($passwordResetToken));
+    }
+
+    public function testAPasswordResetTokenIsValidIfWithinOneHour()
+    {
+        $passwordResetToken = 'randomString' . "_" . strtotime("30 minutes ago");
+        $this->assertTrue(User::isPasswordResetTokenValid($passwordResetToken));
     }
 }

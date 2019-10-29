@@ -20,16 +20,16 @@ class User extends AbstractEntity
     private $passwordHash;
     private $status;
     private $role;
-    private $uniqueKey;
+    private $passwordResetToken;
 
-    protected function __construct($userId, $email, $passwordHash, $status, $role, $uniqueKey)
+    protected function __construct($userId, $email, $passwordHash, $status, $role, $passwordResetToken)
     {
         $this->userId = $userId;
         $this->email = $email;
         $this->passwordHash = $passwordHash;
         $this->status = $status;
         $this->role = $role;
-        $this->uniqueKey = $uniqueKey;
+        $this->passwordResetToken = $passwordResetToken;
     }
 
     /**
@@ -37,15 +37,14 @@ class User extends AbstractEntity
      * @param  UserId $userId       [description]
      * @param  [type] $email        [description]
      * @param  [type] $passwordHash [description]
-     * @param  [type] $uniqueKey    [description]
      * @return [type]               [description]
      */
-    public static function create(UserId $userId, $email, $passwordHash, $uniqueKey)
+    public static function create(UserId $userId, $email, $passwordHash)
     {
-        $newUser = new User($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, $uniqueKey);
+        $newUser = new User($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, '');
 
         $newUser->recordThat(
-            new UserRegistered($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, $uniqueKey)
+            new UserRegistered($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, '')
         );
 
         return $newUser;
@@ -84,6 +83,11 @@ class User extends AbstractEntity
     public function getRole()
     {
         return $this->role;
+    }
+
+    public function getPasswordResetToken()
+    {
+        return $this->passwordResetToken;
     }
 
     /**
@@ -144,6 +148,27 @@ class User extends AbstractEntity
         $this->applyAndRecordThat(new UserUpdated($this->userId, $email, $status, $role));
     }
 
+    /**
+     * creates a password reset token
+     * @param  [type] $passwordResetString [description]
+     * @return [type]                      [description]
+     */
+    public function createPasswordResetToken($passwordResetString)
+    {
+        $token = $this->createTokenFromString($passwordResetString);
+        $this->applyAndRecordThat(new PasswordResetTokenCreated($this->userId, $token));
+    }
+
+    /**
+     * [createTokenFromString description]
+     * @param  [type] $passwordResetString [description]
+     * @return [type]                      [description]
+     */
+    private function createTokenFromString($passwordResetString)
+    {
+        return $passwordResetString . '_' . time();
+    }
+
     protected function applyUserRegistered(UserRegistered $event)
     {
         $this->email = $event->getEmail();
@@ -179,6 +204,11 @@ class User extends AbstractEntity
         $this->role = $event->getRole();
     }
 
+    protected function applyPasswordResetTokenCreated(PasswordResetTokenCreated $event)
+    {
+        $this->passwordResetToken = $event->getPasswordResetToken();
+    }
+
     /**
      * returns all roles
      * @return [type] [description]
@@ -203,4 +233,19 @@ class User extends AbstractEntity
             self::STATUS_DELETED,
         ];
     }
+
+    /**
+     * determine if password reset token is valid
+     * @return [type] [description]
+     */
+    public static function isPasswordResetTokenValid($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
+        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $expire = 3600; // 1 hour
+        return $timestamp + $expire >= time();
+    }
+
 }

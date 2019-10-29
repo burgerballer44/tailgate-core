@@ -11,7 +11,7 @@ class UserRegistered implements DomainEvent, UserDomainEvent
     private $email;
     private $status;
     private $role;
-    private $uniqueKey;
+    private $passwordResetToken;
     private $occurredOn;
 
     public function __construct(
@@ -20,14 +20,14 @@ class UserRegistered implements DomainEvent, UserDomainEvent
         $passwordHash,
         $status,
         $role,
-        $uniqueKey
+        $passwordResetToken
     ) {
         $this->userId = $userId;
         $this->email = $email;
         $this->passwordHash = $passwordHash;
         $this->status = $status;
         $this->role = $role;
-        $this->uniqueKey = $uniqueKey;
+        $this->passwordResetToken = $passwordResetToken;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
@@ -56,9 +56,9 @@ class UserRegistered implements DomainEvent, UserDomainEvent
         return $this->role;
     }
 
-    public function getUniqueKey()
+    public function getPasswordResetToken()
     {
-        return $this->uniqueKey;
+        return $this->passwordResetToken;
     }
 
     public function getOccurredOn()

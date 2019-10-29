@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\RegisterUserCommand;
 use Tailgate\Application\Command\User\RegisterUserHandler;
 use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
-use Tailgate\Common\Security\RandomStringInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
@@ -17,7 +16,7 @@ class RegisterUserHandlerTest extends TestCase
     private $password = 'password';
     private $confirmPassword = 'password';
     private $email = 'email@email.com';
-    private $uniqueKey = 'randomKey';
+    private $passwordResetToken = '';
     private $registerUserCommand;
 
     public function setUp()
@@ -34,7 +33,7 @@ class RegisterUserHandlerTest extends TestCase
         $email = $this->email;
         $password = $this->password;
         $confirmPassword = $this->confirmPassword;
-        $uniqueKey = $this->uniqueKey;
+        $passwordResetToken = $this->passwordResetToken;
 
         $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
 
@@ -44,7 +43,7 @@ class RegisterUserHandlerTest extends TestCase
         // the add method should be called once
         // the user object should have the UserRegistered event
         $userRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($user) use ($password, $confirmPassword, $email, $uniqueKey) {
+            function ($user) use ($password, $confirmPassword, $email, $passwordResetToken) {
                 $events = $user->getRecordedEvents();
 
                 return $events[0] instanceof UserRegistered
@@ -53,7 +52,7 @@ class RegisterUserHandlerTest extends TestCase
                 && $events[0]->getPasswordHash() === $password
                 && $events[0]->getStatus() === User::STATUS_PENDING
                 && $events[0]->getRole() === User::ROLE_USER
-                && $events[0]->getUniqueKey() === $uniqueKey
+                && $events[0]->getPasswordResetToken() === $passwordResetToken
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));
@@ -61,14 +60,7 @@ class RegisterUserHandlerTest extends TestCase
         $passwordHashing = $this->createMock(PasswordHashingInterface::class);
         $passwordHashing->expects($this->once())->method('hash')->willReturn($password);
 
-        $randomStringer = $this->createMock(RandomStringInterface::class);
-        $randomStringer->expects($this->once())->method('generate')->willReturn($uniqueKey);
-
-        $registerUserHandler = new RegisterUserHandler(
-            $userRepository,
-            $passwordHashing,
-            $randomStringer
-        );
+        $registerUserHandler = new RegisterUserHandler($userRepository, $passwordHashing);
 
         $user = $registerUserHandler->handle($this->registerUserCommand);
 

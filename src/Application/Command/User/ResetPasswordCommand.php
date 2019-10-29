@@ -2,7 +2,7 @@
 
 namespace Tailgate\Application\Command\User;
 
-class UpdatePasswordCommand
+class ResetPasswordCommand
 {
     private $userId;
     private $password;

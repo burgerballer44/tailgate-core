@@ -24,8 +24,7 @@ class UpdateUserHandlerTest extends TestCase
         $this->user = User::create(
             UserId::fromString($this->userId),
             'email@email.com',
-            'password',
-            'randomKey'
+            'password'
         );
         $this->user->clearRecordedEvents();
 

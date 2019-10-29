@@ -21,10 +21,10 @@ class UserQueryHandlerTest extends TestCase
         $userView = $this->createMock(UserView::class);
         $userViewRepository->expects($this->once())
             ->method('get')
-            ->willReturn($userView)
             ->with($this->callback(function ($userQueryUserId) use ($userId) {
                 return (new UserId($userId))->equals($userQueryUserId);
-            }));
+            }))
+            ->willReturn($userView);
 
         $userQuery = new UserQuery($userId);
         $userQueryHandler = new UserQueryHandler($userViewRepository, $userViewTransformer);

@@ -3,22 +3,21 @@
 namespace Tailgate\Test\Application\Command\User;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Application\Command\User\UpdatePasswordCommand;
-use Tailgate\Application\Command\User\UpdatePasswordHandler;
+use Tailgate\Application\Command\User\ResetPasswordCommand;
+use Tailgate\Application\Command\User\ResetPasswordHandler;
 use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 
-class UpdatePasswordHandlerTest extends TestCase
+class ResetPasswordHandlerTest extends TestCase
 {
     private $userId = 'userId';
     private $passwordHash = 'password';
     private $email = 'email@email.com';
-    private $key = 'randomKey';
     private $user;
-    private $updatePasswordCommand;
+    private $resetPasswordCommand;
     private $newPasswordHash = 'newPassword';
     private $newPasswordHashConfirm = 'newPassword';
 
@@ -28,12 +27,11 @@ class UpdatePasswordHandlerTest extends TestCase
         $this->user = User::create(
             UserId::fromString($this->userId),
             $this->email,
-            $this->passwordHash,
-            $this->key
+            $this->passwordHash
         );
         $this->user->clearRecordedEvents();
 
-        $this->updatePasswordCommand = new UpdatePasswordCommand($this->userId, $this->newPasswordHash, $this->newPasswordHashConfirm);
+        $this->resetPasswordCommand = new ResetPasswordCommand($this->userId, $this->newPasswordHash, $this->newPasswordHashConfirm);
     }
 
     public function testItAddsAPasswordUpdatedRepository()
@@ -63,11 +61,11 @@ class UpdatePasswordHandlerTest extends TestCase
         $passwordHashing = $this->createMock(PasswordHashingInterface::class);
         $passwordHashing->expects($this->once())->method('hash')->willReturn($newPasswordHash);
 
-        $updatePasswordHandler = new UpdatePasswordHandler(
+        $resetPasswordHandler = new ResetPasswordHandler(
             $userRepository,
             $passwordHashing
         );
 
-        $updatePasswordHandler->handle($this->updatePasswordCommand);
+        $resetPasswordHandler->handle($this->resetPasswordCommand);
     }
 }
