@@ -8,6 +8,7 @@ use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\UserDeleted;
 use Tailgate\Domain\Model\User\PasswordUpdated;
+use Tailgate\Domain\Model\User\PasswordResetTokenCreated;
 use Tailgate\Domain\Model\User\EmailUpdated;
 use Tailgate\Domain\Model\User\UserUpdated;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
@@ -108,6 +109,20 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
             ':email' => $event->getEmail(),
             ':status' => $event->getStatus(),
             ':role' => $event->getRole(),
+        ]);
+    }
+
+    public function projectPasswordResetTokenCreated(PasswordResetTokenCreated $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE `user`
+            SET password_reset_token = :password_reset_token
+            WHERE user_id = :user_id'
+        );
+
+        $stmt->execute([
+            ':user_id' => $event->getAggregateId(),
+            ':password_reset_token' => $event->getPasswordResetToken(),
         ]);
     }
 }

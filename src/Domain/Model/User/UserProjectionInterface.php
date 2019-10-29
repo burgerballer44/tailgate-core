@@ -12,4 +12,5 @@ interface UserProjectionInterface extends ProjectionInterface
     public function projectPasswordUpdated(PasswordUpdated $event);
     public function projectEmailUpdated(EmailUpdated $event);
     public function projectUserUpdated(UserUpdated $event);
+    public function projectPasswordResetTokenCreated(PasswordResetTokenCreated $event);
 }

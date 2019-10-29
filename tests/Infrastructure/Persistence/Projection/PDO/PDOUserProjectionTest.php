@@ -10,6 +10,7 @@ use Tailgate\Domain\Model\User\UserDeleted;
 use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\EmailUpdated;
 use Tailgate\Domain\Model\User\UserUpdated;
+use Tailgate\Domain\Model\User\PasswordResetTokenCreated;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\UserProjection;
 
 class PDOUserProjectionTest extends TestCase
@@ -179,5 +180,30 @@ class PDOUserProjectionTest extends TestCase
             ]);
 
         $this->projection->projectUserUpdated($event);
+    }  
+
+    public function testItCanProjectPasswordResetTokenCreated()
+    {
+        $event = new PasswordResetTokenCreated(UserId::fromString('userId'), 'token');
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('UPDATE `user`
+            SET password_reset_token = :password_reset_token
+            WHERE user_id = :user_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':user_id' => $event->getAggregateId(),
+                ':password_reset_token' => $event->getPasswordResetToken()
+            ]);
+
+        $this->projection->projectPasswordResetTokenCreated($event);
     }
 }
