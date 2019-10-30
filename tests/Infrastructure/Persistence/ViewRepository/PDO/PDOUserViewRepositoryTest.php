@@ -155,7 +155,7 @@ class PDOUserViewRepositoryTest extends TestCase
 
     public function testItCanGetAUserByPasswordResetToken()
     {
-        $passwordResetToken = 'assa;ldkjsadfj;l';
+        $passwordResetToken = 'slsjdhjkhsdjkdh_' . time();
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -206,5 +206,36 @@ class PDOUserViewRepositoryTest extends TestCase
         $this->expectException(RepositoryException::class);
         $this->expectExceptionMessage('User not found by reset token.');
         $this->viewRepository->byPasswordResetToken($passwordResetToken);
+    }
+
+    public function testPasswordResetTokenThatExpiredReturnsException()
+    {
+        $expiredPasswordResetToken = 'asaldkjsadfjl_0000000000';
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT * FROM `user` WHERE password_reset_token = :password_reset_token LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':password_reset_token' => (string) $expiredPasswordResetToken]);
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn([
+                'user_id' => 'blah',
+                'email' => 'blah',
+                'status' => 'blah',
+                'role' => 'blah',
+            ]);
+
+        $this->expectException(RepositoryException::class);
+        $this->expectExceptionMessage('Reset token expired. Please request a password reset again.');
+        $this->viewRepository->byPasswordResetToken($expiredPasswordResetToken);
     }
 }

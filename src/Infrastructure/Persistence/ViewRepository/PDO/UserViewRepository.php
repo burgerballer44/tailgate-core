@@ -3,6 +3,7 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
@@ -77,6 +78,10 @@ class UserViewRepository implements UserViewRepositoryInterface
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RepositoryException("User not found by reset token.");
+        }
+
+        if (!User::isPasswordResetTokenValid($passwordResetToken)) {
+            throw new RepositoryException("Reset token expired. Please request a password reset again.");
         }
 
         return new UserView(
