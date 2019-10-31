@@ -108,9 +108,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
     {
         $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
-            JOIN `member` on `member`.group_id = `group`.group_id
-            WHERE `member`.user_id = :user_id
-            AND `group`.invite_code = :invite_code
+            WHERE `group`.invite_code = :invite_code
             LIMIT 1');
         $stmt->execute([':invite_code' => (string) $inviteCode]);
 

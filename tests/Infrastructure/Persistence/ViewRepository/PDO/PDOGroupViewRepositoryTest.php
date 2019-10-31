@@ -154,9 +154,7 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->method('prepare')
             ->with('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
-            JOIN `member` on `member`.group_id = `group`.group_id
-            WHERE `member`.user_id = :user_id
-            AND `group`.invite_code = :invite_code
+            WHERE `group`.invite_code = :invite_code
             LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
@@ -186,9 +184,7 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->method('prepare')
             ->with('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
-            JOIN `member` on `member`.group_id = `group`.group_id
-            WHERE `member`.user_id = :user_id
-            AND `group`.invite_code = :invite_code
+            WHERE `group`.invite_code = :invite_code
             LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
