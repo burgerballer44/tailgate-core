@@ -16,7 +16,7 @@ class AllGroupsQueryHandlerTest extends TestCase
 
         $groupViewRepository = $this->createMock(GroupViewRepositoryInterface::class);
         $groupViewTransformer = $this->createMock(GroupDataTransformerInterface::class);
-        $groupViewRepository->expects($this->once())->method('all')->willReturn([]);
+        $groupViewRepository->expects($this->once())->method('allByUser')->willReturn([]);
 
         $allGroupsQuery = new AllGroupsQuery($userId);
         $allGroupsQueryHandler = new AllGroupsQueryHandler($groupViewRepository, $groupViewTransformer);

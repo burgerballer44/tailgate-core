@@ -22,7 +22,27 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         $this->pdo = $pdo;
     }
 
-    public function get(UserId $userId, GroupId $groupId)
+    public function get(GroupId $groupId)
+    {
+        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
+            FROM `group`
+            WHERE `group`.group_id = :group_id
+            LIMIT 1');
+        $stmt->execute([':group_id' => (string) $groupId]);
+
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new RepositoryException("Group not found.");
+        }
+
+        return new GroupView(
+            $row['group_id'],
+            $row['name'],
+            $row['invite_code'],
+            $row['owner_id']
+        );
+    }
+
+    public function getByUser(UserId $userId, GroupId $groupId)
     {
         $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
@@ -47,7 +67,27 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         );
     }
 
-    public function all(UserId $id)
+    public function all()
+    {
+        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
+            FROM `group`');
+        $stmt->execute();
+
+        $groups = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $groups[] = new GroupView(
+                $row['group_id'],
+                $row['name'],
+                $row['invite_code'],
+                $row['owner_id']
+            );
+        }
+
+        return $groups;
+    }
+
+    public function allByUser(UserId $id)
     {
         $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`

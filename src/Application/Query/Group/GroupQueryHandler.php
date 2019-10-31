@@ -37,7 +37,7 @@ class GroupQueryHandler
         $userId = UserId::fromString($query->getUserId());
         $groupId = GroupId::fromString($query->getGroupId());
 
-        $groupView = $this->groupViewRepository->get($userId, $groupId);
+        $groupView = $this->groupViewRepository->getByUser($userId, $groupId);
         $memberViews = $this->memberViewRepository->getAllByGroup($groupId);
         $playerViews = $this->playerViewRepository->getAllByGroup($groupId);
         $scoreViews = $this->scoreViewRepository->getAllByGroup($groupId);

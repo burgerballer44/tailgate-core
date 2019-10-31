@@ -34,7 +34,7 @@ class GroupQueryHandlerTest extends TestCase
         $playerView = $this->createMock(PlayerView::class);
         $scoreView = $this->createMock(ScoreView::class);
         $groupViewRepository->expects($this->once())
-            ->method('get')
+            ->method('getByUser')
             ->willReturn($groupView)
             ->with(
                 $this->callback(function ($userQueryUserId) use ($userId) {

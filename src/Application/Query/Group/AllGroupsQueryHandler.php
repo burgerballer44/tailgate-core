@@ -23,7 +23,7 @@ class AllGroupsQueryHandler
     {
         $userId = UserId::fromString($query->getUserId());
 
-        $groupViews = $this->groupViewRepository->all($userId);
+        $groupViews = $this->groupViewRepository->allByUser($userId);
 
         $groups = [];
 
