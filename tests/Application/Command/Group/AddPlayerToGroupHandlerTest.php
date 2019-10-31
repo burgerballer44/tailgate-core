@@ -18,6 +18,7 @@ class AddPlayerToGroupHandlerTest extends TestCase
     private $groupId = 'groupId';
     private $userId = 'userId';
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $memberId = 'memberId';
     private $username = 'username';
     private $group;
@@ -29,6 +30,7 @@ class AddPlayerToGroupHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $this->memberId = (string) $this->group->getMembers()[0]->getMemberId();

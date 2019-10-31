@@ -20,6 +20,7 @@ class GroupTest extends TestCase
 {
     private $groupId;
     private $groupName;
+    private $groupInviteCode;
     private $ownerId;
 
     public function setUp()
@@ -31,7 +32,7 @@ class GroupTest extends TestCase
 
     public function testGroupShouldBeTheSameAfterReconstitution()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $events = $group->getRecordedEvents();
         $group->clearRecordedEvents();
 
@@ -48,7 +49,7 @@ class GroupTest extends TestCase
 
     public function testAGroupCanBeCreated()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         $this->assertEquals($this->groupId, $group->getId());
         $this->assertEquals($this->groupName, $group->getName());
@@ -59,7 +60,7 @@ class GroupTest extends TestCase
 
     public function testUserWhoCreatesGroupIsAMemberOfGroupWhenGroupIsCreated()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $members = $group->getMembers();
 
         $this->assertCount(1, $members);
@@ -72,7 +73,7 @@ class GroupTest extends TestCase
 
     public function testGroupHasAScoreWhenScoreIsSubmitted()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $userId = UserId::fromString('userID');
         $gameId = GameId::fromString('gameId');
         $homeTeamPrediction = '70';
@@ -98,7 +99,7 @@ class GroupTest extends TestCase
 
     public function testGroupGetsAMemberWhenMemberIsAdded()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $userId = UserId::fromString('userID');
 
         $group->addMember($userId);
@@ -116,7 +117,7 @@ class GroupTest extends TestCase
 
     public function testExceptionThrownIfMemberAlreadyPartOfGroup()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('The member is already in the group.');
@@ -126,7 +127,7 @@ class GroupTest extends TestCase
     public function testCannotAddMoreMembersThanLimit()
     {
         // one member added from group creation
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         // fill up rest of members
         for ($i = 1; $i < Group::MEMBER_LIMIT; $i++) {
@@ -140,7 +141,7 @@ class GroupTest extends TestCase
 
     public function testThereAreNoMembersAndScoresWhenGroupIsDeleted()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $userId = UserId::fromString('userID');
         $gameId = GameId::fromString('gameId');
         $homeTeamPrediction = '70';
@@ -167,7 +168,7 @@ class GroupTest extends TestCase
     public function testAMemberTheirPlayersAndTheirScoresAreRemovedWhenAMemberIsDeleted()
     {
         // create a group
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         // add two more members
         $userId2 = UserId::fromString('userId2');
@@ -224,7 +225,7 @@ class GroupTest extends TestCase
     {
         // create a group
         // owner is admin by default
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         // add two more members
         $userId2 = UserId::fromString('userId2');
@@ -253,7 +254,7 @@ class GroupTest extends TestCase
     public function testAPlayersAndTheirScoresAreRemovedWhenAPlayerIsDeleted()
     {
         // create a group
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         // add two more members
         $userId2 = UserId::fromString('userId2');
@@ -291,7 +292,7 @@ class GroupTest extends TestCase
 
     public function testAScoreIsRemovedWhenAScoreIsDeleted()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $gameId = GameId::fromString('gameId');
         $homeTeamPrediction = '70';
         $awayTeamPrediction = '60';
@@ -318,7 +319,7 @@ class GroupTest extends TestCase
         $groupName = 'updatedgroupName';
         $ownerId = UserId::fromString('updatedownerId');
 
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         $group->update($groupName, $ownerId);
 
@@ -333,7 +334,7 @@ class GroupTest extends TestCase
     {
         $groupRole = Group::G_ROLE_MEMBER;
         $allowMultiplePlayers = 'updatedAllowMultiplePlayers';
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         $group->addMember(UserId::fromString('userId'));
 
@@ -350,7 +351,7 @@ class GroupTest extends TestCase
     {
         // create a group
         // owner is admin by default
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $memberId = $group->getMembers()[0]->getMemberId();
 
         // try to update admin to member
@@ -363,7 +364,7 @@ class GroupTest extends TestCase
     {
         $homeTeamPrediction = '700';
         $awayTeamPrediction = '600';
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $gameId = GameId::fromString('gameId');
 
         $memberId = $group->getMembers()[0]->getMemberId();
@@ -386,7 +387,7 @@ class GroupTest extends TestCase
     public function testGroupGetsAPlayerWhenPlayerIsAdded()
     {
         $username = 'username';
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $members = $group->getMembers();
         $players = $group->getPlayers();
         $this->assertCount(0, $players);
@@ -405,7 +406,7 @@ class GroupTest extends TestCase
 
     public function testCannotAddAPlayerForMemberPastPlayerLimit()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $memberId = $group->getMembers()[0]->getMemberId();
 
         // add players to reach limit
@@ -420,7 +421,7 @@ class GroupTest extends TestCase
 
     public function testAnExceptionThrownForPlayerThatDoesntExistWhenSubmittingScore()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $memberId = $group->getMembers()[0]->getMemberId();
         $group->addPlayer($memberId, 'username');
 
@@ -431,7 +432,7 @@ class GroupTest extends TestCase
 
     public function testAnExceptionThrownForPlayerThatHasAlreadySubmitAScoreForGame()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $gameId = GameId::fromString('gameId');
         $memberId = $group->getMembers()[0]->getMemberId();
         $group->addPlayer($memberId, 'username');
@@ -446,7 +447,7 @@ class GroupTest extends TestCase
 
     public function testAnExceptionThrownForMemberThatDoesntExistWhenAddingPlayer()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('The member does not exist. Cannot add the player.');
@@ -455,7 +456,7 @@ class GroupTest extends TestCase
 
     public function testAnExceptionThrownForScoreThatDoesntExistWhenUpdatingScore()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $gameId = GameId::fromString('gameId');
         $memberId = $group->getMembers()[0]->getMemberId();
         $group->addPlayer($memberId, 'username');
@@ -469,7 +470,7 @@ class GroupTest extends TestCase
 
     public function testUpdateMemberThrowsExceptionsWithInvalidValues()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $members = $group->getMembers();
         $memberId = $group->getMembers()[0]->getMemberId();
 
@@ -484,7 +485,7 @@ class GroupTest extends TestCase
 
     public function testDeleteMemberThrowsExceptionsWithInvalidValues()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $userId2 = UserId::fromString('userId2');
         $userId3 = UserId::fromString('userId3');
         $group->addMember($userId2);
@@ -498,7 +499,7 @@ class GroupTest extends TestCase
 
     public function testDeleteScoreThrowsExceptionsWithInvalidValues()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->ownerId);
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $gameId = GameId::fromString('gameId');
         $memberId = $group->getMembers()[0]->getMemberId();
         $group->addPlayer($memberId, 'username');

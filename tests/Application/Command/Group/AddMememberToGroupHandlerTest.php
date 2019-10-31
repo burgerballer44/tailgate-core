@@ -18,6 +18,7 @@ class AddMemberToGroupHandlerTest extends TestCase
     private $userId = 'userId';
     private $userId2 = 'userId2';
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $group;
     private $addMemberToGroupCommand;
 
@@ -27,6 +28,7 @@ class AddMemberToGroupHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $this->group->clearRecordedEvents();

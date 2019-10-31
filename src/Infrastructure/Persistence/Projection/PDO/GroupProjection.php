@@ -29,13 +29,14 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectGroupCreated(GroupCreated $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `group` (group_id, name, owner_id, created_at)
-            VALUES (:group_id, :name, :owner_id, :created_at)'
+            'INSERT INTO `group` (group_id, name, invite_code, owner_id, created_at)
+            VALUES (:group_id, :name, :invite_code, :owner_id, :created_at)'
         );
 
         $stmt->execute([
             ':group_id' => $event->getAggregateId(),
             ':name' => $event->getName(),
+            ':invite_code' => $event->getInviteCode(),
             ':owner_id' => $event->getOwnerId(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);

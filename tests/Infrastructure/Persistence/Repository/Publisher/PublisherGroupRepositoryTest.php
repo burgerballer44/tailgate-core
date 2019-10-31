@@ -24,7 +24,7 @@ class PublisherGroupRepositoryTest extends TestCase
         $this->domainEventPublisher = $this->createMock(EventPublisherInterface::class);
 
         // create a group so we have an event
-        $this->group = Group::create(GroupId::fromString('GroupId'), 'Groupname', UserId::fromString('userId'));
+        $this->group = Group::create(GroupId::fromString('GroupId'), 'Groupname', 'inviteCode', UserId::fromString('userId'));
     }
 
     public function testItCanGetAGroup()

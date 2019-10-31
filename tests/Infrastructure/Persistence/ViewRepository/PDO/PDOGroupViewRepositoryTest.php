@@ -31,7 +31,7 @@ class PDOGroupViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT `group`.group_id, `group`.name, `group`.owner_id
+            ->with('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
             JOIN `member` on `member`.group_id = `group`.group_id
             WHERE `member`.user_id = :user_id
@@ -64,7 +64,7 @@ class PDOGroupViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT `group`.group_id, `group`.name, `group`.owner_id
+            ->with('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
             JOIN `member` on `member`.group_id = `group`.group_id
             WHERE `member`.user_id = :user_id
@@ -83,6 +83,7 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->willReturn([
                 'group_id' => 'blah',
                 'name' => 'blah',
+                'invite_code' => 'blah',
                 'owner_id' => 'blah',
             ]);
 
@@ -97,7 +98,7 @@ class PDOGroupViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT `group`.group_id, `group`.name, `group`.owner_id
+            ->with('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
             JOIN `member` on `member`.group_id = `group`.group_id
             WHERE `member`.user_id = :user_id')
@@ -141,5 +142,72 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->method('fetch');
 
         $this->viewRepository->query($userId, $name);
+    }
+
+    public function testGroupThatDoesNotExistByInviteCodeReturnsException()
+    {
+        $inviteCode = 'code';
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
+            FROM `group`
+            JOIN `member` on `member`.group_id = `group`.group_id
+            WHERE `member`.user_id = :user_id
+            AND `group`.invite_code = :invite_code
+            LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':invite_code' => $inviteCode]);
+
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn(false);
+
+        $this->expectException(RepositoryException::class);
+        $this->expectExceptionMessage('Group not found by invite code.');
+        $this->viewRepository->byInviteCode($inviteCode);
+    }
+
+    public function testCanGetAGroupByInviteCode()
+    {
+        $inviteCode = 'code';
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
+            FROM `group`
+            JOIN `member` on `member`.group_id = `group`.group_id
+            WHERE `member`.user_id = :user_id
+            AND `group`.invite_code = :invite_code
+            LIMIT 1')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute and fetch method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([':invite_code' => $inviteCode]);
+
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('fetch')
+            ->willReturn([
+                'group_id' => 'blah',
+                'name' => 'blah',
+                'invite_code' => 'blah',
+                'owner_id' => 'blah',
+            ]);
+
+        $this->viewRepository->byInviteCode($inviteCode);
     }
 }

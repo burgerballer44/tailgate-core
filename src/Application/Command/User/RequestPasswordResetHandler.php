@@ -10,6 +10,7 @@ use Tailgate\Common\Security\RandomStringInterface;
 class RequestPasswordResetHandler
 {
     private $userRepository;
+    private $randomStringer;
 
     public function __construct(
         UserRepositoryInterface $userRepository,

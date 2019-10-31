@@ -19,6 +19,7 @@ class UpdateScoreForGroupHandlerTest extends TestCase
     private $groupId = 'groupId';
     private $userId = 'userId';
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $groupRole = 'groupRole';
     private $homeTeamPrediction = '70';
     private $awayTeamPrediction = '60';
@@ -33,6 +34,7 @@ class UpdateScoreForGroupHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $memberId = $this->group->getMembers()[0]->getMemberId();

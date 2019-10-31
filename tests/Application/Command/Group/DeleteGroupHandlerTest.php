@@ -16,6 +16,7 @@ class DeleteGroupHandlerTest extends TestCase
     private $groupId = 'groupId';
     private $userId = 'userId';
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $group;
     private $deleteGroupCommand;
 
@@ -25,6 +26,7 @@ class DeleteGroupHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $this->group->clearRecordedEvents();

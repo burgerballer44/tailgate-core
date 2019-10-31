@@ -43,12 +43,13 @@ class GroupViewArrayDataTransformer implements GroupDataTransformerInterface
         }
 
         return [
-            'groupId' => $groupView->getGroupId(),
-            'name'    => $groupView->getName(),
-            'ownerId' => $groupView->getOwnerId(),
-            'members' => $members,
-            'players' => $players,
-            'scores' => $scores,
+            'groupId'    => $groupView->getGroupId(),
+            'name'       => $groupView->getName(),
+            'inviteCode' => $groupView->getInviteCode(),
+            'ownerId'    => $groupView->getOwnerId(),
+            'members'    => $members,
+            'players'    => $players,
+            'scores'     => $scores,
         ];
     }
 }

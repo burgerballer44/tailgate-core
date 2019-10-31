@@ -25,6 +25,7 @@ class UpdateGroupHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             'groupName',
+            'code',
             UserId::fromString('userId')
         );
         $this->group->clearRecordedEvents();

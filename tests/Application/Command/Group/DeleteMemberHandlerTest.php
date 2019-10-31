@@ -18,6 +18,7 @@ class DeleteMemberHandlerTest extends TestCase
     private $memberId;
     private $userId = 'userId';
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $group;
     private $deleteMemberCommand;
 
@@ -27,6 +28,7 @@ class DeleteMemberHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $this->group->addMember(UserId::fromString('userId2'));

@@ -9,13 +9,15 @@ class GroupCreated implements DomainEvent, GroupDomainEvent
 {
     private $groupId;
     private $name;
+    private $inviteCode;
     private $ownerId;
     private $occurredOn;
 
-    public function __construct(GroupId $groupId, $name, UserId $ownerId)
+    public function __construct(GroupId $groupId, $name, $inviteCode, UserId $ownerId)
     {
         $this->groupId = $groupId;
         $this->name = $name;
+        $this->inviteCode = $inviteCode;
         $this->ownerId = $ownerId;
         $this->occurredOn = new \DateTimeImmutable();
     }
@@ -28,6 +30,11 @@ class GroupCreated implements DomainEvent, GroupDomainEvent
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getInviteCode()
+    {
+        return $this->inviteCode;
     }
 
     public function getOwnerId()

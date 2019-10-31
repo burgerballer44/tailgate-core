@@ -6,15 +6,17 @@ class GroupView
 {
     private $groupId;
     private $name;
+    private $inviteCode;
     private $ownerId;
     private $members = [];
     private $players = [];
     private $scores = [];
 
-    public function __construct($groupId, $name, $ownerId)
+    public function __construct($groupId, $name, $inviteCode, $ownerId)
     {
         $this->groupId = $groupId;
         $this->name = $name;
+        $this->inviteCode = $inviteCode;
         $this->ownerId = $ownerId;
     }
 
@@ -26,6 +28,11 @@ class GroupView
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getInviteCode()
+    {
+        return $this->inviteCode;
     }
 
     public function getOwnerId()

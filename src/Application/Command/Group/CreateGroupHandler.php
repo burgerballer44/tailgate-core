@@ -5,14 +5,19 @@ namespace Tailgate\Application\Command\Group;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Common\Security\RandomStringInterface;
 
 class CreateGroupHandler
 {
     public $groupRepository;
+    private $randomStringer;
 
-    public function __construct(GroupRepositoryInterface $groupRepository)
-    {
+    public function __construct(
+        GroupRepositoryInterface $groupRepository,
+        RandomStringInterface $randomStringer
+    ) {
         $this->groupRepository = $groupRepository;
+        $this->randomStringer = $randomStringer;
     }
 
     public function handle(CreateGroupCommand $command)
@@ -23,6 +28,7 @@ class CreateGroupHandler
         $group = Group::create(
             $this->groupRepository->nextIdentity(),
             $name,
+            $this->randomStringer->generate(),
             UserId::fromString($ownerId)
         );
         

@@ -18,6 +18,7 @@ class DeletePlayerHandlerTest extends TestCase
     private $playerId;
     private $userId = 'userId';
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $group;
     private $deletePlayerCommand;
 
@@ -27,6 +28,7 @@ class DeletePlayerHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $memberId = $this->group->getMembers()[0]->getMemberId();

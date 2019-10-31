@@ -23,6 +23,7 @@ class SubmitScoreForGroupHandlerTest extends TestCase
     private $userId = 'userId';
     private $gameId = 'gameId';
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $memberId = '';
     private $username = 'username';
     private $homeTeamPrediction = '70';
@@ -36,6 +37,7 @@ class SubmitScoreForGroupHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $memberId = $this->group->getMembers()[0]->getMemberId();

@@ -24,30 +24,33 @@ class Group extends AbstractEntity
 
     private $groupId;
     private $name;
+    private $inviteCode;
     private $ownerId;
     private $scores = [];
     private $members = [];
     private $players = [];
 
-    protected function __construct($groupId, $name, $ownerId)
+    protected function __construct($groupId, $name, $inviteCode, $ownerId)
     {
         $this->groupId = $groupId;
         $this->name = $name;
+        $this->inviteCode = $inviteCode;
         $this->ownerId = $ownerId;
     }
 
     /**
      * create a group
-     * @param  GroupId $groupId [description]
-     * @param  [type]  $name    [description]
-     * @param  UserId  $ownerId [description]
-     * @return [type]           [description]
+     * @param  GroupId $groupId       [description]
+     * @param  [type]  $name          [description]
+     * @param  [type]  $inviteCode    [description]
+     * @param  UserId  $ownerId       [description]
+     * @return [type]                 [description]
      */
-    public static function create(GroupId $groupId, $name, UserId $ownerId)
+    public static function create(GroupId $groupId, $name, $inviteCode, UserId $ownerId)
     {
-        $newGroup = new Group($groupId, $name, $ownerId);
+        $newGroup = new Group($groupId, $name, $inviteCode, $ownerId);
 
-        $newGroup->recordThat(new GroupCreated($groupId, $name, $ownerId));
+        $newGroup->recordThat(new GroupCreated($groupId, $name, $inviteCode, $ownerId));
 
         $newGroup->applyAndRecordThat(
             new MemberAdded($groupId, new MemberId(), $ownerId, Group::G_ROLE_ADMIN, Group::MULTIPLE_PLAYERS)
@@ -63,7 +66,7 @@ class Group extends AbstractEntity
      */
     protected static function createEmptyEntity(IdentifiesAggregate $groupId)
     {
-        return new Group($groupId, '', '');
+        return new Group($groupId, '', '', '');
     }
 
     public function getId()
@@ -319,6 +322,7 @@ class Group extends AbstractEntity
     protected function applyGroupCreated(GroupCreated $event)
     {
         $this->name = $event->getName();
+        $this->inviteCode = $event->getInviteCode();
         $this->ownerId = $event->getOwnerId();
     }
 

@@ -24,7 +24,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
 
     public function get(UserId $userId, GroupId $groupId)
     {
-        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.owner_id
+        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
             JOIN `member` on `member`.group_id = `group`.group_id
             WHERE `member`.user_id = :user_id
@@ -42,13 +42,14 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         return new GroupView(
             $row['group_id'],
             $row['name'],
+            $row['invite_code'],
             $row['owner_id']
         );
     }
 
     public function all(UserId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.owner_id
+        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
             FROM `group`
             JOIN `member` on `member`.group_id = `group`.group_id
             WHERE `member`.user_id = :user_id');
@@ -60,6 +61,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             $groups[] = new GroupView(
                 $row['group_id'],
                 $row['name'],
+                $row['invite_code'],
                 $row['owner_id']
             );
         }
@@ -94,10 +96,33 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             $groups[] = new GroupView(
                 $row['group_id'],
                 $row['name'],
+                $row['invite_code'],
                 $row['owner_id']
             );
         }
 
         return $groups;
+    }
+
+    public function byInviteCode($inviteCode)
+    {
+        $stmt = $this->pdo->prepare('SELECT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id
+            FROM `group`
+            JOIN `member` on `member`.group_id = `group`.group_id
+            WHERE `member`.user_id = :user_id
+            AND `group`.invite_code = :invite_code
+            LIMIT 1');
+        $stmt->execute([':invite_code' => (string) $inviteCode]);
+
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new RepositoryException("Group not found by invite code.");
+        }
+
+        return new GroupView(
+            $row['group_id'],
+            $row['name'],
+            $row['invite_code'],
+            $row['owner_id']
+        );
     }
 }

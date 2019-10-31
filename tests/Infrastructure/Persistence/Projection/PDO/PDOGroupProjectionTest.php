@@ -40,6 +40,7 @@ class PDOGroupProjectionTest extends TestCase
         $event = new GroupCreated(
             GroupId::fromString('groupId'),
             'name',
+            'code',
             UserId::fromString('userId')
         );
 
@@ -47,8 +48,8 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `group` (group_id, name, owner_id, created_at)
-            VALUES (:group_id, :name, :owner_id, :created_at)')
+            ->with('INSERT INTO `group` (group_id, name, invite_code, owner_id, created_at)
+            VALUES (:group_id, :name, :invite_code, :owner_id, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -58,6 +59,7 @@ class PDOGroupProjectionTest extends TestCase
             ->with([
                 ':group_id' => $event->getAggregateId(),
                 ':name' => $event->getName(),
+                ':invite_code' => $event->getInviteCode(),
                 ':owner_id' => $event->getOwnerId(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);

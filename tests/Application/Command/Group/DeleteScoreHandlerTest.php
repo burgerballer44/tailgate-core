@@ -20,6 +20,7 @@ class DeleteScoreHandlerTest extends TestCase
     private $playerId = '';
     private $scoreId;
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $group;
     private $deleteScoreCommand;
 
@@ -29,6 +30,7 @@ class DeleteScoreHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $memberId = $this->group->getMembers()[0]->getMemberId();

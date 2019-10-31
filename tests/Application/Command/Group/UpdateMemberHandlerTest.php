@@ -17,6 +17,7 @@ class UpdateMemberHandlerTest extends TestCase
     private $groupId = 'groupId';
     private $userId = 'userId';
     private $groupName = 'groupName';
+    private $groupInviteCode = 'code';
     private $groupRole = Group::G_ROLE_ADMIN;
     private $allowMultiplePlayers = 'pizza';
     private $group;
@@ -29,6 +30,7 @@ class UpdateMemberHandlerTest extends TestCase
         $this->group = Group::create(
             GroupId::fromString($this->groupId),
             $this->groupName,
+            $this->groupInviteCode,
             UserId::fromString($this->userId)
         );
         $this->memberId = (string) $this->group->getMembers()[0]->getMemberId();
