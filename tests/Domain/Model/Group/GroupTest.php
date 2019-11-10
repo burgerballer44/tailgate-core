@@ -185,6 +185,7 @@ class GroupTest extends TestCase
         $group->addPlayer($memberId1, 'username1');
         // add two players to the third member
         $memberId3 = $group->getMembers()[2]->getMemberId();
+        $group->updateMember($memberId3, Group::G_ROLE_ADMIN, Group::MULTIPLE_PLAYERS);
         $group->addPlayer($memberId3, 'username31');
         $group->addPlayer($memberId3, 'username32');
         $playerId1 = $group->getPlayers()[0]->getPlayerId();
@@ -267,6 +268,7 @@ class GroupTest extends TestCase
         $group->addPlayer($memberId1, 'username1');
         // add two players to the third member
         $memberId3 = $group->getMembers()[2]->getMemberId();
+        $group->updateMember($memberId3, Group::G_ROLE_ADMIN, Group::MULTIPLE_PLAYERS);
         $group->addPlayer($memberId3, 'username31');
         $group->addPlayer($memberId3, 'username32');
         $playerId1 = $group->getPlayers()[0]->getPlayerId();
@@ -404,7 +406,23 @@ class GroupTest extends TestCase
         $this->assertEquals($username, $players[0]->getUsername());
     }
 
-    public function testCannotAddAPlayerForMemberPastPlayerLimit()
+    public function testCannotAddAPlayerForMemberPastPlayerLimitForSinglePlayerMember()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
+        $memberId = $group->getMembers()[0]->getMemberId();
+
+        // change admin user to a singleplayer
+        $group->updateMember($memberId, Group::G_ROLE_ADMIN, Group::SINGLE_PLAYER);
+
+        // add one player
+        $group->addPlayer($memberId, "playername");
+
+        $this->expectException(ModelException::class);
+        $this->expectExceptionMessage('Player limit reached for member.');
+        $group->addPlayer($memberId, 'playerShouldNotGoThrough');
+    }
+
+    public function testCannotAddAPlayerForMemberPastPlayerLimitForMultiplePlayerMember()
     {
         $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         $memberId = $group->getMembers()[0]->getMemberId();

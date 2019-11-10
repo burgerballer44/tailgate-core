@@ -141,7 +141,15 @@ class Group extends AbstractEntity
             throw new ModelException('The member does not exist. Cannot add the player.');
         }
 
-        if (count($this->getPlayersByMemberId($memberId)) >= self::PLAYER_LIMIT) {
+        $playerCount = count($this->getPlayersByMemberId($memberId));
+
+        // singleplayers should only have one
+        if ($member->getAllowMultiplePlayers() == self::SINGLE_PLAYER && $playerCount) {
+            throw new ModelException('Player limit reached for member.');
+        }
+
+        // multipleplayers cannot have more than the limit
+        if ($playerCount >= self::PLAYER_LIMIT) {
             throw new ModelException('Player limit reached for member.');
         }
 
