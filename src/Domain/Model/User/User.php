@@ -247,5 +247,4 @@ class User extends AbstractEntity
         $expire = 3600; // 1 hour
         return $timestamp + $expire >= time();
     }
-
 }

@@ -36,6 +36,25 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         );
     }
 
+    public function allBySport($sport)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM `season` WHERE sport_id = :sport_id LIMIT 1');
+        $stmt->execute([':sport_id' => (string) $sport]);
+
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            throw new RepositoryException("Season not found by sport.");
+        }
+
+        return new SeasonView(
+            $row['season_id'],
+            $row['sport'],
+            $row['type'],
+            $row['name'],
+            $row['season_start'],
+            $row['season_end']
+        );
+    }
+
     public function all()
     {
         $stmt = $this->pdo->prepare('SELECT * FROM `season`');

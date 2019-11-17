@@ -10,6 +10,7 @@ use Tailgate\Domain\Model\Team\Follow;
 use Tailgate\Domain\Model\Team\FollowId;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Domain\Model\Season\SeasonId;
 
 class TeamTest extends TestCase
 {
@@ -52,14 +53,16 @@ class TeamTest extends TestCase
     {
         $team = Team::create($this->teamId, $this->designation, $this->mascot);
         $groupId = GroupId::fromString('groupId');
+        $seasonId = SeasonId::fromString('seasonId');
 
-        $team->followTeam($groupId);
+        $team->followTeam($groupId, $seasonId);
         $follows = $team->getFollows();
 
         $this->assertCount(1, $follows);
         $this->assertTrue($follows[0] instanceof Follow);
         $this->assertTrue($follows[0]->getFollowId() instanceof FollowId);
         $this->assertTrue($follows[0]->getGroupId()->equals($groupId));
+        $this->assertTrue($follows[0]->getSeasonId()->equals($seasonId));
         $this->assertTrue($follows[0]->getTeamId()->equals($this->teamId));
     }
 
@@ -68,11 +71,12 @@ class TeamTest extends TestCase
         // create a team, and add a follow
         $team = Team::create($this->teamId, $this->designation, $this->mascot);
         $groupId1 = GroupId::fromString('groupId1');
-        $team->followTeam($groupId1);
+        $seasonId = SeasonId::fromString('seasonId');
+        $team->followTeam($groupId1, $seasonId);
 
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('The group already follows this team.');
-        $team->followTeam($groupId1);
+        $team->followTeam($groupId1, $seasonId);
     }
 
     public function testATeamCanBeUpdated()
@@ -91,7 +95,8 @@ class TeamTest extends TestCase
     {
         $team = Team::create($this->teamId, $this->designation, $this->mascot);
         $groupId1 = GroupId::fromString('groupId1');
-        $team->followTeam($groupId1);
+        $seasonId = SeasonId::fromString('seasonId');
+        $team->followTeam($groupId1, $seasonId);
 
         $team->delete();
 
@@ -104,8 +109,9 @@ class TeamTest extends TestCase
         $team = Team::create($this->teamId, $this->designation, $this->mascot);
         $groupId1 = GroupId::fromString('groupId1');
         $groupId2 = GroupId::fromString('groupId2');
-        $team->followTeam($groupId1);
-        $team->followTeam($groupId2);
+        $seasonId = SeasonId::fromString('seasonId');
+        $team->followTeam($groupId1, $seasonId);
+        $team->followTeam($groupId2, $seasonId);
 
         // confirm there are two follows for the team
         $follows = $team->getFollows();
@@ -129,8 +135,9 @@ class TeamTest extends TestCase
         $team = Team::create($this->teamId, $this->designation, $this->mascot);
         $groupId1 = GroupId::fromString('groupId1');
         $groupId2 = GroupId::fromString('groupId2');
-        $team->followTeam($groupId1);
-        $team->followTeam($groupId2);
+        $seasonId = SeasonId::fromString('seasonId');
+        $team->followTeam($groupId1, $seasonId);
+        $team->followTeam($groupId2, $seasonId);
 
         // confirm there are two follows for the team
         $follows = $team->getFollows();

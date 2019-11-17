@@ -5,6 +5,7 @@ namespace Tailgate\Domain\Model\Team;
 use Buttercup\Protects\IdentifiesAggregate;
 use Tailgate\Domain\Model\AbstractEntity;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\ModelException;
 
 class Team extends AbstractEntity
@@ -79,17 +80,17 @@ class Team extends AbstractEntity
     }
 
     /**
-     * gave a group follow a team
+     * have a group follow a team
      * @param  GroupId $groupId [description]
      * @return [type]           [description]
      */
-    public function followTeam(GroupId $groupId)
+    public function followTeam(GroupId $groupId, SeasonId $seasonId)
     {
         if ($team = $this->getFollowByGroupId($groupId)) {
             throw new ModelException('The group already follows this team.');
         }
 
-        $this->applyAndRecordThat(new TeamFollowed($this->teamId, new FollowId(), $groupId));
+        $this->applyAndRecordThat(new TeamFollowed($this->teamId, new FollowId(), $groupId, $seasonId));
     }
 
     /**
@@ -132,7 +133,8 @@ class Team extends AbstractEntity
         $this->follows[] = Follow::create(
             $event->getAggregateId(),
             $event->getFollowId(),
-            $event->getGroupId()
+            $event->getGroupId(),
+            $event->getSeasonId()
         );
     }
 

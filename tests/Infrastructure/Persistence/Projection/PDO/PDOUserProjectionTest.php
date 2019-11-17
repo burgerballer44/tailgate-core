@@ -180,7 +180,7 @@ class PDOUserProjectionTest extends TestCase
             ]);
 
         $this->projection->projectUserUpdated($event);
-    }  
+    }
 
     public function testItCanProjectPasswordResetTokenCreated()
     {

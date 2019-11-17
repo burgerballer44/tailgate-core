@@ -11,11 +11,13 @@ use Tailgate\Domain\Model\Team\FollowDeleted;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
+use Tailgate\Domain\Model\Season\SeasonId;
 
 class DeleteFollowHandlerTest extends TestCase
 {
     private $followId = '';
     private $teamId = 'teamId';
+    private $seasonId = 'seasonId';
     private $designation = 'designation';
     private $mascot = 'mascot';
     private $deleteFollowCommand;
@@ -26,7 +28,7 @@ class DeleteFollowHandlerTest extends TestCase
         // create a team
         $this->team = Team::create(TeamId::fromString($this->teamId), $this->designation, $this->mascot);
         // add a follow
-        $this->team->followTeam(GroupId::fromString('groupId'));
+        $this->team->followTeam(GroupId::fromString('groupId'), SeasonId::fromString('seasonId'));
         $this->team->clearRecordedEvents();
 
         $this->followId = (string) $this->team->getFollows()[0]->getFollowId();

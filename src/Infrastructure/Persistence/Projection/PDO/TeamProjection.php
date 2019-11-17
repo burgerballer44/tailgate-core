@@ -51,13 +51,14 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
     public function projectTeamFollowed(TeamFollowed $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `follow` (follow_id, team_id, group_id, created_at)
-            VALUES (:follow_id, :team_id, :group_id, :created_at)'
+            'INSERT INTO `follow` (follow_id, team_id, group_id, season_id, created_at)
+            VALUES (:follow_id, :team_id, :group_id, :season_id, :created_at)'
         );
 
         $stmt->execute([
             ':follow_id' => $event->getFollowId(),
             ':group_id' => $event->getGroupId(),
+            ':season_id' => $event->getSeasonId(),
             ':team_id' => $event->getAggregateId(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
@@ -66,8 +67,10 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
     public function projectFollowDeleted(FollowDeleted $event)
     {
         $stmt = $this->pdo->prepare('DELETE FROM `follow` WHERE follow_id = :follow_id');
-
         $stmt->execute([':follow_id' => $event->getFollowId()]);
+
+        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE home_team_id = :team_id OR away_team_id = :team_id');
+        $stmt->execute([':team_id' => $event->getAggregateId()]);
     }
 
     public function projectTeamDeleted(TeamDeleted $event)

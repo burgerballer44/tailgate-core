@@ -5,6 +5,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Team\FollowId;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Domain\Model\Team\TeamUpdated;
 use Tailgate\Domain\Model\Team\FollowDeleted;
@@ -83,15 +84,16 @@ class PDOTeamProjectionTest extends TestCase
         $event = new TeamFollowed(
             TeamId::fromString('teamId'),
             FollowId::fromString('followId'),
-            GroupId::fromString('groupId')
+            GroupId::fromString('groupId'),
+            SeasonId::fromString('seasonId')
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `follow` (follow_id, team_id, group_id, created_at)
-            VALUES (:follow_id, :team_id, :group_id, :created_at)')
+            ->with('INSERT INTO `follow` (follow_id, team_id, group_id, season_id, created_at)
+            VALUES (:follow_id, :team_id, :group_id, :season_id, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -101,6 +103,7 @@ class PDOTeamProjectionTest extends TestCase
             ->with([
                 ':follow_id' => $event->getFollowId(),
                 ':group_id' => $event->getGroupId(),
+                ':season_id' => $event->getSeasonId(),
                 ':team_id' => $event->getAggregateId(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
