@@ -86,6 +86,9 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             (SELECT game_id FROM game WHERE season_id = :season_id)');
         $stmt->execute([':season_id' => $event->getAggregateId()]);
 
+        $stmt = $this->pdo->prepare('DELETE FROM `follow` WHERE season_id = :season_id');
+        $stmt->execute([':season_id' => $event->getAggregateId()]);
+
         $stmt = $this->pdo->prepare('DELETE FROM `game` WHERE season_id = :season_id');
         $stmt->execute([':season_id' => $event->getAggregateId()]);
 

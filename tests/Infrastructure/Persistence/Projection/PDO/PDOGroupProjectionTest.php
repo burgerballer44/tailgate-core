@@ -3,6 +3,8 @@
 namespace Infrastructure\Persistence\Projection\PDO;
 
 use PHPUnit\Framework\TestCase;
+use Tailgate\Domain\Model\Group\FollowId;
+use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -18,6 +20,9 @@ use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
+use Tailgate\Domain\Model\Group\TeamFollowed;
+use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\GroupProjection;
@@ -379,5 +384,62 @@ class PDOGroupProjectionTest extends TestCase
             ]);
 
         $this->projection->projectPlayerAdded($event);
+    }
+
+    public function testItCanProjectTeamFollowed()
+    {
+        $event = new TeamFollowed(
+            GroupId::fromString('groupId'),
+            FollowId::fromString('followId'),
+            TeamId::fromString('teamId'),
+            SeasonId::fromString('seasonId')
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('INSERT INTO `follow` (follow_id, group_id, team_id, season_id, created_at)
+            VALUES (:follow_id, :group_id, :team_id, :season_id, :created_at)')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':follow_id' => $event->getFollowId(),
+                ':group_id' => $event->getAggregateId(),
+                ':team_id' => $event->getTeamId(),
+                ':season_id' => $event->getSeasonId(),
+                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+            ]);
+
+        $this->projection->projectTeamFollowed($event);
+    }
+
+    public function testItCanProjectFollowDeleted()
+    {
+        $event = new FollowDeleted(GroupId::fromString('groupId'), FollowId::fromString('followId'));
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->at(0))
+            ->method('prepare')
+            ->with('DELETE FROM `follow` WHERE follow_id = :follow_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(1))
+            ->method('prepare')
+            ->with('DELETE FROM `score` WHERE group_id = :group_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->exactly(2))
+            ->method('execute')
+            ->with([':group_id' => $event->getAggregateId()]);
+
+        $this->projection->projectFollowDeleted($event);
     }
 }

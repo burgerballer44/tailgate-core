@@ -13,6 +13,8 @@ use Tailgate\Domain\Model\Group\MemberDeleted;
 use Tailgate\Domain\Model\Group\MemberUpdated;
 use Tailgate\Domain\Model\Group\PlayerAdded;
 use Tailgate\Domain\Model\Group\PlayerDeleted;
+use Tailgate\Domain\Model\Group\TeamFollowed;
+use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
@@ -176,5 +178,30 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':username' => $event->getUsername(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
+    }
+
+    public function projectTeamFollowed(TeamFollowed $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO `follow` (follow_id, group_id, team_id, season_id, created_at)
+            VALUES (:follow_id, :group_id, :team_id, :season_id, :created_at)'
+        );
+
+        $stmt->execute([
+            ':follow_id' => $event->getFollowId(),
+            ':group_id' => $event->getAggregateId(),
+            ':season_id' => $event->getSeasonId(),
+            ':team_id' => $event->getTeamId(),
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
+        ]);
+    }
+
+    public function projectFollowDeleted(FollowDeleted $event)
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM `follow` WHERE follow_id = :follow_id');
+        $stmt->execute([':group_id' => $event->getAggregateId()]);
+
+        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE group_id = :group_id');
+        $stmt->execute([':group_id' => $event->getAggregateId()]);
     }
 }

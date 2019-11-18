@@ -4,7 +4,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Domain\Model\Team\FollowId;
+use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\FollowViewRepository;
 use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;

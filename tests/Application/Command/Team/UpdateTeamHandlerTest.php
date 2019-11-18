@@ -5,7 +5,7 @@ namespace Tailgate\Test\Application\Command\Team;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\UpdateTeamCommand;
 use Tailgate\Application\Command\Team\UpdateTeamHandler;
-use Tailgate\Domain\Model\Team\FollowId;
+use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Team\TeamUpdated;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;

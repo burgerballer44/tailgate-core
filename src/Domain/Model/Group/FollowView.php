@@ -1,29 +1,29 @@
 <?php
 
-namespace Tailgate\Domain\Model\Team;
+namespace Tailgate\Domain\Model\Group;
 
 class FollowView
 {
-    private $teamId;
-    private $followId;
     private $groupId;
+    private $followId;
+    private $teamId;
     private $groupName;
     private $teamDesignation;
     private $teamMascot;
 
-    public function __construct($teamId, $followId, $groupId, $name, $designation, $mascot)
+    public function __construct($groupId, $followId, $teamId, $name, $designation, $mascot)
     {
-        $this->teamId = $teamId;
-        $this->followId = $followId;
         $this->groupId = $groupId;
+        $this->followId = $followId;
+        $this->teamId = $teamId;
         $this->groupName = $name;
         $this->teamDesignation = $designation;
         $this->teamMascot = $mascot;
     }
 
-    public function getTeamId()
+    public function getGroupId()
     {
-        return $this->teamId;
+        return $this->groupId;
     }
 
     public function getFollowId()
@@ -31,9 +31,9 @@ class FollowView
         return $this->followId;
     }
 
-    public function getGroupId()
+    public function getTeamId()
     {
-        return $this->groupId;
+        return $this->teamId;
     }
 
     public function getGroupName()

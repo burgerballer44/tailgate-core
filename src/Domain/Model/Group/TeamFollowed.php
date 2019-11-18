@@ -1,35 +1,36 @@
 <?php
 
-namespace Tailgate\Domain\Model\Team;
+namespace Tailgate\Domain\Model\Group;
 
 use Buttercup\Protects\DomainEvent;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Season\SeasonId;
 
-class TeamFollowed implements DomainEvent, TeamDomainEvent
+class TeamFollowed implements DomainEvent, GroupDomainEvent
 {
-    private $teamId;
-    private $followId;
     private $groupId;
+    private $followId;
+    private $teamId;
     private $seasonId;
     private $occurredOn;
 
     public function __construct(
-        TeamId $teamId,
-        FollowId $followId,
         GroupId $groupId,
+        FollowId $followId,
+        TeamId $teamId,
         SeasonId $seasonId
     ) {
-        $this->teamId = $teamId;
-        $this->followId = $followId;
         $this->groupId = $groupId;
+        $this->followId = $followId;
+        $this->teamId = $teamId;
         $this->seasonId = $seasonId;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
     public function getAggregateId()
     {
-        return $this->teamId;
+        return $this->groupId;
     }
 
     public function getFollowId()
@@ -37,9 +38,9 @@ class TeamFollowed implements DomainEvent, TeamDomainEvent
         return $this->followId;
     }
 
-    public function getGroupId()
+    public function getTeamId()
     {
-        return $this->groupId;
+        return $this->teamId;
     }
 
     public function getSeasonId()

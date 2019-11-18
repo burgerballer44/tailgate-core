@@ -169,17 +169,22 @@ class PDOSeasonProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->at(1))
             ->method('prepare')
-            ->with('DELETE FROM `game` WHERE season_id = :season_id')
+            ->with('DELETE FROM `follow` WHERE season_id = :season_id')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(2))
+            ->method('prepare')
+            ->with('DELETE FROM `game` WHERE season_id = :season_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(3))
             ->method('prepare')
             ->with('DELETE FROM `season` WHERE season_id = :season_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called three times
         $this->pdoStatementMock
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(4))
             ->method('execute')
             ->with([':season_id' => $event->getAggregateId()]);
 

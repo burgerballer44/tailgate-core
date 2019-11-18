@@ -17,4 +17,6 @@ interface GroupProjectionInterface extends ProjectionInterface
     public function projectPlayerAdded(PlayerAdded $event);
     public function projectPlayerDeleted(PlayerDeleted $event);
     public function projectMemberUpdated(MemberUpdated $event);
+    public function projectTeamFollowed(TeamFollowed $event);
+    public function projectFollowDeleted(FollowDeleted $event);
 }

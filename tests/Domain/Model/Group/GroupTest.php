@@ -5,7 +5,9 @@ namespace Tailgate\Test\Domain\Model\User;
 use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\Group;
+use Tailgate\Domain\Model\Group\Follow;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\Member;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\Player;
@@ -14,6 +16,8 @@ use Tailgate\Domain\Model\Group\Score;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\ModelException;
 use Tailgate\Domain\Model\Season\GameId;
+use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\User\UserId;
 
 class GroupTest extends TestCase
@@ -527,5 +531,63 @@ class GroupTest extends TestCase
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('The score does not exist.');
         $group->deleteScore(ScoreId::fromString('scoreIdThatDoesNotExist'));
+    }
+
+    public function testFollowAddedWhenTeamIsFollowed()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
+        $teamId = TeamId::fromString('teamId');
+        $seasonId = SeasonId::fromString('seasonId');
+
+        $this->assertNull($group->getFollow());
+        $group->followTeam($teamId, $seasonId);
+        $follow = $group->getFollow();
+        
+        $this->assertTrue($follow instanceof Follow);
+        $this->assertTrue($follow->getFollowId() instanceof FollowId);
+        $this->assertTrue($follow->getGroupId()->equals($this->groupId));
+        $this->assertTrue($follow->getSeasonId()->equals($seasonId));
+        $this->assertTrue($follow->getTeamId()->equals($teamId));
+    }
+
+    public function testExceptionThrownWhenTeamIsAlreadyFollowedByGroup()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
+        $teamId = TeamId::fromString('teamId');
+        $seasonId = SeasonId::fromString('seasonId');
+
+        $group->followTeam($teamId, $seasonId);
+
+        $this->expectException(ModelException::class);
+        $this->expectExceptionMessage('Cannot follow this team. This group is already following a team.');
+        $group->followTeam($teamId, $seasonId);
+    }
+
+    public function testAFollowCanBeDeleted()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
+        $teamId = TeamId::fromString('teamId');
+        $seasonId = SeasonId::fromString('seasonId');
+
+        $this->assertNull($group->getFollow());
+        $group->followTeam($teamId, $seasonId);
+
+        // confirm there is a follow
+        $follow = $group->getFollow();
+        $this->assertNotNull($follow);
+
+        $follow = $group->getFollow();
+        $group->deleteFollow($follow->getFollowId());
+
+        $this->assertNull($group->getFollow());
+    }
+
+    public function testExceptionThrownWhenDeletingFollowThatDoesNotExist()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
+
+        $this->expectException(ModelException::class);
+        $this->expectExceptionMessage('No team is followed by group.');
+        $group->deleteFollow(FollowId::fromString('followThatDoesNotExist'));
     }
 }

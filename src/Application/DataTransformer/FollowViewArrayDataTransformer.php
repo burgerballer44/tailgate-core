@@ -3,7 +3,7 @@
 namespace Tailgate\Application\DataTransformer;
 
 use Tailgate\Application\DataTransformer\FollowDataTransformerInterface;
-use Tailgate\Domain\Model\Team\FollowView;
+use Tailgate\Domain\Model\Group\FollowView;
 
 class FollowViewArrayDataTransformer implements FollowDataTransformerInterface
 {

@@ -7,6 +7,8 @@ use Tailgate\Domain\Model\AbstractEntity;
 use Tailgate\Domain\Model\ModelException;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Domain\Model\Season\SeasonId;
 
 class Group extends AbstractEntity
 {
@@ -29,6 +31,7 @@ class Group extends AbstractEntity
     private $scores = [];
     private $members = [];
     private $players = [];
+    private $follow;
 
     protected function __construct($groupId, $name, $inviteCode, $ownerId)
     {
@@ -97,6 +100,11 @@ class Group extends AbstractEntity
     public function getPlayers()
     {
         return $this->players;
+    }
+
+    public function getFollow()
+    {
+        return $this->follow;
     }
 
     /**
@@ -327,6 +335,35 @@ class Group extends AbstractEntity
         );
     }
 
+    /**
+     * follow a team
+     * @param  TeamId   $teamId   [description]
+     * @param  SeasonId $seasonId [description]
+     * @return [type]             [description]
+     */
+    public function followTeam(TeamId $teamId, SeasonId $seasonId)
+    {
+        if ($this->follow) {
+            throw new ModelException('Cannot follow this team. This group is already following a team.');
+        }
+
+        $this->applyAndRecordThat(new TeamFollowed($this->groupId, new FollowId(), $teamId, $seasonId));
+    }
+
+    /**
+     * remove a follow
+     * @param  FollowId $followId [description]
+     * @return [type]             [description]
+     */
+    public function deleteFollow(FollowId $followId)
+    {
+        if (!$this->follow instanceof Follow) {
+            throw new ModelException('No team is followed by group.');
+        }
+
+        $this->applyAndRecordThat(new FollowDeleted($this->groupId, $followId));
+    }
+
     protected function applyGroupCreated(GroupCreated $event)
     {
         $this->name = $event->getName();
@@ -425,6 +462,21 @@ class Group extends AbstractEntity
         $this->scores = array_values(array_filter($this->scores, function ($score) use ($event) {
             return !$score->getScoreId()->equals($event->getScoreId());
         }));
+    }
+
+    protected function applyTeamFollowed(TeamFollowed $event)
+    {
+        $this->follow = Follow::create(
+            $event->getAggregateId(),
+            $event->getFollowId(),
+            $event->getTeamId(),
+            $event->getSeasonId()
+        );
+    }
+
+    protected function applyFollowDeleted(FollowDeleted $event)
+    {
+        $this->follow = null;
     }
 
     /**

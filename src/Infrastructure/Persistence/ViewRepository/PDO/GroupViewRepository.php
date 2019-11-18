@@ -4,6 +4,7 @@ namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\FollowView;
 use Tailgate\Domain\Model\Group\GroupView;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;

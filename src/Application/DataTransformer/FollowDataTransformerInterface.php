@@ -2,7 +2,7 @@
 
 namespace Tailgate\Application\DataTransformer;
 
-use Tailgate\Domain\Model\Team\FollowView;
+use Tailgate\Domain\Model\Group\FollowView;
 
 interface FollowDataTransformerInterface
 {

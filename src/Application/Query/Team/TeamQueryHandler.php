@@ -4,7 +4,7 @@ namespace Tailgate\Application\Query\Team;
 
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
-use Tailgate\Domain\Model\Team\FollowViewRepositoryInterface;
+use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
 use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Application\DataTransformer\TeamDataTransformerInterface;
 

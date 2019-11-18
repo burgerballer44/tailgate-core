@@ -49,36 +49,6 @@ class TeamTest extends TestCase
         $this->assertEquals($this->mascot, $team->getMascot());
     }
 
-    public function testFollowAddedWhenTeamIsFollowed()
-    {
-        $team = Team::create($this->teamId, $this->designation, $this->mascot);
-        $groupId = GroupId::fromString('groupId');
-        $seasonId = SeasonId::fromString('seasonId');
-
-        $team->followTeam($groupId, $seasonId);
-        $follows = $team->getFollows();
-
-        $this->assertCount(1, $follows);
-        $this->assertTrue($follows[0] instanceof Follow);
-        $this->assertTrue($follows[0]->getFollowId() instanceof FollowId);
-        $this->assertTrue($follows[0]->getGroupId()->equals($groupId));
-        $this->assertTrue($follows[0]->getSeasonId()->equals($seasonId));
-        $this->assertTrue($follows[0]->getTeamId()->equals($this->teamId));
-    }
-
-    public function testExceptionThrownWhenTeamIsAlreadyFollowedByGroup()
-    {
-        // create a team, and add a follow
-        $team = Team::create($this->teamId, $this->designation, $this->mascot);
-        $groupId1 = GroupId::fromString('groupId1');
-        $seasonId = SeasonId::fromString('seasonId');
-        $team->followTeam($groupId1, $seasonId);
-
-        $this->expectException(ModelException::class);
-        $this->expectExceptionMessage('The group already follows this team.');
-        $team->followTeam($groupId1, $seasonId);
-    }
-
     public function testATeamCanBeUpdated()
     {
         $designation = 'updatedDesignaton';
@@ -89,66 +59,5 @@ class TeamTest extends TestCase
 
         $this->assertEquals($designation, $team->getDesignation());
         $this->assertEquals($mascot, $team->getMascot());
-    }
-
-    public function testATeamCanBeDeleted()
-    {
-        $team = Team::create($this->teamId, $this->designation, $this->mascot);
-        $groupId1 = GroupId::fromString('groupId1');
-        $seasonId = SeasonId::fromString('seasonId');
-        $team->followTeam($groupId1, $seasonId);
-
-        $team->delete();
-
-        $this->assertEquals([], $team->getFollows());
-    }
-
-    public function testAFollowCanBeDeleted()
-    {
-        // create a team, add two follows
-        $team = Team::create($this->teamId, $this->designation, $this->mascot);
-        $groupId1 = GroupId::fromString('groupId1');
-        $groupId2 = GroupId::fromString('groupId2');
-        $seasonId = SeasonId::fromString('seasonId');
-        $team->followTeam($groupId1, $seasonId);
-        $team->followTeam($groupId2, $seasonId);
-
-        // confirm there are two follows for the team
-        $follows = $team->getFollows();
-        $this->assertCount(2, $follows);
-
-        // get the two followIds, delete one, confirm the other is still asociated o the team
-        $followId1 = $follows[0]->getFollowId();
-        $followId2 = $follows[1]->getFollowId();
-
-        $team->deleteFollow($followId1);
-
-        $follows = $team->getFollows();
-
-        $this->assertCount(1, $follows);
-        $this->assertTrue($follows[0]->getFollowId()->equals($followId2));
-    }
-
-    public function testExceptionThrownWhenDeletingFollowThatDoesNotExist()
-    {
-        // create a team, add two follows
-        $team = Team::create($this->teamId, $this->designation, $this->mascot);
-        $groupId1 = GroupId::fromString('groupId1');
-        $groupId2 = GroupId::fromString('groupId2');
-        $seasonId = SeasonId::fromString('seasonId');
-        $team->followTeam($groupId1, $seasonId);
-        $team->followTeam($groupId2, $seasonId);
-
-        // confirm there are two follows for the team
-        $follows = $team->getFollows();
-        $this->assertCount(2, $follows);
-
-        // get the two followIds, delete one, confirm the other is still asociated o the team
-        $followId1 = $follows[0]->getFollowId();
-        $followId2 = $follows[1]->getFollowId();
-
-        $this->expectException(ModelException::class);
-        $this->expectExceptionMessage('The follow does not exist.');
-        $team->deleteFollow(FollowId::fromString('followThatDoesNotExist'));
     }
 }

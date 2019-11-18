@@ -1,25 +1,25 @@
 <?php
 
-namespace Tailgate\Domain\Model\Team;
+namespace Tailgate\Domain\Model\Group;
 
 use Buttercup\Protects\DomainEvent;
 
-class FollowDeleted implements DomainEvent, TeamDomainEvent
+class FollowDeleted implements DomainEvent, GroupDomainEvent
 {
-    private $teamId;
+    private $groupId;
     private $followId;
     private $occurredOn;
 
-    public function __construct(TeamId $teamId, FollowId $followId)
+    public function __construct(GroupId $groupId, FollowId $followId)
     {
-        $this->teamId = $teamId;
+        $this->groupId = $groupId;
         $this->followId = $followId;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
     public function getAggregateId()
     {
-        return $this->teamId;
+        return $this->groupId;
     }
 
     public function getFollowId()

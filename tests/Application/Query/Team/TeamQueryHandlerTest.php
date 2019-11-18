@@ -8,7 +8,7 @@ use Tailgate\Application\Query\Team\TeamQueryHandler;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
-use Tailgate\Domain\Model\Team\FollowViewRepositoryInterface;
+use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
 use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Application\DataTransformer\TeamDataTransformerInterface;
 

@@ -4,10 +4,8 @@ namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 
 use PDO;
 use Tailgate\Domain\Model\Team\TeamAdded;
-use Tailgate\Domain\Model\Team\TeamFollowed;
 use Tailgate\Domain\Model\Team\TeamUpdated;
 use Tailgate\Domain\Model\Team\TeamDeleted;
-use Tailgate\Domain\Model\Team\FollowDeleted;
 use Tailgate\Domain\Model\Team\TeamProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
@@ -46,31 +44,6 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
             ':designation' => $event->getDesignation(),
             ':mascot' => $event->getMascot()
         ]);
-    }
-
-    public function projectTeamFollowed(TeamFollowed $event)
-    {
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO `follow` (follow_id, team_id, group_id, season_id, created_at)
-            VALUES (:follow_id, :team_id, :group_id, :season_id, :created_at)'
-        );
-
-        $stmt->execute([
-            ':follow_id' => $event->getFollowId(),
-            ':group_id' => $event->getGroupId(),
-            ':season_id' => $event->getSeasonId(),
-            ':team_id' => $event->getAggregateId(),
-            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
-        ]);
-    }
-
-    public function projectFollowDeleted(FollowDeleted $event)
-    {
-        $stmt = $this->pdo->prepare('DELETE FROM `follow` WHERE follow_id = :follow_id');
-        $stmt->execute([':follow_id' => $event->getFollowId()]);
-
-        $stmt = $this->pdo->prepare('DELETE FROM `score` WHERE home_team_id = :team_id OR away_team_id = :team_id');
-        $stmt->execute([':team_id' => $event->getAggregateId()]);
     }
 
     public function projectTeamDeleted(TeamDeleted $event)
