@@ -25,7 +25,9 @@ class TeamViewArrayDataTransformer implements TeamDataTransformerInterface
         $follows = [];
         $games = [];
 
-        $follow = $this->followViewTransformer->read($teamView->getFollow());
+        foreach ($teamView->getFollows() as $followView) {
+            $$follows[] = $this->followViewTransformer->read($followView);
+        }
 
         foreach ($teamView->getGames() as $gameView) {
             $games[] = $this->gameViewTransformer->read($gameView);
@@ -35,7 +37,7 @@ class TeamViewArrayDataTransformer implements TeamDataTransformerInterface
             'teamId'      => $teamView->getTeamId(),
             'designation' => $teamView->getDesignation(),
             'mascot'      => $teamView->getMascot(),
-            'follow'     => $follow,
+            'follows'     => $follows,
             'games'       => $games,
         ];
     }
