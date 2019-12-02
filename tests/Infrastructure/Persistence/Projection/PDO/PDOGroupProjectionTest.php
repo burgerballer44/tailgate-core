@@ -426,7 +426,7 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->at(0))
             ->method('prepare')
-            ->with('DELETE FROM `follow` WHERE follow_id = :follow_id')
+            ->with('DELETE FROM `follow` WHERE group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
         $this->pdoMock
             ->expects($this->at(1))
