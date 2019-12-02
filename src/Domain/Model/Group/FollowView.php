@@ -7,15 +7,17 @@ class FollowView
     private $groupId;
     private $followId;
     private $teamId;
+    private $seasonId;
     private $groupName;
     private $teamDesignation;
     private $teamMascot;
 
-    public function __construct($groupId, $followId, $teamId, $name, $designation, $mascot)
+    public function __construct($groupId, $followId, $teamId, $seasonId, $name, $designation, $mascot)
     {
         $this->groupId = $groupId;
         $this->followId = $followId;
         $this->teamId = $teamId;
+        $this->seasonId = $seasonId;
         $this->groupName = $name;
         $this->teamDesignation = $designation;
         $this->teamMascot = $mascot;
@@ -34,6 +36,11 @@ class FollowView
     public function getTeamId()
     {
         return $this->teamId;
+    }
+
+    public function getSeasonId()
+    {
+        return $this->seasonId;
     }
 
     public function getGroupName()

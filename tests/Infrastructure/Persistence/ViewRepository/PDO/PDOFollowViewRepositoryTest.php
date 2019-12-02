@@ -74,9 +74,10 @@ class PDOFollowViewRepositoryTest extends TestCase
             ->expects($this->once())
             ->method('fetch')
             ->willReturn([
-                'team_id' => 'blah',
-                'follow_id' => 'blah',
                 'group_id' => 'blah',
+                'follow_id' => 'blah',
+                'team_id' => 'blah',
+                'season_id' => 'blah',
                 'name' => 'blah',
                 'designation' => 'blah',
                 'mascot' => 'blah'

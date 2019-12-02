@@ -33,9 +33,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
         }
 
         return new FollowView(
-            $row['team_id'],
-            $row['follow_id'],
             $row['group_id'],
+            $row['follow_id'],
+            $row['team_id'],
+            $row['season_id'],
             $row['name'],
             $row['designation'],
             $row['mascot']
@@ -54,9 +55,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $follows[] = new FollowView(
-                $row['team_id'],
-                $row['follow_id'],
                 $row['group_id'],
+                $row['follow_id'],
+                $row['team_id'],
+                $row['season_id'],
                 $row['name'],
                 $row['designation'],
                 $row['mascot']
@@ -78,9 +80,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $follows[] = new FollowView(
-                $row['team_id'],
-                $row['follow_id'],
                 $row['group_id'],
+                $row['follow_id'],
+                $row['team_id'],
+                $row['season_id'],
                 $row['name'],
                 $row['designation'],
                 $row['mascot']
@@ -102,9 +105,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $follows[] = new FollowView(
-                $row['team_id'],
-                $row['follow_id'],
                 $row['group_id'],
+                $row['follow_id'],
+                $row['team_id'],
+                $row['season_id'],
                 $row['name'],
                 $row['designation'],
                 $row['mascot']
