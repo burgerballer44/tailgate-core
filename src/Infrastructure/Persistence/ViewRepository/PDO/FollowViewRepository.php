@@ -22,7 +22,8 @@ class FollowViewRepository implements FollowViewRepositoryInterface
 
     public function get(FollowId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `follow`
+        $stmt = $this->pdo->prepare('SELECT `follow`.follow_id, `follow`.group_id, `follow`.team_id, `follow`.season_id, `group`.name as groupName, `team`.designation, `team`.mascot, `season`.name as seasonName
+            FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
             WHERE `follow`.follow_id = :follow_id LIMIT 1');
@@ -37,15 +38,17 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             $row['follow_id'],
             $row['team_id'],
             $row['season_id'],
-            $row['name'],
+            $row['groupName'],
             $row['designation'],
-            $row['mascot']
+            $row['mascot'],
+            $row['seasonName']
         );
     }
 
     public function getAllByTeam(TeamId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `follow`
+        $stmt = $this->pdo->prepare('SELECT `follow`.follow_id, `follow`.group_id, `follow`.team_id, `follow`.season_id, `group`.name as groupName, `team`.designation, `team`.mascot, `season`.name as seasonName
+            FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
             WHERE `follow`.team_id = :team_id');
@@ -59,9 +62,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
                 $row['follow_id'],
                 $row['team_id'],
                 $row['season_id'],
-                $row['name'],
+                $row['groupName'],
                 $row['designation'],
-                $row['mascot']
+                $row['mascot'],
+                $row['seasonName']
             );
         }
 
@@ -70,7 +74,8 @@ class FollowViewRepository implements FollowViewRepositoryInterface
 
     public function getAllBySeason(SeasonId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `follow`
+        $stmt = $this->pdo->prepare('SELECT `follow`.follow_id, `follow`.group_id, `follow`.team_id, `follow`.season_id, `group`.name as groupName, `team`.designation, `team`.mascot, `season`.name as seasonName
+            FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
             WHERE `follow`.season_id = :season_id');
@@ -84,9 +89,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
                 $row['follow_id'],
                 $row['team_id'],
                 $row['season_id'],
-                $row['name'],
+                $row['groupName'],
                 $row['designation'],
-                $row['mascot']
+                $row['mascot'],
+                $row['seasonName']
             );
         }
 
@@ -95,7 +101,8 @@ class FollowViewRepository implements FollowViewRepositoryInterface
 
     public function getByGroup(GroupId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `follow`
+        $stmt = $this->pdo->prepare('SELECT `follow`.follow_id, `follow`.group_id, `follow`.team_id, `follow`.season_id, `group`.name as groupName, `team`.designation, `team`.mascot, `season`.name as seasonName
+            FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
             WHERE `follow`.group_id = :group_id
@@ -111,9 +118,10 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             $row['follow_id'],
             $row['team_id'],
             $row['season_id'],
-            $row['name'],
+            $row['groupName'],
             $row['designation'],
-            $row['mascot']
+            $row['mascot'],
+            $row['seasonName']
         );
 
     }

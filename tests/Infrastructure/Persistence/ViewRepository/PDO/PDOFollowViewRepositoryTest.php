@@ -30,7 +30,8 @@ class PDOFollowViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `follow`
+            ->with('SELECT `follow`.follow_id, `follow`.group_id, `follow`.team_id, `follow`.season_id, `group`.name as groupName, `team`.designation, `team`.mascot, `season`.name as seasonName
+            FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
             WHERE `follow`.follow_id = :follow_id LIMIT 1')
@@ -59,7 +60,8 @@ class PDOFollowViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `follow`
+            ->with('SELECT `follow`.follow_id, `follow`.group_id, `follow`.team_id, `follow`.season_id, `group`.name as groupName, `team`.designation, `team`.mascot, `season`.name as seasonName
+            FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
             WHERE `follow`.follow_id = :follow_id LIMIT 1')
@@ -78,9 +80,10 @@ class PDOFollowViewRepositoryTest extends TestCase
                 'follow_id' => 'blah',
                 'team_id' => 'blah',
                 'season_id' => 'blah',
-                'name' => 'blah',
+                'groupName' => 'blah',
                 'designation' => 'blah',
-                'mascot' => 'blah'
+                'mascot' => 'blah',
+                'seasonName' => 'blah'
             ]);
 
         $this->viewRepository->get($followId);
@@ -94,7 +97,8 @@ class PDOFollowViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `follow`
+            ->with('SELECT `follow`.follow_id, `follow`.group_id, `follow`.team_id, `follow`.season_id, `group`.name as groupName, `team`.designation, `team`.mascot, `season`.name as seasonName
+            FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
             WHERE `follow`.team_id = :team_id')
@@ -122,7 +126,8 @@ class PDOFollowViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `follow`
+            ->with('SELECT `follow`.follow_id, `follow`.group_id, `follow`.team_id, `follow`.season_id, `group`.name as groupName, `team`.designation, `team`.mascot, `season`.name as seasonName
+            FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
             WHERE `follow`.group_id = :group_id

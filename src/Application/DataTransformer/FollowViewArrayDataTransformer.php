@@ -16,7 +16,8 @@ class FollowViewArrayDataTransformer implements FollowDataTransformerInterface
             'seasonId' => $followView->getSeasonId(),
             'groupName' => $followView->getGroupName(),
             'teamDesignation' => $followView->getTeamDesignation(),
-            'teamMascot' => $followView->getTeamMascot()
+            'teamMascot' => $followView->getTeamMascot(),
+            'seasonName' => $followView->getSeasonName()
         ];
     }
 }
