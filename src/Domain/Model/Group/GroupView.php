@@ -8,6 +8,7 @@ class GroupView
     private $name;
     private $inviteCode;
     private $ownerId;
+    private $follow;
     private $members = [];
     private $players = [];
     private $scores = [];
@@ -40,6 +41,11 @@ class GroupView
         return $this->ownerId;
     }
 
+    public function getFollow()
+    {
+        return $this->follow;
+    }
+
     public function getMembers()
     {
         return $this->members;
@@ -53,6 +59,11 @@ class GroupView
     public function getScores()
     {
         return $this->scores;
+    }
+
+    public function addFollowView($followView)
+    {
+        $this->follow = $followView;
     }
 
     public function addMemberViews($memberView)

@@ -93,12 +93,13 @@ class FollowViewRepository implements FollowViewRepositoryInterface
         return $follows;
     }
 
-    public function getAllByGroup(GroupId $id)
+    public function getByGroup(GroupId $id)
     {
         $stmt = $this->pdo->prepare('SELECT * FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
-            WHERE `follow`.group_id = :group_id');
+            WHERE `follow`.group_id = :group_id
+            LIMIT 1');
         $stmt->execute([':group_id' => (string) $id]);
 
         $follows = [];

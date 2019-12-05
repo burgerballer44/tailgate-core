@@ -114,7 +114,7 @@ class PDOFollowViewRepositoryTest extends TestCase
         $this->viewRepository->getAllByTeam($teamId);
     }
 
-    public function testItCanGetAllFollowsOfAGroup()
+    public function testItCanGetAFollowForAGroup()
     {
         $groupId = GroupId::fromString('groupId');
 
@@ -125,7 +125,8 @@ class PDOFollowViewRepositoryTest extends TestCase
             ->with('SELECT * FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
-            WHERE `follow`.group_id = :group_id')
+            WHERE `follow`.group_id = :group_id
+            LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -139,6 +140,6 @@ class PDOFollowViewRepositoryTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('fetch');
 
-        $this->viewRepository->getAllByGroup($groupId);
+        $this->viewRepository->getByGroup($groupId);
     }
 }

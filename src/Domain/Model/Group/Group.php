@@ -358,7 +358,7 @@ class Group extends AbstractEntity
     public function deleteFollow(FollowId $followId)
     {
         if (!$this->follow instanceof Follow) {
-            throw new ModelException('No team is followed by group.');
+            throw new ModelException('Group is not following a team.');
         }
 
         $this->applyAndRecordThat(new FollowDeleted($this->groupId, $followId));

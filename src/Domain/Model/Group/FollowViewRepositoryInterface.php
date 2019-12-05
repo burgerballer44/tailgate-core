@@ -8,7 +8,7 @@ use Tailgate\Domain\Model\Season\SeasonId;
 interface FollowViewRepositoryInterface
 {
     public function get(FollowId $id);
-    public function getAllByGroup(GroupId $groupId);
+    public function getByGroup(GroupId $groupId);
     public function getAllByTeam(TeamId $teamId);
     public function getAllBySeason(SeasonId $seasonId);
 }

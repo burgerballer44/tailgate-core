@@ -587,7 +587,7 @@ class GroupTest extends TestCase
         $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
 
         $this->expectException(ModelException::class);
-        $this->expectExceptionMessage('No team is followed by group.');
+        $this->expectExceptionMessage('Group is not following a team.');
         $group->deleteFollow(FollowId::fromString('followThatDoesNotExist'));
     }
 }

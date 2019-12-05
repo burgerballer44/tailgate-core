@@ -8,10 +8,12 @@ use Tailgate\Application\Query\Group\GroupQueryHandler;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupView;
+use Tailgate\Domain\Model\Group\FollowView;
 use Tailgate\Domain\Model\Group\MemberView;
 use Tailgate\Domain\Model\Group\PlayerView;
 use Tailgate\Domain\Model\Group\ScoreView;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
+use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\PlayerViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
@@ -26,10 +28,12 @@ class GroupQueryHandlerTest extends TestCase
 
         $groupViewRepository = $this->createMock(GroupViewRepositoryInterface::class);
         $memberViewRepository = $this->createMock(MemberViewRepositoryInterface::class);
+        $followViewRepository = $this->createMock(FollowViewRepositoryInterface::class);
         $playerViewRepository = $this->createMock(PlayerViewRepositoryInterface::class);
         $scoreViewRepository = $this->createMock(ScoreViewRepositoryInterface::class);
         $groupViewTransformer = $this->createMock(GroupDataTransformerInterface::class);
         $groupView = $this->createMock(GroupView::class);
+        $followView = $this->createMock(FollowView::class);
         $memberView = $this->createMock(MemberView::class);
         $playerView = $this->createMock(PlayerView::class);
         $scoreView = $this->createMock(ScoreView::class);
@@ -62,6 +66,12 @@ class GroupQueryHandlerTest extends TestCase
             ->with($this->callback(function ($groupQueryGroupId) use ($groupId) {
                 return (new GroupId($groupId))->equals($groupQueryGroupId);
             }));
+        $followViewRepository->expects($this->once())
+            ->method('getByGroup')
+            ->willReturn($followView)
+            ->with($this->callback(function ($groupQueryGroupId) use ($groupId) {
+                return (new GroupId($groupId))->equals($groupQueryGroupId);
+            }));
 
         $groupQuery = new GroupQuery($userId, $groupId);
         $groupQueryHandler = new GroupQueryHandler(
@@ -69,6 +79,7 @@ class GroupQueryHandlerTest extends TestCase
             $memberViewRepository,
             $playerViewRepository,
             $scoreViewRepository,
+            $followViewRepository,
             $groupViewTransformer
         );
         $groupQueryHandler->handle($groupQuery);
