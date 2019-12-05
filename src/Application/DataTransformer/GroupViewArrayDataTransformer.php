@@ -25,6 +25,7 @@ class GroupViewArrayDataTransformer implements GroupDataTransformerInterface
         $this->memberViewTransformer = $memberViewTransformer;
         $this->playerViewTransformer = $playerViewTransformer;
         $this->scoreViewTransformer = $scoreViewTransformer;
+        $this->followViewTransformer = $followViewTransformer;
     }
 
     public function read(GroupView $groupView)

@@ -102,20 +102,19 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             LIMIT 1');
         $stmt->execute([':group_id' => (string) $id]);
 
-        $follows = [];
-
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $follows[] = new FollowView(
-                $row['group_id'],
-                $row['follow_id'],
-                $row['team_id'],
-                $row['season_id'],
-                $row['name'],
-                $row['designation'],
-                $row['mascot']
-            );
+        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            return false;
         }
 
-        return $follows;
+        return new FollowView(
+            $row['group_id'],
+            $row['follow_id'],
+            $row['team_id'],
+            $row['season_id'],
+            $row['name'],
+            $row['designation'],
+            $row['mascot']
+        );
+
     }
 }
