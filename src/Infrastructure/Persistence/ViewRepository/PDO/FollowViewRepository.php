@@ -26,6 +26,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
+            JOIN `season` on `season`.season_id = `follow`.season_id
             WHERE `follow`.follow_id = :follow_id LIMIT 1');
         $stmt->execute([':follow_id' => (string) $id]);
 
@@ -51,6 +52,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
+            JOIN `season` on `season`.season_id = `follow`.season_id
             WHERE `follow`.team_id = :team_id');
         $stmt->execute([':team_id' => (string) $id]);
 
@@ -78,6 +80,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
+            JOIN `season` on `season`.season_id = `follow`.season_id
             WHERE `follow`.season_id = :season_id');
         $stmt->execute([':season_id' => (string) $id]);
 
@@ -105,6 +108,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             FROM `follow`
             JOIN `group` on `group`.group_id = `follow`.group_id
             JOIN `team` on `team`.team_id = `follow`.team_id
+            JOIN `season` on `season`.season_id = `follow`.season_id
             WHERE `follow`.group_id = :group_id
             LIMIT 1');
         $stmt->execute([':group_id' => (string) $id]);
