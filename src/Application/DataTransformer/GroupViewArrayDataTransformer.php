@@ -34,7 +34,7 @@ class GroupViewArrayDataTransformer implements GroupDataTransformerInterface
         $players = [];
         $scores = [];
 
-        if ($followView = $groupView->getFollowView()) {
+        if ($followView = $groupView->getFollow()) {
             $follow = $this->followViewTransformer->read($followView);
         }
 
