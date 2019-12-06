@@ -127,7 +127,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             $params[':name'] = "%{$name}%";
         }
 
-        $stmt = $this->pdo->prepare('SELECT * FROM `group`
+        $stmt = $this->pdo->prepare('SELECT DISTINCT `group`.group_id, `group`.name, `group`.invite_code, `group`.owner_id FROM `group`
             JOIN `member` on `member`.group_id = `group`.group_id' . $specification->toSql());
         $stmt->execute($params);
 
