@@ -4,8 +4,9 @@ namespace Tailgate\Application\Query\Group;
 
 use Tailgate\Application\DataTransformer\GroupDataTransformerInterface;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
+use Tailgate\Domain\Model\User\UserId;
 
-class AllGroupsQueryHandler
+class AllGroupsByUserQueryHandler
 {
     private $groupViewRepository;
     private $groupViewTransformer;
@@ -18,9 +19,11 @@ class AllGroupsQueryHandler
         $this->groupViewTransformer = $groupViewTransformer;
     }
 
-    public function handle(AllGroupsQuery $query)
+    public function handle(AllGroupsByUserQuery $query)
     {
-        $groupViews = $this->groupViewRepository->all();
+        $userId = UserId::fromString($query->getUserId());
+
+        $groupViews = $this->groupViewRepository->allByUser($userId);
 
         $groups = [];
 
