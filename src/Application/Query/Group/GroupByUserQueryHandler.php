@@ -11,7 +11,7 @@ use Tailgate\Domain\Model\Group\PlayerViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
 use Tailgate\Application\DataTransformer\GroupDataTransformerInterface;
 
-class GroupQueryHandler
+class GroupByUserQueryHandler
 {
     private $groupViewRepository;
     private $memberViewRepository;
@@ -36,11 +36,12 @@ class GroupQueryHandler
         $this->groupViewTransformer = $groupViewTransformer;
     }
 
-    public function handle(GroupQuery $query)
+    public function handle(GroupByUserQuery $query)
     {
+        $userId = UserId::fromString($query->getUserId());
         $groupId = GroupId::fromString($query->getGroupId());
 
-        $groupView = $this->groupViewRepository->get($groupId);
+        $groupView = $this->groupViewRepository->getByUser($userId, $groupId);
         $memberViews = $this->memberViewRepository->getAllByGroup($groupId);
         $playerViews = $this->playerViewRepository->getAllByGroup($groupId);
         $scoreViews = $this->scoreViewRepository->getAllByGroup($groupId);
