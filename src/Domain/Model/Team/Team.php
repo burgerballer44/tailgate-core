@@ -94,6 +94,5 @@ class Team extends AbstractEntity
 
     protected function applyTeamDeleted(TeamDeleted $event)
     {
-        
     }
 }

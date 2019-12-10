@@ -535,7 +535,8 @@ class GroupTest extends TestCase
 
     public function testFollowAddedWhenTeamIsFollowed()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
+        ;
         $teamId = TeamId::fromString('teamId');
         $seasonId = SeasonId::fromString('seasonId');
 
@@ -552,7 +553,8 @@ class GroupTest extends TestCase
 
     public function testExceptionThrownWhenTeamIsAlreadyFollowedByGroup()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
+        ;
         $teamId = TeamId::fromString('teamId');
         $seasonId = SeasonId::fromString('seasonId');
 
@@ -565,7 +567,8 @@ class GroupTest extends TestCase
 
     public function testAFollowCanBeDeleted()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
+        ;
         $teamId = TeamId::fromString('teamId');
         $seasonId = SeasonId::fromString('seasonId');
 
@@ -584,7 +587,8 @@ class GroupTest extends TestCase
 
     public function testExceptionThrownWhenDeletingFollowThatDoesNotExist()
     {
-        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);;
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
+        ;
 
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('Group is not following a team.');

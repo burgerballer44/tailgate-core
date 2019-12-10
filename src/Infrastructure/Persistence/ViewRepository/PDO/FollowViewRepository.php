@@ -127,6 +127,5 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             $row['mascot'],
             $row['seasonName']
         );
-
     }
 }
