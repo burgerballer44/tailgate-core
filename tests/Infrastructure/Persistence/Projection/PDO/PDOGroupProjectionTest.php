@@ -311,12 +311,17 @@ class PDOGroupProjectionTest extends TestCase
         $this->pdoMock
             ->expects($this->at(3))
             ->method('prepare')
+            ->with('DELETE FROM `follow` WHERE group_id = :group_id')
+            ->willReturn($this->pdoStatementMock);
+        $this->pdoMock
+            ->expects($this->at(4))
+            ->method('prepare')
             ->with('DELETE FROM `group` WHERE group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
         $this->pdoStatementMock
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(5))
             ->method('execute')
             ->with([':group_id' => $event->getAggregateId()]);
 

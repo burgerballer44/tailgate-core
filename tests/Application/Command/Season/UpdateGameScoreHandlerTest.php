@@ -64,7 +64,7 @@ class UpdateGameScoreHandlerTest extends TestCase
             $this->homeTeamScore,
             $this->awayTeamScore,
             $this->startDate,
-            $this->startTime,
+            $this->startTime
         );
     }
 

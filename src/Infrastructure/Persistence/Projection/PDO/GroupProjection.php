@@ -132,6 +132,9 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
         $stmt = $this->pdo->prepare('DELETE FROM `member` WHERE group_id = :group_id');
         $stmt->execute([':group_id' => $event->getAggregateId()]);
 
+        $stmt = $this->pdo->prepare('DELETE FROM `follow` WHERE group_id = :group_id');
+        $stmt->execute([':group_id' => $event->getAggregateId()]);
+
         $stmt = $this->pdo->prepare('DELETE FROM `group` WHERE group_id = :group_id');
         $stmt->execute([':group_id' => $event->getAggregateId()]);
     }
