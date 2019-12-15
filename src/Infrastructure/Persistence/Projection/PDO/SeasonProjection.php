@@ -33,8 +33,8 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':name' => $event->getName(),
             ':sport' => $event->getSport(),
             ':type' => $event->getSeasonType(),
-            ':season_start' => $event->getSeasonStart()->format(self::DATE_FORMAT),
-            ':season_end' => $event->getSeasonEnd()->format(self::DATE_FORMAT),
+            ':season_start' => $event->getSeasonStart(),
+            ':season_end' => $event->getSeasonEnd(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
@@ -51,7 +51,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':game_id' => $event->getGameId(),
             ':home_team_id' => $event->getHomeTeamId(),
             ':away_team_id' => $event->getAwayTeamId(),
-            ':start_date' => $event->getStartDate()->format(self::DATE_FORMAT),
+            ':start_date' => $event->getStartDate(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
@@ -67,7 +67,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':game_id' => $event->getGameId(),
             ':home_team_score' => $event->getHomeTeamScore(),
             ':away_team_score' => $event->getAwayTeamScore(),
-            ':start_date' => $event->getStartDate()->format(self::DATE_FORMAT)
+            ':start_date' => $event->getStartDate()
         ]);
     }
 
@@ -108,8 +108,8 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':name' => $event->getName(),
             ':sport' => $event->getSport(),
             ':type' => $event->getSeasonType(),
-            ':season_start' => $event->getSeasonStart()->format(self::DATE_FORMAT),
-            ':season_end' => $event->getSeasonEnd()->format(self::DATE_FORMAT)
+            ':season_start' => $event->getSeasonStart(),
+            ':season_end' => $event->getSeasonEnd()
         ]);
     }
 }

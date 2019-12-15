@@ -33,7 +33,7 @@ class Game
         GameId $gameId,
         TeamId $homeTeamId,
         TeamId $awayTeamId,
-        \DateTimeImmutable $startDate
+        $startDate
     ) {
         $newGame = new Game(
             $seasonId,
@@ -91,7 +91,7 @@ class Game
         $this->awayTeamScore = $awayTeamScore;
     }
 
-    public function addStartDate(\DateTimeImmutable $startDate)
+    public function addStartDate($startDate)
     {
         $this->startDate = $startDate;
     }

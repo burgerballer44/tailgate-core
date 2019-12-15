@@ -30,8 +30,8 @@ class AddGameHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01');
-        $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28');
+        $this->seasonStart = '2019-09-01';
+        $this->seasonEnd = '2019-12-28';
 
         // create a season and clear events
         $this->season = Season::create(
@@ -44,12 +44,12 @@ class AddGameHandlerTest extends TestCase
         );
         $this->season->clearRecordedEvents();
 
-        $this->startDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-10-01 19:30');
+        $this->startDate = '2019-10-01 19:30';
         $this->addGameCommand = new AddGameCommand(
             $this->seasonId,
             $this->homeTeamId,
             $this->awayTeamId,
-            $this->startDate->format('Y-m-d H:i')
+            $this->startDate
         );
     }
 
@@ -77,7 +77,7 @@ class AddGameHandlerTest extends TestCase
                 && $events[0]->getGameId() instanceof GameId
                 && $events[0]->getHomeTeamId()->equals(TeamId::fromString($homeTeamId))
                 && $events[0]->getAwayTeamId()->equals(TeamId::fromString($awayTeamId))
-                && $events[0]->getStartDate()->format('Y-m-d H:i') === $startDate->format('Y-m-d H:i')
+                && $events[0]->getStartDate() === \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)->format('Y-m-d H:i:s')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

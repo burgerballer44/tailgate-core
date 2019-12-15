@@ -24,8 +24,8 @@ class DeleteSeasonHandlerTest extends TestCase
     public function setUp()
     {
         // create season and clear events
-        $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-09-01');
-        $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
+        $this->seasonStart = '2021-09-01';
+        $this->seasonEnd = '2021-12-28';
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
             $this->name,

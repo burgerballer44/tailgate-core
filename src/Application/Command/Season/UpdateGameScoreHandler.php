@@ -29,7 +29,7 @@ class UpdateGameScoreHandler
             GameId::fromString($gameId),
             $homeTeamScore,
             $awayTeamScore,
-            \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)
+            $startDate
         );
         
         $this->seasonRepository->add($season);

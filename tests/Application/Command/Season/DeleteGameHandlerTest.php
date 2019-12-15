@@ -26,8 +26,8 @@ class DeleteGameHandlerTest extends TestCase
 
     public function setUp()
     {
-        $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01');
-        $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28');
+        $this->seasonStart = '2019-09-01';
+        $this->seasonEnd = '2019-12-28';
 
         // create a season, add a game, and clear events
         $this->season = Season::create(
@@ -41,7 +41,7 @@ class DeleteGameHandlerTest extends TestCase
         $this->season->addGame(
             TeamId::fromString('homeTeamId'),
             TeamId::fromString('awayTeamId'),
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01')
+            '2019-10-01'
         );
         $this->gameId = $this->season->getGames()[0]->getGameId();
         $this->season->clearRecordedEvents();

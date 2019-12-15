@@ -34,8 +34,8 @@ class PDOSeasonProjectionTest extends TestCase
             'sport',
             'season type',
             'name of season',
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01'),
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28')
+            '2019-09-01',
+            '2019-12-28'
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -55,8 +55,8 @@ class PDOSeasonProjectionTest extends TestCase
                 ':sport' => $event->getSport(),
                 ':type' => $event->getSeasonType(),
                 ':name' => $event->getName(),
-                ':season_start' => $event->getSeasonStart()->format('Y-m-d H:i:s'),
-                ':season_end' => $event->getSeasonEnd()->format('Y-m-d H:i:s'),
+                ':season_start' => $event->getSeasonStart(),
+                ':season_end' => $event->getSeasonEnd(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
 
@@ -70,7 +70,7 @@ class PDOSeasonProjectionTest extends TestCase
             GameId::fromString('gameId'),
             TeamId::fromString('homeTeamId'),
             TeamId::fromString('awayTeamId'),
-            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-10-01 19:30')
+            '2019-10-01 19:30'
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -90,7 +90,7 @@ class PDOSeasonProjectionTest extends TestCase
                 ':game_id' => $event->getGameId(),
                 ':home_team_id' => $event->getHomeTeamId(),
                 ':away_team_id' => $event->getAwayTeamId(),
-                ':start_date' => $event->getStartDate()->format('Y-m-d H:i:s'),
+                ':start_date' => $event->getStartDate(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
 
@@ -105,7 +105,7 @@ class PDOSeasonProjectionTest extends TestCase
             GameId::fromString('gameId'),
             80,
             70,
-            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-09-01 19:30')
+            '2019-09-01 19:30'
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -124,7 +124,7 @@ class PDOSeasonProjectionTest extends TestCase
                 ':game_id' => $event->getGameId(),
                 ':home_team_score' => $event->getHomeTeamScore(),
                 ':away_team_score' => $event->getAwayTeamScore(),
-                ':start_date' => $event->getStartDate()->format('Y-m-d H:i:s')
+                ':start_date' => $event->getStartDate()
             ]);
 
         $this->projection->projectGameScoreUpdated($event);
@@ -198,8 +198,8 @@ class PDOSeasonProjectionTest extends TestCase
             'sport',
             'season type',
             'name of season',
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01'),
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28')
+            '2019-09-01',
+            '2019-12-28'
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -219,8 +219,8 @@ class PDOSeasonProjectionTest extends TestCase
                 ':sport' => $event->getSport(),
                 ':type' => $event->getSeasonType(),
                 ':name' => $event->getName(),
-                ':season_start' => $event->getSeasonStart()->format('Y-m-d H:i:s'),
-                ':season_end' => $event->getSeasonEnd()->format('Y-m-d H:i:s')
+                ':season_start' => $event->getSeasonStart(),
+                ':season_end' => $event->getSeasonEnd()
             ]);
 
         $this->projection->projectSeasonUpdated($event);

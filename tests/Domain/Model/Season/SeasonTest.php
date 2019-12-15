@@ -23,8 +23,8 @@ class SeasonTest extends TestCase
     public function setUp()
     {
         $this->seasonId = SeasonId::fromString('seasonId');
-        $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01');
-        $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28');
+        $this->seasonStart = '2019-09-01';
+        $this->seasonEnd = '2019-12-28';
     }
 
     public function testSeasonShouldBeTheSameAfterReconstitution()
@@ -66,8 +66,8 @@ class SeasonTest extends TestCase
         $this->assertEquals($this->sport, $season->getSport());
         $this->assertEquals($this->seasonType, $season->getSeasonType());
         $this->assertEquals($this->name, $season->getName());
-        $this->assertEquals($this->seasonStart, $season->getSeasonStart());
-        $this->assertEquals($this->seasonEnd, $season->getSeasonEnd());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d', $this->seasonStart)->format('Y-m-d H:i:s'), $season->getSeasonStart());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d', $this->seasonEnd)->format('Y-m-d H:i:s'), $season->getSeasonEnd());
     }
 
     public function testAGameIsAddedWhenGameIsAdded()
@@ -82,7 +82,7 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', '2019-10-01 12:12:12');
+        $startDate = '2019-10-01 12:12';
 
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
         $games = $season->getGames();
@@ -92,7 +92,7 @@ class SeasonTest extends TestCase
         $this->assertTrue($games[0]->getGameId() instanceof GameId);
         $this->assertTrue($games[0]->getHomeTeamId()->equals($homeTeamId));
         $this->assertTrue($games[0]->getAwayTeamId()->equals($awayTeamId));
-        $this->assertEquals($startDate, $games[0]->getStartDate());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)->format('Y-m-d H:i:s'), $games[0]->getStartDate());
         $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
     }
 
@@ -108,13 +108,13 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-10-01 19:30');
+        $startDate = '2019-10-01 19:30';
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
         $games = $season->getGames();
 
         $homeTeamScore = 70;
         $awayTeamScore = 60;
-        $newStartDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-12-01 19:30');
+        $newStartDate = '2019-12-01 19:30';
 
         $season->updateGameScore(
             $games[0]->getGameId(),
@@ -128,7 +128,7 @@ class SeasonTest extends TestCase
         $this->assertTrue($games[0]->getGameId() instanceof GameId);
         $this->assertEquals($homeTeamScore, $games[0]->getHomeTeamScore());
         $this->assertEquals($awayTeamScore, $games[0]->getAwayTeamScore());
-        $this->assertTrue($games[0]->getStartDate()->format('Y-m-d H:i') === $newStartDate->format('Y-m-d H:i'));
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d H:i', $newStartDate)->format('Y-m-d H:i:s'), $games[0]->getStartDate());
         $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
     }
 
@@ -144,7 +144,7 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+        $startDate = '2019-10-01';
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
  
         $this->expectException(ModelException::class);
@@ -153,7 +153,7 @@ class SeasonTest extends TestCase
             GameId::fromString('gameThatDoesNoExist'),
             12,
             23,
-            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-12-01')
+            '2019-12-01'
         );
     }
 
@@ -170,7 +170,7 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+        $startDate = '2019-10-01';
 
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
@@ -204,7 +204,7 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+        $startDate = '2019-10-01';
 
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
@@ -234,7 +234,7 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-10-01');
+        $startDate = '2019-10-01';
 
         $season->addGame($homeTeamId, $awayTeamId, $startDate);
         $games = $season->getGames();
@@ -252,8 +252,8 @@ class SeasonTest extends TestCase
         $sport = Season::SPORT_FOOTBALL;
         $seasonType = Season::SEASON_TYPE_REG;
         $name = 'updatedname';
-        $seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
-        $seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
+        $seasonStart = '2021-12-28';
+        $seasonEnd = '2021-12-28';
         $season = Season::create(
             $this->seasonId,
             $this->name,
@@ -268,14 +268,14 @@ class SeasonTest extends TestCase
         $this->assertEquals($sport, $season->getSport());
         $this->assertEquals($seasonType, $season->getSeasonType());
         $this->assertEquals($name, $season->getName());
-        $this->assertEquals($seasonStart, $season->getSeasonStart());
-        $this->assertEquals($seasonEnd, $season->getSeasonEnd());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart)->format('Y-m-d H:i:s'), $season->getSeasonStart());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd)->format('Y-m-d H:i:s'), $season->getSeasonEnd());
     }
 
     public function testUpdatingSeasonWithInvalidValuesThrowsException()
     {
-        $seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
-        $seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
+        $seasonStart = '2021-12-28';
+        $seasonEnd = '2021-12-28';
         $season = Season::create(
             $this->seasonId,
             $this->name,

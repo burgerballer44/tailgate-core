@@ -34,21 +34,21 @@ class Season extends AbstractEntity
 
     /**
      * create a season
-     * @param  SeasonId           $seasonId    [description]
-     * @param  [type]             $sport       [description]
-     * @param  [type]             $seasonType  [description]
-     * @param  [type]             $name        [description]
-     * @param  \DateTimeImmutable $seasonStart [description]
-     * @param  \DateTimeImmutable $seasonEnd   [description]
-     * @return [type]                          [description]
+     * @param  SeasonId  $seasonId    [description]
+     * @param  [type]    $sport       [description]
+     * @param  [type]    $seasonType  [description]
+     * @param  [type]    $name        [description]
+     * @param  [type]    $seasonStart [description]
+     * @param  [type]    $seasonEnd   [description]
+     * @return [type]                 [description]
      */
     public static function create(
         SeasonId $seasonId,
         $name,
         $sport,
         $seasonType,
-        \DateTimeImmutable $seasonStart,
-        \DateTimeImmutable $seasonEnd
+        $seasonStart,
+        $seasonEnd
     ) {
         if (!in_array($sport, self::getValidSports())) {
             throw new ModelException('Invalid sport. Sport does not exist.');
@@ -57,6 +57,12 @@ class Season extends AbstractEntity
         if (!in_array($seasonType, self::getValidSeasonTypes())) {
             throw new ModelException('Invalid season type. Season type does not exist.');
         }
+
+        // seasonStart and seasonEnd will be a date most of the time but can be TBA sometimes
+        $seasonStartDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart);
+        $seasonStart = $seasonStartDateTime instanceof \DateTimeImmutable ? $seasonStartDateTime->format('Y-m-d H:i:s') : $seasonStart;
+        $seasonEndDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd);
+        $seasonEnd = $seasonEndDateTime instanceof \DateTimeImmutable ? $seasonEndDateTime->format('Y-m-d H:i:s') : $seasonEnd;
 
         $newSeason = new Season($seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd);
 
@@ -114,14 +120,14 @@ class Season extends AbstractEntity
 
     /**
      * update the season information
-     * @param  [type]             $sport       [description]
-     * @param  [type]             $seasonType  [description]
-     * @param  [type]             $name        [description]
-     * @param  \DateTimeImmutable $seasonStart [description]
-     * @param  \DateTimeImmutable $seasonEnd   [description]
-     * @return [type]                          [description]
+     * @param  [type] $sport       [description]
+     * @param  [type] $seasonType  [description]
+     * @param  [type] $name        [description]
+     * @param  [type] $seasonStart [description]
+     * @param  [type] $seasonEnd   [description]
+     * @return [type]              [description]
      */
-    public function update($sport, $seasonType, $name, \DateTimeImmutable $seasonStart, \DateTimeImmutable $seasonEnd)
+    public function update($sport, $seasonType, $name, $seasonStart, $seasonEnd)
     {
         if (!in_array($sport, $this->getValidSports())) {
             throw new ModelException('Invalid sport. Sport does not exist.');
@@ -131,6 +137,12 @@ class Season extends AbstractEntity
             throw new ModelException('Invalid season type. Season type does not exist.');
         }
 
+        // seasonStart and seasonEnd will be a date most of the time but can be TBA sometimes
+        $seasonStartDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart);
+        $seasonStart = $seasonStartDateTime instanceof \DateTimeImmutable ? $seasonStartDateTime->format('Y-m-d H:i:s') : $seasonStart;
+        $seasonEndDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd);
+        $seasonEnd = $seasonEndDateTime instanceof \DateTimeImmutable ? $seasonEndDateTime->format('Y-m-d H:i:s') : $seasonEnd;
+
         $this->applyAndRecordThat(
             new SeasonUpdated($this->seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd)
         );
@@ -138,12 +150,16 @@ class Season extends AbstractEntity
 
     /**
      * adds a game
-     * @param TeamId             $homeTeamId [description]
-     * @param TeamId             $awayTeamId [description]
-     * @param \DateTimeImmutable $startDate  [description]
+     * @param TeamId $homeTeamId [description]
+     * @param TeamId $awayTeamId [description]
+     * @param [type] $startDate  [description]
      */
-    public function addGame(TeamId $homeTeamId, TeamId $awayTeamId, \DateTimeImmutable $startDate)
+    public function addGame(TeamId $homeTeamId, TeamId $awayTeamId, $startDate)
     {
+        // startDate will be a date most of the time but can be TBA sometimes
+        $startDateDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate);
+        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('Y-m-d H:i:s') : $startDate;
+
         $this->applyAndRecordThat(
             new GameAdded($this->seasonId, new GameId(), $homeTeamId, $awayTeamId, $startDate)
         );
@@ -162,6 +178,10 @@ class Season extends AbstractEntity
         if (!$game = $this->getGameById($gameId)) {
             throw new ModelException('The game does not exist. Cannot update the game score.');
         }
+
+        // startDate will be a date most of the time but can be TBA sometimes
+        $startDateDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate);
+        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('Y-m-d H:i:s') : $startDate;
 
         $this->applyAndRecordThat(new GameScoreUpdated($this->seasonId, $gameId, $homeTeamScore, $awayTeamScore, $startDate));
     }

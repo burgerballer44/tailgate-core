@@ -26,14 +26,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
             throw new RepositoryException("Season not found.");
         }
 
-        return new SeasonView(
-            $row['season_id'],
-            $row['sport'],
-            $row['type'],
-            $row['name'],
-            $row['season_start'],
-            $row['season_end']
-        );
+        return $this->createSeasonView($row);
     }
 
     public function allBySport($sport)
@@ -45,14 +38,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
             throw new RepositoryException("Season not found by sport.");
         }
 
-        return new SeasonView(
-            $row['season_id'],
-            $row['sport'],
-            $row['type'],
-            $row['name'],
-            $row['season_start'],
-            $row['season_end']
-        );
+        return $this->createSeasonView($row);
     }
 
     public function all()
@@ -63,16 +49,26 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         $seasons = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $seasons[] =  new SeasonView(
-                $row['season_id'],
-                $row['sport'],
-                $row['type'],
-                $row['name'],
-                $row['season_start'],
-                $row['season_end']
-            );
+            $seasons[] =  $this->createSeasonView($row);;
         }
 
         return $seasons;
+    }
+
+    private function createSeasonView($row)
+    {
+        $seasonStartDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['season_start']);
+        $seasonStart = $seasonStartDateTime instanceof \DateTimeImmutable ? $seasonStartDateTime->format('Y-m-d') : $row['season_start'];
+        $seasonEndDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['season_end']);
+        $seasonEnd = $seasonEndDateTime instanceof \DateTimeImmutable ? $seasonEndDateTime->format('Y-m-d') : $row['season_end'];
+
+        return new SeasonView(
+            $row['season_id'],
+            $row['sport'],
+            $row['type'],
+            $row['name'],
+            $seasonStart,
+            $seasonEnd
+        );
     }
 }

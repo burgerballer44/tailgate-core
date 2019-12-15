@@ -30,8 +30,8 @@ class UpdateSeasonHandler
             $sport,
             $seasonType,
             $name,
-            \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart),
-            \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd)
+            $seasonStart,
+            $seasonEnd
         );
         
         $this->seasonRepository->add($season);

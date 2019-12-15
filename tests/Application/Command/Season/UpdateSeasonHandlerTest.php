@@ -24,15 +24,15 @@ class UpdateSeasonHandlerTest extends TestCase
     public function setUp()
     {
         // create season and clear events
-        $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-09-01');
-        $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2021-12-28');
+        $this->seasonStart = '2021-09-01';
+        $this->seasonEnd = '2021-12-28';
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
             'Name',
             Season::SPORT_FOOTBALL,
             Season::SEASON_TYPE_REG,
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01'),
-            \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01')
+            '2019-09-01',
+            '2019-09-01'
         );
         $this->season->clearRecordedEvents();
 
@@ -41,8 +41,8 @@ class UpdateSeasonHandlerTest extends TestCase
             $this->name,
             $this->sport,
             $this->seasonType,
-            $this->seasonStart->format('Y-m-d'),
-            $this->seasonEnd->format('Y-m-d')
+            $this->seasonStart,
+            $this->seasonEnd
         );
     }
 
@@ -72,8 +72,8 @@ class UpdateSeasonHandlerTest extends TestCase
                 && $events[0]->getSport() === $sport
                 && $events[0]->getSeasonType() === $seasonType
                 && $events[0]->getName() === $name
-                && $events[0]->getSeasonStart()->format('Y-m-d') === $seasonStart->format('Y-m-d')
-                && $events[0]->getSeasonEnd()->format('Y-m-d') === $seasonEnd->format('Y-m-d')
+                && $events[0]->getSeasonStart() === \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart)->format('Y-m-d H:i:s')
+                && $events[0]->getSeasonEnd() === \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd)->format('Y-m-d H:i:s')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

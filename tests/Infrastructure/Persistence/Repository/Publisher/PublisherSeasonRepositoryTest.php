@@ -28,8 +28,8 @@ class PublisherSeasonRepositoryTest extends TestCase
             'name',
             'Football',
             Season::SEASON_TYPE_REG,
-            new \DateTimeImmutable(),
-            new \DateTimeImmutable()
+            '2019-05-05',
+            '2019-05-15'
         );
     }
 

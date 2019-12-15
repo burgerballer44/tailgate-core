@@ -18,7 +18,7 @@ class GameScoreUpdated implements DomainEvent, SeasonDomainEvent
         GameId $gameId,
         $homeTeamScore,
         $awayTeamScore,
-        \DateTimeImmutable $startDate
+        $startDate
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;

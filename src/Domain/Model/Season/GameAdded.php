@@ -19,7 +19,7 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
         GameId $gameId,
         TeamId $homeTeamId,
         TeamId $awayTeamId,
-        \DateTimeImmutable $startDate
+        $startDate
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;

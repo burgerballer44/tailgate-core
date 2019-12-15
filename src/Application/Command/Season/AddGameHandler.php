@@ -27,7 +27,7 @@ class AddGameHandler
         $season->addGame(
             TeamId::fromString($homeTeamId),
             TeamId::fromString($awayTeamId),
-            \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)
+            $startDate
         );
         
         $this->seasonRepository->add($season);

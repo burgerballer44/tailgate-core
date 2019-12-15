@@ -35,8 +35,8 @@ class UpdateGameScoreHandlerTest extends TestCase
     public function setUp()
     {
         // create a season, add a game, and clear events
-        $this->seasonStart = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-09-01');
-        $this->seasonEnd = \DateTimeImmutable::createFromFormat('Y-m-d', '2019-12-28');
+        $this->seasonStart = '2019-09-01';
+        $this->seasonEnd = '2019-12-28';
         $this->season = Season::create(
             SeasonId::fromString($this->seasonId),
             $this->name,
@@ -48,19 +48,19 @@ class UpdateGameScoreHandlerTest extends TestCase
         $this->season->addGame(
             TeamId::fromString($this->homeTeamId),
             TeamId::fromString($this->awayTeamId),
-            \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-10-01 19:30')
+            '2019-10-01 19:30'
         );
         $this->season->clearRecordedEvents();
         $games = $this->season->getGames();
         $this->game = $games[0];
 
-        $this->startDate = \DateTimeImmutable::createFromFormat('Y-m-d H:i', '2019-12-01 19:30');
+        $this->startDate = '2019-12-01 19:30';
         $this->updateGameScoreCommand = new UpdateGameScoreCommand(
             SeasonId::fromString($this->seasonId),
             $this->game->getGameId(),
             $this->homeTeamScore,
             $this->awayTeamScore,
-            $this->startDate->format('Y-m-d H:i')
+            $this->startDate
         );
     }
 
@@ -89,7 +89,7 @@ class UpdateGameScoreHandlerTest extends TestCase
                 && $events[0]->getGameId()->equals($game->getGameId())
                 && $events[0]->getHomeTeamScore() === $homeTeamScore
                 && $events[0]->getAwayTeamScore() === $awayTeamScore
-                && $events[0]->getStartDate()->format('Y-m-d H:i') === $startDate->format('Y-m-d H:i')
+                && $events[0]->getStartDate() === \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)->format('Y-m-d H:i:s')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

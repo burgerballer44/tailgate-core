@@ -19,8 +19,8 @@ class SeasonCreated implements DomainEvent, SeasonDomainEvent
         $sport,
         $seasonType,
         $name,
-        \DateTimeImmutable $seasonStart,
-        \DateTimeImmutable $seasonEnd
+        $seasonStart,
+        $seasonEnd
     ) {
         $this->seasonId = $seasonId;
         $this->sport = $sport;
