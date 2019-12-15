@@ -96,7 +96,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
 
     private function createScoreView($row)
     {
-        new ScoreView(
+        return new ScoreView(
             $row['score_id'],
             $row['group_id'],
             $row['player_id'],
