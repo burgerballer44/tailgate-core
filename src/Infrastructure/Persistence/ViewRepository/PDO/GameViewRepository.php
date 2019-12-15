@@ -41,7 +41,8 @@ class GameViewRepository implements GameViewRepositoryInterface
             FROM `game` g 
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
-            WHERE g.season_id = :season_id');
+            WHERE g.season_id = :season_id
+            ORDER BY g.start_date');
         $stmt->execute([':season_id' => (string) $id]);
 
         $games = [];
@@ -59,7 +60,8 @@ class GameViewRepository implements GameViewRepositoryInterface
             FROM `game` g
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
-            WHERE g.home_team_id = :team_id OR g.away_team_id = :team_id');
+            WHERE g.home_team_id = :team_id OR g.away_team_id = :team_id
+            ORDER BY g.start_date');
         $stmt->execute([':team_id' => (string) $id]);
 
         $games = [];
