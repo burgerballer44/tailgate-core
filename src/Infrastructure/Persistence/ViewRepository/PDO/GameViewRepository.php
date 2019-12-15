@@ -83,7 +83,7 @@ class GameViewRepository implements GameViewRepositoryInterface
             $row['away_team_id'],
             $row['home_team_score'],
             $row['away_team_score'],
-            $row['start_date'],
+            $startDate,
             $row['home_designation'],
             $row['home_mascot'],
             $row['away_designation'],
