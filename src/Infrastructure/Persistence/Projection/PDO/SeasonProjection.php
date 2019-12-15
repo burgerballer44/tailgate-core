@@ -43,7 +43,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     {
         $stmt = $this->pdo->prepare(
             'INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, start_time, created_at)
-            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, start_time, :created_at)'
+            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :start_time, :created_at)'
         );
 
         $stmt->execute([

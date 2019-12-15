@@ -79,7 +79,7 @@ class PDOSeasonProjectionTest extends TestCase
             ->expects($this->once())
             ->method('prepare')
             ->with('INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, start_time, created_at)
-            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, start_time, :created_at)')
+            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :start_time, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
