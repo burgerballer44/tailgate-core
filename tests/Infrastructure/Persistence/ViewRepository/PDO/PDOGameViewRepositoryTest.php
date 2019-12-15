@@ -105,7 +105,8 @@ class PDOGameViewRepositoryTest extends TestCase
             FROM `game` g 
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
-            WHERE g.season_id = :season_id')
+            WHERE g.season_id = :season_id
+            ORDER BY g.start_date')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -134,7 +135,8 @@ class PDOGameViewRepositoryTest extends TestCase
             FROM `game` g
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
-            WHERE g.home_team_id = :team_id OR g.away_team_id = :team_id')
+            WHERE g.home_team_id = :team_id OR g.away_team_id = :team_id
+            ORDER BY g.start_date')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
