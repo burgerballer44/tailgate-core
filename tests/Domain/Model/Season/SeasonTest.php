@@ -82,9 +82,10 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = '2019-10-01 12:12';
+        $startDate = '2019-10-01';
+        $startTime = '12:12';
 
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
         $games = $season->getGames();
 
         $this->assertCount(1, $games);
@@ -92,7 +93,8 @@ class SeasonTest extends TestCase
         $this->assertTrue($games[0]->getGameId() instanceof GameId);
         $this->assertTrue($games[0]->getHomeTeamId()->equals($homeTeamId));
         $this->assertTrue($games[0]->getAwayTeamId()->equals($awayTeamId));
-        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)->format('Y-m-d H:i:s'), $games[0]->getStartDate());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d', $startDate)->format('Y-m-d H:i:s'), $games[0]->getStartDate());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('H:i', $startTime)->format('Y-m-d H:i:s'), $games[0]->getStartTime());
         $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
     }
 
@@ -108,19 +110,22 @@ class SeasonTest extends TestCase
         );
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
-        $startDate = '2019-10-01 19:30';
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $startDate = '2019-10-01';
+        $startTime = '12:12';
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
         $games = $season->getGames();
 
         $homeTeamScore = 70;
         $awayTeamScore = 60;
-        $newStartDate = '2019-12-01 19:30';
+        $newStartDate = '2019-12-01';
+        $newStartTime = '19:30';
 
         $season->updateGameScore(
             $games[0]->getGameId(),
             $homeTeamScore,
             $awayTeamScore,
-            $newStartDate
+            $newStartDate,
+            $newStartTime
         );
 
         $this->assertCount(1, $games);
@@ -128,7 +133,8 @@ class SeasonTest extends TestCase
         $this->assertTrue($games[0]->getGameId() instanceof GameId);
         $this->assertEquals($homeTeamScore, $games[0]->getHomeTeamScore());
         $this->assertEquals($awayTeamScore, $games[0]->getAwayTeamScore());
-        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d H:i', $newStartDate)->format('Y-m-d H:i:s'), $games[0]->getStartDate());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('Y-m-d', $newStartDate)->format('Y-m-d H:i:s'), $games[0]->getStartDate());
+        $this->assertEquals(\DateTimeImmutable::createFromFormat('H:i', $newStartTime)->format('Y-m-d H:i:s'), $games[0]->getStartTime());
         $this->assertTrue($games[0]->getSeasonId()->equals($this->seasonId));
     }
 
@@ -145,7 +151,8 @@ class SeasonTest extends TestCase
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
         $startDate = '2019-10-01';
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $startTime = '12:12';
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
  
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('The game does not exist. Cannot update the game score.');
@@ -153,7 +160,8 @@ class SeasonTest extends TestCase
             GameId::fromString('gameThatDoesNoExist'),
             12,
             23,
-            '2019-12-01'
+            '2019-12-01',
+            '12:12'
         );
     }
 
@@ -171,10 +179,11 @@ class SeasonTest extends TestCase
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
         $startDate = '2019-10-01';
+        $startTime = '12:12';
 
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
         $games = $season->getGames();
         $this->assertCount(3, $games);
 
@@ -205,10 +214,11 @@ class SeasonTest extends TestCase
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
         $startDate = '2019-10-01';
+        $startTime = '12:12';
 
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
         $games = $season->getGames();
         $this->assertCount(3, $games);
 
@@ -235,8 +245,9 @@ class SeasonTest extends TestCase
         $homeTeamId = TeamId::fromString('homeTeamId');
         $awayTeamId = TeamId::fromString('awayTeamId');
         $startDate = '2019-10-01';
+        $startTime = '12:12';
 
-        $season->addGame($homeTeamId, $awayTeamId, $startDate);
+        $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
         $games = $season->getGames();
         $this->assertCount(1, $games);
 

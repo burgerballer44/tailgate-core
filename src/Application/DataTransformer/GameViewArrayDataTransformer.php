@@ -17,6 +17,7 @@ class GameViewArrayDataTransformer implements GameDataTransformerInterface
             'homeTeamScore'   => $gameView->getHomeTeamScore(),
             'awayTeamScore'   => $gameView->getAwayTeamScore(),
             'startDate'       => $gameView->getStartDate(),
+            'startTime'       => $gameView->getStartTime(),
             'homeDesignation' => $gameView->getHomeDesignation(),
             'homeMascot'      => $gameView->getHomeMascot(),
             'awayDesignation' => $gameView->getAwayDesignation(),

@@ -11,6 +11,7 @@ class GameScoreUpdated implements DomainEvent, SeasonDomainEvent
     private $homeTeamScore;
     private $awayTeamScore;
     private $startDate;
+    private $startTime;
     private $occurredOn;
 
     public function __construct(
@@ -18,13 +19,15 @@ class GameScoreUpdated implements DomainEvent, SeasonDomainEvent
         GameId $gameId,
         $homeTeamScore,
         $awayTeamScore,
-        $startDate
+        $startDate,
+        $startTime
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;
         $this->homeTeamScore = $homeTeamScore;
         $this->awayTeamScore = $awayTeamScore;
         $this->startDate = $startDate;
+        $this->startTime = $startTime;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
@@ -51,6 +54,11 @@ class GameScoreUpdated implements DomainEvent, SeasonDomainEvent
     public function getStartDate()
     {
         return $this->startDate;
+    }
+
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 
     public function getOccurredOn()

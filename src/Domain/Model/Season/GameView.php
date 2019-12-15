@@ -11,6 +11,7 @@ class GameView
     private $homeTeamScore;
     private $awayTeamScore;
     private $startDate;
+    private $startTime;
     private $homeDesignation;
     private $homeMascot;
     private $awayDesignation;
@@ -24,6 +25,7 @@ class GameView
         $homeTeamScore,
         $awayTeamScore,
         $startDate,
+        $startTime,
         $homeDesignation,
         $homeMascot,
         $awayDesignation,
@@ -36,6 +38,7 @@ class GameView
         $this->homeTeamScore = $homeTeamScore;
         $this->awayTeamScore = $awayTeamScore;
         $this->startDate = $startDate;
+        $this->startTime = $startTime;
         $this->homeDesignation = $homeDesignation;
         $this->homeMascot = $homeMascot;
         $this->awayDesignation = $awayDesignation;
@@ -75,6 +78,11 @@ class GameView
     public function getStartDate()
     {
         return $this->startDate;
+    }
+
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 
     public function getHomeDesignation()

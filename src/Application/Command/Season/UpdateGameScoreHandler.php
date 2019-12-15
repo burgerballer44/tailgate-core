@@ -22,6 +22,7 @@ class UpdateGameScoreHandler
         $homeTeamScore = $command->getHomeTeamScore();
         $awayTeamScore = $command->getAwayTeamScore();
         $startDate = $command->getStartDate();
+        $startTime = $command->getStartTime();
 
         $season = $this->seasonRepository->get(SeasonId::fromString($seasonId));
 
@@ -29,7 +30,8 @@ class UpdateGameScoreHandler
             GameId::fromString($gameId),
             $homeTeamScore,
             $awayTeamScore,
-            $startDate
+            $startDate,
+            $startTime
         );
         
         $this->seasonRepository->add($season);

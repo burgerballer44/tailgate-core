@@ -22,7 +22,7 @@ class PDOGameViewRepositoryTest extends TestCase
         $this->viewRepository = new GameViewRepository($this->pdoMock);
     }
 
-    public function testFollowThatDoesNotExistReturnsException()
+    public function testGameThatDoesNotExistReturnsException()
     {
         $gameId = GameId::fromString('followId');
 
@@ -30,7 +30,7 @@ class PDOGameViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, g.start_time, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
             FROM `game` g 
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
@@ -52,7 +52,7 @@ class PDOGameViewRepositoryTest extends TestCase
         $this->viewRepository->get($gameId);
     }
 
-    public function testItCanGetAFollow()
+    public function testItCanGetAGame()
     {
         $gameId = GameId::fromString('followId');
 
@@ -60,7 +60,7 @@ class PDOGameViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, g.start_time, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
             FROM `game` g 
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
@@ -83,6 +83,7 @@ class PDOGameViewRepositoryTest extends TestCase
                 'home_team_score' => 'blah',
                 'away_team_score' => 'blah',
                 'start_date' => 'blah',
+                'start_time' => 'blah',
                 'home_designation' => 'blah',
                 'home_mascot' => 'blah',
                 'away_designation' => 'blah',
@@ -100,7 +101,7 @@ class PDOGameViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, g.start_time, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
             FROM `game` g 
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
@@ -129,7 +130,7 @@ class PDOGameViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, g.start_time, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
             FROM `game` g
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id

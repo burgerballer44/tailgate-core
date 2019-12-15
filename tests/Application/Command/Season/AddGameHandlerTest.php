@@ -18,6 +18,7 @@ class AddGameHandlerTest extends TestCase
     private $homeTeamId = 'homeTeamId';
     private $awayTeamId = 'awayTeamId';
     private $startDate;
+    private $startTime;
 
     private $name = 'name';
     private $sport = Season::SPORT_FOOTBALL;
@@ -44,12 +45,14 @@ class AddGameHandlerTest extends TestCase
         );
         $this->season->clearRecordedEvents();
 
-        $this->startDate = '2019-10-01 19:30';
+        $this->startDate = '2019-10-01';
+        $this->startTime = '19:30';
         $this->addGameCommand = new AddGameCommand(
             $this->seasonId,
             $this->homeTeamId,
             $this->awayTeamId,
-            $this->startDate
+            $this->startDate,
+            $this->startTime
         );
     }
 
@@ -59,6 +62,7 @@ class AddGameHandlerTest extends TestCase
         $homeTeamId = $this->homeTeamId;
         $awayTeamId = $this->awayTeamId;
         $startDate = $this->startDate;
+        $startTime = $this->startTime;
         $season = $this->season;
 
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
@@ -69,7 +73,7 @@ class AddGameHandlerTest extends TestCase
         // the add method should be called once
         // the season object should have the GameAdded event
         $seasonRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($season) use ($seasonId, $homeTeamId, $awayTeamId, $startDate) {
+            function ($season) use ($seasonId, $homeTeamId, $awayTeamId, $startDate, $startTime) {
                 $events = $season->getRecordedEvents();
 
                 return $events[0] instanceof GameAdded
@@ -77,7 +81,8 @@ class AddGameHandlerTest extends TestCase
                 && $events[0]->getGameId() instanceof GameId
                 && $events[0]->getHomeTeamId()->equals(TeamId::fromString($homeTeamId))
                 && $events[0]->getAwayTeamId()->equals(TeamId::fromString($awayTeamId))
-                && $events[0]->getStartDate() === \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)->format('Y-m-d H:i:s')
+                && $events[0]->getStartDate() === \DateTimeImmutable::createFromFormat('Y-m-d', $startDate)->format('Y-m-d H:i:s')
+                && $events[0]->getStartTime() === \DateTimeImmutable::createFromFormat('H:i', $startTime)->format('Y-m-d H:i:s')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

@@ -21,7 +21,7 @@ class GameViewRepository implements GameViewRepositoryInterface
 
     public function get(GameId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+        $stmt = $this->pdo->prepare('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, g.start_time, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
             FROM `game` g 
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
@@ -37,7 +37,7 @@ class GameViewRepository implements GameViewRepositoryInterface
 
     public function getAllBySeason(SeasonId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+        $stmt = $this->pdo->prepare('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, g.start_time, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
             FROM `game` g 
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
@@ -55,7 +55,7 @@ class GameViewRepository implements GameViewRepositoryInterface
 
     public function getAllByTeam(TeamId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+        $stmt = $this->pdo->prepare('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, g.start_time, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
             FROM `game` g
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
@@ -74,7 +74,9 @@ class GameViewRepository implements GameViewRepositoryInterface
     private function createGameView($row)
     {
         $startDateDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['start_date']);
-        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('M j, Y (D) / g:i A') : $row['start_date'];
+        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('Y-m-d') : $row['start_date'];
+        $startTimeDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['start_time']);
+        $startTime = $startTimeDateTime instanceof \DateTimeImmutable ? $startTimeDateTime->format('H:i') : $row['start_time'];
 
         return new GameView(
             $row['season_id'],
@@ -84,6 +86,7 @@ class GameViewRepository implements GameViewRepositoryInterface
             $row['home_team_score'],
             $row['away_team_score'],
             $startDate,
+            $startTime,
             $row['home_designation'],
             $row['home_mascot'],
             $row['away_designation'],

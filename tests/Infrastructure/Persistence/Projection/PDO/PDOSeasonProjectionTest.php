@@ -70,15 +70,16 @@ class PDOSeasonProjectionTest extends TestCase
             GameId::fromString('gameId'),
             TeamId::fromString('homeTeamId'),
             TeamId::fromString('awayTeamId'),
-            '2019-10-01 19:30'
+            '2019-10-01',
+            '19:30'
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, created_at)
-            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :created_at)')
+            ->with('INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, start_time, created_at)
+            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, start_time, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -91,6 +92,7 @@ class PDOSeasonProjectionTest extends TestCase
                 ':home_team_id' => $event->getHomeTeamId(),
                 ':away_team_id' => $event->getAwayTeamId(),
                 ':start_date' => $event->getStartDate(),
+                ':start_time' => $event->getStartTime(),
                 ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
             ]);
 
@@ -105,14 +107,15 @@ class PDOSeasonProjectionTest extends TestCase
             GameId::fromString('gameId'),
             80,
             70,
-            '2019-09-01 19:30'
+            '2019-09-01',
+            '19:30'
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score, start_date = :start_date
+            ->with('UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score, start_date = :start_date, start_time = :start_time
             WHERE game_id = :game_id')
             ->willReturn($this->pdoStatementMock);
 
@@ -124,7 +127,8 @@ class PDOSeasonProjectionTest extends TestCase
                 ':game_id' => $event->getGameId(),
                 ':home_team_score' => $event->getHomeTeamScore(),
                 ':away_team_score' => $event->getAwayTeamScore(),
-                ':start_date' => $event->getStartDate()
+                ':start_date' => $event->getStartDate(),
+                ':start_time' => $event->getStartTime()
             ]);
 
         $this->projection->projectGameScoreUpdated($event);

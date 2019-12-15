@@ -21,13 +21,15 @@ class AddGameHandler
         $homeTeamId = $command->getHomeTeamId();
         $awayTeamId = $command->getAwayTeamId();
         $startDate = $command->getStartDate();
+        $startTime = $command->getStartTime();
 
         $season = $this->seasonRepository->get(SeasonId::fromString($seasonId));
 
         $season->addGame(
             TeamId::fromString($homeTeamId),
             TeamId::fromString($awayTeamId),
-            $startDate
+            $startDate,
+            $startTime
         );
         
         $this->seasonRepository->add($season);

@@ -8,17 +8,20 @@ class AddGameCommand
     private $homeTeamId;
     private $awayTeamId;
     private $startDate;
+    private $startTime;
 
     public function __construct(
         string $seasonId,
         string $homeTeamId,
         string $awayTeamId,
-        string $startDate
+        string $startDate,
+        string $startTime
     ) {
         $this->seasonId = $seasonId;
         $this->homeTeamId = $homeTeamId;
         $this->awayTeamId = $awayTeamId;
         $this->startDate = $startDate;
+        $this->startTime = $startTime;
     }
 
     public function getSeasonId()
@@ -39,5 +42,10 @@ class AddGameCommand
     public function getStartDate()
     {
         return $this->startDate;
+    }
+
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 }

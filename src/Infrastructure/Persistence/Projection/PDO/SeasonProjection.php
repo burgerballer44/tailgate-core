@@ -42,8 +42,8 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectGameAdded(GameAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, created_at)
-            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :created_at)'
+            'INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, start_time, created_at)
+            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, start_time, :created_at)'
         );
 
         $stmt->execute([
@@ -52,6 +52,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':home_team_id' => $event->getHomeTeamId(),
             ':away_team_id' => $event->getAwayTeamId(),
             ':start_date' => $event->getStartDate(),
+            ':start_time' => $event->getStartTime(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
@@ -59,7 +60,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectGameScoreUpdated(GameScoreUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score, start_date = :start_date
+            'UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score, start_date = :start_date, start_time = :start_time
             WHERE game_id = :game_id'
         );
 
@@ -67,7 +68,8 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
             ':game_id' => $event->getGameId(),
             ':home_team_score' => $event->getHomeTeamScore(),
             ':away_team_score' => $event->getAwayTeamScore(),
-            ':start_date' => $event->getStartDate()
+            ':start_date' => $event->getStartDate(),
+            ':start_time' => $event->getStartTime()
         ]);
     }
 

@@ -13,19 +13,22 @@ class Game
     private $homeTeamScore;
     private $awayTeamScore;
     private $startDate;
+    private $startTime;
 
     private function __construct(
         $seasonId,
         $gameId,
         $homeTeamId,
         $awayTeamId,
-        $startDate
+        $startDate,
+        $startTime
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;
         $this->homeTeamId = $homeTeamId;
         $this->awayTeamId = $awayTeamId;
         $this->startDate = $startDate;
+        $this->startTime = $startTime;
     }
 
     public static function create(
@@ -33,14 +36,16 @@ class Game
         GameId $gameId,
         TeamId $homeTeamId,
         TeamId $awayTeamId,
-        $startDate
+        $startDate,
+        $startTime
     ) {
         $newGame = new Game(
             $seasonId,
             $gameId,
             $homeTeamId,
             $awayTeamId,
-            $startDate
+            $startDate,
+            $startTime
         );
 
         return $newGame;
@@ -81,6 +86,11 @@ class Game
         return $this->startDate;
     }
 
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
+
     public function addHomeTeamScore(int $homeTeamScore)
     {
         $this->homeTeamScore = $homeTeamScore;
@@ -94,5 +104,10 @@ class Game
     public function addStartDate($startDate)
     {
         $this->startDate = $startDate;
+    }
+
+    public function addStartTime($startTime)
+    {
+        $this->startTime = $startTime;
     }
 }

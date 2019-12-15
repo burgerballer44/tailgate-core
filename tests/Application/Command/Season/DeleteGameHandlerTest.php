@@ -41,7 +41,8 @@ class DeleteGameHandlerTest extends TestCase
         $this->season->addGame(
             TeamId::fromString('homeTeamId'),
             TeamId::fromString('awayTeamId'),
-            '2019-10-01'
+            '2019-10-01',
+            '19:30'
         );
         $this->gameId = $this->season->getGames()[0]->getGameId();
         $this->season->clearRecordedEvents();

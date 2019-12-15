@@ -16,7 +16,8 @@ class UpdateGameScoreHandlerTest extends TestCase
 {
     private $homeTeamScore = 70;
     private $awayTeamScore = 60;
-    private $startDate = '';
+    private $startDate;
+    private $startTime;
 
     private $seasonId = 'seasonId';
     private $homeTeamId = 'homeTeamId';
@@ -48,19 +49,22 @@ class UpdateGameScoreHandlerTest extends TestCase
         $this->season->addGame(
             TeamId::fromString($this->homeTeamId),
             TeamId::fromString($this->awayTeamId),
-            '2019-10-01 19:30'
+            '2019-10-01',
+            '19:30'
         );
         $this->season->clearRecordedEvents();
         $games = $this->season->getGames();
         $this->game = $games[0];
 
-        $this->startDate = '2019-12-01 19:30';
+        $this->startDate = '2019-12-01';
+        $this->startTime = '19:30';
         $this->updateGameScoreCommand = new UpdateGameScoreCommand(
             SeasonId::fromString($this->seasonId),
             $this->game->getGameId(),
             $this->homeTeamScore,
             $this->awayTeamScore,
-            $this->startDate
+            $this->startDate,
+            $this->startTime,
         );
     }
 
@@ -69,6 +73,7 @@ class UpdateGameScoreHandlerTest extends TestCase
         $homeTeamScore = $this->homeTeamScore;
         $awayTeamScore = $this->awayTeamScore;
         $startDate = $this->startDate;
+        $startTime = $this->startTime;
         $season = $this->season;
         $seasonId = $this->seasonId;
         $game = $this->game;
@@ -81,7 +86,7 @@ class UpdateGameScoreHandlerTest extends TestCase
         // the add method should be called once
         // the season object should have the GameScoreUpdated event
         $seasonRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($season) use ($homeTeamScore, $awayTeamScore, $game, $seasonId, $startDate) {
+            function ($season) use ($homeTeamScore, $awayTeamScore, $game, $seasonId, $startDate, $startTime) {
                 $events = $season->getRecordedEvents();
 
                 return $events[0] instanceof GameScoreUpdated
@@ -89,7 +94,8 @@ class UpdateGameScoreHandlerTest extends TestCase
                 && $events[0]->getGameId()->equals($game->getGameId())
                 && $events[0]->getHomeTeamScore() === $homeTeamScore
                 && $events[0]->getAwayTeamScore() === $awayTeamScore
-                && $events[0]->getStartDate() === \DateTimeImmutable::createFromFormat('Y-m-d H:i', $startDate)->format('Y-m-d H:i:s')
+                && $events[0]->getStartDate() === \DateTimeImmutable::createFromFormat('Y-m-d', $startDate)->format('Y-m-d H:i:s')
+                && $events[0]->getStartTime() === \DateTimeImmutable::createFromFormat('H:i', $startTime)->format('Y-m-d H:i:s')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

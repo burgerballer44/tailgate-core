@@ -12,6 +12,7 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
     private $homeTeamId;
     private $awayTeamId;
     private $startDate;
+    private $startTime;
     private $occurredOn;
 
     public function __construct(
@@ -19,13 +20,15 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
         GameId $gameId,
         TeamId $homeTeamId,
         TeamId $awayTeamId,
-        $startDate
+        $startDate,
+        $startTime
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;
         $this->homeTeamId = $homeTeamId;
         $this->awayTeamId = $awayTeamId;
         $this->startDate = $startDate;
+        $this->startTime = $startTime;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
@@ -52,6 +55,11 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
     public function getStartDate()
     {
         return $this->startDate;
+    }
+
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 
     public function getOccurredOn()
