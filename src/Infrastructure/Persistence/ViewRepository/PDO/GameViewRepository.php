@@ -76,9 +76,9 @@ class GameViewRepository implements GameViewRepositoryInterface
     private function createGameView($row)
     {
         $startDateDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['start_date']);
-        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('Y-m-d') : $row['start_date'];
+        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('M j, Y (D)') : $row['start_date'];
         $startTimeDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['start_time']);
-        $startTime = $startTimeDateTime instanceof \DateTimeImmutable ? $startTimeDateTime->format('H:i') : $row['start_time'];
+        $startTime = $startTimeDateTime instanceof \DateTimeImmutable ? $startTimeDateTime->format('g:i A') : $row['start_time'];
 
         return new GameView(
             $row['season_id'],
