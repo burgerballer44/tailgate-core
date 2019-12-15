@@ -49,7 +49,8 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         $seasons = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $seasons[] =  $this->createSeasonView($row);;
+            $seasons[] =  $this->createSeasonView($row);
+            ;
         }
 
         return $seasons;

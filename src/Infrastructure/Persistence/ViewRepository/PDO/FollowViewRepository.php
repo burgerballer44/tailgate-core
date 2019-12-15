@@ -34,16 +34,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             throw new RepositoryException("Follow not found.");
         }
 
-        return new FollowView(
-            $row['group_id'],
-            $row['follow_id'],
-            $row['team_id'],
-            $row['season_id'],
-            $row['groupName'],
-            $row['designation'],
-            $row['mascot'],
-            $row['seasonName']
-        );
+        return $this->createFollowView($row);
     }
 
     public function getAllByTeam(TeamId $id)
@@ -59,16 +50,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
         $follows = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $follows[] = new FollowView(
-                $row['group_id'],
-                $row['follow_id'],
-                $row['team_id'],
-                $row['season_id'],
-                $row['groupName'],
-                $row['designation'],
-                $row['mascot'],
-                $row['seasonName']
-            );
+            $follows[] = $this->createFollowView($row);
         }
 
         return $follows;
@@ -87,16 +69,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
         $follows = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $follows[] = new FollowView(
-                $row['group_id'],
-                $row['follow_id'],
-                $row['team_id'],
-                $row['season_id'],
-                $row['groupName'],
-                $row['designation'],
-                $row['mascot'],
-                $row['seasonName']
-            );
+            $follows[] = $this->createFollowView($row);
         }
 
         return $follows;
@@ -117,6 +90,11 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             return false;
         }
 
+        return $this->createFollowView($row);
+    }
+
+    private function createFollowView($row)
+    {
         return new FollowView(
             $row['group_id'],
             $row['follow_id'],

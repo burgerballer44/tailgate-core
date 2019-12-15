@@ -28,12 +28,7 @@ class PlayerViewRepository implements PlayerViewRepositoryInterface
             throw new RepositoryException("Player not found.");
         }
 
-        return new PlayerView(
-            $row['player_id'],
-            $row['member_id'],
-            $row['group_id'],
-            $row['username']
-        );
+        return $this->createPlayerView($row);
     }
 
     public function getAllByGroup(GroupId $id)
@@ -44,12 +39,7 @@ class PlayerViewRepository implements PlayerViewRepositoryInterface
         $players = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $players[] = new PlayerView(
-                $row['player_id'],
-                $row['member_id'],
-                $row['group_id'],
-                $row['username']
-            );
+            $players[] = $this->createPlayerView($row);
         }
 
         return $players;
@@ -61,14 +51,19 @@ class PlayerViewRepository implements PlayerViewRepositoryInterface
         $stmt->execute([':username' => (string) $username]);
 
         if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            return new PlayerView(
-                $row['player_id'],
-                $row['username'],
-                $row['status'],
-                $row['role']
-            );
+            return $this->createPlayerView($row);
         }
 
         return false;
+    }
+
+    private function createPlayerView($row)
+    {
+        return new PlayerView(
+            $row['player_id'],
+            $row['member_id'],
+            $row['group_id'],
+            $row['username']
+        );
     }
 }

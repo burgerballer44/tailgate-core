@@ -35,12 +35,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             throw new RepositoryException("Group not found.");
         }
 
-        return new GroupView(
-            $row['group_id'],
-            $row['name'],
-            $row['invite_code'],
-            $row['owner_id']
-        );
+        return $this->createGroupView($row);
     }
 
     public function getByUser(UserId $userId, GroupId $groupId)
@@ -60,12 +55,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             throw new RepositoryException("Group not found.");
         }
 
-        return new GroupView(
-            $row['group_id'],
-            $row['name'],
-            $row['invite_code'],
-            $row['owner_id']
-        );
+        return $this->createGroupView($row);
     }
 
     public function all()
@@ -77,12 +67,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         $groups = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $groups[] = new GroupView(
-                $row['group_id'],
-                $row['name'],
-                $row['invite_code'],
-                $row['owner_id']
-            );
+            $groups[] = $this->createGroupView($row);
         }
 
         return $groups;
@@ -99,12 +84,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         $groups = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $groups[] = new GroupView(
-                $row['group_id'],
-                $row['name'],
-                $row['invite_code'],
-                $row['owner_id']
-            );
+            $groups[] = $this->createGroupView($row);
         }
 
         return $groups;
@@ -134,12 +114,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         $groups = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $groups[] = new GroupView(
-                $row['group_id'],
-                $row['name'],
-                $row['invite_code'],
-                $row['owner_id']
-            );
+            $groups[] = $this->createGroupView($row);
         }
 
         return $groups;
@@ -157,6 +132,11 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             throw new RepositoryException("Group not found by invite code.");
         }
 
+        return $this->createGroupView($row);
+    }
+
+    private function createGroupView($row)
+    {
         return new GroupView(
             $row['group_id'],
             $row['name'],

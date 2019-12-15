@@ -26,11 +26,7 @@ class TeamViewRepository implements TeamViewRepositoryInterface
             throw new RepositoryException("Team not found.");
         }
 
-        return new TeamView(
-            $row['team_id'],
-            $row['designation'],
-            $row['mascot']
-        );
+        return $this->createTeamView($row);
     }
 
     public function all()
@@ -41,13 +37,18 @@ class TeamViewRepository implements TeamViewRepositoryInterface
         $teams = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $teams[] = new TeamView(
-                $row['team_id'],
-                $row['designation'],
-                $row['mascot']
-            );
+            $teams[] = $this->createTeamView($row);
         }
 
         return $teams;
+    }
+
+    private function createTeamView($row)
+    {
+        return new TeamView(
+            $row['team_id'],
+            $row['designation'],
+            $row['mascot']
+        );
     }
 }

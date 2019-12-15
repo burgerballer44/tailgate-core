@@ -27,12 +27,7 @@ class UserViewRepository implements UserViewRepositoryInterface
             throw new RepositoryException("User not found.");
         }
 
-        return new UserView(
-            $row['user_id'],
-            $row['email'],
-            $row['status'],
-            $row['role']
-        );
+        return $this->createUserView($row);
     }
 
     public function all()
@@ -43,12 +38,7 @@ class UserViewRepository implements UserViewRepositoryInterface
         $users = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $users[] = new UserView(
-                $row['user_id'],
-                $row['email'],
-                $row['status'],
-                $row['role']
-            );
+            $users[] = $this->createUserView($row);
         }
 
         return $users;
@@ -63,12 +53,7 @@ class UserViewRepository implements UserViewRepositoryInterface
             throw new RepositoryException("User not found by email.");
         }
 
-        return new UserView(
-            $row['user_id'],
-            $row['email'],
-            $row['status'],
-            $row['role']
-        );
+        return $this->createUserView($row);
     }
 
     public function byPasswordResetToken($passwordResetToken)
@@ -84,6 +69,11 @@ class UserViewRepository implements UserViewRepositoryInterface
             throw new RepositoryException("Reset token expired. Please request a password reset again.");
         }
 
+        return $this->createUserView($row);
+    }
+
+    private function createUserView($row)
+    {
         return new UserView(
             $row['user_id'],
             $row['email'],

@@ -34,20 +34,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
             throw new RepositoryException("Score not found.");
         }
 
-        return new ScoreView(
-            $row['score_id'],
-            $row['group_id'],
-            $row['player_id'],
-            $row['game_id'],
-            $row['home_team_prediction'],
-            $row['away_team_prediction'],
-            $row['home_team_id'],
-            $row['away_team_id'],
-            $row['home_designation'],
-            $row['home_mascot'],
-            $row['away_designation'],
-            $row['away_mascot']
-        );
+        return $this->createScoreView($row);
     }
 
     public function getAllByGroup(GroupId $id)
@@ -63,20 +50,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
         $scores = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $scores[] = new ScoreView(
-                $row['score_id'],
-                $row['group_id'],
-                $row['player_id'],
-                $row['game_id'],
-                $row['home_team_prediction'],
-                $row['away_team_prediction'],
-                $row['home_team_id'],
-                $row['away_team_id'],
-                $row['home_designation'],
-                $row['home_mascot'],
-                $row['away_designation'],
-                $row['away_mascot']
-            );
+            $scores[] = $this->createScoreView($row);
         }
 
         return $scores;
@@ -95,20 +69,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
         $scores = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $scores[] = new ScoreView(
-                $row['score_id'],
-                $row['group_id'],
-                $row['player_id'],
-                $row['game_id'],
-                $row['home_team_prediction'],
-                $row['away_team_prediction'],
-                $row['home_team_id'],
-                $row['away_team_id'],
-                $row['home_designation'],
-                $row['home_mascot'],
-                $row['away_designation'],
-                $row['away_mascot']
-            );
+            $scores[] = $this->createScoreView($row);
         }
 
         return $scores;
@@ -127,22 +88,27 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
         $scores = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $scores[] = new ScoreView(
-                $row['score_id'],
-                $row['group_id'],
-                $row['player_id'],
-                $row['game_id'],
-                $row['home_team_prediction'],
-                $row['away_team_prediction'],
-                $row['home_team_id'],
-                $row['away_team_id'],
-                $row['home_designation'],
-                $row['home_mascot'],
-                $row['away_designation'],
-                $row['away_mascot']
-            );
+            $scores[] = $this->createScoreView($row);
         }
 
         return $scores;
+    }
+
+    private function createScoreView($row)
+    {
+        new ScoreView(
+            $row['score_id'],
+            $row['group_id'],
+            $row['player_id'],
+            $row['game_id'],
+            $row['home_team_prediction'],
+            $row['away_team_prediction'],
+            $row['home_team_id'],
+            $row['away_team_id'],
+            $row['home_designation'],
+            $row['home_mascot'],
+            $row['away_designation'],
+            $row['away_mascot']
+        );
     }
 }

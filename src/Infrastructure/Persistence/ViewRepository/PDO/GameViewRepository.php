@@ -32,19 +32,7 @@ class GameViewRepository implements GameViewRepositoryInterface
             throw new RepositoryException("Game not found.");
         }
 
-        return new GameView(
-            $row['season_id'],
-            $row['game_id'],
-            $row['home_team_id'],
-            $row['away_team_id'],
-            $row['home_team_score'],
-            $row['away_team_score'],
-            $row['start_date'],
-            $row['home_designation'],
-            $row['home_mascot'],
-            $row['away_designation'],
-            $row['away_mascot']
-        );
+        return $this->createGameView($row);
     }
 
     public function getAllBySeason(SeasonId $id)
@@ -59,19 +47,7 @@ class GameViewRepository implements GameViewRepositoryInterface
         $games = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $games[] = new GameView(
-                $row['season_id'],
-                $row['game_id'],
-                $row['home_team_id'],
-                $row['away_team_id'],
-                $row['home_team_score'],
-                $row['away_team_score'],
-                $row['start_date'],
-                $row['home_designation'],
-                $row['home_mascot'],
-                $row['away_designation'],
-                $row['away_mascot']
-            );
+            $games[] = $this->createGameView($row);
         }
 
         return $games;
@@ -89,21 +65,29 @@ class GameViewRepository implements GameViewRepositoryInterface
         $games = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $games[] = new GameView(
-                $row['season_id'],
-                $row['game_id'],
-                $row['home_team_id'],
-                $row['away_team_id'],
-                $row['home_team_score'],
-                $row['away_team_score'],
-                $row['start_date'],
-                $row['home_designation'],
-                $row['home_mascot'],
-                $row['away_designation'],
-                $row['away_mascot']
-            );
+            $games[] = $this->createGameView($row);
         }
 
         return $games;
+    }
+
+    private function createGameView($row)
+    {
+        $startDateDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['start_date']);
+        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('M j, Y (D) / g:i A') : $row['start_date'];
+
+        return new GameView(
+            $row['season_id'],
+            $row['game_id'],
+            $row['home_team_id'],
+            $row['away_team_id'],
+            $row['home_team_score'],
+            $row['away_team_score'],
+            $row['start_date'],
+            $row['home_designation'],
+            $row['home_mascot'],
+            $row['away_designation'],
+            $row['away_mascot']
+        );
     }
 }

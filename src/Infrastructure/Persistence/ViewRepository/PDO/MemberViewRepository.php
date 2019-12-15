@@ -31,14 +31,7 @@ class MemberViewRepository implements MemberViewRepositoryInterface
             throw new RepositoryException("Member not found.");
         }
 
-        return new MemberView(
-            $row['member_id'],
-            $row['group_id'],
-            $row['user_id'],
-            $row['role'],
-            $row['allow_multiple'],
-            $row['email']
-        );
+        return $this->createMemberView($row);
     }
 
     public function getAllByGroup(GroupId $id)
@@ -52,14 +45,7 @@ class MemberViewRepository implements MemberViewRepositoryInterface
         $members = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $members[] = new MemberView(
-                $row['member_id'],
-                $row['group_id'],
-                $row['user_id'],
-                $row['role'],
-                $row['allow_multiple'],
-                $row['email']
-            );
+            $members[] = $this->createMemberView($row);
         }
 
         return $members;
@@ -76,16 +62,21 @@ class MemberViewRepository implements MemberViewRepositoryInterface
         $members = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $members[] = new MemberView(
-                $row['member_id'],
-                $row['group_id'],
-                $row['user_id'],
-                $row['role'],
-                $row['allow_multiple'],
-                $row['email']
-            );
+            $members[] = $this->createMemberView($row);
         }
 
         return $members;
+    }
+
+    private function createMemberView($row)
+    {
+        return new MemberView(
+            $row['member_id'],
+            $row['group_id'],
+            $row['user_id'],
+            $row['role'],
+            $row['allow_multiple'],
+            $row['email']
+        );
     }
 }
