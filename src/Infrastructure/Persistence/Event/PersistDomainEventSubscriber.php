@@ -1,9 +1,9 @@
 <?php
 
-namespace Tailgate\Common\Event;
+namespace Tailgate\Infrastructure\Persistence\Event;
 
 use Buttercup\Protects\DomainEvent;
-use Tailgate\Common\Event\EventStoreInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Common\Event\EventSubscriberInterface;
 
 class PersistDomainEventSubscriber implements EventSubscriberInterface

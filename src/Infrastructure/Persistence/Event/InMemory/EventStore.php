@@ -6,7 +6,7 @@ use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\DomainEvents;
 use Buttercup\Protects\IdentifiesAggregate;
-use Tailgate\Common\Event\EventStoreInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 
 class EventStore implements EventStoreInterface
 {

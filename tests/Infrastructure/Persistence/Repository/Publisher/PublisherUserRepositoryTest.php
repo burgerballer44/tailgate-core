@@ -5,7 +5,7 @@ namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
-use Tailgate\Common\Event\EventStoreInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Common\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Common\Event;
+namespace Tailgate\Infrastructure\Persistence\Event;
 
 use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvent;
