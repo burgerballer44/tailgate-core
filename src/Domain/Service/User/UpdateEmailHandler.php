@@ -1,0 +1,35 @@
+<?php
+
+namespace Tailgate\Domain\Service\User;
+
+use Tailgate\Application\Command\User\UpdateEmailCommand;
+use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\User\User;
+use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Domain\Service\AbstractService;
+
+class UpdateEmailHandler extends AbstractService
+{
+    private $userRepository;
+
+    public function __construct(ValidatorInterface $validator, UserRepositoryInterface $userRepository)
+    {
+        parent::__construct($validator);
+        $this->userRepository = $userRepository;
+    }
+
+    public function handle(UpdateEmailCommand $command)
+    {
+        $this->validate($command);
+        
+        $userId = $command->getUserId();
+        $email = $command->getEmail();
+
+        $user = $this->userRepository->get(UserId::fromString($userId));
+
+        $user->updateEmail($email);
+
+        $this->userRepository->add($user);
+    }
+}
