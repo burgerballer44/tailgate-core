@@ -56,7 +56,7 @@ class DeleteUserHandlerTest extends TestCase
         ));
 
         $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
+        $validator->expects($this->exactly(0))->method('assert')->willReturn(true);
 
         $deleteUserHandler = new DeleteUserHandler($validator, $userRepository);
 
