@@ -21,7 +21,7 @@ class DeleteFollowHandler extends AbstractService
 
     public function handle(DeleteFollowCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
 
         $groupId = $command->getGroupId();
         $followId = $command->getFollowId();

@@ -6,6 +6,6 @@ use Tailgate\Application\Validator\ValidationResult;
 
 interface ValidatorInterface
 {
-    public function assert(): bool;
+    public function assert($command): bool;
     public function errors(): array;
 }

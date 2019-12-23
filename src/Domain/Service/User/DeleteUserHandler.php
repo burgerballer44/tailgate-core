@@ -21,7 +21,7 @@ class DeleteUserHandler extends AbstractService
 
     public function handle(DeleteUserCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
         
         $userId = $command->getUserId();
 

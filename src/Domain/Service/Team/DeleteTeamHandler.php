@@ -21,7 +21,7 @@ class DeleteTeamHandler extends AbstractService
 
     public function handle(DeleteTeamCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
         
         $teamId = $command->getTeamId();
 

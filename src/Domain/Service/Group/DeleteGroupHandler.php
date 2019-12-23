@@ -21,7 +21,7 @@ class DeleteGroupHandler extends AbstractService
 
     public function handle(DeleteGroupCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
 
         $groupId = $command->getGroupId();
 

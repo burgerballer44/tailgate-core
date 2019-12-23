@@ -22,7 +22,7 @@ class DeletePlayerHandler extends AbstractService
 
     public function handle(DeletePlayerCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
 
         $groupId = $command->getGroupId();
         $PlayerId = $command->getPlayerId();

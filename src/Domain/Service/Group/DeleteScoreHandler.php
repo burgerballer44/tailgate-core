@@ -22,7 +22,7 @@ class DeleteScoreHandler extends AbstractService
 
     public function handle(DeleteScoreCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
 
         $groupId = $command->getGroupId();
         $scoreId = $command->getScoreId();

@@ -21,7 +21,7 @@ class DeleteSeasonHandler extends AbstractService
 
     public function handle(DeleteSeasonCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
         
         $seasonId = $command->getSeasonId();
 

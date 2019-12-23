@@ -22,7 +22,7 @@ class DeleteGameHandler extends AbstractService
 
     public function handle(DeleteGameCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
         
         $seasonId = $command->getSeasonId();
         $gameId = $command->getGameId();

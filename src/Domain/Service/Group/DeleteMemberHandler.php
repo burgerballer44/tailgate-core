@@ -22,7 +22,7 @@ class DeleteMemberHandler extends AbstractService
 
     public function handle(DeleteMemberCommand $command)
     {
-        $this->validate($command);
+        // $this->validate($command);
 
         $groupId = $command->getGroupId();
         $memberId = $command->getMemberId();
