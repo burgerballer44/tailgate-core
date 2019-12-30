@@ -91,12 +91,12 @@ class Game
         return $this->startTime;
     }
 
-    public function addHomeTeamScore(int $homeTeamScore)
+    public function addHomeTeamScore($homeTeamScore)
     {
         $this->homeTeamScore = $homeTeamScore;
     }
 
-    public function addAwayTeamScore(int $awayTeamScore)
+    public function addAwayTeamScore($awayTeamScore)
     {
         $this->awayTeamScore = $awayTeamScore;
     }

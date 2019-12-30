@@ -14,8 +14,8 @@ class UpdateGameScoreCommand
     public function __construct(
         string $seasonId,
         string $gameId,
-        int $homeTeamScore,
-        int $awayTeamScore,
+        $homeTeamScore,
+        $awayTeamScore,
         string $startDate,
         string $startTime
     ) {

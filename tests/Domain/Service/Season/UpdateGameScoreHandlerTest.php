@@ -16,7 +16,7 @@ use Tailgate\Domain\Service\Season\UpdateGameScoreHandler;
 class UpdateGameScoreHandlerTest extends TestCase
 {
     private $homeTeamScore = 70;
-    private $awayTeamScore = 60;
+    private $awayTeamScore = null;
     private $startDate;
     private $startTime;
 
@@ -93,8 +93,8 @@ class UpdateGameScoreHandlerTest extends TestCase
                 return $events[0] instanceof GameScoreUpdated
                 && $events[0]->getAggregateId()->equals(SeasonId::fromString($seasonId))
                 && $events[0]->getGameId()->equals($game->getGameId())
-                && $events[0]->getHomeTeamScore() === $homeTeamScore
-                && $events[0]->getAwayTeamScore() === $awayTeamScore
+                && $events[0]->getHomeTeamScore() == $homeTeamScore
+                && $events[0]->getAwayTeamScore() == $awayTeamScore
                 && $events[0]->getStartDate() === \DateTimeImmutable::createFromFormat('Y-m-d', $startDate)->format('Y-m-d H:i:s')
                 && $events[0]->getStartTime() === \DateTimeImmutable::createFromFormat('H:i', $startTime)->format('Y-m-d H:i:s')
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
