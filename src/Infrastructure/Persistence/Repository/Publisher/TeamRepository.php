@@ -4,11 +4,12 @@ namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
-use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
+use Tailgate\Common\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Team\Team;
+use Tailgate\Domain\Model\Team\TeamDomainEvent;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
-use Tailgate\Common\Event\EventPublisherInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 
 class TeamRepository implements TeamRepositoryInterface
 {
@@ -35,7 +36,7 @@ class TeamRepository implements TeamRepositoryInterface
         $events = $team->getRecordedEvents();
         
         foreach ($events as $event) {
-            $this->domainEventPublisher->publish($event);
+            $this->domainEventPublisher->publish(TeamDomainEvent::class, $event);
         }
 
         $team->clearRecordedEvents();

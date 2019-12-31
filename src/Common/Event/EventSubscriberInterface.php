@@ -2,8 +2,9 @@
 
 namespace Tailgate\Common\Event;
 
+use Tailgate\Common\Event\EventPublisherInterface;
+
 interface EventSubscriberInterface
 {
-    public function isSubscribedTo($aDomainEvent);
-    public function handle($aDomainEvent);
+    public function subscribe(EventPublisherInterface $publisher);
 }

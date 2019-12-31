@@ -2,25 +2,32 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
-use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\AggregateHistory;
+use Buttercup\Protects\DomainEvent;
 use PHPUnit\Framework\TestCase;
-use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
+use Tailgate\Common\Event\EventPublisher;
 use Tailgate\Common\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\User\User;
+use Tailgate\Domain\Model\User\UserDomainEvent;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\User\UserProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
+use Tailgate\Infrastructure\Persistence\Event\UserProjectorEventSubscriber;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\UserRepository;
 
 class PublisherUserRepositoryTest extends TestCase
 {
     private $eventStore;
-    private $domainEventPublisher;
+    private $eventPublisher;
+    private $projection;
     private $user;
 
     public function setUp()
     {
         $this->eventStore = $this->createMock(EventStoreInterface::class);
-        $this->domainEventPublisher = $this->createMock(EventPublisherInterface::class);
+        $this->projection = $this->createMock(UserProjectionInterface::class);
+        $this->eventPublisher = EventPublisher::instance();
+        $this->eventPublisher->subscribe(new UserProjectorEventSubscriber($this->projection));
 
         // create a user and activate it just so we have an extra event on it
         $this->user = User::create(UserId::fromString('userId'), 'email', 'passwordHash');
@@ -35,26 +42,26 @@ class PublisherUserRepositoryTest extends TestCase
         // the getAggregateHistoryFor method should be called once and will return the aggregateHistory
         $this->eventStore->expects($this->once())->method('getAggregateHistoryFor')->willReturn($aggregateHistory);
 
-        $userRepository = new UserRepository($this->eventStore, $this->domainEventPublisher);
+        $userRepository = new UserRepository($this->eventStore, $this->eventPublisher);
 
         $user = $userRepository->get($userId);
         
         $this->assertInstanceOf(User::class, $user);
     }
 
-    public function testItCanAddEventsToTheDomainEventPublisher()
+    public function testItCanAddEventsToTheEventPublisher()
     {
-        // the publish method should be called twice since the user has 2 events
-        $this->domainEventPublisher->expects($this->exactly(2))->method('publish')->with($this->isInstanceOf(DomainEvent::class));
+        // the projectOne method should be called twice since the user has 2 events
+        $this->projection->expects($this->exactly(2))->method('projectOne')->with($this->isInstanceOf(UserDomainEvent::class));
 
-        $userRepository = new UserRepository($this->eventStore, $this->domainEventPublisher);
+        $userRepository = new UserRepository($this->eventStore, $this->eventPublisher);
 
         $userRepository->add($this->user);
     }
 
     public function testItReturnsANewUserIdentity()
     {
-        $userRepository = new UserRepository($this->eventStore, $this->domainEventPublisher);
+        $userRepository = new UserRepository($this->eventStore, $this->eventPublisher);
 
         $userId = $userRepository->nextIdentity();
 

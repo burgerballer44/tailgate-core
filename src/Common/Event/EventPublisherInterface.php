@@ -2,11 +2,11 @@
 
 namespace Tailgate\Common\Event;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Common\Event\EventSubscriberInterface;
 
 interface EventPublisherInterface
 {
-    public function subscribe($subscriber);
-    public function unsubscribe($id);
-    public function publish(DomainEvent $event);
+    public static function on($name, $handler, $data, $append);
+    public function subscribe(EventSubscriberInterface $subscriber);
+    public static function publish($eventName, $data);
 }

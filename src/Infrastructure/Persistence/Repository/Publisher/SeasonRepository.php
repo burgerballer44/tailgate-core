@@ -4,11 +4,12 @@ namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
-use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
+use Tailgate\Common\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Season\Season;
+use Tailgate\Domain\Model\Season\SeasonDomainEvent;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
-use Tailgate\Common\Event\EventPublisherInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 
 class SeasonRepository implements SeasonRepositoryInterface
 {
@@ -35,7 +36,7 @@ class SeasonRepository implements SeasonRepositoryInterface
         $events = $season->getRecordedEvents();
         
         foreach ($events as $event) {
-            $this->domainEventPublisher->publish($event);
+            $this->domainEventPublisher->publish(SeasonDomainEvent::class, $event);
         };
 
         $season->clearRecordedEvents();

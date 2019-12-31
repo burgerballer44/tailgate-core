@@ -2,7 +2,8 @@
 
 namespace Tailgate\Infrastructure\Persistence\Event;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Common\Event\Event;
+use Tailgate\Common\Event\EventPublisherInterface;
 use Tailgate\Common\Event\EventSubscriberInterface;
 use Tailgate\Domain\Model\User\UserDomainEvent;
 use Tailgate\Domain\Model\User\UserProjectionInterface;
@@ -16,13 +17,13 @@ class UserProjectorEventSubscriber implements EventSubscriberInterface
         $this->userProjection = $userProjection;
     }
 
-    public function handle($event)
+    public function handle(Event $event)
     {
-        $this->userProjection->projectOne($event);
+        $this->userProjection->projectOne($event->data);
     }
 
-    public function isSubscribedTo($event)
+    public function subscribe(EventPublisherInterface $publisher)
     {
-        return $event instanceof UserDomainEvent;
+        $publisher->on(UserDomainEvent::class, [$this, 'handle']);
     }
 }

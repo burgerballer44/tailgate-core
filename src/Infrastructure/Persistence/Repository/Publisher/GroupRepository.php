@@ -4,11 +4,12 @@ namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
-use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
+use Tailgate\Common\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Group\Group;
+use Tailgate\Domain\Model\Group\GroupDomainEvent;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Common\Event\EventPublisherInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 
 class GroupRepository implements GroupRepositoryInterface
 {
@@ -35,7 +36,7 @@ class GroupRepository implements GroupRepositoryInterface
         $events = $group->getRecordedEvents();
         
         foreach ($events as $event) {
-            $this->domainEventPublisher->publish($event);
+            $this->domainEventPublisher->publish(GroupDomainEvent::class, $event);
         }
 
         $group->clearRecordedEvents();
