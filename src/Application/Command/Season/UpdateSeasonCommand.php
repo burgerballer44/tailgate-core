@@ -11,14 +11,8 @@ class UpdateSeasonCommand
     private $seasonStart;
     private $seasonEnd;
 
-    public function __construct(
-        string $seasonId,
-        string $name,
-        string $sport,
-        string $seasonType,
-        string $seasonStart,
-        string $seasonEnd
-    ) {
+    public function __construct($seasonId, $name, $sport, $seasonType, $seasonStart, $seasonEnd)
+    {
         $this->name = $name;
         $this->seasonId = $seasonId;
         $this->sport = $sport;

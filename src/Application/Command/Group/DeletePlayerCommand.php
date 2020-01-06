@@ -7,7 +7,7 @@ class DeletePlayerCommand
     private $groupId;
     private $playerId;
 
-    public function __construct(string $groupId, string $playerId)
+    public function __construct($groupId, $playerId)
     {
         $this->groupId = $groupId;
         $this->playerId = $playerId;

@@ -8,7 +8,7 @@ class UpdateGroupCommand
     private $name;
     private $ownerId;
 
-    public function __construct(string $groupId, string $name, string $ownerId)
+    public function __construct($groupId, $name, $ownerId)
     {
         $this->groupId = $groupId;
         $this->name = $name;

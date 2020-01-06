@@ -10,13 +10,8 @@ class CreateSeasonCommand
     private $seasonStart;
     private $seasonEnd;
 
-    public function __construct(
-        string $name,
-        string $sport,
-        string $seasonType,
-        string $seasonStart,
-        string $seasonEnd
-    ) {
+    public function __construct($name, $sport, $seasonType, $seasonStart, $seasonEnd)
+    {
         $this->name = $name;
         $this->sport = $sport;
         $this->seasonType = $seasonType;

@@ -6,7 +6,7 @@ class GroupInviteCodeQuery
 {
     private $inviteCode;
 
-    public function __construct(string $inviteCode)
+    public function __construct($inviteCode)
     {
         $this->inviteCode = $inviteCode;
     }

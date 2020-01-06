@@ -9,12 +9,8 @@ class UpdateScoreForGroupCommand
     private $homeTeamPrediction;
     private $awayTeamPrediction;
 
-    public function __construct(
-        string $groupId,
-        string $scoreId,
-        int $homeTeamPrediction,
-        int $awayTeamPrediction
-    ) {
+    public function __construct($groupId, $scoreId, $homeTeamPrediction, $awayTeamPrediction)
+    {
         $this->groupId = $groupId;
         $this->scoreId = $scoreId;
         $this->homeTeamPrediction = $homeTeamPrediction;

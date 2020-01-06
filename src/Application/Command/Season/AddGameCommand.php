@@ -10,13 +10,8 @@ class AddGameCommand
     private $startDate;
     private $startTime;
 
-    public function __construct(
-        string $seasonId,
-        string $homeTeamId,
-        string $awayTeamId,
-        string $startDate,
-        string $startTime
-    ) {
+    public function __construct($seasonId, $homeTeamId, $awayTeamId, $startDate, $startTime)
+    {
         $this->seasonId = $seasonId;
         $this->homeTeamId = $homeTeamId;
         $this->awayTeamId = $awayTeamId;

@@ -9,7 +9,7 @@ class UpdateMemberCommand
     private $groupRole;
     private $allowMultiplePlayers;
 
-    public function __construct(string $groupId, string $memberId, string $groupRole, string $allowMultiplePlayers)
+    public function __construct($groupId, $memberId, $groupRole, $allowMultiplePlayers)
     {
         $this->groupId = $groupId;
         $this->memberId = $memberId;

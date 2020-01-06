@@ -7,7 +7,7 @@ class AddTeamCommand
     private $designation;
     private $mascot;
 
-    public function __construct(string $designation, string $mascot)
+    public function __construct($designation, $mascot)
     {
         $this->designation = $designation;
         $this->mascot = $mascot;

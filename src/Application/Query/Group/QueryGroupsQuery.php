@@ -7,7 +7,7 @@ class QueryGroupsQuery
     private $userId;
     private $name;
 
-    public function __construct(string $userId = null, string $name = null)
+    public function __construct($userId = null, $name = null)
     {
         $this->userId = $userId;
         $this->name = $name;

@@ -7,7 +7,7 @@ class DeleteScoreCommand
     private $groupId;
     private $scoreId;
 
-    public function __construct(string $groupId, string $scoreId)
+    public function __construct($groupId, $scoreId)
     {
         $this->groupId = $groupId;
         $this->scoreId = $scoreId;

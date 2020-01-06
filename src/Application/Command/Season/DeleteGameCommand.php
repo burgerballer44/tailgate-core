@@ -7,7 +7,7 @@ class DeleteGameCommand
     private $seasonId;
     private $gameId;
 
-    public function __construct(string $seasonId, string $gameId)
+    public function __construct($seasonId, $gameId)
     {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;

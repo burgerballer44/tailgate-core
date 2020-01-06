@@ -6,7 +6,7 @@ class TeamQuery
 {
     private $teamId;
 
-    public function __construct(string $teamId)
+    public function __construct($teamId)
     {
         $this->teamId = $teamId;
     }

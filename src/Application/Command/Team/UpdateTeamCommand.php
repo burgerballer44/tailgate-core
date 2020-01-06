@@ -8,7 +8,7 @@ class UpdateTeamCommand
     private $designation;
     private $mascot;
 
-    public function __construct(string $teamId, string $designation, string $mascot)
+    public function __construct($teamId, $designation, $mascot)
     {
         $this->teamId = $teamId;
         $this->designation = $designation;

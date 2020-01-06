@@ -8,7 +8,7 @@ class ResetPasswordCommand
     private $password;
     private $confirmPassword;
 
-    public function __construct(string $userId, string $password, string $confirmPassword)
+    public function __construct($userId, $password, $confirmPassword)
     {
         $this->userId = $userId;
         $this->password = $password;

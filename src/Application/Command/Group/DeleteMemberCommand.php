@@ -7,7 +7,7 @@ class DeleteMemberCommand
     private $groupId;
     private $memberId;
 
-    public function __construct(string $groupId, string $memberId)
+    public function __construct($groupId, $memberId)
     {
         $this->groupId = $groupId;
         $this->memberId = $memberId;

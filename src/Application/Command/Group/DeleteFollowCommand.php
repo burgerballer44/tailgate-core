@@ -7,7 +7,7 @@ class DeleteFollowCommand
     private $groupId;
     private $followId;
 
-    public function __construct(string $groupId, string $followId)
+    public function __construct($groupId, $followId)
     {
         $this->groupId = $groupId;
         $this->followId = $followId;

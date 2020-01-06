@@ -61,7 +61,7 @@ class UpdateGameScoreHandlerTest extends TestCase
         $this->startTime = '19:30';
         $this->updateGameScoreCommand = new UpdateGameScoreCommand(
             SeasonId::fromString($this->seasonId),
-            $this->game->getGameId(),
+            (string)$this->game->getGameId(),
             $this->homeTeamScore,
             $this->awayTeamScore,
             $this->startDate,

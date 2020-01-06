@@ -4,6 +4,6 @@ namespace Tailgate\Common\PasswordHashing;
 
 interface PasswordHashingInterface
 {
-    public function hash($plainPassword);
-    public function verify($plainPassword, $hash);
+    public function hash($plainPassword) : string;
+    public function verify($plainPassword, $hash) : bool;
 }

@@ -6,7 +6,7 @@ class UserResetPasswordTokenQuery
 {
     private $passwordResetToken;
 
-    public function __construct(string $passwordResetToken)
+    public function __construct($passwordResetToken)
     {
         $this->passwordResetToken = $passwordResetToken;
     }

@@ -8,7 +8,7 @@ class FollowTeamCommand
     private $teamId;
     private $seasonId;
 
-    public function __construct(string $groupId, string $teamId, string $seasonId)
+    public function __construct($groupId, $teamId, $seasonId)
     {
         $this->groupId = $groupId;
         $this->teamId = $teamId;

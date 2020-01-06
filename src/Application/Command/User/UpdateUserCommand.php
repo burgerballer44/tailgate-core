@@ -9,12 +9,8 @@ class UpdateUserCommand
     private $status;
     private $role;
 
-    public function __construct(
-        string $userId,
-        string $email,
-        string $status,
-        string $role
-    ) {
+    public function __construct($userId, $email, $status, $role)
+    {
         $this->userId = $userId;
         $this->email = $email;
         $this->status = $status;

@@ -6,7 +6,7 @@ class DeleteGroupCommand
 {
     private $groupId;
 
-    public function __construct(string $groupId)
+    public function __construct($groupId)
     {
         $this->groupId = $groupId;
     }

@@ -7,7 +7,7 @@ class UpdateEmailCommand
     private $userId;
     private $email;
 
-    public function __construct(string $userId, string $email)
+    public function __construct($userId, $email)
     {
         $this->userId = $userId;
         $this->email = $email;

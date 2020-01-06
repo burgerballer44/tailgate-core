@@ -7,7 +7,7 @@ class CreateGroupCommand
     private $name;
     private $ownerId;
 
-    public function __construct(string $name, string $ownerId)
+    public function __construct($name, $ownerId)
     {
         $this->name = $name;
         $this->ownerId = $ownerId;

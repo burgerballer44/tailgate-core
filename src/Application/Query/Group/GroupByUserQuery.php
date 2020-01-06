@@ -7,7 +7,7 @@ class GroupByUserQuery
     private $userId;
     private $groupId;
 
-    public function __construct(string $userId, string $groupId)
+    public function __construct($userId, $groupId)
     {
         $this->userId = $userId;
         $this->groupId = $groupId;

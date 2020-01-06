@@ -8,7 +8,7 @@ class AddPlayerToGroupCommand
     private $memberId;
     private $username;
 
-    public function __construct(string $groupId, string $memberId, string $username)
+    public function __construct($groupId, $memberId, $username)
     {
         $this->groupId = $groupId;
         $this->memberId = $memberId;

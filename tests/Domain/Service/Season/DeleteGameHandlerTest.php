@@ -45,7 +45,7 @@ class DeleteGameHandlerTest extends TestCase
             '2019-10-01',
             '19:30'
         );
-        $this->gameId = $this->season->getGames()[0]->getGameId();
+        $this->gameId = (string)$this->season->getGames()[0]->getGameId();
         $this->season->clearRecordedEvents();
 
         $this->deleteGameCommand = new DeleteGameCommand(

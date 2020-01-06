@@ -6,7 +6,7 @@ class UserEmailQuery
 {
     private $email;
 
-    public function __construct(string $email)
+    public function __construct($email)
     {
         $this->email = $email;
     }

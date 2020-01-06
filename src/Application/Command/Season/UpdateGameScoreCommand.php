@@ -11,14 +11,8 @@ class UpdateGameScoreCommand
     private $startDate;
     private $startTime;
 
-    public function __construct(
-        string $seasonId,
-        string $gameId,
-        $homeTeamScore,
-        $awayTeamScore,
-        string $startDate,
-        string $startTime
-    ) {
+    public function __construct($seasonId, $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime)
+    {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;
         $this->homeTeamScore = $homeTeamScore;

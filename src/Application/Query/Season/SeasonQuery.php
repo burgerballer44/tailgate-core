@@ -6,7 +6,7 @@ class SeasonQuery
 {
     private $seasonId;
 
-    public function __construct(string $seasonId)
+    public function __construct($seasonId)
     {
         $this->seasonId = $seasonId;
     }
