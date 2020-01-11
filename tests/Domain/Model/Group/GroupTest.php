@@ -95,7 +95,6 @@ class GroupTest extends TestCase
         $this->assertTrue($scores[0]->getScoreId() instanceof ScoreId);
         $this->assertTrue($scores[0]->getGroupId()->equals($this->groupId));
         $this->assertTrue($scores[0]->getPlayerId()->equals($playerId));
-        $this->assertTrue($scores[0]->getMemberId()->equals($memberId));
         $this->assertTrue($scores[0]->getGameId()->equals($gameId));
         $this->assertEquals($homeTeamPrediction, $scores[0]->getHomeTeamPrediction());
         $this->assertEquals($awayTeamPrediction, $scores[0]->getAwayTeamPrediction());

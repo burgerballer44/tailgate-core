@@ -130,7 +130,6 @@ class Group extends AbstractEntity
                 $this->groupId,
                 new ScoreId(),
                 $playerId,
-                $player->getMemberId(),
                 $gameId,
                 $homeTeamPrediction,
                 $awayTeamPrediction
@@ -383,7 +382,6 @@ class Group extends AbstractEntity
             $event->getAggregateId(),
             $event->getScoreId(),
             $event->getPlayerId(),
-            $event->getMemberId(),
             $event->getGameId(),
             $event->getHomeTeamPrediction(),
             $event->getAwayTeamPrediction()
@@ -437,12 +435,16 @@ class Group extends AbstractEntity
             return !$member->getMemberId()->equals($event->getMemberId());
         }));
 
+        $playerIdsForMember = array_map(function($player) {
+            return (string)$player->getPlayerId();
+        }, $this->getPlayersByMemberId($event->getMemberId()));
+
         $this->players = array_values(array_filter($this->players, function ($player) use ($event) {
             return !$player->getMemberId()->equals($event->getMemberId());
         }));
 
-        $this->scores = array_values(array_filter($this->scores, function ($score) use ($event) {
-            return !$score->getMemberId()->equals($event->getMemberId());
+        $this->scores = array_values(array_filter($this->scores, function ($score) use ($playerIdsForMember) {
+            return !in_array((string)$score->getPlayerId(), $playerIdsForMember);
         }));
     }
 
