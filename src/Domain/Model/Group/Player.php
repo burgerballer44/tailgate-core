@@ -23,7 +23,7 @@ class Player
 
     public static function create(
         GroupId $groupId,
-        playerId $playerId,
+        PlayerId $playerId,
         MemberId $memberId,
         $username
     ) {
@@ -55,5 +55,10 @@ class Player
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function changeMember(MemberId $memberId)
+    {
+        $this->memberId = $memberId;
     }
 }

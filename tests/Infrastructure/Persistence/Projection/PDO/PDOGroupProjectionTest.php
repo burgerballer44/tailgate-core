@@ -3,8 +3,8 @@
 namespace Infrastructure\Persistence\Projection\PDO;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\FollowDeleted;
+use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -17,13 +17,14 @@ use Tailgate\Domain\Model\Group\MemberUpdated;
 use Tailgate\Domain\Model\Group\PlayerAdded;
 use Tailgate\Domain\Model\Group\PlayerDeleted;
 use Tailgate\Domain\Model\Group\PlayerId;
+use Tailgate\Domain\Model\Group\PlayerOwnerChanged;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Domain\Model\Group\TeamFollowed;
-use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\GameId;
+use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\GroupProjection;
 
@@ -200,6 +201,33 @@ class PDOGroupProjectionTest extends TestCase
             ]);
 
         $this->projection->projectGroupUpdated($event);
+    }
+
+    public function testItCanProjectPlayerOwnerChanged()
+    {
+        $event = new PlayerOwnerChanged(
+            GroupId::fromString('groupId'),
+            PlayerId::fromString('playerId'),
+            MemberId::fromString('memberId'),
+        );
+
+        // the pdo mock should call prepare and return a pdostatement mock
+        $this->pdoMock
+            ->expects($this->once())
+            ->method('prepare')
+            ->with('UPDATE `player` SET member_id = :member_id WHERE player_id = :player_id')
+            ->willReturn($this->pdoStatementMock);
+
+        // execute method called once
+        $this->pdoStatementMock
+            ->expects($this->once())
+            ->method('execute')
+            ->with([
+                ':player_id' => $event->getPlayerId(),
+                ':member_id' => $event->getMemberId(),
+            ]);
+
+        $this->projection->projectPlayerOwnerChanged($event);
     }
 
     public function testItCanProjectMemberDeleted()

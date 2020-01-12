@@ -166,6 +166,27 @@ class Group extends AbstractEntity
     }
 
     /**
+     * change who owns a player to a different member
+     * @param  PlayerId $playerId [description]
+     * @param  MemberId $memberId [description]
+     * @return [type]             [description]
+     */
+    public function changePlayerOwner(PlayerId $playerId, MemberId $memberId)
+    {
+        if (!$member = $this->getMemberById($memberId)) {
+            throw new ModelException('The member does not exist. Cannot change the player owner.');
+        }
+
+        if (!$player = $this->getPlayerById($playerId)) {
+            throw new ModelException('The player does not exist. Cannot change the player owner.');
+        }
+
+        $this->applyAndRecordThat(
+            new PlayerOwnerChanged($this->groupId, $playerId, $memberId)
+        );
+    }
+
+    /**
      * changes a score to something else
      * @param  ScoreId $scoreId            [description]
      * @param  [type]  $homeTeamPrediction [description]
@@ -474,6 +495,12 @@ class Group extends AbstractEntity
             $event->getTeamId(),
             $event->getSeasonId()
         );
+    }
+
+    protected function applyPlayerOwnerChanged(PlayerOwnerChanged $event)
+    {
+        $player = $this->getPlayerById($event->getPlayerId());
+        $player->changeMember($event->getMemberId());
     }
 
     protected function applyFollowDeleted(FollowDeleted $event)

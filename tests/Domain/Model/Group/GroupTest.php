@@ -295,6 +295,33 @@ class GroupTest extends TestCase
         $this->assertTrue($players[1]->getPlayerId()->equals($playerId32));
     }
 
+    public function testAPlayerMemberIsChangedWhenAPlayerOwnerIsChanged()
+    {
+        $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
+
+        $userId2 = UserId::fromString('userId2');
+        $group->addMember($userId2);
+
+        $memberId1 = $group->getMembers()[0]->getMemberId();
+        $group->addPlayer($memberId1, 'username1');
+        $playerId = (string) $group->getPlayers()[0]->getPlayerId();
+        
+        $players = $group->getPlayers();
+        $this->assertEquals($this->groupId, $players[0]->getGroupId());
+        $this->assertEquals($playerId, $players[0]->getPlayerId());
+        $this->assertEquals($memberId1, $players[0]->getMemberId());
+
+        $memberId2 = (string) $group->getMembers()[1]->getMemberId();
+        $playerId = (string) $group->getPlayers()[0]->getPlayerId();
+
+        $group->changePlayerOwner(PlayerId::fromString($playerId), MemberId::fromString($memberId2));
+
+        $players = $group->getPlayers();
+        $this->assertEquals($this->groupId, $players[0]->getGroupId());
+        $this->assertEquals($playerId, $players[0]->getPlayerId());
+        $this->assertEquals($memberId2, $players[0]->getMemberId());
+    }
+
     public function testAScoreIsRemovedWhenAScoreIsDeleted()
     {
         $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);

@@ -13,6 +13,7 @@ use Tailgate\Domain\Model\Group\MemberDeleted;
 use Tailgate\Domain\Model\Group\MemberUpdated;
 use Tailgate\Domain\Model\Group\PlayerAdded;
 use Tailgate\Domain\Model\Group\PlayerDeleted;
+use Tailgate\Domain\Model\Group\PlayerOwnerChanged;
 use Tailgate\Domain\Model\Group\TeamFollowed;
 use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
@@ -90,6 +91,18 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':group_id' => $event->getAggregateId(),
             ':name' => $event->getName(),
             ':owner_id' => $event->getOwnerId(),
+        ]);
+    }
+
+    public function projectPlayerOwnerChanged(PlayerOwnerChanged $event)
+    {
+        $stmt = $this->pdo->prepare(
+            'UPDATE `player` SET member_id = :member_id WHERE player_id = :player_id'
+        );
+
+        $stmt->execute([
+            ':player_id' => $event->getPlayerId(),
+            ':member_id' => $event->getMemberId(),
         ]);
     }
 
