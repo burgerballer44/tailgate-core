@@ -31,8 +31,8 @@ class AllFollowedGamesQueryHandler
         $followId = FollowId::fromString($query->getFollowId());
         $followView = $this->followViewRepository->get($followId);
 
-        $teamId = TeamId::fromString($followView['team_id']);
-        $seasonId = SeasonId::fromString($followView['season_id']);
+        $teamId = TeamId::fromString($followView->getTeamId());
+        $seasonId = SeasonId::fromString($followView->getSeasonId());
         $gameViews = $this->gameViewRepository->getAllByTeamAndSeason($teamId, $seasonId);
 
         $games = [];

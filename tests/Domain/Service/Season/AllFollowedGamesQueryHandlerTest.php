@@ -23,7 +23,7 @@ class AllFollowedGamesQueryHandlerTest extends TestCase
         $gameViewRepository = $this->createMock(GameViewRepositoryInterface::class);
         $gameViewTransformer = $this->createMock(GameDataTransformerInterface::class);
 
-        $followView = ['team_id' => 'team_id', 'season_id' => 'season_id'];
+        $followView = new FollowView('groupId', 'followId', 'teamId', 'seasonId', 'name', 'designation', 'mascot', 'seasonName');
         $followViewRepository->expects($this->once())
             ->method('get')
             ->willReturn($followView)
@@ -35,10 +35,10 @@ class AllFollowedGamesQueryHandlerTest extends TestCase
             ->method('getAllByTeamAndSeason')
             ->willReturn([])
             ->with($this->callback(function ($returnedFollowViewTeamId) use ($followView) {
-                    return (new TeamId($followView['team_id']))->equals($returnedFollowViewTeamId);
+                    return (new TeamId($followView->getTeamId()))->equals($returnedFollowViewTeamId);
                 }),
                 $this->callback(function ($returnedFollowViewSeasonId) use ($followView) {
-                    return (new SeasonId($followView['season_id']))->equals($returnedFollowViewSeasonId);
+                    return (new SeasonId($followView->getSeasonId()))->equals($returnedFollowViewSeasonId);
                 })
             );
 
