@@ -73,6 +73,26 @@ class GameViewRepository implements GameViewRepositoryInterface
         return $games;
     }
 
+    public function getAllByTeamAndSeason(TeamId $teamId, SeasonId $seasonId)
+    {
+        $stmt = $this->pdo->prepare('SELECT g.season_id, g.game_id, g.home_team_id, g.away_team_id, g.home_team_score, g.away_team_score, g.start_date, g.start_time, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            FROM `game` g 
+            JOIN `team` hot on hot.team_id = g.home_team_id
+            JOIN `team` awt on awt.team_id = g.away_team_id
+            WHERE g.season_id = :season_id
+            AND (g.home_team_id = :team_id OR g.away_team_id = :team_id)
+            ORDER BY g.start_date');
+        $stmt->execute([':team_id' => (string) $teamId, ':season_id' => (string) $seasonId]);
+
+        $games = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $games[] = $this->createGameView($row);
+        }
+
+        return $games;
+    }
+
     private function createGameView($row)
     {
         $startDateDateTime = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $row['start_date']);

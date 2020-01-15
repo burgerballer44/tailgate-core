@@ -10,5 +10,6 @@ interface GameViewRepositoryInterface
 {
     public function get(GameId $id);
     public function getAllBySeason(SeasonId $seasonId);
-    public function getAllByTeam(TeamId $teamIf);
+    public function getAllByTeam(TeamId $teamId);
+    public function getAllByTeamAndSeason(TeamId $teamId, SeasonId $seasonId);
 }
