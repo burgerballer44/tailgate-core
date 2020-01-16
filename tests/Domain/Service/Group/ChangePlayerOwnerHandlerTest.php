@@ -44,7 +44,7 @@ class ChangePlayerOwnerHandlerTest extends TestCase
         $this->changePlayerOwnerCommand = new ChangePlayerOwnerCommand(
             $this->groupId,
             (string)$this->playerId,
-            (string)$this->newMemberId,
+            (string)$this->newMemberId
         );
     }
 

@@ -208,7 +208,7 @@ class PDOGroupProjectionTest extends TestCase
         $event = new PlayerOwnerChanged(
             GroupId::fromString('groupId'),
             PlayerId::fromString('playerId'),
-            MemberId::fromString('memberId'),
+            MemberId::fromString('memberId')
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
