@@ -456,7 +456,7 @@ class Group extends AbstractEntity
             return !$member->getMemberId()->equals($event->getMemberId());
         }));
 
-        $playerIdsForMember = array_map(function($player) {
+        $playerIdsForMember = array_map(function ($player) {
             return (string)$player->getPlayerId();
         }, $this->getPlayersByMemberId($event->getMemberId()));
 

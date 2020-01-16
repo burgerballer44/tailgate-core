@@ -34,7 +34,8 @@ class AllFollowedGamesQueryHandlerTest extends TestCase
         $gameViewRepository->expects($this->once())
             ->method('getAllByTeamAndSeason')
             ->willReturn([])
-            ->with($this->callback(function ($returnedFollowViewTeamId) use ($followView) {
+            ->with(
+                $this->callback(function ($returnedFollowViewTeamId) use ($followView) {
                     return (new TeamId($followView->getTeamId()))->equals($returnedFollowViewTeamId);
                 }),
                 $this->callback(function ($returnedFollowViewSeasonId) use ($followView) {

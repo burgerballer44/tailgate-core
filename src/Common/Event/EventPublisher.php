@@ -7,7 +7,7 @@ use Tailgate\Common\Event\EventSubscriberInterface;
 use Tailgate\Common\Event\Event;
 
 class EventPublisher implements EventPublisherInterface
-{   
+{
     /**
      * contains all globally registered event handlers
      * [event => [event handlers]]
@@ -33,7 +33,9 @@ class EventPublisher implements EventPublisherInterface
         return static::$instance;
     }
 
-    private function __construct(){}
+    private function __construct()
+    {
+    }
 
     public function __clone()
     {
@@ -42,20 +44,20 @@ class EventPublisher implements EventPublisherInterface
 
     /**
      * attaches an event handler to an event
-     * 
+     *
      * 4 types of handlers can be attached
      * a global function Ex: 'trim'
      * a callable object and method Ex: [$object, 'methodName']
      * a closure Ex: function($event){}
      * a file path with a global function Ex: ['filePath', 'functionName']
-     * 
+     *
      * @param  string  $name    name of the event
      * @param  mixed  $handler [description]
      * @param  mixed  $data    the data to be passed to the event handler when the event is published
      * @param  boolean $append  set append to false if you want to add the handler to the beginning of the handler list
      */
     public static function on($name, $handler, $data = null, $append = true)
-    {   
+    {
         if (!is_string($handler) && !is_array($handler) && !$handler instanceof \Closure) {
             throw new \Exception("Only strings, arrays, closures are accepted.");
         }
@@ -67,7 +69,6 @@ class EventPublisher implements EventPublisherInterface
 
         // if passing an array that is not callable, the file and function must exist
         if (is_array($handler) && !is_callable($handler)) {
-
             if (is_object($handler[0])) {
                 throw new \Exception("The object is not callable.");
             }
@@ -100,7 +101,7 @@ class EventPublisher implements EventPublisherInterface
 
     /**
      * detach an event handler from an event
-     * 
+     *
      * @param  string $name    name of the event
      * @param  mixed $handler the handler to be removed
      * @return bool whether or not the handler is found and removed
