@@ -32,13 +32,7 @@ class User extends AbstractEntity
         $this->passwordResetToken = $passwordResetToken;
     }
 
-    /**
-     * create a user
-     * @param  UserId $userId       [description]
-     * @param  [type] $email        [description]
-     * @param  [type] $passwordHash [description]
-     * @return [type]               [description]
-     */
+    // create a user
     public static function create(UserId $userId, $email, $passwordHash)
     {
         $newUser = new User($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, '');
@@ -50,11 +44,7 @@ class User extends AbstractEntity
         return $newUser;
     }
 
-    /**
-     * create an empty user
-     * @param  IdentifiesAggregate $userId [description]
-     * @return [type]                      [description]
-     */
+    // create an empty user
     protected static function createEmptyEntity(IdentifiesAggregate $userId)
     {
         return new User($userId, '', '', '', '', '');
@@ -90,51 +80,31 @@ class User extends AbstractEntity
         return $this->passwordResetToken;
     }
 
-    /**
-     * set status to active
-     * @return [type] [description]
-     */
+    // set status to active
     public function activate()
     {
         $this->applyAndRecordThat(new UserActivated($this->userId, User::STATUS_ACTIVE));
     }
 
-    /**
-     * set status to deleted
-     * @return [type] [description]
-     */
+    // set status to deleted
     public function delete()
     {
         $this->applyAndRecordThat(new UserDeleted($this->userId, User::STATUS_DELETED));
     }
 
-    /**
-     * updates the password hash
-     * @param  [type] $passwordHash [description]
-     * @return [type]               [description]
-     */
+    // updates the password hash
     public function updatePassword($passwordHash)
     {
         $this->applyAndRecordThat(new PasswordUpdated($this->userId, $passwordHash));
     }
 
-    /**
-     * updates the email
-     * @param  [type] $email [description]
-     * @return [type]        [description]
-     */
+    // updates the email
     public function updateEmail($email)
     {
         $this->applyAndRecordThat(new EmailUpdated($this->userId, $email));
     }
 
-    /**
-     * updates email, status, and role
-     * @param  [type] $email  [description]
-     * @param  [type] $status [description]
-     * @param  [type] $role   [description]
-     * @return [type]         [description]
-     */
+    // updates email, status, and role
     public function update($email, $status, $role)
     {
         if (!in_array($role, $this->getValidRoles())) {
@@ -148,22 +118,14 @@ class User extends AbstractEntity
         $this->applyAndRecordThat(new UserUpdated($this->userId, $email, $status, $role));
     }
 
-    /**
-     * creates a password reset token
-     * @param  [type] $passwordResetString [description]
-     * @return [type]                      [description]
-     */
+    // creates a password reset token
     public function createPasswordResetToken($passwordResetString)
     {
         $token = $this->createTokenFromString($passwordResetString);
         $this->applyAndRecordThat(new PasswordResetTokenCreated($this->userId, $token));
     }
 
-    /**
-     * [createTokenFromString description]
-     * @param  [type] $passwordResetString [description]
-     * @return [type]                      [description]
-     */
+    // create a temporary password reset token
     private function createTokenFromString($passwordResetString)
     {
         return $passwordResetString . '_' . time();
@@ -209,10 +171,6 @@ class User extends AbstractEntity
         $this->passwordResetToken = $event->getPasswordResetToken();
     }
 
-    /**
-     * returns all roles
-     * @return [type] [description]
-     */
     public static function getValidRoles()
     {
         return [
@@ -221,10 +179,6 @@ class User extends AbstractEntity
         ];
     }
 
-    /**
-     * return all statuses
-     * @return [type] [description]
-     */
     public static function getValidStatuses()
     {
         return [
@@ -234,10 +188,7 @@ class User extends AbstractEntity
         ];
     }
 
-    /**
-     * determine if password reset token is valid
-     * @return [type] [description]
-     */
+    // determine if password reset token is valid
     public static function isPasswordResetTokenValid($token)
     {
         if (empty($token)) {

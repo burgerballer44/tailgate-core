@@ -4,10 +4,11 @@ namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
-use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\User\UserProjectionInterface;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 
 class UserRepository implements UserRepositoryInterface
 {

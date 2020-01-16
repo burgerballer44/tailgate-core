@@ -19,13 +19,7 @@ class Team extends AbstractEntity
         $this->mascot = $mascot;
     }
 
-    /**
-     * create a team
-     * @param  TeamId $teamId      [description]
-     * @param  [type] $designation [description]
-     * @param  [type] $mascot      [description]
-     * @return [type]              [description]
-     */
+    // create a team
     public static function create(TeamId $teamId, $designation, $mascot)
     {
         $newTeam = new Team($teamId, $designation, $mascot);
@@ -35,11 +29,7 @@ class Team extends AbstractEntity
         return $newTeam;
     }
 
-    /**
-     * create an empty team
-     * @param  IdentifiesAggregate $teamId [description]
-     * @return [type]                      [description]
-     */
+    // create an empty team
     protected static function createEmptyEntity(IdentifiesAggregate $teamId)
     {
         return new Team($teamId, '', '');
@@ -60,21 +50,13 @@ class Team extends AbstractEntity
         return $this->mascot;
     }
 
-    /**
-     * updates the team's designation adn mascot
-     * @param  [type] $designation [description]
-     * @param  [type] $mascot      [description]
-     * @return [type]              [description]
-     */
+    // updates the team's designation adn mascot
     public function update($designation, $mascot)
     {
         $this->applyAndRecordThat(new TeamUpdated($this->teamId, $designation, $mascot));
     }
 
-    /**
-     * delete team
-     * @return [type] [description]
-     */
+    // delete team
     public function delete()
     {
         $this->applyAndRecordThat(new TeamDeleted($this->teamId));

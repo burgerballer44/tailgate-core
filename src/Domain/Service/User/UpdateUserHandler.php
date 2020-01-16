@@ -11,8 +11,6 @@ use Tailgate\Domain\Service\AbstractService;
 class UpdateUserHandler extends AbstractService
 {
     private $userRepository;
-    private $passwordHashing;
-    private $randomStringer;
 
     public function __construct(ValidatorInterface $validator, UserRepositoryInterface $userRepository)
     {

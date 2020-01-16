@@ -32,16 +32,7 @@ class Season extends AbstractEntity
         $this->seasonEnd = $seasonEnd;
     }
 
-    /**
-     * create a season
-     * @param  SeasonId  $seasonId    [description]
-     * @param  [type]    $sport       [description]
-     * @param  [type]    $seasonType  [description]
-     * @param  [type]    $name        [description]
-     * @param  [type]    $seasonStart [description]
-     * @param  [type]    $seasonEnd   [description]
-     * @return [type]                 [description]
-     */
+    // create a season
     public static function create(
         SeasonId $seasonId,
         $name,
@@ -73,11 +64,7 @@ class Season extends AbstractEntity
         return $newSeason;
     }
 
-    /**
-     * create an empty season
-     * @param  IdentifiesAggregate $seasonId [description]
-     * @return [type]                        [description]
-     */
+    // create an empty season
     protected static function createEmptyEntity(IdentifiesAggregate $seasonId)
     {
         return new Season($seasonId, '', '', '', '', '');
@@ -118,15 +105,7 @@ class Season extends AbstractEntity
         return $this->games;
     }
 
-    /**
-     * update the season information
-     * @param  [type] $sport       [description]
-     * @param  [type] $seasonType  [description]
-     * @param  [type] $name        [description]
-     * @param  [type] $seasonStart [description]
-     * @param  [type] $seasonEnd   [description]
-     * @return [type]              [description]
-     */
+    // update the season information
     public function update($sport, $seasonType, $name, $seasonStart, $seasonEnd)
     {
         if (!in_array($sport, $this->getValidSports())) {
@@ -148,13 +127,7 @@ class Season extends AbstractEntity
         );
     }
 
-    /**
-     * adds a game
-     * @param TeamId $homeTeamId [description]
-     * @param TeamId $awayTeamId [description]
-     * @param [type] $startDate  [description]
-     * @param [type] $startTime  [description]
-     */
+    // adds a game
     public function addGame(TeamId $homeTeamId, TeamId $awayTeamId, $startDate, $startTime)
     {
         // startDate and startTime will be a date most of the time but can be a string sometimes
@@ -196,20 +169,13 @@ class Season extends AbstractEntity
         $this->applyAndRecordThat(new GameScoreUpdated($this->seasonId, $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime));
     }
 
-    /**
-     * delete all games in the season
-     * @return [type] [description]
-     */
+    // delete all games in the season
     public function delete()
     {
         $this->applyAndRecordThat(new SeasonDeleted($this->seasonId));
     }
 
-    /**
-     * delete a game
-     * @param  GameId $gameId [description]
-     * @return [type]         [description]
-     */
+    // delete a game
     public function deleteGame(GameId $gameId)
     {
         if (!$this->getGameById($gameId)) {
@@ -280,10 +246,6 @@ class Season extends AbstractEntity
         }
     }
 
-    /**
-     * return valid sports
-     * @return [type] [description]
-     */
     public static function getValidSports()
     {
         return [
@@ -292,10 +254,6 @@ class Season extends AbstractEntity
         ];
     }
 
-    /**
-     * return valid season types
-     * @return [type] [description]
-     */
     public static function getValidSeasonTypes()
     {
         return [

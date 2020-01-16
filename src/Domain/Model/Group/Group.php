@@ -198,7 +198,7 @@ class Group extends AbstractEntity
     // updates a member role, and if they can add multiple players
     public function updateMember(MemberId $memberId, $groupRole, $allowMultiple)
     {
-        if (!$member = $this->getMemberById($memberId)) {
+        if (!$this->getMemberById($memberId)) {
             throw new ModelException('The member does not exist.');
         }
 
@@ -210,7 +210,7 @@ class Group extends AbstractEntity
         $adminMembers = $this->getMembersThatAreAdmin();
 
         // get their member ids
-        $adminMemberIds = array_map(function ($member) {
+        $adminMemberIds = array_map(function($member) {
             return (string) $member->getMemberId();
         }, $adminMembers);
 
@@ -244,7 +244,7 @@ class Group extends AbstractEntity
     // delete a member, all players the member has, and all scores from each player
     public function deleteMember(MemberId $memberId)
     {
-        if (!$member = $this->getMemberById($memberId)) {
+        if (!$this->getMemberById($memberId)) {
             throw new ModelException('The member does not exist.');
         }
 
@@ -252,7 +252,7 @@ class Group extends AbstractEntity
         $adminMembers = $this->getMembersThatAreAdmin();
 
         // get their member ids
-        $adminMemberIds = array_map(function ($member) {
+        $adminMemberIds = array_map(function($member) {
             return (string) $member->getMemberId();
         }, $adminMembers);
 
