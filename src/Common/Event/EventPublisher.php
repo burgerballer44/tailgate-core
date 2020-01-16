@@ -178,7 +178,7 @@ class EventPublisher implements EventPublisherInterface
     /**
      * activate all event handlers for an event
      * @param  string $name name of the event
-     * @param  [type] $data the data to be passed to the event handler when the event is published.
+     * @param  mixed $data the data to be passed to the event handler when the event is published.
      * passing data to the publish method will overwrite the data passed during the on() method for all handlers
      */
     public static function publish($name, $data = null)

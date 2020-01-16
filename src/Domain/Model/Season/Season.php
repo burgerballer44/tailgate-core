@@ -179,7 +179,7 @@ class Season extends AbstractEntity
      */
     public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime)
     {
-        if (!$game = $this->getGameById($gameId)) {
+        if (!$this->getGameById($gameId)) {
             throw new ModelException('The game does not exist. Cannot update the game score.');
         }
 
@@ -212,7 +212,7 @@ class Season extends AbstractEntity
      */
     public function deleteGame(GameId $gameId)
     {
-        if (!$game = $this->getGameById($gameId)) {
+        if (!$this->getGameById($gameId)) {
             throw new ModelException('The game does not exist. Cannot delete the game.');
         }
 

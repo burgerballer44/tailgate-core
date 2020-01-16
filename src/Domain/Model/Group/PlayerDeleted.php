@@ -14,7 +14,7 @@ class PlayerDeleted implements DomainEvent, GroupDomainEvent
     public function __construct(GroupId $groupId, PlayerId $playerId)
     {
         $this->groupId = $groupId;
-        $this->PlayerId = $playerId;
+        $this->playerId = $playerId;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
@@ -25,7 +25,7 @@ class PlayerDeleted implements DomainEvent, GroupDomainEvent
 
     public function getPlayerId()
     {
-        return $this->PlayerId;
+        return $this->playerId;
     }
 
     public function getOccurredOn()

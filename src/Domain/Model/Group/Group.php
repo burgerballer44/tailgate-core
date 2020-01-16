@@ -41,14 +41,7 @@ class Group extends AbstractEntity
         $this->ownerId = $ownerId;
     }
 
-    /**
-     * create a group
-     * @param  GroupId $groupId       [description]
-     * @param  [type]  $name          [description]
-     * @param  [type]  $inviteCode    [description]
-     * @param  UserId  $ownerId       [description]
-     * @return [type]                 [description]
-     */
+    // create a group
     public static function create(GroupId $groupId, $name, $inviteCode, UserId $ownerId)
     {
         $newGroup = new Group($groupId, $name, $inviteCode, $ownerId);
@@ -62,11 +55,7 @@ class Group extends AbstractEntity
         return $newGroup;
     }
 
-    /**
-     * create an empty group
-     * @param  IdentifiesAggregate $groupId [description]
-     * @return [type]                       [description]
-     */
+    // create an empty group
     protected static function createEmptyEntity(IdentifiesAggregate $groupId)
     {
         return new Group($groupId, '', '', '');
@@ -107,21 +96,14 @@ class Group extends AbstractEntity
         return $this->follow;
     }
 
-    /**
-     * adds a score
-     * @param  PlayerId $playerId           [description]
-     * @param  GameId   $gameId             [description]
-     * @param  [type]   $homeTeamPrediction [description]
-     * @param  [type]   $awayTeamPrediction [description]
-     * @return [type]                       [description]
-     */
+    // add a score
     public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
     {
-        if (!$player = $this->getPlayerById($playerId)) {
+        if (!$this->getPlayerById($playerId)) {
             throw new ModelException('The player submitting the score does not exist.');
         }
 
-        if ($score = $this->getScoreByPlayerIdAndGameId($playerId, $gameId)) {
+        if ($this->getScoreByPlayerIdAndGameId($playerId, $gameId)) {
             throw new ModelException('The player already submitted a score for this game.');
         }
 
@@ -137,11 +119,7 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * add a player
-     * @param MemberId $memberId [description]
-     * @param [type]   $username [description]
-     */
+    // add a player
     public function addPlayer(MemberId $memberId, $username)
     {
         if (!$member = $this->getMemberById($memberId)) {
@@ -165,19 +143,14 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * change who owns a player to a different member
-     * @param  PlayerId $playerId [description]
-     * @param  MemberId $memberId [description]
-     * @return [type]             [description]
-     */
+    // change who owns a player to a different member
     public function changePlayerOwner(PlayerId $playerId, MemberId $memberId)
     {
-        if (!$member = $this->getMemberById($memberId)) {
+        if (!$this->getMemberById($memberId)) {
             throw new ModelException('The member does not exist. Cannot change the player owner.');
         }
 
-        if (!$player = $this->getPlayerById($playerId)) {
+        if (!$this->getPlayerById($playerId)) {
             throw new ModelException('The player does not exist. Cannot change the player owner.');
         }
 
@@ -186,16 +159,10 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * changes a score to something else
-     * @param  ScoreId $scoreId            [description]
-     * @param  [type]  $homeTeamPrediction [description]
-     * @param  [type]  $awayTeamPrediction [description]
-     * @return [type]                      [description]
-     */
+    // changes a score to something else
     public function updateScore(ScoreId $scoreId, $homeTeamPrediction, $awayTeamPrediction)
     {
-        if (!$score = $this->getScoreById($scoreId)) {
+        if (!$this->getScoreById($scoreId)) {
             throw new ModelException('The score does not exist. Cannot update the score.');
         }
 
@@ -204,13 +171,10 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * add a member
-     * @param UserId $userId [description]
-     */
+    // add a member
     public function addMember(UserId $userId)
     {
-        if ($user = $this->getMemberByUserId($userId)) {
+        if ($this->getMemberByUserId($userId)) {
             throw new ModelException('The member is already in the group.');
         }
 
@@ -223,12 +187,7 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * updates the group name, and owner
-     * @param  [type] $name    [description]
-     * @param  UserId $ownerId [description]
-     * @return [type]          [description]
-     */
+    // updates the group name, and owner
     public function update($name, UserId $ownerId)
     {
         $this->applyAndRecordThat(
@@ -236,13 +195,7 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * updates a member role, and if they can add multiple players
-     * @param  MemberId $memberId      [description]
-     * @param  [type]   $groupRole     [description]
-     * @param  [type]   $allowMultiple [description]
-     * @return [type]                  [description]
-     */
+    // updates a member role, and if they can add multiple players
     public function updateMember(MemberId $memberId, $groupRole, $allowMultiple)
     {
         if (!$member = $this->getMemberById($memberId)) {
@@ -282,20 +235,13 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * remove all members, players, and scores from a group
-     * @return [type] [description]
-     */
+    // remove all members, players, and scores from a group
     public function delete()
     {
         $this->applyAndRecordThat(new GroupDeleted($this->groupId));
     }
 
-    /**
-     * delete a member, all players the member has, and all scores from each player
-     * @param  MemberId $memberId [description]
-     * @return [type]             [description]
-     */
+    // delete a member, all players the member has, and all scores from each player
     public function deleteMember(MemberId $memberId)
     {
         if (!$member = $this->getMemberById($memberId)) {
@@ -323,14 +269,10 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * delete a player, and all of their scores
-     * @param  PlayerId $playerId [description]
-     * @return [type]             [description]
-     */
+    // delete a player, and all of their scores
     public function deletePlayer(PlayerId $playerId)
     {
-        if (!$player = $this->getPlayerById($playerId)) {
+        if (!$this->getPlayerById($playerId)) {
             throw new ModelException('The player does not exist.');
         }
 
@@ -339,14 +281,10 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * delete a score
-     * @param  ScoreId $scoreId [description]
-     * @return [type]           [description]
-     */
+    // delete a score
     public function deleteScore(ScoreId $scoreId)
     {
-        if (!$score = $this->getScoreById($scoreId)) {
+        if (!$this->getScoreById($scoreId)) {
             throw new ModelException('The score does not exist. Cannot update the score.');
         }
 
@@ -355,12 +293,7 @@ class Group extends AbstractEntity
         );
     }
 
-    /**
-     * follow a team
-     * @param  TeamId   $teamId   [description]
-     * @param  SeasonId $seasonId [description]
-     * @return [type]             [description]
-     */
+    // follow a team
     public function followTeam(TeamId $teamId, SeasonId $seasonId)
     {
         if ($this->follow) {
@@ -370,11 +303,7 @@ class Group extends AbstractEntity
         $this->applyAndRecordThat(new TeamFollowed($this->groupId, new FollowId(), $teamId, $seasonId));
     }
 
-    /**
-     * remove a follow
-     * @param  FollowId $followId [description]
-     * @return [type]             [description]
-     */
+    // remove a follow
     public function deleteFollow(FollowId $followId)
     {
         if (!$this->follow instanceof Follow) {
@@ -508,11 +437,6 @@ class Group extends AbstractEntity
         $this->follow = null;
     }
 
-    /**
-     * [getMemberByUserId description]
-     * @param  UserId $userId [description]
-     * @return [type]         [description]
-     */
     private function getMemberByUserId(UserId $userId)
     {
         foreach ($this->members as $member) {
@@ -522,11 +446,6 @@ class Group extends AbstractEntity
         }
     }
 
-    /**
-     * [getPlayersByMemberId description]
-     * @param  MemberId $memberId [description]
-     * @return [type]             [description]
-     */
     private function getPlayersByMemberId(MemberId $memberId)
     {
         return array_filter($this->players, function ($player) use ($memberId) {
@@ -534,11 +453,6 @@ class Group extends AbstractEntity
         });
     }
 
-    /**
-     * [getMemberById description]
-     * @param  MemberId $memberId [description]
-     * @return [type]             [description]
-     */
     private function getMemberById(MemberId $memberId)
     {
         foreach ($this->members as $member) {
@@ -548,11 +462,6 @@ class Group extends AbstractEntity
         }
     }
 
-    /**
-     * [getPlayerById description]
-     * @param  PlayerId $playerId [description]
-     * @return [type]             [description]
-     */
     private function getPlayerById(PlayerId $playerId)
     {
         foreach ($this->players as $player) {
@@ -562,11 +471,6 @@ class Group extends AbstractEntity
         }
     }
 
-    /**
-     * [getScoreById description]
-     * @param  ScoreId $scoreId [description]
-     * @return [type]           [description]
-     */
     private function getScoreById(ScoreId $scoreId)
     {
         foreach ($this->scores as $score) {
@@ -576,12 +480,6 @@ class Group extends AbstractEntity
         }
     }
 
-    /**
-     * [getScoreByPlayerIdAndGameId description]
-     * @param  PlayerId $playerId [description]
-     * @param  GameId   $gameId   [description]
-     * @return [type]             [description]
-     */
     private function getScoreByPlayerIdAndGameId(PlayerId $playerId, GameId $gameId)
     {
         foreach ($this->scores as $score) {
@@ -591,10 +489,6 @@ class Group extends AbstractEntity
         }
     }
 
-    /**
-     * [getMembersThatAreAdmin description]
-     * @return [type] [description]
-     */
     private function getMembersThatAreAdmin()
     {
         return array_filter($this->members, function ($member) {
@@ -602,10 +496,6 @@ class Group extends AbstractEntity
         });
     }
 
-    /**
-     * return valid group roles
-     * @return [type] [description]
-     */
     public static function getValidGroupRoles()
     {
         return [
