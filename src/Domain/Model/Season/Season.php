@@ -141,15 +141,7 @@ class Season extends AbstractEntity
         );
     }
 
-    /**
-     * [updateGameScore description]
-     * @param  GameId $gameId        [description]
-     * @param  [type] $homeTeamScore [description]
-     * @param  [type] $awayTeamScore [description]
-     * @param  [type] $startDate     [description]
-     * @param  [type] $startTime     [description]
-     * @return [type]                [description]
-     */
+    // update the score of a game
     public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime)
     {
         if (!$this->getGameById($gameId)) {
