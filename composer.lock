@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/burgerballer44/event-publisher.git",
-                "reference": "95ec91f9485492480cbb82239a46997605ac0fb5"
+                "reference": "2f3b07cbcc1eff1b8967907deb14e917c4a15a10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/burgerballer44/event-publisher/zipball/95ec91f9485492480cbb82239a46997605ac0fb5",
-                "reference": "95ec91f9485492480cbb82239a46997605ac0fb5",
+                "url": "https://api.github.com/repos/burgerballer44/event-publisher/zipball/2f3b07cbcc1eff1b8967907deb14e917c4a15a10",
+                "reference": "2f3b07cbcc1eff1b8967907deb14e917c4a15a10",
                 "shasum": ""
             },
             "require-dev": {
@@ -47,7 +47,7 @@
                 "source": "https://github.com/burgerballer44/event-publisher/tree/master",
                 "issues": "https://github.com/burgerballer44/event-publisher/issues"
             },
-            "time": "2020-01-17T01:29:30+00:00"
+            "time": "2020-01-17T01:38:51+00:00"
         },
         {
             "name": "buttercup/protects",
