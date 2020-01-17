@@ -3,9 +3,9 @@
 namespace Tailgate\Infrastructure\Persistence\Event;
 
 use Buttercup\Protects\DomainEvent;
-use Tailgate\Common\Event\Event;
-use Tailgate\Common\Event\EventPublisherInterface;
-use Tailgate\Common\Event\EventSubscriberInterface;
+use Burger\Event;
+use Burger\EventPublisherInterface;
+use Burger\EventSubscriberInterface;
 use Tailgate\Domain\Model\Group\GroupDomainEvent;
 use Tailgate\Domain\Model\Season\SeasonDomainEvent;
 use Tailgate\Domain\Model\Team\TeamDomainEvent;

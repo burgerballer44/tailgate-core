@@ -2,9 +2,9 @@
 
 namespace Tailgate\Infrastructure\Persistence\Event;
 
-use Tailgate\Common\Event\Event;
-use Tailgate\Common\Event\EventPublisherInterface;
-use Tailgate\Common\Event\EventSubscriberInterface;
+use Burger\Event;
+use Burger\EventPublisherInterface;
+use Burger\EventSubscriberInterface;
 use Tailgate\Domain\Model\Team\TeamDomainEvent;
 use Tailgate\Domain\Model\Team\TeamProjectionInterface;
 
