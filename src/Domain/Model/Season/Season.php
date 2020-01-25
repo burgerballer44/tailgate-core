@@ -224,7 +224,7 @@ class Season extends AbstractEntity
         }));
     }
 
-    protected function applySeasonDeleted(SeasonDeleted $event)
+    protected function applySeasonDeleted()
     {
         $this->games = [];
     }

@@ -20,7 +20,7 @@ class AllGroupsQueryHandler extends AbstractService
         $this->groupViewTransformer = $groupViewTransformer;
     }
 
-    public function handle(AllGroupsQuery $query)
+    public function handle()
     {
         $groupViews = $this->groupViewRepository->all();
 

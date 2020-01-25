@@ -19,7 +19,7 @@ class AllUsersQueryHandler
         $this->userViewTransformer = $userViewTransformer;
     }
 
-    public function handle(AllUsersQuery $allUsersQuery)
+    public function handle()
     {
         $userViews = $this->userViewRepository->all();
 

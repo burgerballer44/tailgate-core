@@ -19,7 +19,7 @@ class AllSeasonsQueryHandler
         $this->seasonViewTransformer = $seasonViewTransformer;
     }
 
-    public function handle(AllSeasonsQuery $query)
+    public function handle()
     {
         $seasonViews = $this->seasonViewRepository->all();
 

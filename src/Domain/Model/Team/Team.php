@@ -74,7 +74,7 @@ class Team extends AbstractEntity
         $this->mascot = $event->getMascot();
     }
 
-    protected function applyTeamDeleted(TeamDeleted $event)
+    protected function applyTeamDeleted()
     {
     }
 }

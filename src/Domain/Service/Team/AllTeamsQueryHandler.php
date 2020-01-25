@@ -19,7 +19,7 @@ class AllTeamsQueryHandler
         $this->teamViewTransformer = $teamViewTransformer;
     }
 
-    public function handle(AllTeamsQuery $allTeamsQuery)
+    public function handle()
     {
         $teamViews = $this->teamViewRepository->all();
 
