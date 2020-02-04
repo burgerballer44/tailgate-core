@@ -22,7 +22,7 @@ class ScoreViewArrayDataTransformer implements ScoreDataTransformerInterface
             'homeMascot' => $scoreView->getHomeMascot(),
             'awayDesignation' => $scoreView->getAwayDesignation(),
             'awayMascot' => $scoreView->getAwayMascot(),
-            'awayMascot' => $scoreView->getUsername()
+            'username' => $scoreView->getUsername()
         ];
     }
 }
