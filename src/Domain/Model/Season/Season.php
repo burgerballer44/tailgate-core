@@ -154,9 +154,9 @@ class Season extends AbstractEntity
         $startTimeDateTime = \DateTimeImmutable::createFromFormat('H:i', $startTime);
         $startTime = $startTimeDateTime instanceof \DateTimeImmutable ? $startTimeDateTime->format('Y-m-d H:i:s') : $startTime;
 
-        // scores should be int or null
-        $homeTeamScore = is_int($homeTeamScore) ? $homeTeamScore : null;
-        $awayTeamScore = is_int($awayTeamScore) ? $awayTeamScore : null;
+        // scores should be numeric or null
+        $homeTeamScore = is_numeric($homeTeamScore) ? $homeTeamScore : null;
+        $awayTeamScore = is_numeric($awayTeamScore) ? $awayTeamScore : null;
 
         $this->applyAndRecordThat(new GameScoreUpdated($this->seasonId, $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime));
     }
