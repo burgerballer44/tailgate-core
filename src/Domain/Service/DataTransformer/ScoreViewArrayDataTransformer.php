@@ -21,7 +21,8 @@ class ScoreViewArrayDataTransformer implements ScoreDataTransformerInterface
             'homeDesignation' => $scoreView->getHomeDesignation(),
             'homeMascot' => $scoreView->getHomeMascot(),
             'awayDesignation' => $scoreView->getAwayDesignation(),
-            'awayMascot' => $scoreView->getAwayMascot()
+            'awayMascot' => $scoreView->getAwayMascot(),
+            'awayMascot' => $scoreView->getUsername()
         ];
     }
 }

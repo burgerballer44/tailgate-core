@@ -31,11 +31,12 @@ class PDOScoreViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.score_id = :score_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
@@ -62,11 +63,12 @@ class PDOScoreViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.score_id = :score_id LIMIT 1')
             ->willReturn($this->pdoStatementMock);
 
@@ -91,6 +93,7 @@ class PDOScoreViewRepositoryTest extends TestCase
                 'home_mascot' => 'blah',
                 'away_designation' => 'blah',
                 'away_mascot' => 'blah',
+                'username' => 'blah',
             ]);
 
         $this->viewRepository->get($scoreId);
@@ -104,11 +107,12 @@ class PDOScoreViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.group_id = :group_id')
             ->willReturn($this->pdoStatementMock);
 
@@ -135,11 +139,12 @@ class PDOScoreViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.group_id = :group_id AND s.player_id = :player_id')
             ->willReturn($this->pdoStatementMock);
 
@@ -166,11 +171,12 @@ class PDOScoreViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+            ->with('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.group_id = :group_id AND s.game_id = :game_id')
             ->willReturn($this->pdoStatementMock);
 

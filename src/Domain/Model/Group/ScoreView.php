@@ -16,6 +16,7 @@ class ScoreView
     private $homeMascot;
     private $awayDesignation;
     private $awayMascot;
+    private $username;
 
     public function __construct(
         $scoreId,
@@ -29,7 +30,8 @@ class ScoreView
         $homeDesignation,
         $homeMascot,
         $awayDesignation,
-        $awayMascot
+        $awayMascot,
+        $username
     ) {
         $this->scoreId = $scoreId;
         $this->groupId = $groupId;
@@ -43,6 +45,7 @@ class ScoreView
         $this->homeMascot = $homeMascot;
         $this->awayDesignation = $awayDesignation;
         $this->awayMascot = $awayMascot;
+        $this->username = $username;
     }
 
     public function getScoreId()
@@ -102,5 +105,10 @@ class ScoreView
     public function getAwayMascot()
     {
         return $this->awayMascot;
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
     }
 }

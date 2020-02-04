@@ -22,11 +22,12 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
 
     public function get(ScoreId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+        $stmt = $this->pdo->prepare('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.score_id = :score_id LIMIT 1');
         $stmt->execute([':score_id' => (string) $id]);
 
@@ -39,11 +40,12 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
 
     public function getAllByGroup(GroupId $id)
     {
-        $stmt = $this->pdo->prepare('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+        $stmt = $this->pdo->prepare('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.group_id = :group_id');
         $stmt->execute([':group_id' => (string) $id]);
 
@@ -58,11 +60,12 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
 
     public function getAllByGroupPlayer(GroupId $id, PlayerId $playerId)
     {
-        $stmt = $this->pdo->prepare('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+        $stmt = $this->pdo->prepare('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.group_id = :group_id AND s.player_id = :player_id');
         $stmt->execute([':group_id' => (string) $id, ':player_id' => (string) $playerId]);
 
@@ -77,11 +80,12 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
 
     public function getAllByGroupGame(GroupId $id, GameId $game)
     {
-        $stmt = $this->pdo->prepare('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot
+        $stmt = $this->pdo->prepare('SELECT s.score_id, s.group_id, s.player_id, s.game_id, s.home_team_prediction, s.away_team_prediction, g.home_team_id, g.away_team_id, hot.designation as home_designation, hot.mascot as home_mascot, awt.designation as away_designation, awt.mascot as away_mascot, p.username
             FROM `score` s
             JOIN `game` g on g.game_id = s.game_id
             JOIN `team` hot on hot.team_id = g.home_team_id
             JOIN `team` awt on awt.team_id = g.away_team_id
+            JOIN `player` p on s.player_id = p.player_id
             WHERE s.group_id = :group_id AND s.game_id = :game_id');
         $stmt->execute([':group_id' => (string) $id, ':game_id' => (string) $game]);
 
@@ -108,7 +112,8 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
             $row['home_designation'],
             $row['home_mascot'],
             $row['away_designation'],
-            $row['away_mascot']
+            $row['away_mascot'],
+            $row['username'],
         );
     }
 }
