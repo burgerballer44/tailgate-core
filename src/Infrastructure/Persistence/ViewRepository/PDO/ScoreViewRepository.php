@@ -113,7 +113,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
             $row['home_mascot'],
             $row['away_designation'],
             $row['away_mascot'],
-            $row['username'],
+            $row['username']
         );
     }
 }
