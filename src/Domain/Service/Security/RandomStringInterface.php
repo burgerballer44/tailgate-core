@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Common\Security;
+namespace Tailgate\Domain\Service\Security;
 
 interface RandomStringInterface
 {

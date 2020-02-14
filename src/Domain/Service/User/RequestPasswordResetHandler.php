@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Service\User;
 
 use Tailgate\Application\Command\User\RequestPasswordResetCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
-use Tailgate\Common\Security\RandomStringInterface;
+use Tailgate\Domain\Service\Security\RandomStringInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;

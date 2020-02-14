@@ -4,8 +4,7 @@ namespace Tailgate\Domain\Service\User;
 
 use Tailgate\Application\Command\User\RegisterUserCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
-use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
-use Tailgate\Common\Security\RandomStringInterface;
+use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Domain\Service\AbstractService;

@@ -5,7 +5,7 @@ namespace Tailgate\Test\Domain\Service\User;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\RegisterUserCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
-use Tailgate\Common\PasswordHashing\PasswordHashingInterface;
+use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;

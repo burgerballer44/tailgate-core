@@ -1,6 +1,8 @@
 <?php
 
-namespace Tailgate\Common\PasswordHashing;
+namespace Tailgate\Infrastructure\Service\PasswordHashing;
+
+use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
 
 class BasicPasswordHashing implements PasswordHashingInterface
 {

@@ -5,6 +5,7 @@ namespace Tailgate\Application\Validator;
 use Exception;
 use Throwable;
 
+// exception for failing validation
 class ValidationException extends Exception
 {
     private $validationErrors;

@@ -5,7 +5,7 @@ namespace Tailgate\Test\Domain\Service\Group;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\CreateGroupCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
-use Tailgate\Common\Security\RandomStringInterface;
+use Tailgate\Domain\Service\Security\RandomStringInterface;
 use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;

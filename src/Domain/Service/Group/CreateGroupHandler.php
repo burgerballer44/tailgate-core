@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\CreateGroupCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
-use Tailgate\Common\Security\RandomStringInterface;
+use Tailgate\Domain\Service\Security\RandomStringInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;

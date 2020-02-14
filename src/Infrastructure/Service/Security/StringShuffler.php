@@ -1,6 +1,8 @@
 <?php
 
-namespace Tailgate\Common\Security;
+namespace Tailgate\Infrastructure\Service\Security;
+
+use Tailgate\Domain\Service\Security\RandomStringInterface;
 
 class StringShuffler implements RandomStringInterface
 {

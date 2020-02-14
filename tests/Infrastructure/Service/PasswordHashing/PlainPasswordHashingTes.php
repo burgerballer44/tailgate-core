@@ -1,9 +1,9 @@
 <?php
 
-namespace Tailgate\Test\Common\PasswordHashing;
+namespace Tailgate\Test\Infrastructure\ServicePasswordHashing;
 
 use PHPUnit\Framework\TestCase;
-use Tailgate\Common\PasswordHashing\PlainPasswordHashing;
+use Tailgate\Infrastructure\Service\PasswordHashing\PlainPasswordHashing;
 
 class PlainPasswordHashingTest extends TestCase
 {

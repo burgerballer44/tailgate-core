@@ -5,7 +5,7 @@ namespace Tailgate\Test\Domain\Service\User;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\RequestPasswordResetCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
-use Tailgate\Common\Security\RandomStringInterface;
+use Tailgate\Domain\Service\Security\RandomStringInterface;
 use Tailgate\Domain\Model\User\PasswordResetTokenCreated;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
