@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Model\Group;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Tailgate\Domain\Model\AbstractEntity;
-use Tailgate\Domain\Model\ModelException;
+use RuntimeException;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -100,11 +100,11 @@ class Group extends AbstractEntity
     public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
     {
         if (!$this->getPlayerById($playerId)) {
-            throw new ModelException('The player submitting the score does not exist.');
+            throw new RuntimeException('The player submitting the score does not exist.');
         }
 
         if ($this->getScoreByPlayerIdAndGameId($playerId, $gameId)) {
-            throw new ModelException('The player already submitted a score for this game.');
+            throw new RuntimeException('The player already submitted a score for this game.');
         }
 
         $this->applyAndRecordThat(
@@ -123,19 +123,19 @@ class Group extends AbstractEntity
     public function addPlayer(MemberId $memberId, $username)
     {
         if (!$member = $this->getMemberById($memberId)) {
-            throw new ModelException('The member does not exist. Cannot add the player.');
+            throw new RuntimeException('The member does not exist. Cannot add the player.');
         }
 
         $playerCount = count($this->getPlayersByMemberId($memberId));
 
         // singleplayers should only have one
         if ($member->getAllowMultiplePlayers() == self::SINGLE_PLAYER && $playerCount) {
-            throw new ModelException('Player limit reached for member.');
+            throw new RuntimeException('Player limit reached for member.');
         }
 
         // multipleplayers cannot have more than the limit
         if ($playerCount >= self::PLAYER_LIMIT) {
-            throw new ModelException('Player limit reached for member.');
+            throw new RuntimeException('Player limit reached for member.');
         }
 
         $this->applyAndRecordThat(
@@ -147,11 +147,11 @@ class Group extends AbstractEntity
     public function changePlayerOwner(PlayerId $playerId, MemberId $memberId)
     {
         if (!$this->getMemberById($memberId)) {
-            throw new ModelException('The member does not exist. Cannot change the player owner.');
+            throw new RuntimeException('The member does not exist. Cannot change the player owner.');
         }
 
         if (!$this->getPlayerById($playerId)) {
-            throw new ModelException('The player does not exist. Cannot change the player owner.');
+            throw new RuntimeException('The player does not exist. Cannot change the player owner.');
         }
 
         $this->applyAndRecordThat(
@@ -163,7 +163,7 @@ class Group extends AbstractEntity
     public function updateScore(ScoreId $scoreId, $homeTeamPrediction, $awayTeamPrediction)
     {
         if (!$this->getScoreById($scoreId)) {
-            throw new ModelException('The score does not exist. Cannot update the score.');
+            throw new RuntimeException('The score does not exist. Cannot update the score.');
         }
 
         $this->applyAndRecordThat(
@@ -175,11 +175,11 @@ class Group extends AbstractEntity
     public function addMember(UserId $userId)
     {
         if ($this->getMemberByUserId($userId)) {
-            throw new ModelException('The member is already in the group.');
+            throw new RuntimeException('The member is already in the group.');
         }
 
         if (count($this->members) >= self::MEMBER_LIMIT) {
-            throw new ModelException('Group member limit reached.');
+            throw new RuntimeException('Group member limit reached.');
         }
 
         $this->applyAndRecordThat(
@@ -199,11 +199,11 @@ class Group extends AbstractEntity
     public function updateMember(MemberId $memberId, $groupRole, $allowMultiple)
     {
         if (!$this->getMemberById($memberId)) {
-            throw new ModelException('The member does not exist.');
+            throw new RuntimeException('The member does not exist.');
         }
 
         if (!in_array($groupRole, $this->getValidGroupRoles())) {
-            throw new ModelException('Invalid group role. Group role does not exist.');
+            throw new RuntimeException('Invalid group role. Group role does not exist.');
         }
 
         // get all admin members
@@ -222,7 +222,7 @@ class Group extends AbstractEntity
             && in_array($memberId, $adminMemberIds)
             && ($groupRole != self::G_ROLE_ADMIN)
         ) {
-            throw new ModelException('Cannot change the last admin in the group to not be an admin.');
+            throw new RuntimeException('Cannot change the last admin in the group to not be an admin.');
         }
 
         // set single player by default. no need for exception
@@ -245,7 +245,7 @@ class Group extends AbstractEntity
     public function deleteMember(MemberId $memberId)
     {
         if (!$this->getMemberById($memberId)) {
-            throw new ModelException('The member does not exist.');
+            throw new RuntimeException('The member does not exist.');
         }
 
         // get all admin members
@@ -261,7 +261,7 @@ class Group extends AbstractEntity
             count($adminMemberIds) == self::MIN_NUMBER_ADMINS
             && in_array($memberId, $adminMemberIds)
         ) {
-            throw new ModelException('Cannot remove the last admin in a group.');
+            throw new RuntimeException('Cannot remove the last admin in a group.');
         }
 
         $this->applyAndRecordThat(
@@ -273,7 +273,7 @@ class Group extends AbstractEntity
     public function deletePlayer(PlayerId $playerId)
     {
         if (!$this->getPlayerById($playerId)) {
-            throw new ModelException('The player does not exist.');
+            throw new RuntimeException('The player does not exist.');
         }
 
         $this->applyAndRecordThat(
@@ -285,7 +285,7 @@ class Group extends AbstractEntity
     public function deleteScore(ScoreId $scoreId)
     {
         if (!$this->getScoreById($scoreId)) {
-            throw new ModelException('The score does not exist. Cannot update the score.');
+            throw new RuntimeException('The score does not exist. Cannot update the score.');
         }
 
         $this->applyAndRecordThat(
@@ -297,7 +297,7 @@ class Group extends AbstractEntity
     public function followTeam(TeamId $teamId, SeasonId $seasonId)
     {
         if ($this->follow) {
-            throw new ModelException('Cannot follow this team. This group is already following a team.');
+            throw new RuntimeException('Cannot follow this team. This group is already following a team.');
         }
 
         $this->applyAndRecordThat(new TeamFollowed($this->groupId, new FollowId(), $teamId, $seasonId));
@@ -307,7 +307,7 @@ class Group extends AbstractEntity
     public function deleteFollow(FollowId $followId)
     {
         if (!$this->follow instanceof Follow) {
-            throw new ModelException('Group is not following a team.');
+            throw new RuntimeException('Group is not following a team.');
         }
 
         $this->applyAndRecordThat(new FollowDeleted($this->groupId, $followId));

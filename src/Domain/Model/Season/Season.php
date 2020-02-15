@@ -3,8 +3,8 @@
 namespace Tailgate\Domain\Model\Season;
 
 use Buttercup\Protects\IdentifiesAggregate;
+use RuntimeException;
 use Tailgate\Domain\Model\AbstractEntity;
-use Tailgate\Domain\Model\ModelException;
 use Tailgate\Domain\Model\Team\TeamId;
 
 class Season extends AbstractEntity
@@ -42,11 +42,11 @@ class Season extends AbstractEntity
         $seasonEnd
     ) {
         if (!in_array($sport, self::getValidSports())) {
-            throw new ModelException('Invalid sport. Sport does not exist.');
+            throw new RuntimeException('Invalid sport. Sport does not exist.');
         }
 
         if (!in_array($seasonType, self::getValidSeasonTypes())) {
-            throw new ModelException('Invalid season type. Season type does not exist.');
+            throw new RuntimeException('Invalid season type. Season type does not exist.');
         }
 
         // seasonStart and seasonEnd will be a date most of the time but can be a string sometimes
@@ -109,11 +109,11 @@ class Season extends AbstractEntity
     public function update($sport, $seasonType, $name, $seasonStart, $seasonEnd)
     {
         if (!in_array($sport, $this->getValidSports())) {
-            throw new ModelException('Invalid sport. Sport does not exist.');
+            throw new RuntimeException('Invalid sport. Sport does not exist.');
         }
 
         if (!in_array($seasonType, $this->getValidSeasonTypes())) {
-            throw new ModelException('Invalid season type. Season type does not exist.');
+            throw new RuntimeException('Invalid season type. Season type does not exist.');
         }
 
         // seasonStart and seasonEnd will be a date most of the time but can be a string sometimes
@@ -145,7 +145,7 @@ class Season extends AbstractEntity
     public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime)
     {
         if (!$this->getGameById($gameId)) {
-            throw new ModelException('The game does not exist. Cannot update the game score.');
+            throw new RuntimeException('The game does not exist. Cannot update the game score.');
         }
 
         // startDate and startTime will be a date most of the time but can be a string sometimes
@@ -171,7 +171,7 @@ class Season extends AbstractEntity
     public function deleteGame(GameId $gameId)
     {
         if (!$this->getGameById($gameId)) {
-            throw new ModelException('The game does not exist. Cannot delete the game.');
+            throw new RuntimeException('The game does not exist. Cannot delete the game.');
         }
 
         $this->applyAndRecordThat(new GameDeleted($this->seasonId, $gameId));

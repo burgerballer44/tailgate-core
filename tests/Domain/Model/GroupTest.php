@@ -1,9 +1,10 @@
 <?php
 
-namespace Tailgate\Test\Domain\Model\User;
+namespace Tailgate\Test\Domain\Model;
 
 use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\Follow;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -14,7 +15,6 @@ use Tailgate\Domain\Model\Group\Player;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\Score;
 use Tailgate\Domain\Model\Group\ScoreId;
-use Tailgate\Domain\Model\ModelException;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Season\SeasonId;
@@ -122,7 +122,7 @@ class GroupTest extends TestCase
     {
         $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The member is already in the group.');
         $group->addMember($this->ownerId);
     }
@@ -137,7 +137,7 @@ class GroupTest extends TestCase
             $group->addMember(UserId::fromString("userID{$i}"));
         }
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Group member limit reached.');
         $group->addMember(UserId::fromString("userShouldNotGoThrough"));
     }
@@ -249,7 +249,7 @@ class GroupTest extends TestCase
         $group->deleteMember($memberId2);
 
         // try to delete the first member which is the last admin
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Cannot remove the last admin in a group.');
         $group->deleteMember($memberId1);
     }
@@ -387,7 +387,7 @@ class GroupTest extends TestCase
         $memberId = $group->getMembers()[0]->getMemberId();
 
         // try to update admin to member
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Cannot change the last admin in the group to not be an admin.');
         $group->updateMember($memberId, Group::G_ROLE_MEMBER, Group::SINGLE_PLAYER);
     }
@@ -447,7 +447,7 @@ class GroupTest extends TestCase
         // add one player
         $group->addPlayer($memberId, "playername");
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Player limit reached for member.');
         $group->addPlayer($memberId, 'playerShouldNotGoThrough');
     }
@@ -462,7 +462,7 @@ class GroupTest extends TestCase
             $group->addPlayer($memberId, "username{$i}");
         }
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Player limit reached for member.');
         $group->addPlayer($memberId, 'playerShouldNotGoThrough');
     }
@@ -473,7 +473,7 @@ class GroupTest extends TestCase
         $memberId = $group->getMembers()[0]->getMemberId();
         $group->addPlayer($memberId, 'username');
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The player submitting the score does not exist.');
         $group->submitScore(PlayerId::fromString('playerIdThatDoesNotExist'), GameId::fromString('gameId'), 1, 2);
     }
@@ -488,7 +488,7 @@ class GroupTest extends TestCase
         $group->submitScore($playerId, $gameId, 1, 2);
 
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The player already submitted a score for this game.');
         $group->submitScore($playerId, $gameId, 1, 2);
     }
@@ -497,7 +497,7 @@ class GroupTest extends TestCase
     {
         $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The member does not exist. Cannot add the player.');
         $group->addPlayer(MemberId::fromString('memberIdThatDoesNotExist'), 'username');
     }
@@ -511,7 +511,7 @@ class GroupTest extends TestCase
         $playerId = $group->getPlayers()[0]->getPlayerId();
         $group->submitScore($playerId, $gameId, 1, 2);
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The score does not exist. Cannot update the score.');
         $group->updateScore(ScoreId::fromString('scoreIdThatDoesNotExist'), 1, 2);
     }
@@ -522,11 +522,11 @@ class GroupTest extends TestCase
         $members = $group->getMembers();
         $memberId = $group->getMembers()[0]->getMemberId();
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The member does not exist.');
         $group->updateMember(MemberID::fromString('invalidMemberId'), Group::G_ROLE_ADMIN, 1);
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The score does not exist. Cannot update the score.');
         $group->updateMember($memberId, 'invalidGroupRole', 1);
     }
@@ -540,7 +540,7 @@ class GroupTest extends TestCase
         $group->addMember($userId3);
         $members = $group->getMembers();
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The member does not exist.');
         $group->deleteMember(MemberID::fromString('invalidMemberId'));
     }
@@ -554,7 +554,7 @@ class GroupTest extends TestCase
         $playerId = $group->getPlayers()[0]->getPlayerId();
         $group->submitScore($playerId, $gameId, 1, 2);
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The score does not exist.');
         $group->deleteScore(ScoreId::fromString('scoreIdThatDoesNotExist'));
     }
@@ -586,7 +586,7 @@ class GroupTest extends TestCase
 
         $group->followTeam($teamId, $seasonId);
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Cannot follow this team. This group is already following a team.');
         $group->followTeam($teamId, $seasonId);
     }
@@ -616,7 +616,7 @@ class GroupTest extends TestCase
         $group = Group::create($this->groupId, $this->groupName, $this->groupInviteCode, $this->ownerId);
         ;
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Group is not following a team.');
         $group->deleteFollow(FollowId::fromString('followThatDoesNotExist'));
     }

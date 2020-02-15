@@ -1,13 +1,13 @@
 <?php
 
-namespace Tailgate\Test\Domain\Model\User;
+namespace Tailgate\Test\Domain\Model;
 
 use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
-use Tailgate\Domain\Model\ModelException;
+use RuntimeException;
 
 class UserTest extends TestCase
 {
@@ -101,11 +101,11 @@ class UserTest extends TestCase
     {
         $user = User::create($this->userId, $this->email, $this->passwordHash);
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid role. Role does not exist.');
         $user->update('email@email.com', User::STATUS_PENDING, 'invalideRole');
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid status. Status does not exist.');
         $user->update('email@email.com', 'invalidStatus', User::ROLE_ADMIN);
     }

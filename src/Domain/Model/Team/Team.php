@@ -4,7 +4,6 @@ namespace Tailgate\Domain\Model\Team;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Tailgate\Domain\Model\AbstractEntity;
-use Tailgate\Domain\Model\ModelException;
 
 class Team extends AbstractEntity
 {

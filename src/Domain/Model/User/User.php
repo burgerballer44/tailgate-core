@@ -4,7 +4,7 @@ namespace Tailgate\Domain\Model\User;
 
 use Buttercup\Protects\IdentifiesAggregate;
 use Tailgate\Domain\Model\AbstractEntity;
-use Tailgate\Domain\Model\ModelException;
+use RuntimeException;
 
 class User extends AbstractEntity
 {
@@ -108,11 +108,11 @@ class User extends AbstractEntity
     public function update($email, $status, $role)
     {
         if (!in_array($role, $this->getValidRoles())) {
-            throw new ModelException('Invalid role. Role does not exist.');
+            throw new RuntimeException('Invalid role. Role does not exist.');
         }
 
         if (!in_array($status, $this->getValidStatuses())) {
-            throw new ModelException('Invalid status. Status does not exist.');
+            throw new RuntimeException('Invalid status. Status does not exist.');
         }
         
         $this->applyAndRecordThat(new UserUpdated($this->userId, $email, $status, $role));

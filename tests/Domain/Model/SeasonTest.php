@@ -1,10 +1,10 @@
 <?php
 
-namespace Tailgate\Test\Domain\Model\Season;
+namespace Tailgate\Test\Domain\Model;
 
 use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
-use Tailgate\Domain\Model\ModelException;
+use RuntimeException;
 use Tailgate\Domain\Model\Season\Game;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\Season;
@@ -154,7 +154,7 @@ class SeasonTest extends TestCase
         $startTime = '12:12';
         $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime);
  
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The game does not exist. Cannot update the game score.');
         $season->updateGameScore(
             GameId::fromString('gameThatDoesNoExist'),
@@ -226,7 +226,7 @@ class SeasonTest extends TestCase
         $gameId2 = $games[1]->getGameId();
         $gameId3 = $games[2]->getGameId();
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The game does not exist. Cannot delete the game.');
         $season->deleteGame(GameId::fromString('gameThatDoesNoExist'));
     }
@@ -296,11 +296,11 @@ class SeasonTest extends TestCase
             $this->seasonEnd
         );
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid sport. Sport does not exist.');
         $season->update('invalidSport', Season::SEASON_TYPE_REG, 'name', $seasonStart, $seasonEnd);
 
-        $this->expectException(ModelException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Invalid season type. Season type does not exist.');
         $season->update(Season::SPORT_FOOTBALL, 'invalidSeasonType', 'name', $seasonStart, $seasonEnd);
     }
