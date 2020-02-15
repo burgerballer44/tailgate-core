@@ -14,6 +14,7 @@ class UpdateEmailHandler implements ValidatableService
 {
     use Validatable;
     
+    private $validator;
     private $userRepository;
 
     public function __construct(ValidatorInterface $validator, UserRepositoryInterface $userRepository)

@@ -12,9 +12,8 @@ class DeleteGroupHandler
 {
     private $groupRepository;
 
-    public function __construct(ValidatorInterface $validator, GroupRepositoryInterface $groupRepository)
+    public function __construct(GroupRepositoryInterface $groupRepository)
     {
-        $this->validator = $validator;
         $this->groupRepository = $groupRepository;
     }
 
