@@ -12,7 +12,7 @@ use Tailgate\Domain\Model\Team\TeamDomainEvent;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
-use Tailgate\Infrastructure\Persistence\Event\TeamProjectorEventSubscriber;
+use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\TeamProjectorEventSubscriber;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\TeamRepository;
 
 class PublisherTeamRepositoryTest extends TestCase

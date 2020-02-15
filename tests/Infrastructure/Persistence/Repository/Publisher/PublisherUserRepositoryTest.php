@@ -12,7 +12,7 @@ use Tailgate\Domain\Model\User\UserDomainEvent;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
-use Tailgate\Infrastructure\Persistence\Event\UserProjectorEventSubscriber;
+use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\UserProjectorEventSubscriber;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\UserRepository;
 
 class PublisherUserRepositoryTest extends TestCase

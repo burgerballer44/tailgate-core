@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Infrastructure\Persistence\Event;
+namespace Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection;
 
 use Burger\Event;
 use Burger\EventPublisherInterface;

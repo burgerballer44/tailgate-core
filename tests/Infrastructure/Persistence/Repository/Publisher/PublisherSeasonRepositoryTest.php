@@ -12,7 +12,7 @@ use Tailgate\Domain\Model\Season\SeasonDomainEvent;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Infrastructure\Persistence\Projection\SeasonProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
-use Tailgate\Infrastructure\Persistence\Event\SeasonProjectorEventSubscriber;
+use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\SeasonProjectorEventSubscriber;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\SeasonRepository;
 
 class PublisherSeasonRepositoryTest extends TestCase

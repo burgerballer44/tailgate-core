@@ -13,7 +13,7 @@ use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
-use Tailgate\Infrastructure\Persistence\Event\GroupProjectorEventSubscriber;
+use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\GroupProjectorEventSubscriber;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\GroupRepository;
 
 class PublisherGroupRepositoryTest extends TestCase
