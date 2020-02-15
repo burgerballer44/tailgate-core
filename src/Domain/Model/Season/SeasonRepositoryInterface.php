@@ -2,9 +2,8 @@
 
 namespace Tailgate\Domain\Model\Season;
 
-use Buttercup\Protects\AggregateRepository;
+use Tailgate\Domain\Model\RepositoryInterface;
 
-interface SeasonRepositoryInterface extends AggregateRepository
+interface SeasonRepositoryInterface extends RepositoryInterface
 {
-    public function nextIdentity();
 }

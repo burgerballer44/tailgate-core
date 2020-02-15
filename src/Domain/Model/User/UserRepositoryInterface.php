@@ -2,9 +2,8 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Buttercup\Protects\AggregateRepository;
+use Tailgate\Domain\Model\RepositoryInterface;
 
-interface UserRepositoryInterface extends AggregateRepository
+interface UserRepositoryInterface extends RepositoryInterface
 {
-    public function nextIdentity();
 }

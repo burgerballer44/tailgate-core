@@ -10,6 +10,7 @@ use Buttercup\Protects\IsEventSourced;
 use Buttercup\Protects\RecordsEvents;
 use Verraes\ClassFunctions\ClassFunctions;
 
+// all entities need event sourving behavior
 abstract class AbstractEntity implements RecordsEvents, IsEventSourced
 {
     private $recordedEvents = [];

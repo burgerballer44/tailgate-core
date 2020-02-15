@@ -2,9 +2,8 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\AggregateRepository;
+use Tailgate\Domain\Model\RepositoryInterface;
 
-interface GroupRepositoryInterface extends AggregateRepository
+interface GroupRepositoryInterface extends RepositoryInterface
 {
-    public function nextIdentity();
 }
