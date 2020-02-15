@@ -8,7 +8,7 @@ use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
-use Tailgate\Domain\Model\Season\SeasonProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\SeasonProjectionInterface;
 
 class SeasonRepository implements SeasonRepositoryInterface
 {

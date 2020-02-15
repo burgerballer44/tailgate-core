@@ -8,7 +8,7 @@ use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Model\Group\GroupProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
 
 class GroupRepository implements GroupRepositoryInterface
 {

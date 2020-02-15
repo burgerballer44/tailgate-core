@@ -8,7 +8,7 @@ use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
-use Tailgate\Domain\Model\Team\TeamProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
 
 class TeamRepository implements TeamRepositoryInterface
 {

@@ -6,7 +6,7 @@ use Buttercup\Protects\IdentifiesAggregate;
 use Buttercup\Protects\RecordsEvents;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 
