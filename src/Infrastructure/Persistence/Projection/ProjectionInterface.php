@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Common\Projection;
+namespace Tailgate\Infrastructure\Persistence\Projection;
 
 use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\DomainEvents;

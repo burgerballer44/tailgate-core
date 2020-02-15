@@ -6,7 +6,7 @@ use Burger\Event;
 use Burger\EventPublisherInterface;
 use Burger\EventSubscriberInterface;
 use Tailgate\Domain\Model\Group\GroupDomainEvent;
-use Tailgate\Domain\Model\Group\GroupProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
 
 class GroupProjectorEventSubscriber implements EventSubscriberInterface
 {

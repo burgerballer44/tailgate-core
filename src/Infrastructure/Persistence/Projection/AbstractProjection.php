@@ -4,7 +4,7 @@ namespace Tailgate\Infrastructure\Persistence\Projection;
 
 use Buttercup\Protects\DomainEvent;
 use Buttercup\Protects\DomainEvents;
-use Tailgate\Common\Projection\ProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\ProjectionInterface;
 use Verraes\ClassFunctions\ClassFunctions;
 
 abstract class AbstractProjection implements ProjectionInterface

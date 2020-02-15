@@ -25,7 +25,7 @@ class DeleteScoreHandlerTest extends TestCase
     private $group;
     private $deleteScoreCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a game, add a score, and clear events
         $this->group = Group::create(

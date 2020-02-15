@@ -20,7 +20,7 @@ class UpdateTeamHandlerTest extends TestCase
     private $updateTeamCommand;
     private $team;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->team = Team::create(TeamId::fromString($this->teamId), 'designation', 'mascot');
         $this->team->clearRecordedEvents();

@@ -10,7 +10,7 @@ use Burger\EventPublisherInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupDomainEvent;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Group\GroupProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Infrastructure\Persistence\Event\GroupProjectorEventSubscriber;
@@ -23,7 +23,7 @@ class PublisherGroupRepositoryTest extends TestCase
     private $eventPublisher;
     private $group;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->eventStore = $this->createMock(EventStoreInterface::class);
         $this->projection = $this->createMock(GroupProjectionInterface::class);

@@ -34,7 +34,7 @@ class UpdateGameScoreHandlerTest extends TestCase
     private $game;
     private $updateGameScoreCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a season, add a game, and clear events
         $this->seasonStart = '2019-09-01';

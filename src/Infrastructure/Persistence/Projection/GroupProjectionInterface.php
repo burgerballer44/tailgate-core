@@ -1,8 +1,22 @@
 <?php
 
-namespace Tailgate\Domain\Model\Group;
+namespace Tailgate\Infrastructure\Persistence\Projection;
 
-use Tailgate\Common\Projection\ProjectionInterface;
+use Tailgate\Domain\Model\Group\FollowDeleted;
+use Tailgate\Domain\Model\Group\GroupCreated;
+use Tailgate\Domain\Model\Group\GroupDeleted;
+use Tailgate\Domain\Model\Group\GroupScoreUpdated;
+use Tailgate\Domain\Model\Group\GroupUpdated;
+use Tailgate\Domain\Model\Group\MemberAdded;
+use Tailgate\Domain\Model\Group\MemberDeleted;
+use Tailgate\Domain\Model\Group\MemberUpdated;
+use Tailgate\Domain\Model\Group\PlayerAdded;
+use Tailgate\Domain\Model\Group\PlayerDeleted;
+use Tailgate\Domain\Model\Group\PlayerOwnerChanged;
+use Tailgate\Domain\Model\Group\ScoreDeleted;
+use Tailgate\Domain\Model\Group\ScoreSubmitted;
+use Tailgate\Domain\Model\Group\TeamFollowed;
+use Tailgate\Infrastructure\Persistence\Projection\ProjectionInterface;
 
 interface GroupProjectionInterface extends ProjectionInterface
 {

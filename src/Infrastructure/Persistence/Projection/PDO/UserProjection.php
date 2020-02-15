@@ -3,7 +3,6 @@
 namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 
 use PDO;
-use Tailgate\Domain\Model\User\UserProjectionInterface;
 use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\UserDeleted;
@@ -12,6 +11,7 @@ use Tailgate\Domain\Model\User\PasswordResetTokenCreated;
 use Tailgate\Domain\Model\User\EmailUpdated;
 use Tailgate\Domain\Model\User\UserUpdated;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
+use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
 
 class UserProjection extends AbstractProjection implements UserProjectionInterface
 {

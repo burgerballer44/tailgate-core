@@ -25,7 +25,7 @@ class UpdateMemberHandlerTest extends TestCase
     private $memberId;
     private $updateMemberCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group and clear events
         $this->group = Group::create(

@@ -20,7 +20,7 @@ class UpdateEmailHandlerTest extends TestCase
     private $updateEmailCommand;
     private $newEmail = 'newEmail@email.coim';
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a team and clear events
         $this->user = User::create(

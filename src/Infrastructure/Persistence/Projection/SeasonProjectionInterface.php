@@ -1,8 +1,14 @@
 <?php
 
-namespace Tailgate\Domain\Model\Season;
+namespace Tailgate\Infrastructure\Persistence\Projection;
 
-use Tailgate\Common\Projection\ProjectionInterface;
+use Tailgate\Domain\Model\Season\GameAdded;
+use Tailgate\Domain\Model\Season\GameDeleted;
+use Tailgate\Domain\Model\Season\GameScoreUpdated;
+use Tailgate\Domain\Model\Season\SeasonCreated;
+use Tailgate\Domain\Model\Season\SeasonDeleted;
+use Tailgate\Domain\Model\Season\SeasonUpdated;
+use Tailgate\Infrastructure\Persistence\Projection\ProjectionInterface;
 
 interface SeasonProjectionInterface extends ProjectionInterface
 {

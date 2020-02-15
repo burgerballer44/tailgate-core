@@ -19,7 +19,7 @@ class CreateGroupHandlerTest extends TestCase
     private $ownerId = 'ownerId';
     private $createGroupCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->createGroupCommand = new CreateGroupCommand(
             $this->groupName,

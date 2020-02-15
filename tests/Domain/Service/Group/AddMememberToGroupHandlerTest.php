@@ -23,7 +23,7 @@ class AddMemberToGroupHandlerTest extends TestCase
     private $group;
     private $addMemberToGroupCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group and clear events
         $this->group = Group::create(

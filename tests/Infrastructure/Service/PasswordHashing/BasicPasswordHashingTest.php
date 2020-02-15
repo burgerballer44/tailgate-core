@@ -12,7 +12,7 @@ class BasicPasswordHashingTest extends TestCase
     private $passwordHash = '$2y$10$QaQC1BqV8O9N.NPeimP4yugJNDL60TIVQWb7eK24FR3dYsXQecT8u';
     private $passwordHashing;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->passwordHashing = new BasicPasswordHashing();
     }

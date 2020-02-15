@@ -30,7 +30,7 @@ class AddGameHandlerTest extends TestCase
     private $season;
     private $addGameCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->seasonStart = '2019-09-01';
         $this->seasonEnd = '2019-12-28';

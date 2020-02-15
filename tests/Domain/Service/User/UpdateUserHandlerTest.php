@@ -20,7 +20,7 @@ class UpdateUserHandlerTest extends TestCase
     private $user;
     private $updateUserCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->user = User::create(
             UserId::fromString($this->userId),

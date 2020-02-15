@@ -10,7 +10,7 @@ use Burger\EventPublisherInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserDomainEvent;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Infrastructure\Persistence\Event\UserProjectorEventSubscriber;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\UserRepository;
@@ -22,7 +22,7 @@ class PublisherUserRepositoryTest extends TestCase
     private $projection;
     private $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->eventStore = $this->createMock(EventStoreInterface::class);
         $this->projection = $this->createMock(UserProjectionInterface::class);

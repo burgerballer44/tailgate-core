@@ -16,7 +16,7 @@ class PDOEventStoreTest extends TestCase
     private $pdoStatementMock;
     private $eventStore;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->pdoMock = $this->createMock(\PDO::class);
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);

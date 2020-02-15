@@ -29,7 +29,7 @@ class FollowTeamHandlerTest extends TestCase
     private $team;
     private $season;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group and clear events
         $this->group = Group::create(

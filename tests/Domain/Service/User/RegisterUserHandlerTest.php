@@ -20,7 +20,7 @@ class RegisterUserHandlerTest extends TestCase
     private $passwordResetToken = '';
     private $registerUserCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->registerUserCommand = new RegisterUserCommand(
             $this->email,

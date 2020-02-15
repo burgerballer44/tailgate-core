@@ -23,7 +23,7 @@ class DeleteMemberHandlerTest extends TestCase
     private $group;
     private $deleteMemberCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group, add a member, and clear events
         $this->group = Group::create(

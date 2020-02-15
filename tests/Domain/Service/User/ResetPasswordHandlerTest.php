@@ -22,7 +22,7 @@ class ResetPasswordHandlerTest extends TestCase
     private $newPasswordHash = 'newPassword';
     private $newPasswordHashConfirm = 'newPassword';
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a team and clear events
         $this->user = User::create(

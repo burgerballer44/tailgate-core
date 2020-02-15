@@ -29,7 +29,7 @@ class UpdateScoreForGroupHandlerTest extends TestCase
     private $scoreId;
     private $updateScoreForGroupCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group, add a score, and clear events
         $this->group = Group::create(

@@ -31,7 +31,7 @@ class SubmitScoreForGroupHandlerTest extends TestCase
     private $group;
     private $submitScoreForGroupCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group, add a player for the group owner, and clear events
         $this->group = Group::create(

@@ -5,7 +5,6 @@ namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 use PDO;
 use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupDeleted;
-use Tailgate\Domain\Model\Group\GroupProjectionInterface;
 use Tailgate\Domain\Model\Group\GroupScoreUpdated;
 use Tailgate\Domain\Model\Group\GroupUpdated;
 use Tailgate\Domain\Model\Group\MemberAdded;
@@ -19,6 +18,7 @@ use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
+use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
 
 class GroupProjection extends AbstractProjection implements GroupProjectionInterface
 {

@@ -10,7 +10,7 @@ class PlainPasswordHashingTest extends TestCase
     private $password = 'password';
     private $passwordHashing;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->passwordHashing = new PlainPasswordHashing();
     }

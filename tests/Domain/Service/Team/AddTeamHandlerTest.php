@@ -16,7 +16,7 @@ class AddTeamHandlerTest extends TestCase
     private $mascot = 'mascot';
     private $addTeamCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->addTeamCommand = new AddTeamCommand($this->designation, $this->mascot);
     }

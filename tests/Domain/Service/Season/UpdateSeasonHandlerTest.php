@@ -22,7 +22,7 @@ class UpdateSeasonHandlerTest extends TestCase
     private $season;
     private $updateSeasonCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create season and clear events
         $this->seasonStart = '2021-09-01';

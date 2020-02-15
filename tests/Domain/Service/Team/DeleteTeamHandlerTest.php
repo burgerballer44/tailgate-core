@@ -19,7 +19,7 @@ class DeleteTeamHandlerTest extends TestCase
     private $deleteTeamCommand;
     private $team;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a team and clear events
         $this->team = Team::create(TeamId::fromString($this->teamId), $this->designation, $this->mascot);

@@ -6,7 +6,7 @@ use Burger\Event;
 use Burger\EventPublisherInterface;
 use Burger\EventSubscriberInterface;
 use Tailgate\Domain\Model\Season\SeasonDomainEvent;
-use Tailgate\Domain\Model\Season\SeasonProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\SeasonProjectionInterface;
 
 class SeasonProjectorEventSubscriber implements EventSubscriberInterface
 {

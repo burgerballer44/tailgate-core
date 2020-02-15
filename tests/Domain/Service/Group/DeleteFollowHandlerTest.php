@@ -26,7 +26,7 @@ class DeleteFollowHandlerTest extends TestCase
     private $deleteFollowCommand;
     private $group;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group and clear events
         $this->group = Group::create(

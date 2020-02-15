@@ -19,7 +19,7 @@ class DeleteUserHandlerTest extends TestCase
     private $user;
     private $deleteUserCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a user and clear events
         $this->user = User::create(

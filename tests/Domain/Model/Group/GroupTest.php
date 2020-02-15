@@ -27,7 +27,7 @@ class GroupTest extends TestCase
     private $groupInviteCode;
     private $ownerId;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->groupId = GroupId::fromString('groupId');
         $this->groupName = 'groupName';

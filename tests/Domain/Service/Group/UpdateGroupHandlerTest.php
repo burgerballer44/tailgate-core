@@ -20,7 +20,7 @@ class UpdateGroupHandlerTest extends TestCase
     private $group;
     private $updateGroupCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group and clear events
         $this->group = Group::create(

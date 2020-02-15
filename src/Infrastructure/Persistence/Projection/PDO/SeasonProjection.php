@@ -4,13 +4,13 @@ namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 
 use PDO;
 use Tailgate\Domain\Model\Season\GameAdded;
+use Tailgate\Domain\Model\Season\GameDeleted;
 use Tailgate\Domain\Model\Season\GameScoreUpdated;
 use Tailgate\Domain\Model\Season\SeasonCreated;
 use Tailgate\Domain\Model\Season\SeasonDeleted;
 use Tailgate\Domain\Model\Season\SeasonUpdated;
-use Tailgate\Domain\Model\Season\GameDeleted;
-use Tailgate\Domain\Model\Season\SeasonProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
+use Tailgate\Infrastructure\Persistence\Projection\SeasonProjectionInterface;
 
 class SeasonProjection extends AbstractProjection implements SeasonProjectionInterface
 {

@@ -18,7 +18,7 @@ class TeamTest extends TestCase
     private $designation = 'designation';
     private $mascot = 'mascot';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->teamId = TeamId::fromString('teamId');
     }

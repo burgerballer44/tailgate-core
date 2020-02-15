@@ -19,7 +19,7 @@ class ActivateUserHandlerTest extends TestCase
     private $user;
     private $activateUserCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a user and clear events
         $this->user = User::create(

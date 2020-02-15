@@ -15,7 +15,7 @@ class UserTest extends TestCase
     private $passwordHash = 'passwordHashBlahBlah';
     private $email = 'emailAddress';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->userId = UserId::fromString('userId');
     }

@@ -24,7 +24,7 @@ class ChangePlayerOwnerHandlerTest extends TestCase
     private $newMemberId;
     private $changePlayerOwnerCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a group and clear events
         $this->group = Group::create(

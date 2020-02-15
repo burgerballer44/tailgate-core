@@ -1,8 +1,15 @@
 <?php
 
-namespace Tailgate\Domain\Model\User;
+namespace Tailgate\Infrastructure\Persistence\Projection;
 
-use Tailgate\Common\Projection\ProjectionInterface;
+use Tailgate\Domain\Model\User\EmailUpdated;
+use Tailgate\Domain\Model\User\PasswordResetTokenCreated;
+use Tailgate\Domain\Model\User\PasswordUpdated;
+use Tailgate\Domain\Model\User\UserActivated;
+use Tailgate\Domain\Model\User\UserDeleted;
+use Tailgate\Domain\Model\User\UserRegistered;
+use Tailgate\Domain\Model\User\UserUpdated;
+use Tailgate\Infrastructure\Persistence\Projection\ProjectionInterface;
 
 interface UserProjectionInterface extends ProjectionInterface
 {

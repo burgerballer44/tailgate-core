@@ -20,7 +20,7 @@ class SeasonTest extends TestCase
     private $seasonStart;
     private $seasonEnd;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->seasonId = SeasonId::fromString('seasonId');
         $this->seasonStart = '2019-09-01';

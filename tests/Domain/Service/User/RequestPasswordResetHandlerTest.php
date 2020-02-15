@@ -21,7 +21,7 @@ class RequestPasswordResetHandlerTest extends TestCase
     private $user;
     private $requestPasswordReset;
 
-    public function setUp()
+    public function setUp(): void
     {
         // create a user and clear events
         $this->user = User::create(

@@ -6,7 +6,7 @@ use PDO;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Domain\Model\Team\TeamUpdated;
 use Tailgate\Domain\Model\Team\TeamDeleted;
-use Tailgate\Domain\Model\Team\TeamProjectionInterface;
+use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 
 class TeamProjection extends AbstractProjection implements TeamProjectionInterface
