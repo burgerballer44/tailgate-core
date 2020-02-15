@@ -1,6 +1,6 @@
 <?php
 
-namespace Tailgate\Domain\Service\DataTransformer;
+namespace Tailgate\Infrastructure\Service\DataTransformer;
 
 use Tailgate\Domain\Service\DataTransformer\UserDataTransformerInterface;
 use Tailgate\Domain\Model\User\UserView;
