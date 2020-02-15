@@ -8,15 +8,19 @@ use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Season\GameId;
-use Tailgate\Domain\Service\AbstractService;
+use Tailgate\Domain\Service\Validatable;
+use Tailgate\Domain\Service\ValidatableService;
 
-class UpdateMemberHandler extends AbstractService
+class UpdateMemberHandler implements ValidatableService
 {
-    public $groupRepository;
+    use Validatable;
+    
+    private $validator;
+    private $groupRepository;
 
     public function __construct(ValidatorInterface $validator, GroupRepositoryInterface $groupRepository)
     {
-        parent::__construct($validator);
+        $this->validator = $validator;
         $this->groupRepository = $groupRepository;
     }
 

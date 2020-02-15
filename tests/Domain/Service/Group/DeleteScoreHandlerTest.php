@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\Group;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\DeleteScoreCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
@@ -71,10 +70,7 @@ class DeleteScoreHandlerTest extends TestCase
             }
         ));
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->exactly(0))->method('assert')->willReturn(true);
-
-        $deleteScoreHandler = new DeleteScoreHandler($validator, $groupRepository);
+        $deleteScoreHandler = new DeleteScoreHandler($groupRepository);
 
         $deleteScoreHandler->handle($this->deleteScoreCommand);
     }

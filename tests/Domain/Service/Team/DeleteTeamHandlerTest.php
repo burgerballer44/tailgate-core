@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\Team;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\DeleteTeamCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamDeleted;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -50,10 +49,7 @@ class DeleteTeamHandlerTest extends TestCase
             }
         ));
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->exactly(0))->method('assert')->willReturn(true);
-
-        $this->deleteTeamHandler = new DeleteTeamHandler($validator, $teamRepository);
+        $this->deleteTeamHandler = new DeleteTeamHandler($teamRepository);
 
         $this->deleteTeamHandler->handle($this->deleteTeamCommand);
     }

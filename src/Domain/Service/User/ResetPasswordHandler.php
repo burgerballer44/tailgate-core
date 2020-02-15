@@ -4,14 +4,18 @@ namespace Tailgate\Domain\Service\User;
 
 use Tailgate\Application\Command\User\ResetPasswordCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
-use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
-use Tailgate\Domain\Service\AbstractService;
+use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
+use Tailgate\Domain\Service\Validatable;
+use Tailgate\Domain\Service\ValidatableService;
 
-class ResetPasswordHandler extends AbstractService
+class ResetPasswordHandler implements ValidatableService
 {
+    use Validatable;
+    
+    private $validator;
     private $userRepository;
     private $passwordHashing;
 
@@ -20,7 +24,7 @@ class ResetPasswordHandler extends AbstractService
         UserRepositoryInterface $userRepository,
         PasswordHashingInterface $passwordHashing
     ) {
-        parent::__construct($validator);
+        $this->validator = $validator;
         $this->userRepository = $userRepository;
         $this->passwordHashing = $passwordHashing;
     }

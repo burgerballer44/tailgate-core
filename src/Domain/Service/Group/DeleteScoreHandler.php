@@ -8,22 +8,18 @@ use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreId;
-use Tailgate\Domain\Service\AbstractService;
 
-class DeleteScoreHandler extends AbstractService
+class DeleteScoreHandler
 {
     private $groupRepository;
 
-    public function __construct(ValidatorInterface $validator, GroupRepositoryInterface $groupRepository)
+    public function __construct(GroupRepositoryInterface $groupRepository)
     {
-        parent::__construct($validator);
         $this->groupRepository = $groupRepository;
     }
 
     public function handle(DeleteScoreCommand $command)
     {
-        // $this->validate($command);
-
         $groupId = $command->getGroupId();
         $scoreId = $command->getScoreId();
 

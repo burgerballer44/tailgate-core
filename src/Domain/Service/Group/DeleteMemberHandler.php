@@ -8,22 +8,18 @@ use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberId;
-use Tailgate\Domain\Service\AbstractService;
 
-class DeleteMemberHandler extends AbstractService
+class DeleteMemberHandler
 {
     private $groupRepository;
 
-    public function __construct(ValidatorInterface $validator, GroupRepositoryInterface $groupRepository)
+    public function __construct(GroupRepositoryInterface $groupRepository)
     {
-        parent::__construct($validator);
         $this->groupRepository = $groupRepository;
     }
 
     public function handle(DeleteMemberCommand $command)
     {
-        // $this->validate($command);
-
         $groupId = $command->getGroupId();
         $memberId = $command->getMemberId();
 

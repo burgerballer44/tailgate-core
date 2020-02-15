@@ -7,22 +7,19 @@ use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Service\AbstractService;
 
-class DeleteGroupHandler extends AbstractService
+class DeleteGroupHandler
 {
     private $groupRepository;
 
     public function __construct(ValidatorInterface $validator, GroupRepositoryInterface $groupRepository)
     {
-        parent::__construct($validator);
+        $this->validator = $validator;
         $this->groupRepository = $groupRepository;
     }
 
     public function handle(DeleteGroupCommand $command)
     {
-        // $this->validate($command);
-
         $groupId = $command->getGroupId();
 
         $group = $this->groupRepository->get(GroupId::fromString($groupId));

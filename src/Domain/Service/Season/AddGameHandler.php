@@ -7,15 +7,19 @@ use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Domain\Service\AbstractService;
+use Tailgate\Domain\Service\Validatable;
+use Tailgate\Domain\Service\ValidatableService;
 
-class AddGameHandler extends AbstractService
+class AddGameHandler implements ValidatableService
 {
-    public $seasonRepository;
+    use Validatable;
+    
+    private $validator;
+    private $seasonRepository;
 
     public function __construct(ValidatorInterface $validator, SeasonRepositoryInterface $seasonRepository)
     {
-        parent::__construct($validator);
+        $this->validator = $validator;
         $this->seasonRepository = $seasonRepository;
     }
 

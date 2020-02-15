@@ -5,10 +5,9 @@ namespace Tailgate\Domain\Service\Group;
 use Tailgate\Application\Query\Group\AllGroupsByUserQuery;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Service\AbstractService;
 use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
 
-class AllGroupsByUserQueryHandler extends AbstractService
+class AllGroupsByUserQueryHandler
 {
     private $groupViewRepository;
     private $groupViewTransformer;

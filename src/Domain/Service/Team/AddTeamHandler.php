@@ -6,15 +6,19 @@ use Tailgate\Application\Command\Team\AddTeamCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
-use Tailgate\Domain\Service\AbstractService;
+use Tailgate\Domain\Service\Validatable;
+use Tailgate\Domain\Service\ValidatableService;
 
-class AddTeamHandler extends AbstractService
+class AddTeamHandler implements ValidatableService
 {
-    public $teamRepository;
+    use Validatable;
+    
+    private $validator;
+    private $teamRepository;
 
     public function __construct(ValidatorInterface $validator, TeamRepositoryInterface $teamRepository)
     {
-        parent::__construct($validator);
+        $this->validator = $validator;
         $this->teamRepository = $teamRepository;
     }
 

@@ -7,22 +7,18 @@ use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
-use Tailgate\Domain\Service\AbstractService;
 
-class DeleteUserHandler extends AbstractService
+class DeleteUserHandler
 {
     private $userRepository;
 
-    public function __construct(ValidatorInterface $validator, UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        parent::__construct($validator);
         $this->userRepository = $userRepository;
     }
 
     public function handle(DeleteUserCommand $command)
     {
-        // $this->validate($command);
-        
         $userId = $command->getUserId();
 
         $user = $this->userRepository->get(UserId::fromString($userId));

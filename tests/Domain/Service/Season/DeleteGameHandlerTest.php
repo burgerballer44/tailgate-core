@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\Season;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Season\DeleteGameCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Season\GameDeleted;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\Season;
@@ -78,10 +77,7 @@ class DeleteGameHandlerTest extends TestCase
             }
         ));
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->exactly(0))->method('assert')->willReturn(true);
-
-        $deleteGameHandler = new DeleteGameHandler($validator, $seasonRepository);
+        $deleteGameHandler = new DeleteGameHandler($seasonRepository);
 
         $deleteGameHandler->handle($this->deleteGameCommand);
     }

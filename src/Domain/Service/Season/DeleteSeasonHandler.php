@@ -7,22 +7,18 @@ use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
-use Tailgate\Domain\Service\AbstractService;
 
-class DeleteSeasonHandler extends AbstractService
+class DeleteSeasonHandler
 {
     private $seasonRepository;
 
-    public function __construct(ValidatorInterface $validator, SeasonRepositoryInterface $seasonRepository)
+    public function __construct(SeasonRepositoryInterface $seasonRepository)
     {
-        parent::__construct($validator);
         $this->seasonRepository = $seasonRepository;
     }
 
     public function handle(DeleteSeasonCommand $command)
     {
-        // $this->validate($command);
-        
         $seasonId = $command->getSeasonId();
 
         $season = $this->seasonRepository->get(SeasonId::fromString($seasonId));

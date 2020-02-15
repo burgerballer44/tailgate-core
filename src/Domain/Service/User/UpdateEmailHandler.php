@@ -7,15 +7,18 @@ use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
-use Tailgate\Domain\Service\AbstractService;
+use Tailgate\Domain\Service\Validatable;
+use Tailgate\Domain\Service\ValidatableService;
 
-class UpdateEmailHandler extends AbstractService
+class UpdateEmailHandler implements ValidatableService
 {
+    use Validatable;
+    
     private $userRepository;
 
     public function __construct(ValidatorInterface $validator, UserRepositoryInterface $userRepository)
     {
-        parent::__construct($validator);
+        $this->validator = $validator;
         $this->userRepository = $userRepository;
     }
 

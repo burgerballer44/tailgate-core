@@ -66,10 +66,7 @@ class DeleteMemberHandlerTest extends TestCase
             }
         ));
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->exactly(0))->method('assert')->willReturn(true);
-
-        $deleteMemberHandler = new DeleteMemberHandler($validator, $groupRepository);
+        $deleteMemberHandler = new DeleteMemberHandler($groupRepository);
 
         $deleteMemberHandler->handle($this->deleteMemberCommand);
     }

@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\User;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\DeleteUserCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserDeleted;
 use Tailgate\Domain\Model\User\UserId;
@@ -55,10 +54,7 @@ class DeleteUserHandlerTest extends TestCase
             }
         ));
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->exactly(0))->method('assert')->willReturn(true);
-
-        $deleteUserHandler = new DeleteUserHandler($validator, $userRepository);
+        $deleteUserHandler = new DeleteUserHandler($userRepository);
 
         $deleteUserHandler->handle($this->deleteUserCommand);
     }

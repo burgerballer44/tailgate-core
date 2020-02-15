@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\Group;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\DeleteFollowCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\Group;
@@ -69,10 +68,7 @@ class DeleteFollowHandlerTest extends TestCase
             }
         ));
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->exactly(0))->method('assert')->willReturn(true);
-
-        $this->deleteFollowHandler = new DeleteFollowHandler($validator, $groupRepository);
+        $this->deleteFollowHandler = new DeleteFollowHandler($groupRepository);
 
         $this->deleteFollowHandler->handle($this->deleteFollowCommand);
     }

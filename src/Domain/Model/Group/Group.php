@@ -210,7 +210,7 @@ class Group extends AbstractEntity
         $adminMembers = $this->getMembersThatAreAdmin();
 
         // get their member ids
-        $adminMemberIds = array_map(function($member) {
+        $adminMemberIds = array_map(function ($member) {
             return (string) $member->getMemberId();
         }, $adminMembers);
 
@@ -252,7 +252,7 @@ class Group extends AbstractEntity
         $adminMembers = $this->getMembersThatAreAdmin();
 
         // get their member ids
-        $adminMemberIds = array_map(function($member) {
+        $adminMemberIds = array_map(function ($member) {
             return (string) $member->getMemberId();
         }, $adminMembers);
 
