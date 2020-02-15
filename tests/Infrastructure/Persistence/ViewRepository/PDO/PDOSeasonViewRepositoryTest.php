@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\SeasonViewRepository;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class PDOSeasonViewRepositoryTest extends TestCase
 {
@@ -43,7 +43,7 @@ class PDOSeasonViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Season not found.');
         $this->viewRepository->get($seasonId);
     }
@@ -100,7 +100,7 @@ class PDOSeasonViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Season not found by sport.');
         $this->viewRepository->allBySport($sport);
     }

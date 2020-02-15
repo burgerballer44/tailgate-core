@@ -6,7 +6,7 @@ use PDO;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class SeasonViewRepository implements SeasonViewRepositoryInterface
 {
@@ -23,7 +23,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         $stmt->execute([':season_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Season not found.");
+            throw new RuntimeException("Season not found.");
         }
 
         return $this->createSeasonView($row);
@@ -35,7 +35,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         $stmt->execute([':sport_id' => (string) $sport]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Season not found by sport.");
+            throw new RuntimeException("Season not found by sport.");
         }
 
         return $this->createSeasonView($row);

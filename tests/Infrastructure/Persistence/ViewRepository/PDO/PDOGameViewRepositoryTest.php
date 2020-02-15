@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\GameViewRepository;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class PDOGameViewRepositoryTest extends TestCase
 {
@@ -47,7 +47,7 @@ class PDOGameViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Game not found.');
         $this->viewRepository->get($gameId);
     }

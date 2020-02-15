@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\FollowViewRepository;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class PDOFollowViewRepositoryTest extends TestCase
 {
@@ -48,7 +48,7 @@ class PDOFollowViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Follow not found.');
         $this->viewRepository->get($followId);
     }

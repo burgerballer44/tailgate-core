@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupView;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\GroupViewRepository;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class PDOGroupViewRepositoryTest extends TestCase
 {
@@ -47,7 +47,7 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Group not found.');
         $this->viewRepository->get($groupId);
     }
@@ -112,7 +112,7 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Group not found.');
         $this->viewRepository->getByUser($userId, $groupId);
     }
@@ -254,7 +254,7 @@ class PDOGroupViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Group not found by invite code.');
         $this->viewRepository->byInviteCode($inviteCode);
     }

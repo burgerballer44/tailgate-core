@@ -6,7 +6,7 @@ use PDO;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class TeamViewRepository implements TeamViewRepositoryInterface
 {
@@ -23,7 +23,7 @@ class TeamViewRepository implements TeamViewRepositoryInterface
         $stmt->execute([':team_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Team not found.");
+            throw new RuntimeException("Team not found.");
         }
 
         return $this->createTeamView($row);

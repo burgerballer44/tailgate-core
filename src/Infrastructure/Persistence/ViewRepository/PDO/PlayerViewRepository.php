@@ -8,7 +8,7 @@ use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\PlayerView;
 use Tailgate\Domain\Model\Group\PlayerViewRepositoryInterface;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class PlayerViewRepository implements PlayerViewRepositoryInterface
 {
@@ -25,7 +25,7 @@ class PlayerViewRepository implements PlayerViewRepositoryInterface
         $stmt->execute([':player_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Player not found.");
+            throw new RuntimeException("Player not found.");
         }
 
         return $this->createPlayerView($row);

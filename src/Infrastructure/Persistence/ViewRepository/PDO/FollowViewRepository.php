@@ -9,7 +9,7 @@ use Tailgate\Domain\Model\Group\FollowView;
 use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Season\SeasonId;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class FollowViewRepository implements FollowViewRepositoryInterface
 {
@@ -31,7 +31,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
         $stmt->execute([':follow_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Follow not found.");
+            throw new RuntimeException("Follow not found.");
         }
 
         return $this->createFollowView($row);

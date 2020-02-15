@@ -7,7 +7,7 @@ use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class UserViewRepository implements UserViewRepositoryInterface
 {
@@ -24,7 +24,7 @@ class UserViewRepository implements UserViewRepositoryInterface
         $stmt->execute([':user_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("User not found.");
+            throw new RuntimeException("User not found.");
         }
 
         return $this->createUserView($row);
@@ -50,7 +50,7 @@ class UserViewRepository implements UserViewRepositoryInterface
         $stmt->execute([':email' => (string) $email]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("User not found by email.");
+            throw new RuntimeException("User not found by email.");
         }
 
         return $this->createUserView($row);
@@ -62,11 +62,11 @@ class UserViewRepository implements UserViewRepositoryInterface
         $stmt->execute([':password_reset_token' => (string) $passwordResetToken]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("User not found by reset token.");
+            throw new RuntimeException("User not found by reset token.");
         }
 
         if (!User::isPasswordResetTokenValid($passwordResetToken)) {
-            throw new RepositoryException("Reset token expired. Please request a password reset again.");
+            throw new RuntimeException("Reset token expired. Please request a password reset again.");
         }
 
         return $this->createUserView($row);

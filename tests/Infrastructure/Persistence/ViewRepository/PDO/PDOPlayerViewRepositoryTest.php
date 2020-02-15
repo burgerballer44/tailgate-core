@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\PlayerViewRepository;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class PDOPlayerViewRepositoryTest extends TestCase
 {
@@ -42,7 +42,7 @@ class PDOPlayerViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Player not found.');
         $this->viewRepository->get($playerId);
     }

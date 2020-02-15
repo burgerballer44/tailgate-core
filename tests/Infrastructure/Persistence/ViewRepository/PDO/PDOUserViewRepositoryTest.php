@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\UserViewRepository;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class PDOUserViewRepositoryTest extends TestCase
 {
@@ -42,7 +42,7 @@ class PDOUserViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('User not found.');
         $this->viewRepository->get($userId);
     }
@@ -148,7 +148,7 @@ class PDOUserViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('User not found by email.');
         $this->viewRepository->byEmail($email);
     }
@@ -203,7 +203,7 @@ class PDOUserViewRepositoryTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('User not found by reset token.');
         $this->viewRepository->byPasswordResetToken($passwordResetToken);
     }
@@ -234,7 +234,7 @@ class PDOUserViewRepositoryTest extends TestCase
                 'role' => 'blah',
             ]);
 
-        $this->expectException(RepositoryException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Reset token expired. Please request a password reset again.');
         $this->viewRepository->byPasswordResetToken($expiredPasswordResetToken);
     }

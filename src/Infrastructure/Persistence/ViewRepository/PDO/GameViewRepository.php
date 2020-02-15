@@ -8,7 +8,7 @@ use Tailgate\Domain\Model\Season\GameView;
 use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class GameViewRepository implements GameViewRepositoryInterface
 {
@@ -29,7 +29,7 @@ class GameViewRepository implements GameViewRepositoryInterface
         $stmt->execute([':game_id' => (string) $id]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Game not found.");
+            throw new RuntimeException("Game not found.");
         }
 
         return $this->createGameView($row);

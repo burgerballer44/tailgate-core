@@ -12,7 +12,7 @@ use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\AndSpec
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\NameSpecification;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\UserSpecification;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\WhereSpecification;
-use Tailgate\Infrastructure\Persistence\ViewRepository\RepositoryException;
+use RuntimeException;
 
 class GroupViewRepository implements GroupViewRepositoryInterface
 {
@@ -32,7 +32,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         $stmt->execute([':group_id' => (string) $groupId]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Group not found.");
+            throw new RuntimeException("Group not found.");
         }
 
         return $this->createGroupView($row);
@@ -52,7 +52,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         ]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Group not found.");
+            throw new RuntimeException("Group not found.");
         }
 
         return $this->createGroupView($row);
@@ -129,7 +129,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
         $stmt->execute([':invite_code' => (string) $inviteCode]);
 
         if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RepositoryException("Group not found by invite code.");
+            throw new RuntimeException("Group not found by invite code.");
         }
 
         return $this->createGroupView($row);
