@@ -22,7 +22,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
     {
         $stmt = $this->pdo->prepare(
             'INSERT INTO `team` (team_id, designation, mascot, sport, created_at)
-            VALUES (:team_id, :designation, :mascot, :created_at)'
+            VALUES (:team_id, :designation, :mascot, :sport, :created_at)'
         );
 
         $stmt->execute([

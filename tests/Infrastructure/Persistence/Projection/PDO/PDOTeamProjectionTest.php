@@ -34,7 +34,7 @@ class PDOTeamProjectionTest extends TestCase
             ->expects($this->once())
             ->method('prepare')
             ->with('INSERT INTO `team` (team_id, designation, mascot, sport, created_at)
-            VALUES (:team_id, :designation, :mascot, :created_at)')
+            VALUES (:team_id, :designation, :mascot, :sport, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
