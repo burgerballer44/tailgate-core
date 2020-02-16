@@ -5,6 +5,7 @@ namespace Tailgate\Test\Domain\Service\Team;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\AddTeamCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
@@ -14,17 +15,19 @@ class AddTeamHandlerTest extends TestCase
 {
     private $designation = 'designation';
     private $mascot = 'mascot';
+    private $sport = Season::SPORT_FOOTBALL;
     private $addTeamCommand;
 
     public function setUp(): void
     {
-        $this->addTeamCommand = new AddTeamCommand($this->designation, $this->mascot);
+        $this->addTeamCommand = new AddTeamCommand($this->designation, $this->mascot, $this->sport);
     }
 
     public function testItAddsATeamAddedEventToTheTeamRepository()
     {
         $designation = $this->designation;
         $mascot = $this->mascot;
+        $sport = $this->sport;
 
         $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
 
@@ -34,13 +37,14 @@ class AddTeamHandlerTest extends TestCase
         // the add method should be called once
         // the team object should have the TeamAdded event
         $teamRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($team) use ($designation, $mascot) {
+            function ($team) use ($designation, $mascot, $sport) {
                 $events = $team->getRecordedEvents();
 
                 return $events[0] instanceof TeamAdded
                 && $events[0]->getAggregateId() instanceof TeamId
                 && $events[0]->getDesignation() === $designation
                 && $events[0]->getMascot() === $mascot
+                && $events[0]->getSport() === $sport
                 && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
             }
         ));

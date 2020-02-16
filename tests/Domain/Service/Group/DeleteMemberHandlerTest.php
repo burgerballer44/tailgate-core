@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\Group;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\DeleteMemberCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;

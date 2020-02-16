@@ -5,17 +5,19 @@ namespace Tailgate\Test\Domain\Model;
 use Buttercup\Protects\AggregateHistory;
 use PHPUnit\Framework\TestCase;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Season\Season;
+use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\Follow;
 use Tailgate\Domain\Model\Team\FollowId;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Domain\Model\Season\SeasonId;
 
 class TeamTest extends TestCase
 {
     private $teamId;
     private $designation = 'designation';
     private $mascot = 'mascot';
+    private $sport = Season::SPORT_FOOTBALL;
 
     public function setUp(): void
     {
@@ -24,7 +26,7 @@ class TeamTest extends TestCase
 
     public function testTeamShouldBeTheSameAfterReconstitution()
     {
-        $team = Team::create($this->teamId, $this->designation, $this->mascot);
+        $team = Team::create($this->teamId, $this->designation, $this->mascot, $this->sport);
         $events = $team->getRecordedEvents();
         $team->clearRecordedEvents();
 
@@ -41,7 +43,7 @@ class TeamTest extends TestCase
 
     public function testATeamCanBeCreated()
     {
-        $team = Team::create($this->teamId, $this->designation, $this->mascot);
+        $team = Team::create($this->teamId, $this->designation, $this->mascot, $this->sport);
 
         $this->assertEquals($this->teamId, $team->getId());
         $this->assertEquals($this->designation, $team->getDesignation());
@@ -52,7 +54,7 @@ class TeamTest extends TestCase
     {
         $designation = 'updatedDesignaton';
         $mascot = 'updatedMascot';
-        $team = Team::create($this->teamId, $this->designation, $this->mascot);
+        $team = Team::create($this->teamId, $this->designation, $this->mascot, $this->sport);
 
         $team->update($designation, $mascot);
 

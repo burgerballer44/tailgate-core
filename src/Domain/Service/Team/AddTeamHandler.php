@@ -28,11 +28,13 @@ class AddTeamHandler implements ValidatableService
         
         $designation = $command->getDesignation();
         $mascot = $command->getMascot();
+        $sport = $command->getSport();
 
         $team = Team::create(
             $this->teamRepository->nextIdentity(),
             $designation,
-            $mascot
+            $mascot,
+            $sport
         );
         
         $this->teamRepository->add($team);

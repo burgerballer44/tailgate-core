@@ -9,13 +9,15 @@ class TeamAdded implements DomainEvent, TeamDomainEvent
     private $teamId;
     private $designation;
     private $mascot;
+    private $sport;
     private $occurredOn;
 
-    public function __construct(TeamId $teamId, $designation, $mascot)
+    public function __construct(TeamId $teamId, $designation, $mascot, $sport)
     {
         $this->teamId = $teamId;
         $this->designation = $designation;
         $this->mascot = $mascot;
+        $this->sport = $sport;
         $this->occurredOn = new \DateTimeImmutable();
     }
 
@@ -37,6 +39,11 @@ class TeamAdded implements DomainEvent, TeamDomainEvent
     public function getMascot()
     {
         return $this->mascot;
+    }
+
+    public function getSport()
+    {
+        return $this->sport;
     }
 
     public function getOccurredOn()

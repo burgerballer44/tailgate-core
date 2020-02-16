@@ -2,17 +2,18 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
+use Burger\EventPublisher;
+use Burger\EventPublisherInterface;
 use Buttercup\Protects\AggregateHistory;
 use Buttercup\Protects\DomainEvent;
 use PHPUnit\Framework\TestCase;
-use Burger\EventPublisher;
-use Burger\EventPublisherInterface;
+use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamDomainEvent;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\TeamProjectorEventSubscriber;
+use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\TeamRepository;
 
 class PublisherTeamRepositoryTest extends TestCase
@@ -30,7 +31,7 @@ class PublisherTeamRepositoryTest extends TestCase
         $this->eventPublisher->subscribe(new TeamProjectorEventSubscriber($this->projection));
 
         // create a team so we have an event
-        $this->team = Team::create(teamId::fromString('teamId'), 'dedignation', 'mascot');
+        $this->team = Team::create(teamId::fromString('teamId'), 'dedignation', 'mascot', Season::SPORT_FOOTBALL);
     }
 
     public function testItCanGetATeam()

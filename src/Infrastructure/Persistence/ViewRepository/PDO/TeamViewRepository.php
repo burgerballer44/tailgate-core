@@ -3,10 +3,11 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use RuntimeException;
+use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
-use RuntimeException;
 
 class TeamViewRepository implements TeamViewRepositoryInterface
 {
@@ -29,6 +30,20 @@ class TeamViewRepository implements TeamViewRepositoryInterface
         return $this->createTeamView($row);
     }
 
+    public function allBySport($sport)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM `team` WHERE sport = :sport');
+        $stmt->execute([':sport' => $sport]);
+
+        $teams = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $teams[] = $this->createTeamView($row);
+        }
+
+        return $teams;
+    }
+
     public function all()
     {
         $stmt = $this->pdo->prepare('SELECT * FROM `team`');
@@ -48,7 +63,8 @@ class TeamViewRepository implements TeamViewRepositoryInterface
         return new TeamView(
             $row['team_id'],
             $row['designation'],
-            $row['mascot']
+            $row['mascot'],
+            $row['sport']
         );
     }
 }

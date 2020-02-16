@@ -31,14 +31,16 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
 
     public function allBySport($sport)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM `season` WHERE sport_id = :sport_id LIMIT 1');
-        $stmt->execute([':sport_id' => (string) $sport]);
+        $stmt = $this->pdo->prepare('SELECT * FROM `season` WHERE sport = :sport');
+        $stmt->execute([':sport' => (string) $sport]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            throw new RuntimeException("Season not found by sport.");
+        $seasons = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $seasons[] =  $this->createSeasonView($row);
         }
 
-        return $this->createSeasonView($row);
+        return $seasons;
     }
 
     public function all()
@@ -50,7 +52,6 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $seasons[] =  $this->createSeasonView($row);
-            ;
         }
 
         return $seasons;

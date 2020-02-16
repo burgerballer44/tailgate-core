@@ -37,6 +37,7 @@ class TeamViewArrayDataTransformer implements TeamDataTransformerInterface
             'teamId'      => $teamView->getTeamId(),
             'designation' => $teamView->getDesignation(),
             'mascot'      => $teamView->getMascot(),
+            'sport'       => $teamView->getSport(),
             'follows'     => $follows,
             'games'       => $games,
         ];

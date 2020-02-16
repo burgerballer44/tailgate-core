@@ -79,7 +79,7 @@ class PDOSeasonViewRepositoryTest extends TestCase
         $this->viewRepository->get($seasonId);
     }
 
-    public function testSeasonThatDoesNotExistBySportReturnsException()
+    public function testItCanGetSeasonsBySport()
     {
         $sport = Season::SPORT_FOOTBALL;
 
@@ -87,51 +87,17 @@ class PDOSeasonViewRepositoryTest extends TestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('SELECT * FROM `season` WHERE sport_id = :sport_id LIMIT 1')
-            ->willReturn($this->pdoStatementMock);
-
-        // execute and fetch method called once
-        $this->pdoStatementMock
-            ->expects($this->once())
-            ->method('execute')
-            ->with([':sport_id' => (string) $sport]);
-        $this->pdoStatementMock
-            ->expects($this->once())
-            ->method('fetch')
-            ->willReturn(false);
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Season not found by sport.');
-        $this->viewRepository->allBySport($sport);
-    }
-
-    public function testItCanGetASeasonBySport()
-    {
-        $sport = Season::SPORT_FOOTBALL;
-
-        // the pdo mock should call prepare and return a pdostatement mock
-        $this->pdoMock
-            ->expects($this->once())
-            ->method('prepare')
-            ->with('SELECT * FROM `season` WHERE sport_id = :sport_id LIMIT 1')
+            ->with('SELECT * FROM `season` WHERE sport = :sport')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
         $this->pdoStatementMock
             ->expects($this->once())
             ->method('execute')
-            ->with([':sport_id' => (string) $sport]);
+            ->with([':sport' => (string) $sport]);
         $this->pdoStatementMock
             ->expects($this->once())
-            ->method('fetch')
-            ->willReturn([
-                'season_id' => 'blah',
-                'sport' => 'blah',
-                'type' => 'blah',
-                'name' => 'blah',
-                'season_start' => 'blah',
-                'season_end' => 'blah',
-            ]);
+            ->method('fetch');
 
         $this->viewRepository->allBySport($sport);
     }

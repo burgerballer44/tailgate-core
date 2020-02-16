@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\UpdateTeamCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Group\FollowId;
+use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
@@ -22,7 +23,7 @@ class UpdateTeamHandlerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->team = Team::create(TeamId::fromString($this->teamId), 'designation', 'mascot');
+        $this->team = Team::create(TeamId::fromString($this->teamId), 'designation', 'mascot', Season::SPORT_FOOTBALL);
         $this->team->clearRecordedEvents();
 
         $this->updateTeamCommand = new UpdateTeamCommand($this->teamId, $this->designation, $this->mascot);

@@ -4,6 +4,7 @@ namespace Tailgate\Test\Domain\Service\Team;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\DeleteTeamCommand;
+use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamDeleted;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -15,13 +16,14 @@ class DeleteTeamHandlerTest extends TestCase
     private $teamId = 'teamId';
     private $designation = 'designation';
     private $mascot = 'mascot';
+    private $sport = Season::SPORT_FOOTBALL;
     private $deleteTeamCommand;
     private $team;
 
     public function setUp(): void
     {
         // create a team and clear events
-        $this->team = Team::create(TeamId::fromString($this->teamId), $this->designation, $this->mascot);
+        $this->team = Team::create(TeamId::fromString($this->teamId), $this->designation, $this->mascot, $this->sport);
         $this->team->clearRecordedEvents();
 
         $this->deleteTeamCommand = new DeleteTeamCommand($this->teamId);

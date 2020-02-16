@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\Group;
 
 use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\DeleteGroupCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -59,10 +58,7 @@ class DeleteGroupHandlerTest extends TestCase
             }
         ));
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->exactly(0))->method('assert')->willReturn(true);
-
-        $deleteGroupHandler = new DeleteGroupHandler($validator, $groupRepository);
+        $deleteGroupHandler = new DeleteGroupHandler($groupRepository);
 
         $deleteGroupHandler->handle($this->deleteGroupCommand);
     }

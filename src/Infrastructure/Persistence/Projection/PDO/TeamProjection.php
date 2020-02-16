@@ -21,7 +21,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
     public function projectTeamAdded(TeamAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `team` (team_id, designation, mascot, created_at)
+            'INSERT INTO `team` (team_id, designation, mascot, sport, created_at)
             VALUES (:team_id, :designation, :mascot, :created_at)'
         );
 
@@ -29,6 +29,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
             ':team_id' => $event->getAggregateId(),
             ':designation' => $event->getDesignation(),
             ':mascot' => $event->getMascot(),
+            ':sport' => $event->getSport(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }

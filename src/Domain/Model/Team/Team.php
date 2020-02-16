@@ -10,20 +10,22 @@ class Team extends AbstractEntity
     private $teamId;
     private $designation;
     private $mascot;
+    private $sport;
 
-    protected function __construct($teamId, $designation, $mascot)
+    protected function __construct($teamId, $designation, $mascot, $sport)
     {
         $this->teamId = $teamId;
         $this->designation = $designation;
         $this->mascot = $mascot;
+        $this->sport = $sport;
     }
 
     // create a team
-    public static function create(TeamId $teamId, $designation, $mascot)
+    public static function create(TeamId $teamId, $designation, $mascot, $sport)
     {
-        $newTeam = new Team($teamId, $designation, $mascot);
+        $newTeam = new Team($teamId, $designation, $mascot, $sport);
 
-        $newTeam->recordThat(new TeamAdded($teamId, $designation, $mascot));
+        $newTeam->recordThat(new TeamAdded($teamId, $designation, $mascot, $sport));
 
         return $newTeam;
     }
@@ -31,7 +33,7 @@ class Team extends AbstractEntity
     // create an empty team
     protected static function createEmptyEntity(IdentifiesAggregate $teamId)
     {
-        return new Team($teamId, '', '');
+        return new Team($teamId, '', '', '');
     }
 
     public function getId()
@@ -47,6 +49,11 @@ class Team extends AbstractEntity
     public function getMascot()
     {
         return $this->mascot;
+    }
+
+    public function getSport()
+    {
+        return $this->sport;
     }
 
     // updates the team's designation adn mascot
@@ -65,6 +72,7 @@ class Team extends AbstractEntity
     {
         $this->designation = $event->getDesignation();
         $this->mascot = $event->getMascot();
+        $this->sport = $event->getSport();
     }
 
     protected function applyTeamUpdated(TeamUpdated $event)

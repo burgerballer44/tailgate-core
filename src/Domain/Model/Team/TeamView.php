@@ -7,14 +7,16 @@ class TeamView
     private $teamId;
     private $designation;
     private $mascot;
+    private $sport;
     private $follows = [];
     private $games = [];
 
-    public function __construct($teamId, $designation, $mascot)
+    public function __construct($teamId, $designation, $mascot, $sport)
     {
         $this->teamId = $teamId;
         $this->designation = $designation;
         $this->mascot = $mascot;
+        $this->sport = $sport;
     }
 
     public function getTeamId()
@@ -30,6 +32,11 @@ class TeamView
     public function getMascot()
     {
         return $this->mascot;
+    }
+
+    public function getSport()
+    {
+        return $this->sport;
     }
 
     public function getFollows()
