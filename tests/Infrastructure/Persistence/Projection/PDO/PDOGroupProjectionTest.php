@@ -2,7 +2,7 @@
 
 namespace Infrastructure\Persistence\Projection\PDO;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\GroupCreated;
@@ -27,8 +27,9 @@ use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\GroupProjection;
+use Tailgate\Test\BaseTestCase;
 
-class PDOGroupProjectionTest extends TestCase
+class PDOGroupProjectionTest extends BaseTestCase
 {
     private $pdoMock;
     private $pdoStatementMock;
@@ -47,7 +48,8 @@ class PDOGroupProjectionTest extends TestCase
             GroupId::fromString('groupId'),
             'name',
             'code',
-            UserId::fromString('userId')
+            UserId::fromString('userId'),
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -67,7 +69,7 @@ class PDOGroupProjectionTest extends TestCase
                 ':name' => $event->getName(),
                 ':invite_code' => $event->getInviteCode(),
                 ':owner_id' => $event->getOwnerId(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectGroupCreated($event);
@@ -80,7 +82,8 @@ class PDOGroupProjectionTest extends TestCase
             MemberId::fromString('memberId'),
             UserId::fromString('userId'),
             'role',
-            0
+            0,
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -101,7 +104,7 @@ class PDOGroupProjectionTest extends TestCase
                 ':user_id' => $event->getUserId(),
                 ':role' => $event->getGroupRole(),
                 ':allow_multiple' => $event->getAllowMultiplePlayers(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectMemberAdded($event);
@@ -113,7 +116,8 @@ class PDOGroupProjectionTest extends TestCase
             GroupId::fromString('groupId'),
             MemberId::fromString('memberId'),
             'role',
-            0
+            0,
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -146,7 +150,8 @@ class PDOGroupProjectionTest extends TestCase
             PlayerId::fromString('playerId'),
             GameId::fromString('gameId'),
             80,
-            70
+            70,
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -168,7 +173,7 @@ class PDOGroupProjectionTest extends TestCase
                 ':game_id' => $event->getGameId(),
                 ':home_team_prediction' => $event->getHomeTeamPrediction(),
                 ':away_team_prediction' => $event->getAwayTeamPrediction(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectScoreSubmitted($event);
@@ -179,7 +184,8 @@ class PDOGroupProjectionTest extends TestCase
         $event = new GroupUpdated(
             GroupId::fromString('groupId'),
             'name',
-            UserId::fromString('userId')
+            UserId::fromString('userId'),
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -208,7 +214,8 @@ class PDOGroupProjectionTest extends TestCase
         $event = new PlayerOwnerChanged(
             GroupId::fromString('groupId'),
             PlayerId::fromString('playerId'),
-            MemberId::fromString('memberId')
+            MemberId::fromString('memberId'),
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -234,24 +241,19 @@ class PDOGroupProjectionTest extends TestCase
     {
         $event = new MemberDeleted(
             GroupId::fromString('groupId'),
-            MemberId::fromString('memberId')
+            MemberId::fromString('memberId'),
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(3))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE member_id = :member_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(1))
-            ->method('prepare')
-            ->with('DELETE FROM `player` WHERE member_id = :member_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(2))
-            ->method('prepare')
-            ->with('DELETE FROM `member` WHERE member_id = :member_id')
+            ->withConsecutive(
+                ['DELETE FROM `score` WHERE member_id = :member_id'],
+                ['DELETE FROM `player` WHERE member_id = :member_id'],
+                ['DELETE FROM `member` WHERE member_id = :member_id']
+            )
             ->willReturn($this->pdoStatementMock);
 
         // execute method called thee times
@@ -267,19 +269,18 @@ class PDOGroupProjectionTest extends TestCase
     {
         $event = new PlayerDeleted(
             GroupId::fromString('groupId'),
-            PlayerId::fromString('playerId')
+            PlayerId::fromString('playerId'),
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE player_id = :player_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(1))
-            ->method('prepare')
-            ->with('DELETE FROM `player` WHERE player_id = :player_id')
+            ->withConsecutive(
+                ['DELETE FROM `score` WHERE player_id = :player_id'],
+                ['DELETE FROM `player` WHERE player_id = :player_id']
+            )
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -295,7 +296,8 @@ class PDOGroupProjectionTest extends TestCase
     {
         $event = new ScoreDeleted(
             GroupId::fromString('groupId'),
-            ScoreId::fromString('scoreId')
+            ScoreId::fromString('scoreId'),
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -316,33 +318,19 @@ class PDOGroupProjectionTest extends TestCase
 
     public function testItCanProjectGroupDeleted()
     {
-        $event = new GroupDeleted(GroupId::fromString('groupId'));
+        $event = new GroupDeleted(GroupId::fromString('groupId'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(5))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE group_id = :group_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(1))
-            ->method('prepare')
-            ->with('DELETE FROM `player` WHERE group_id = :group_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(2))
-            ->method('prepare')
-            ->with('DELETE FROM `member` WHERE group_id = :group_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(3))
-            ->method('prepare')
-            ->with('DELETE FROM `follow` WHERE group_id = :group_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(4))
-            ->method('prepare')
-            ->with('DELETE FROM `group` WHERE group_id = :group_id')
+            ->withConsecutive(
+                ['DELETE FROM `score` WHERE group_id = :group_id'],
+                ['DELETE FROM `player` WHERE group_id = :group_id'],
+                ['DELETE FROM `member` WHERE group_id = :group_id'],
+                ['DELETE FROM `follow` WHERE group_id = :group_id'],
+                ['DELETE FROM `group` WHERE group_id = :group_id']
+            )
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -360,7 +348,8 @@ class PDOGroupProjectionTest extends TestCase
             GroupId::fromString('groupId'),
             ScoreId::fromString('scoreId'),
             70,
-            60
+            60,
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -391,7 +380,8 @@ class PDOGroupProjectionTest extends TestCase
             GroupId::fromString('groupId'),
             PLayerId::fromString('playerId'),
             MemberId::fromString('memberId'),
-            'username'
+            'username',
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -411,7 +401,7 @@ class PDOGroupProjectionTest extends TestCase
                 ':player_id' => $event->getPlayerId(),
                 ':member_id' => $event->getMemberId(),
                 ':username' => $event->getUsername(),
-                ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectPlayerAdded($event);
@@ -423,7 +413,8 @@ class PDOGroupProjectionTest extends TestCase
             GroupId::fromString('groupId'),
             FollowId::fromString('followId'),
             TeamId::fromString('teamId'),
-            SeasonId::fromString('seasonId')
+            SeasonId::fromString('seasonId'),
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -443,7 +434,7 @@ class PDOGroupProjectionTest extends TestCase
                 ':group_id' => $event->getAggregateId(),
                 ':team_id' => $event->getTeamId(),
                 ':season_id' => $event->getSeasonId(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectTeamFollowed($event);
@@ -451,18 +442,16 @@ class PDOGroupProjectionTest extends TestCase
 
     public function testItCanProjectFollowDeleted()
     {
-        $event = new FollowDeleted(GroupId::fromString('groupId'), FollowId::fromString('followId'));
+        $event = new FollowDeleted(GroupId::fromString('groupId'), FollowId::fromString('followId'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('prepare')
-            ->with('DELETE FROM `follow` WHERE group_id = :group_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(1))
-            ->method('prepare')
-            ->with('DELETE FROM `score` WHERE group_id = :group_id')
+            ->withConsecutive(
+                ['DELETE FROM `follow` WHERE group_id = :group_id'],
+                ['DELETE FROM `score` WHERE group_id = :group_id']
+            )
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once

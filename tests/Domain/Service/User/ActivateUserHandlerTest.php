@@ -2,30 +2,34 @@
 
 namespace Tailgate\Test\Domain\Service\User;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\User\ActivateUserCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
+use Tailgate\Domain\Model\User\UserStatus;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\User\ActivateUserHandler;
+use Tailgate\Test\BaseTestCase;
 
-class ActivateUserHandlerTest extends TestCase
+class ActivateUserHandlerTest extends BaseTestCase
 {
-    private $userId = 'userId';
-    private $passwordHash = 'password';
-    private $email = 'email@email.com';
-    private $user;
-    private $activateUserCommand;
-
     public function setUp(): void
     {
+        $this->userId = UserId::fromString('userId');
+        $this->passwordHash = 'password';
+        $this->email = Email::fromString('email@email.com');
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
         // create a user and clear events
-        $this->user = User::create(
-            UserId::fromString($this->userId),
+        $this->user = User::register(
+            $this->userId,
             $this->email,
-            $this->passwordHash
+            $this->passwordHash,
+            $this->dateOccurred
         );
         $this->user->clearRecordedEvents();
 
@@ -34,31 +38,14 @@ class ActivateUserHandlerTest extends TestCase
 
     public function testItAddsAUserActivatedToTheRepository()
     {
-        $userId = $this->userId;
-        $user = $this->user;
-
-        $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
-
-        // the get method should be called once and will return the user
-        $userRepository->expects($this->once())->method('get')->willReturn($user);
-
-        // the add method should be called once
-        // the user object should have the UserActivated event
-        $userRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($user) use ($userId) {
-                $events = $user->getRecordedEvents();
-
-                return $events[0] instanceof UserActivated
-                && $events[0]->getAggregateId()->equals(UserId::fromString($userId))
-                && $events[0]->getStatus() === User::STATUS_ACTIVE
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
-
         $validator = $this->createMock(ValidatorInterface::class);
         $validator->expects($this->once())->method('assert')->willReturn(true);
 
-        $activateUserHandler = new ActivateUserHandler($validator, $userRepository);
+        $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
+        $userRepository->expects($this->once())->method('get')->willReturn($this->user);
+        $userRepository->expects($this->once())->method('add');
+
+        $activateUserHandler = new ActivateUserHandler($validator, new FakeClock(), $userRepository);
 
         $activateUserHandler->handle($this->activateUserCommand);
     }

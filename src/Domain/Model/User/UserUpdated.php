@@ -2,7 +2,7 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class UserUpdated implements DomainEvent, UserDomainEvent
 {
@@ -10,19 +10,25 @@ class UserUpdated implements DomainEvent, UserDomainEvent
     private $email;
     private $status;
     private $role;
-    private $occurredOn;
+    private $dateOccurred;
 
     public function __construct(
         UserId $userId,
         $email,
         $status,
-        $role
+        $role,
+        $dateOccurred
     ) {
         $this->userId = $userId;
         $this->email = $email;
         $this->status = $status;
         $this->role = $role;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'User information updated.';
     }
 
     public function getAggregateId()
@@ -45,8 +51,8 @@ class UserUpdated implements DomainEvent, UserDomainEvent
         return $this->role;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

@@ -2,21 +2,26 @@
 
 namespace Tailgate\Domain\Model\Team;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class TeamUpdated implements DomainEvent, TeamDomainEvent
 {
     private $teamId;
     private $designation;
     private $mascot;
-    private $occurredOn;
+    private $dateOccurred;
 
-    public function __construct(TeamId $teamId, $designation, $mascot)
+    public function __construct(TeamId $teamId, $designation, $mascot, $dateOccurred)
     {
         $this->teamId = $teamId;
         $this->designation = $designation;
         $this->mascot = $mascot;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Team information updated.';
     }
 
     public function getAggregateId()
@@ -34,8 +39,8 @@ class TeamUpdated implements DomainEvent, TeamDomainEvent
         return $this->mascot;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

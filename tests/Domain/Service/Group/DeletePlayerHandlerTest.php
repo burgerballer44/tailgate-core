@@ -2,37 +2,39 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\DeletePlayerCommand;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\PlayerDeleted;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\DeletePlayerHandler;
+use Tailgate\Test\BaseTestCase;
 
-class DeletePlayerHandlerTest extends TestCase
+class DeletePlayerHandlerTest extends BaseTestCase
 {
-    private $groupId = 'groupId';
-    private $playerId;
-    private $userId = 'userId';
-    private $groupName = 'groupName';
-    private $groupInviteCode = 'code';
-    private $group;
-    private $deletePlayerCommand;
-
     public function setUp(): void
     {
-        // create a group, add a member, and clear events
+        $this->groupId = GroupId::fromString('groupId');
+        $this->userId = UserId::fromString('userId');
+        $this->groupName = 'groupName';
+        $this->groupInviteCode = GroupInviteCode::create();
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
+        // create a group and clear events
         $this->group = Group::create(
-            GroupId::fromString($this->groupId),
+            $this->groupId,
             $this->groupName,
             $this->groupInviteCode,
-            UserId::fromString($this->userId)
+            $this->userId,
+            $this->dateOccurred
         );
         $memberId = $this->group->getMembers()[0]->getMemberId();
-        $this->group->addPlayer($memberId, 'username');
+        $this->group->addPlayer($memberId, 'username', $this->dateOccurred);
         $this->playerId = (string) $this->group->getPlayers()[0]->getPlayerId();
 
         $this->group->clearRecordedEvents();
@@ -45,29 +47,11 @@ class DeletePlayerHandlerTest extends TestCase
 
     public function testItAddsAPlayerDeletedEventToTheGroupRepository()
     {
-        $groupId = $this->groupId;
-        $playerId = $this->playerId;
-        $group = $this->group;
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
+        $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
+        $groupRepository->expects($this->once())->method('add');
 
-        // the get method should be called once and will return the group
-        $groupRepository->expects($this->once())->method('get')->willReturn($group);
-
-        // the add method should be called once
-        // the group object should have the PlayerDeleted event
-        $groupRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($group) use ($groupId, $playerId) {
-                $events = $group->getRecordedEvents();
-
-                return $events[0] instanceof PlayerDeleted
-                && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
-                && $events[0]->getPlayerId()->equals(PlayerId::fromString($playerId))
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
-
-        $deletePlayerHandler = new DeletePlayerHandler($groupRepository);
+        $deletePlayerHandler = new DeletePlayerHandler($groupRepository, new FakeClock());
 
         $deletePlayerHandler->handle($this->deletePlayerCommand);
     }

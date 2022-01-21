@@ -2,15 +2,15 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Event\InMemory;
 
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use Buttercup\Protects\DomainEvents;
-use PHPUnit\Framework\TestCase;
+use Burger\Aggregate\AggregateHistory;
+use Burger\Aggregate\DomainEvent;
+use Burger\Aggregate\DomainEvents;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Infrastructure\Persistence\Event\InMemory\EventStore;
 
-class InMemoryEventStoreTest extends TestCase
+class InMemoryEventStoreTest extends BaseTestCase
 {
     public function testItCanCommitOneDomainEvent()
     {

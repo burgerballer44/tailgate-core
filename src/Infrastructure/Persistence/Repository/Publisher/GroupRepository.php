@@ -2,9 +2,10 @@
 
 namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Buttercup\Protects\RecordsEvents;
-use Burger\EventPublisherInterface;
+use Burger\Aggregate\IdentifiesAggregate;
+use Burger\Aggregate\IsEventSourced;
+use Burger\Aggregate\RecordsEvents;
+use Burger\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupDomainEvent;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -24,11 +25,11 @@ class GroupRepository implements GroupRepositoryInterface
         $this->domainEventPublisher = $domainEventPublisher;
     }
 
-    public function get(IdentifiesAggregate $aggregateId)
+    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return Group::reconstituteFrom($eventStream);
+        return Group::reconstituteFromEvents($eventStream);
     }
 
     public function add(RecordsEvents $group)

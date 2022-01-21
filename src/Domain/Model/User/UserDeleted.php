@@ -2,19 +2,24 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class UserDeleted implements DomainEvent, UserDomainEvent
 {
     private $userId;
     private $status;
-    private $occurredOn;
+    private $dateOccurred;
 
-    public function __construct(UserId $userId, $status)
+    public function __construct(UserId $userId, $status, $dateOccurred)
     {
         $this->userId = $userId;
         $this->status = $status;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'User removed from application.';
     }
 
     public function getAggregateId()
@@ -27,8 +32,8 @@ class UserDeleted implements DomainEvent, UserDomainEvent
         return $this->status;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

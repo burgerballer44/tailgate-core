@@ -2,10 +2,10 @@
 
 namespace Tailgate\Test\Infrastructure\Service\PasswordHashing;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Infrastructure\Service\PasswordHashing\BasicPasswordHashing;
 
-class BasicPasswordHashingTest extends TestCase
+class BasicPasswordHashingTest extends BaseTestCase
 {
     private $password = 'password';
     // a hash of he text 'password'

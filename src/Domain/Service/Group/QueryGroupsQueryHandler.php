@@ -22,10 +22,7 @@ class QueryGroupsQueryHandler
 
     public function handle(QueryGroupsQuery $query)
     {
-        $userId = UserId::fromString($query->getUserId());
-        $name = $query->getName();
-
-        $groupViews = $this->groupViewRepository->query($userId, $name);
+        $groupViews = $this->groupViewRepository->query(UserId::fromString($query->getUserId()), $query->getName());
 
         $groups = [];
 

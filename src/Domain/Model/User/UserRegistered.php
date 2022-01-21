@@ -2,7 +2,7 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class UserRegistered implements DomainEvent, UserDomainEvent
 {
@@ -11,8 +11,7 @@ class UserRegistered implements DomainEvent, UserDomainEvent
     private $email;
     private $status;
     private $role;
-    private $passwordResetToken;
-    private $occurredOn;
+    private $dateOccurred;
 
     public function __construct(
         UserId $userId,
@@ -20,15 +19,19 @@ class UserRegistered implements DomainEvent, UserDomainEvent
         $passwordHash,
         $status,
         $role,
-        $passwordResetToken
+        $dateOccurred
     ) {
         $this->userId = $userId;
         $this->email = $email;
         $this->passwordHash = $passwordHash;
         $this->status = $status;
         $this->role = $role;
-        $this->passwordResetToken = $passwordResetToken;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'User added to the application.';
     }
 
     public function getAggregateId()
@@ -56,13 +59,8 @@ class UserRegistered implements DomainEvent, UserDomainEvent
         return $this->role;
     }
 
-    public function getPasswordResetToken()
+    public function getDateOccurred()
     {
-        return $this->passwordResetToken;
-    }
-
-    public function getOccurredOn()
-    {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

@@ -3,7 +3,7 @@
 namespace Tailgate\Domain\Model\Group;
 
 use Ramsey\Uuid\Uuid;
-use Buttercup\Protects\IdentifiesAggregate;
+use Burger\Aggregate\IdentifiesAggregate;
 
 class ScoreId implements IdentifiesAggregate
 {
@@ -14,17 +14,17 @@ class ScoreId implements IdentifiesAggregate
         $this->scoreId = null === $scoreId ? Uuid::uuid4()->toString() : $scoreId;
     }
 
-    public static function fromString($scoreId)
+    public static function fromString($scoreId) : IdentifiesAggregate
     {
         return new ScoreId($scoreId);
     }
 
-    public function __toString()
+    public function __toString() : string
     {
         return (string) $this->scoreId;
     }
 
-    public function equals(IdentifiesAggregate $other)
+    public function equals(IdentifiesAggregate $other) : bool
     {
         return
             $other instanceof ScoreId

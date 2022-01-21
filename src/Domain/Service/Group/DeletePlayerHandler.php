@@ -4,28 +4,29 @@ namespace Tailgate\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\DeletePlayerCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\PlayerId;
+use Tailgate\Domain\Service\Clock\Clock;
 
 class DeletePlayerHandler
 {
     private $groupRepository;
+    private $clock;
 
-    public function __construct(GroupRepositoryInterface $groupRepository)
+    public function __construct(GroupRepositoryInterface $groupRepository, Clock $clock)
     {
         $this->groupRepository = $groupRepository;
+        $this->clock = $clock;
     }
 
     public function handle(DeletePlayerCommand $command)
     {
-        $groupId = $command->getGroupId();
-        $PlayerId = $command->getPlayerId();
+        $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group = $this->groupRepository->get(GroupId::fromString($groupId));
-
-        $group->deletePlayer(PlayerId::fromString($PlayerId));
+        $group->deletePlayer(PlayerId::fromString($command->getPlayerId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
 
         $this->groupRepository->add($group);
     }

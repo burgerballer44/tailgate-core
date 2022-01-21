@@ -2,7 +2,7 @@
 
 namespace Tailgate\Test\Domain\Service\Team;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Team\TeamQuery;
 use Tailgate\Domain\Service\Team\TeamQueryHandler;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -12,7 +12,7 @@ use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
 use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\TeamDataTransformerInterface;
 
-class TeamQueryHandlerTest extends TestCase
+class TeamQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToGetATeamByTeamIdFromTeamViewRepository()
     {

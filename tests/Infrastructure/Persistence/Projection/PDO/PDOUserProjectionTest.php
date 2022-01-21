@@ -2,18 +2,19 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 
-use PHPUnit\Framework\TestCase;
-use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserRegistered;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\User\EmailUpdated;
+use Tailgate\Domain\Model\User\PasswordResetTokenApplied;
+use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\UserDeleted;
-use Tailgate\Domain\Model\User\PasswordUpdated;
-use Tailgate\Domain\Model\User\EmailUpdated;
+use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserUpdated;
-use Tailgate\Domain\Model\User\PasswordResetTokenCreated;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\UserProjection;
+use Tailgate\Test\BaseTestCase;
 
-class PDOUserProjectionTest extends TestCase
+class PDOUserProjectionTest extends BaseTestCase
 {
     private $pdoMock;
     private $pdoStatementMock;
@@ -28,14 +29,14 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectUserRegistered()
     {
-        $event = new UserRegistered(UserId::fromString('userId'), 'email1', 'password1', 'status', 'role', 'randomString');
+        $event = new UserRegistered(UserId::fromString('userId'), 'email1', 'password1', 'status', 'role', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `user` (user_id, password_hash, email, status, role, password_reset_token, created_at)
-            VALUES (:user_id, :password_hash, :email, :status, :role, :password_reset_token, :created_at)')
+            ->with('INSERT INTO `user` (user_id, password_hash, email, status, role, created_at)
+            VALUES (:user_id, :password_hash, :email, :status, :role, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -48,8 +49,7 @@ class PDOUserProjectionTest extends TestCase
                 ':password_hash' => $event->getPasswordHash(),
                 ':status' => $event->getStatus(),
                 ':role' => $event->getRole(),
-                ':password_reset_token' => $event->getPasswordResetToken(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectUserRegistered($event);
@@ -57,7 +57,7 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectUserActivated()
     {
-        $event = new UserActivated(UserId::fromString('userId'), 'status');
+        $event = new UserActivated(UserId::fromString('userId'), 'status', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -82,7 +82,7 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectUserDeleted()
     {
-        $event = new UserDeleted(UserId::fromString('userId'), 'status');
+        $event = new UserDeleted(UserId::fromString('userId'), 'status', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -107,7 +107,7 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectPasswordUpdated()
     {
-        $event = new PasswordUpdated(UserId::fromString('userId'), 'password');
+        $event = new PasswordUpdated(UserId::fromString('userId'), 'password', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -132,7 +132,7 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectEmailUpdated()
     {
-        $event = new EmailUpdated(UserId::fromString('userId'), 'email@email.com');
+        $event = new EmailUpdated(UserId::fromString('userId'), 'email@email.com', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -157,7 +157,7 @@ class PDOUserProjectionTest extends TestCase
 
     public function testItCanProjectUserUpdated()
     {
-        $event = new UserUpdated(UserId::fromString('userId'), 'email@email.com', 'status', 'role');
+        $event = new UserUpdated(UserId::fromString('userId'), 'email@email.com', 'status', 'role', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -182,9 +182,9 @@ class PDOUserProjectionTest extends TestCase
         $this->projection->projectUserUpdated($event);
     }
 
-    public function testItCanProjectPasswordResetTokenCreated()
+    public function testItCanProjectPasswordResetTokenApplied()
     {
-        $event = new PasswordResetTokenCreated(UserId::fromString('userId'), 'token');
+        $event = new PasswordResetTokenApplied(UserId::fromString('userId'), 'token', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -204,6 +204,6 @@ class PDOUserProjectionTest extends TestCase
                 ':password_reset_token' => $event->getPasswordResetToken()
             ]);
 
-        $this->projection->projectPasswordResetTokenCreated($event);
+        $this->projection->projectPasswordResetTokenApplied($event);
     }
 }

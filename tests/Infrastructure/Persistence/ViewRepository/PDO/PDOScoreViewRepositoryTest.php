@@ -2,7 +2,7 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\ScoreId;
@@ -10,7 +10,7 @@ use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\ScoreViewRepository;
 use RuntimeException;
 
-class PDOScoreViewRepositoryTest extends TestCase
+class PDOScoreViewRepositoryTest extends BaseTestCase
 {
     private $pdoMock;
     private $pdoStatementMock;

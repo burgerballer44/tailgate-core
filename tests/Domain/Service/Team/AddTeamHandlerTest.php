@@ -2,57 +2,40 @@
 
 namespace Tailgate\Test\Domain\Service\Team;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Team\AddTeamCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Season\Season;
+use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Team\AddTeamHandler;
+use Tailgate\Test\BaseTestCase;
 
-class AddTeamHandlerTest extends TestCase
+class AddTeamHandlerTest extends BaseTestCase
 {
-    private $designation = 'designation';
-    private $mascot = 'mascot';
-    private $sport = Season::SPORT_FOOTBALL;
-    private $addTeamCommand;
-
     public function setUp(): void
     {
-        $this->addTeamCommand = new AddTeamCommand($this->designation, $this->mascot, $this->sport);
+        $this->designation = 'designation';
+        $this->mascot = 'mascot';
+        $this->sport = Sport::getFootball();
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
+        $this->addTeamCommand = new AddTeamCommand($this->designation, $this->mascot, $this->sport, $this->dateOccurred);
     }
 
     public function testItAddsATeamAddedEventToTheTeamRepository()
     {
-        $designation = $this->designation;
-        $mascot = $this->mascot;
-        $sport = $this->sport;
-
-        $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
-
-        // the nextIdentity method should be called once and will return a new TeamID
-        $teamRepository->expects($this->once())->method('nextIdentity')->willReturn(new TeamId());
-
-        // the add method should be called once
-        // the team object should have the TeamAdded event
-        $teamRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($team) use ($designation, $mascot, $sport) {
-                $events = $team->getRecordedEvents();
-
-                return $events[0] instanceof TeamAdded
-                && $events[0]->getAggregateId() instanceof TeamId
-                && $events[0]->getDesignation() === $designation
-                && $events[0]->getMascot() === $mascot
-                && $events[0]->getSport() === $sport
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
-
         $validator = $this->createMock(ValidatorInterface::class);
         $validator->expects($this->once())->method('assert')->willReturn(true);
 
-        $addTeamHandler = new AddTeamHandler($validator, $teamRepository);
+        $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
+        $teamRepository->expects($this->once())->method('nextIdentity')->willReturn(new TeamId());
+        $teamRepository->expects($this->once())->method('add');
+
+        $addTeamHandler = new AddTeamHandler($validator, new FakeClock(), $teamRepository);
 
         $addTeamHandler->handle($this->addTeamCommand);
     }

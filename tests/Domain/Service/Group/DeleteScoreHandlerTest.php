@@ -2,41 +2,42 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\DeleteScoreCommand;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\DeleteScoreHandler;
+use Tailgate\Test\BaseTestCase;
 
-class DeleteScoreHandlerTest extends TestCase
+class DeleteScoreHandlerTest extends BaseTestCase
 {
-    private $groupId = 'groupId';
-    private $userId = 'userId';
-    private $playerId = '';
-    private $scoreId;
-    private $groupName = 'groupName';
-    private $groupInviteCode = 'code';
-    private $group;
-    private $deleteScoreCommand;
-
     public function setUp(): void
     {
-        // create a game, add a score, and clear events
+        $this->groupId = GroupId::fromString('groupId');
+        $this->userId = UserId::fromString('userId');
+        $this->groupName = 'groupName';
+        $this->groupInviteCode = GroupInviteCode::create();
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
+        // create a group and clear events
         $this->group = Group::create(
-            GroupId::fromString($this->groupId),
+            $this->groupId,
             $this->groupName,
             $this->groupInviteCode,
-            UserId::fromString($this->userId)
+            $this->userId,
+            $this->dateOccurred
         );
         $memberId = $this->group->getMembers()[0]->getMemberId();
-        $this->group->addPlayer($memberId, 'username');
+        $this->group->addPlayer($memberId, 'username', $this->dateOccurred);
         $playerId = $this->group->getPlayers()[0]->getPlayerId();
-        $this->group->submitScore($playerId, GameId::fromString('gameID'), 70, 60);
+        $this->group->submitScore($playerId, GameId::fromString('gameID'), 70, 60, $this->dateOccurred);
         $this->scoreId = (string) $this->group->getScores()[0]->getScoreId();
         $this->group->clearRecordedEvents();
 
@@ -48,29 +49,11 @@ class DeleteScoreHandlerTest extends TestCase
 
     public function testItAddsAScoreDeletedEventToTheGroupRepository()
     {
-        $groupId = $this->groupId;
-        $scoreId = $this->scoreId;
-        $group = $this->group;
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
+        $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
+        $groupRepository->expects($this->once())->method('add');
 
-        // the get method should be called once and will return the group
-        $groupRepository->expects($this->once())->method('get')->willReturn($group);
-
-        // the add method should be called once
-        // the group object should have the ScoreDeleted event
-        $groupRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($group) use ($groupId, $scoreId) {
-                $events = $group->getRecordedEvents();
-
-                return $events[0] instanceof ScoreDeleted
-                && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
-                && $events[0]->getScoreId()->equals(ScoreId::fromString($scoreId))
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
-
-        $deleteScoreHandler = new DeleteScoreHandler($groupRepository);
+        $deleteScoreHandler = new DeleteScoreHandler($groupRepository, new FakeClock());
 
         $deleteScoreHandler->handle($this->deleteScoreCommand);
     }

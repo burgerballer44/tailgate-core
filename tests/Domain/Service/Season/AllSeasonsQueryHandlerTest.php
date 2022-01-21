@@ -2,13 +2,13 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Season\AllSeasonsQuery;
 use Tailgate\Domain\Service\Season\AllSeasonsQueryHandler;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\SeasonDataTransformerInterface;
 
-class AllSeasonsQueryHandlerTest extends TestCase
+class AllSeasonsQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToGetAllSeasonsFromSeasonViewRepository()
     {

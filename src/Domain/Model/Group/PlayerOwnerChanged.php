@@ -2,24 +2,30 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class PlayerOwnerChanged implements DomainEvent, GroupDomainEvent
 {
     private $groupId;
     private $playerId;
     private $memberId;
-    private $occurredOn;
+    private $dateOccurred;
 
     public function __construct(
         GroupId $groupId,
         PlayerId $playerId,
-        MemberId $memberId
+        MemberId $memberId,
+        $dateOccurred
     ) {
         $this->groupId = $groupId;
         $this->playerId = $playerId;
         $this->memberId = $memberId;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Group player has changed owner.';
     }
 
     public function getAggregateId()
@@ -37,8 +43,8 @@ class PlayerOwnerChanged implements DomainEvent, GroupDomainEvent
         return $this->memberId;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

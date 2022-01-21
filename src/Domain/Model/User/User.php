@@ -2,19 +2,16 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Tailgate\Domain\Model\AbstractEntity;
+use Burger\Aggregate\IdentifiesAggregate;
 use RuntimeException;
+use Tailgate\Domain\Model\AbstractEventBasedEntity;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
+use Tailgate\Domain\Model\User\UserRole;
+use Tailgate\Domain\Model\User\UserStatus;
 
-class User extends AbstractEntity
+class User extends AbstractEventBasedEntity
 {
-    const ROLE_USER = 'Normal'; // the average user, normal people who sign up
-    const ROLE_ADMIN = 'Admin'; // an important person who can do whatever
-
-    const STATUS_ACTIVE = 'Active'; // can use the app
-    const STATUS_PENDING = 'Pending'; // user who signs up but needs to confirm email
-    const STATUS_DELETED = 'Deleted'; // user who is deleted
-
     private $userId;
     private $email;
     private $passwordHash;
@@ -22,37 +19,9 @@ class User extends AbstractEntity
     private $role;
     private $passwordResetToken;
 
-    protected function __construct($userId, $email, $passwordHash, $status, $role, $passwordResetToken)
+    public function getUserId()
     {
-        $this->userId = $userId;
-        $this->email = $email;
-        $this->passwordHash = $passwordHash;
-        $this->status = $status;
-        $this->role = $role;
-        $this->passwordResetToken = $passwordResetToken;
-    }
-
-    // create a user
-    public static function create(UserId $userId, $email, $passwordHash)
-    {
-        $newUser = new User($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, '');
-
-        $newUser->recordThat(
-            new UserRegistered($userId, $email, $passwordHash, User::STATUS_PENDING, User::ROLE_USER, '')
-        );
-
-        return $newUser;
-    }
-
-    // create an empty user
-    protected static function createEmptyEntity(IdentifiesAggregate $userId)
-    {
-        return new User($userId, '', '', '', '', '');
-    }
-
-    public function getId()
-    {
-        return (string) $this->userId;
+        return $this->userId;
     }
 
     public function getEmail()
@@ -80,71 +49,70 @@ class User extends AbstractEntity
         return $this->passwordResetToken;
     }
 
-    // set status to active
-    public function activate()
+    // create an empty user
+    protected static function createEmptyEntity(IdentifiesAggregate $userId)
     {
-        $this->applyAndRecordThat(new UserActivated($this->userId, User::STATUS_ACTIVE));
+        return new static();
     }
 
-    // set status to deleted
-    public function delete()
+    // register a user to use application
+    public static function register(UserId $userId, Email $email, $passwordHash, Date $dateOccurred)
     {
-        $this->applyAndRecordThat(new UserDeleted($this->userId, User::STATUS_DELETED));
+        $user = new static();
+
+        $user->applyAndRecordThat(
+            new UserRegistered($userId, $email, $passwordHash, UserStatus::getPending(), UserRole::getStandard(), $dateOccurred)
+        );
+
+        return $user;
     }
 
-    // updates the password hash
-    public function updatePassword($passwordHash)
+    // set user status to active
+    public function activate(Date $dateOccurred)
     {
-        $this->applyAndRecordThat(new PasswordUpdated($this->userId, $passwordHash));
+        $this->applyAndRecordThat(new UserActivated($this->userId, UserStatus::getActive(), $dateOccurred));
     }
 
-    // updates the email
-    public function updateEmail($email)
+    // update the password hash
+    public function updatePassword($passwordHash, Date $dateOccurred)
     {
-        $this->applyAndRecordThat(new EmailUpdated($this->userId, $email));
+        $this->applyAndRecordThat(new PasswordUpdated($this->userId, $passwordHash, $dateOccurred));
     }
 
-    // updates email, status, and role
-    public function update($email, $status, $role)
+    // update the user email address
+    public function updateEmail(Email $email, Date $dateOccurred)
     {
-        if (!in_array($role, $this->getValidRoles())) {
-            throw new RuntimeException('Invalid role. Role does not exist.');
-        }
-
-        if (!in_array($status, $this->getValidStatuses())) {
-            throw new RuntimeException('Invalid status. Status does not exist.');
-        }
-        
-        $this->applyAndRecordThat(new UserUpdated($this->userId, $email, $status, $role));
+        $this->applyAndRecordThat(new EmailUpdated($this->userId, $email, $dateOccurred));
     }
 
-    // creates a password reset token
-    public function createPasswordResetToken($passwordResetString)
+    // update user email, status, and role
+    public function update(Email $email, UserStatus $status, UserRole $role, Date $dateOccurred)
     {
-        $token = $this->createTokenFromString($passwordResetString);
-        $this->applyAndRecordThat(new PasswordResetTokenCreated($this->userId, $token));
+        $this->applyAndRecordThat(new UserUpdated($this->userId, $email, $status, $role, $dateOccurred));
     }
 
-    // create a temporary password reset token
-    private function createTokenFromString($passwordResetString)
+    // set user status to deleted
+    public function delete(Date $dateOccurred)
     {
-        return $passwordResetString . '_' . time();
+        $this->applyAndRecordThat(new UserDeleted($this->userId, UserStatus::getDeleted(), $dateOccurred));
+    }
+
+    // apply a password reset token to user
+    public function applyPasswordResetToken(PasswordResetToken $token, Date $dateOccurred)
+    {
+        $this->applyAndRecordThat(new PasswordResetTokenApplied($this->userId, $token, $dateOccurred));
     }
 
     protected function applyUserRegistered(UserRegistered $event)
     {
-        $this->email = $event->getEmail();
+        $this->userId       = $event->getAggregateId();
+        $this->email        = $event->getEmail();
         $this->passwordHash = $event->getPasswordHash();
-        $this->status = $event->getStatus();
-        $this->role = $event->getRole();
+        $this->status       = $event->getStatus();
+        $this->role         = $event->getRole();
     }
 
     protected function applyUserActivated(UserActivated $event)
-    {
-        $this->status = $event->getStatus();
-    }
-
-    protected function applyUserDeleted(UserDeleted $event)
     {
         $this->status = $event->getStatus();
     }
@@ -161,41 +129,18 @@ class User extends AbstractEntity
 
     protected function applyUserUpdated(UserUpdated $event)
     {
-        $this->email = $event->getEmail();
+        $this->email  = $event->getEmail();
         $this->status = $event->getStatus();
-        $this->role = $event->getRole();
+        $this->role   = $event->getRole();
     }
 
-    protected function applyPasswordResetTokenCreated(PasswordResetTokenCreated $event)
+    protected function applyPasswordResetTokenApplied(PasswordResetTokenApplied $event)
     {
         $this->passwordResetToken = $event->getPasswordResetToken();
     }
 
-    public static function getValidRoles()
+    protected function applyUserDeleted(UserDeleted $event)
     {
-        return [
-            self::ROLE_USER,
-            self::ROLE_ADMIN,
-        ];
-    }
-
-    public static function getValidStatuses()
-    {
-        return [
-            self::STATUS_ACTIVE,
-            self::STATUS_PENDING,
-            self::STATUS_DELETED,
-        ];
-    }
-
-    // determine if password reset token is valid
-    public static function isPasswordResetTokenValid($token)
-    {
-        if (empty($token)) {
-            return false;
-        }
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
-        $expire = 3600; // 1 hour
-        return $timestamp + $expire >= time();
+        $this->status = $event->getStatus();
     }
 }

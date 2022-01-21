@@ -2,7 +2,7 @@
 
 namespace Tailgate\Test\Domain\Service\User;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\User\UserQuery;
 use Tailgate\Domain\Service\User\UserQueryHandler;
 use Tailgate\Domain\Model\User\UserId;
@@ -10,7 +10,7 @@ use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\UserDataTransformerInterface;
 
-class UserQueryHandlerTest extends TestCase
+class UserQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToGetAUserByUserIdFromUserViewRepository()
     {

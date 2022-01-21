@@ -2,20 +2,25 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 use Tailgate\Domain\Model\User\UserId;
 
 class PlayerDeleted implements DomainEvent, GroupDomainEvent
 {
     private $groupId;
     private $playerId;
-    private $occurredOn;
+    private $dateOccurred;
 
-    public function __construct(GroupId $groupId, PlayerId $playerId)
+    public function __construct(GroupId $groupId, PlayerId $playerId, $dateOccurred)
     {
         $this->groupId = $groupId;
         $this->playerId = $playerId;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Group player removed.';
     }
 
     public function getAggregateId()
@@ -28,8 +33,8 @@ class PlayerDeleted implements DomainEvent, GroupDomainEvent
         return $this->playerId;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

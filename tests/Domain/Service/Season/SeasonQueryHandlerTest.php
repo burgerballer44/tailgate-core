@@ -2,7 +2,7 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Season\SeasonQuery;
 use Tailgate\Domain\Service\Season\SeasonQueryHandler;
 use Tailgate\Domain\Model\Season\SeasonId;
@@ -11,7 +11,7 @@ use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
 use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\SeasonDataTransformerInterface;
 
-class SeasonQueryHandlerTest extends TestCase
+class SeasonQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToGetASeasonBySeasonIdFromTeamViewRepository()
     {

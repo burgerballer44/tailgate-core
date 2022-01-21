@@ -28,8 +28,7 @@ class AllFollowedGamesQueryHandler
 
     public function handle(AllFollowedGamesQuery $query)
     {
-        $followId = FollowId::fromString($query->getFollowId());
-        $followView = $this->followViewRepository->get($followId);
+        $followView = $this->followViewRepository->get(FollowId::fromString($query->getFollowId()));
 
         $teamId = TeamId::fromString($followView->getTeamId());
         $seasonId = SeasonId::fromString($followView->getSeasonId());

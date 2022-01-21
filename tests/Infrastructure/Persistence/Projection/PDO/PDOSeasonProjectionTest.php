@@ -2,19 +2,20 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Season\GameAdded;
+use Tailgate\Domain\Model\Season\GameDeleted;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\GameScoreUpdated;
 use Tailgate\Domain\Model\Season\SeasonCreated;
 use Tailgate\Domain\Model\Season\SeasonDeleted;
-use Tailgate\Domain\Model\Season\SeasonUpdated;
-use Tailgate\Domain\Model\Season\GameDeleted;
 use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Season\SeasonUpdated;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\SeasonProjection;
+use Tailgate\Test\BaseTestCase;
 
-class PDOSeasonProjectionTest extends TestCase
+class PDOSeasonProjectionTest extends BaseTestCase
 {
     private $pdoMock;
     private $pdoStatementMock;
@@ -35,7 +36,8 @@ class PDOSeasonProjectionTest extends TestCase
             'season type',
             'name of season',
             '2019-09-01',
-            '2019-12-28'
+            '2019-12-28',
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -57,7 +59,7 @@ class PDOSeasonProjectionTest extends TestCase
                 ':name' => $event->getName(),
                 ':season_start' => $event->getSeasonStart(),
                 ':season_end' => $event->getSeasonEnd(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectSeasonCreated($event);
@@ -71,7 +73,8 @@ class PDOSeasonProjectionTest extends TestCase
             TeamId::fromString('homeTeamId'),
             TeamId::fromString('awayTeamId'),
             '2019-10-01',
-            '19:30'
+            '19:30',
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -93,7 +96,7 @@ class PDOSeasonProjectionTest extends TestCase
                 ':away_team_id' => $event->getAwayTeamId(),
                 ':start_date' => $event->getStartDate(),
                 ':start_time' => $event->getStartTime(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectGameAdded($event);
@@ -108,7 +111,8 @@ class PDOSeasonProjectionTest extends TestCase
             80,
             70,
             '2019-09-01',
-            '19:30'
+            '19:30',
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -136,18 +140,16 @@ class PDOSeasonProjectionTest extends TestCase
 
     public function testItCanProjectGameDeleted()
     {
-        $event = new GameDeleted(SeasonId::fromString('seasonId'), GameId::fromString('gameId'));
+        $event = new GameDeleted(SeasonId::fromString('seasonId'), GameId::fromString('gameId'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE game_id = :game_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(1))
-            ->method('prepare')
-            ->with('DELETE FROM `game` WHERE game_id = :game_id')
+            ->withConsecutive(
+                ['DELETE FROM `score` WHERE game_id = :game_id'],
+                ['DELETE FROM `game` WHERE game_id = :game_id']
+            )
             ->willReturn($this->pdoStatementMock);
 
         // execute method called twice
@@ -161,29 +163,20 @@ class PDOSeasonProjectionTest extends TestCase
 
     public function testItCanProjectSeasonDeleted()
     {
-        $event = new SeasonDeleted(SeasonId::fromString('seasonId'));
+        $event = new SeasonDeleted(SeasonId::fromString('seasonId'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE game_id IN
-            (SELECT game_id FROM game WHERE season_id = :season_id)')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(1))
-            ->method('prepare')
-            ->with('DELETE FROM `follow` WHERE season_id = :season_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(2))
-            ->method('prepare')
-            ->with('DELETE FROM `game` WHERE season_id = :season_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(3))
-            ->method('prepare')
-            ->with('DELETE FROM `season` WHERE season_id = :season_id')
+            ->withConsecutive(
+                ['DELETE FROM `score` WHERE game_id IN
+            (SELECT game_id FROM game WHERE season_id = :season_id)'],
+                ['DELETE FROM `follow` WHERE season_id = :season_id'],
+                ['DELETE FROM `game` WHERE season_id = :season_id'],
+                ['DELETE FROM `season` WHERE season_id = :season_id']
+
+            )
             ->willReturn($this->pdoStatementMock);
 
         // execute method called three times
@@ -203,7 +196,8 @@ class PDOSeasonProjectionTest extends TestCase
             'season type',
             'name of season',
             '2019-09-01',
-            '2019-12-28'
+            '2019-12-28',
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
         // the pdo mock should call prepare and return a pdostatement mock

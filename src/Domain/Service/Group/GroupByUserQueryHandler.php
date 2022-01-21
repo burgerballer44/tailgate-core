@@ -39,10 +39,9 @@ class GroupByUserQueryHandler
 
     public function handle(GroupByUserQuery $query)
     {
-        $userId = UserId::fromString($query->getUserId());
         $groupId = GroupId::fromString($query->getGroupId());
 
-        $groupView = $this->groupViewRepository->getByUser($userId, $groupId);
+        $groupView = $this->groupViewRepository->getByUser(UserId::fromString($query->getUserId()), $groupId);
         $memberViews = $this->memberViewRepository->getAllByGroup($groupId);
         $playerViews = $this->playerViewRepository->getAllByGroup($groupId);
         $scoreViews = $this->scoreViewRepository->getAllByGroup($groupId);

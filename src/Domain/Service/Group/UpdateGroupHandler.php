@@ -4,9 +4,11 @@ namespace Tailgate\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\UpdateGroupCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Service\Clock\Clock;
 use Tailgate\Domain\Service\Validatable;
 use Tailgate\Domain\Service\ValidatableService;
 
@@ -15,11 +17,13 @@ class UpdateGroupHandler implements ValidatableService
     use Validatable;
     
     private $validator;
+    private $clock;
     private $groupRepository;
 
-    public function __construct(ValidatorInterface $validator, GroupRepositoryInterface $groupRepository)
+    public function __construct(ValidatorInterface $validator, Clock $clock, GroupRepositoryInterface $groupRepository)
     {
         $this->validator = $validator;
+        $this->clock = $clock;
         $this->groupRepository = $groupRepository;
     }
 
@@ -27,15 +31,12 @@ class UpdateGroupHandler implements ValidatableService
     {
         $this->validate($command);
 
-        $groupId = $command->getGroupId();
-        $name = $command->getName();
-        $ownerId = $command->getOwnerId();
-
-        $group = $this->groupRepository->get(GroupId::fromString($groupId));
+        $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
         $group->update(
-            $name,
-            UserId::fromString($ownerId)
+            $command->getName(),
+            UserId::fromString($command->getOwnerId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
         );
 
         $this->groupRepository->add($group);

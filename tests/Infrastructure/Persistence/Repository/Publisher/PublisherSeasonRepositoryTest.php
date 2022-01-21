@@ -2,20 +2,24 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use PHPUnit\Framework\TestCase;
-use Burger\EventPublisher;
-use Burger\EventPublisherInterface;
+use Burger\Aggregate\AggregateHistory;
+use Burger\Aggregate\DomainEvent;
+use Burger\Event\EventPublisher;
+use Burger\Event\EventPublisherInterface;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonDomainEvent;
 use Tailgate\Domain\Model\Season\SeasonId;
-use Tailgate\Infrastructure\Persistence\Projection\SeasonProjectionInterface;
+use Tailgate\Domain\Model\Season\SeasonType;
+use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\SeasonProjectorEventSubscriber;
+use Tailgate\Infrastructure\Persistence\Projection\SeasonProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\SeasonRepository;
+use Tailgate\Test\BaseTestCase;
 
-class PublisherSeasonRepositoryTest extends TestCase
+class PublisherSeasonRepositoryTest extends BaseTestCase
 {
     private $eventStore;
     private $projection;
@@ -33,16 +37,17 @@ class PublisherSeasonRepositoryTest extends TestCase
         $this->season = Season::create(
             SeasonId::fromString('SeasonId'),
             'name',
-            'Football',
-            Season::SEASON_TYPE_REG,
-            '2019-05-05',
-            '2019-05-15'
+            Sport::getFootball(),
+            SeasonType::getRegularSeason(),
+            DateOrString::fromString('2019-05-05'),
+            DateOrString::fromString('2019-05-15'),
+            Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
     }
 
     public function testItCanGetASeason()
     {
-        $seasonId = SeasonId::fromString($this->season->getId());
+        $seasonId = $this->season->getSeasonId();
         $aggregateHistory = new AggregateHistory($seasonId, (array)$this->season->getRecordedEvents());
 
         // the getAggregateHistoryFor method should be called once and will return the aggregateHistory

@@ -2,17 +2,22 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class GroupDeleted implements DomainEvent, GroupDomainEvent
 {
     private $groupId;
-    private $occurredOn;
+    private $dateOccurred;
 
-    public function __construct(GroupId $groupId)
+    public function __construct(GroupId $groupId, $dateOccurred)
     {
         $this->groupId = $groupId;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Group deleted.';
     }
 
     public function getAggregateId()
@@ -20,8 +25,8 @@ class GroupDeleted implements DomainEvent, GroupDomainEvent
         return $this->groupId;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

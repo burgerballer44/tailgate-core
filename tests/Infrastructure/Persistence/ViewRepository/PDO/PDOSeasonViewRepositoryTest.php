@@ -2,14 +2,15 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
+use RuntimeException;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
+use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\SeasonViewRepository;
-use RuntimeException;
 
-class PDOSeasonViewRepositoryTest extends TestCase
+class PDOSeasonViewRepositoryTest extends BaseTestCase
 {
     private $pdoMock;
     private $pdoStatementMock;
@@ -81,7 +82,7 @@ class PDOSeasonViewRepositoryTest extends TestCase
 
     public function testItCanGetSeasonsBySport()
     {
-        $sport = Season::SPORT_FOOTBALL;
+        $sport = Sport::getFootball();
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock

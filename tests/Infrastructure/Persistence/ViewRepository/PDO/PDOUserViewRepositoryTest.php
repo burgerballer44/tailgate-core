@@ -2,13 +2,13 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\UserViewRepository;
 use RuntimeException;
 
-class PDOUserViewRepositoryTest extends TestCase
+class PDOUserViewRepositoryTest extends BaseTestCase
 {
     private $pdoMock;
     private $pdoStatementMock;

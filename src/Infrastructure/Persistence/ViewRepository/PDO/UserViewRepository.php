@@ -3,11 +3,12 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use RuntimeException;
+use Tailgate\Domain\Model\User\PasswordResetToken;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
-use RuntimeException;
 
 class UserViewRepository implements UserViewRepositoryInterface
 {
@@ -65,7 +66,7 @@ class UserViewRepository implements UserViewRepositoryInterface
             throw new RuntimeException("User not found by reset token.");
         }
 
-        if (!User::isPasswordResetTokenValid($passwordResetToken)) {
+        if (!PasswordResetToken::isPasswordResetTokenValid($passwordResetToken)) {
             throw new RuntimeException("Reset token expired. Please request a password reset again.");
         }
 

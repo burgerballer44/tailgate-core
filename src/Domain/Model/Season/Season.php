@@ -2,18 +2,16 @@
 
 namespace Tailgate\Domain\Model\Season;
 
-use Buttercup\Protects\IdentifiesAggregate;
+use Burger\Aggregate\IdentifiesAggregate;
 use RuntimeException;
-use Tailgate\Domain\Model\AbstractEntity;
+use Tailgate\Domain\Model\AbstractEventBasedEntity;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\DateOrString;
+use Tailgate\Domain\Model\Common\TimeOrString;
 use Tailgate\Domain\Model\Team\TeamId;
 
-class Season extends AbstractEntity
+class Season extends AbstractEventBasedEntity
 {
-    const SPORT_FOOTBALL = 'Football';
-    const SPORT_BASKETBALL = 'Basketball';
-
-    const SEASON_TYPE_REG = 'Regular-Season';
-
     private $seasonId;
     private $sport;
     private $seasonType;
@@ -22,57 +20,9 @@ class Season extends AbstractEntity
     private $seasonEnd;
     private $games = [];
 
-    protected function __construct($seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd)
+    public function getSeasonId()
     {
-        $this->seasonId = $seasonId;
-        $this->sport = $sport;
-        $this->seasonType = $seasonType;
-        $this->name = $name;
-        $this->seasonStart = $seasonStart;
-        $this->seasonEnd = $seasonEnd;
-    }
-
-    // create a season
-    public static function create(
-        SeasonId $seasonId,
-        $name,
-        $sport,
-        $seasonType,
-        $seasonStart,
-        $seasonEnd
-    ) {
-        if (!in_array($sport, self::getValidSports())) {
-            throw new RuntimeException('Invalid sport. Sport does not exist.');
-        }
-
-        if (!in_array($seasonType, self::getValidSeasonTypes())) {
-            throw new RuntimeException('Invalid season type. Season type does not exist.');
-        }
-
-        // seasonStart and seasonEnd will be a date most of the time but can be a string sometimes
-        $seasonStartDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart);
-        $seasonStart = $seasonStartDateTime instanceof \DateTimeImmutable ? $seasonStartDateTime->format('Y-m-d H:i:s') : $seasonStart;
-        $seasonEndDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd);
-        $seasonEnd = $seasonEndDateTime instanceof \DateTimeImmutable ? $seasonEndDateTime->format('Y-m-d H:i:s') : $seasonEnd;
-
-        $newSeason = new Season($seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd);
-
-        $newSeason->recordThat(
-            new SeasonCreated($seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd)
-        );
-
-        return $newSeason;
-    }
-
-    // create an empty season
-    protected static function createEmptyEntity(IdentifiesAggregate $seasonId)
-    {
-        return new Season($seasonId, '', '', '', '', '');
-    }
-
-    public function getId()
-    {
-        return (string) $this->seasonId;
+        return $this->seasonId;
     }
 
     public function getSport()
@@ -105,80 +55,80 @@ class Season extends AbstractEntity
         return $this->games;
     }
 
-    // update the season information
-    public function update($sport, $seasonType, $name, $seasonStart, $seasonEnd)
+    // create an empty season
+    protected static function createEmptyEntity(IdentifiesAggregate $seasonId)
     {
-        if (!in_array($sport, $this->getValidSports())) {
-            throw new RuntimeException('Invalid sport. Sport does not exist.');
-        }
+        return new static();
+    }
 
-        if (!in_array($seasonType, $this->getValidSeasonTypes())) {
-            throw new RuntimeException('Invalid season type. Season type does not exist.');
-        }
+    // create a season
+    public static function create(
+        SeasonId $seasonId,
+        $name,
+        Sport $sport,
+        SeasonType $seasonType,
+        DateOrString $seasonStart,
+        DateOrString $seasonEnd,
+        Date $dateOccurred
+    ) {
+        $season = new static();
 
-        // seasonStart and seasonEnd will be a date most of the time but can be a string sometimes
-        $seasonStartDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart);
-        $seasonStart = $seasonStartDateTime instanceof \DateTimeImmutable ? $seasonStartDateTime->format('Y-m-d H:i:s') : $seasonStart;
-        $seasonEndDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd);
-        $seasonEnd = $seasonEndDateTime instanceof \DateTimeImmutable ? $seasonEndDateTime->format('Y-m-d H:i:s') : $seasonEnd;
+        $season->applyAndRecordThat(
+            new SeasonCreated($seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd, $dateOccurred)
+        );
 
+        return $season;
+    }
+
+    // update the season information
+    public function update(Sport $sport, SeasonType $seasonType, $name, DateOrString $seasonStart, DateOrString $seasonEnd, Date $dateOccurred)
+    {
         $this->applyAndRecordThat(
-            new SeasonUpdated($this->seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd)
+            new SeasonUpdated($this->seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd, $dateOccurred)
         );
     }
 
     // adds a game
-    public function addGame(TeamId $homeTeamId, TeamId $awayTeamId, $startDate, $startTime)
+    public function addGame(TeamId $homeTeamId, TeamId $awayTeamId, DateOrString $startDate, TimeOrString $startTime, Date $dateOccurred)
     {
-        // startDate and startTime will be a date most of the time but can be a string sometimes
-        $startDateDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $startDate);
-        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('Y-m-d H:i:s') : $startDate;
-        $startTimeDateTime = \DateTimeImmutable::createFromFormat('H:i', $startTime);
-        $startTime = $startTimeDateTime instanceof \DateTimeImmutable ? $startTimeDateTime->format('Y-m-d H:i:s') : $startTime;
-
         $this->applyAndRecordThat(
-            new GameAdded($this->seasonId, new GameId(), $homeTeamId, $awayTeamId, $startDate, $startTime)
+            new GameAdded($this->seasonId, new GameId(), $homeTeamId, $awayTeamId, $startDate, $startTime, $dateOccurred)
         );
     }
 
     // update the score of a game
-    public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime)
+    public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore, DateOrString $startDate, TimeOrString $startTime, Date $dateOccurred)
     {
         if (!$this->getGameById($gameId)) {
             throw new RuntimeException('The game does not exist. Cannot update the game score.');
         }
 
-        // startDate and startTime will be a date most of the time but can be a string sometimes
-        $startDateDateTime = \DateTimeImmutable::createFromFormat('Y-m-d', $startDate);
-        $startDate = $startDateDateTime instanceof \DateTimeImmutable ? $startDateDateTime->format('Y-m-d H:i:s') : $startDate;
-        $startTimeDateTime = \DateTimeImmutable::createFromFormat('H:i', $startTime);
-        $startTime = $startTimeDateTime instanceof \DateTimeImmutable ? $startTimeDateTime->format('Y-m-d H:i:s') : $startTime;
-
         // scores should be numeric or null
         $homeTeamScore = is_numeric($homeTeamScore) ? $homeTeamScore : null;
         $awayTeamScore = is_numeric($awayTeamScore) ? $awayTeamScore : null;
 
-        $this->applyAndRecordThat(new GameScoreUpdated($this->seasonId, $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime));
+        $this->applyAndRecordThat(new GameScoreUpdated($this->seasonId, $gameId, $homeTeamScore, $awayTeamScore, $startDate, $startTime, $dateOccurred));
     }
 
     // delete all games in the season
-    public function delete()
+    public function delete(Date $dateOccurred)
     {
-        $this->applyAndRecordThat(new SeasonDeleted($this->seasonId));
+        $this->applyAndRecordThat(new SeasonDeleted($this->seasonId, $dateOccurred));
     }
 
     // delete a game
-    public function deleteGame(GameId $gameId)
+    public function deleteGame(GameId $gameId, Date $dateOccurred)
     {
         if (!$this->getGameById($gameId)) {
             throw new RuntimeException('The game does not exist. Cannot delete the game.');
         }
 
-        $this->applyAndRecordThat(new GameDeleted($this->seasonId, $gameId));
+        $this->applyAndRecordThat(new GameDeleted($this->seasonId, $gameId, $dateOccurred));
     }
 
     protected function applySeasonCreated(SeasonCreated $event)
     {
+        $this->seasonId = $event->getAggregateId();
         $this->sport = $event->getSport();
         $this->seasonType = $event->getSeasonType();
         $this->name = $event->getName();
@@ -236,20 +186,5 @@ class Season extends AbstractEntity
                 return $game;
             }
         }
-    }
-
-    public static function getValidSports()
-    {
-        return [
-            self::SPORT_FOOTBALL,
-            self::SPORT_BASKETBALL,
-        ];
-    }
-
-    public static function getValidSeasonTypes()
-    {
-        return [
-            self::SEASON_TYPE_REG,
-        ];
     }
 }

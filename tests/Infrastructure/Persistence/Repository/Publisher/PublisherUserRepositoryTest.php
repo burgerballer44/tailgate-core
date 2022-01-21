@@ -2,20 +2,22 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use PHPUnit\Framework\TestCase;
-use Burger\EventPublisher;
-use Burger\EventPublisherInterface;
+use Burger\Aggregate\AggregateHistory;
+use Burger\Aggregate\DomainEvent;
+use Burger\Event\EventPublisher;
+use Burger\Event\EventPublisherInterface;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserDomainEvent;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\UserProjectorEventSubscriber;
+use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\UserRepository;
+use Tailgate\Test\BaseTestCase;
 
-class PublisherUserRepositoryTest extends TestCase
+class PublisherUserRepositoryTest extends BaseTestCase
 {
     private $eventStore;
     private $eventPublisher;
@@ -30,13 +32,13 @@ class PublisherUserRepositoryTest extends TestCase
         $this->eventPublisher->subscribe(new UserProjectorEventSubscriber($this->projection));
 
         // create a user and activate it just so we have an extra event on it
-        $this->user = User::create(UserId::fromString('userId'), 'email', 'passwordHash');
-        $this->user->activate();
+        $this->user = User::register(UserId::fromString('userId'), Email::fromString('email@email.com'), 'passwordHash', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
+        $this->user->activate(Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
     }
 
     public function testItCanGetAUser()
     {
-        $userId = UserId::fromString($this->user->getId());
+        $userId = $this->user->getUserId();
         $aggregateHistory = new AggregateHistory($userId, (array)$this->user->getRecordedEvents());
 
         // the getAggregateHistoryFor method should be called once and will return the aggregateHistory

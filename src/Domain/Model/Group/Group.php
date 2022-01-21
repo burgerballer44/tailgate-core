@@ -2,19 +2,19 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Tailgate\Domain\Model\AbstractEntity;
+use Burger\Aggregate\IdentifiesAggregate;
 use RuntimeException;
+use Tailgate\Domain\Model\AbstractEventBasedEntity;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Group\GroupInviteCode;
+use Tailgate\Domain\Model\Group\GroupRole;
 use Tailgate\Domain\Model\Season\GameId;
-use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Domain\Model\User\UserId;
 
-class Group extends AbstractEntity
+class Group extends AbstractEventBasedEntity
 {
-    const G_ROLE_ADMIN = 'Group-Admin'; // someone who can manage the gorup
-    const G_ROLE_MEMBER = 'Group-Member'; // regular user who can submit scores
-
     const SINGLE_PLAYER = 0;  // member can not add multiple players to group
     const MULTIPLE_PLAYERS = 1;  // member can add multiple players to group
 
@@ -33,37 +33,9 @@ class Group extends AbstractEntity
     private $players = [];
     private $follow;
 
-    protected function __construct($groupId, $name, $inviteCode, $ownerId)
+    public function getGroupId()
     {
-        $this->groupId = $groupId;
-        $this->name = $name;
-        $this->inviteCode = $inviteCode;
-        $this->ownerId = $ownerId;
-    }
-
-    // create a group
-    public static function create(GroupId $groupId, $name, $inviteCode, UserId $ownerId)
-    {
-        $newGroup = new Group($groupId, $name, $inviteCode, $ownerId);
-
-        $newGroup->recordThat(new GroupCreated($groupId, $name, $inviteCode, $ownerId));
-
-        $newGroup->applyAndRecordThat(
-            new MemberAdded($groupId, new MemberId(), $ownerId, Group::G_ROLE_ADMIN, Group::MULTIPLE_PLAYERS)
-        );
-
-        return $newGroup;
-    }
-
-    // create an empty group
-    protected static function createEmptyEntity(IdentifiesAggregate $groupId)
-    {
-        return new Group($groupId, '', '', '');
-    }
-
-    public function getId()
-    {
-        return (string) $this->groupId;
+        return $this->groupId;
     }
 
     public function getName()
@@ -71,9 +43,14 @@ class Group extends AbstractEntity
         return $this->name;
     }
 
+    public function getInviteCode()
+    {
+        return $this->inviteCode;
+    }
+
     public function getOwnerId()
     {
-        return (string) $this->ownerId;
+        return $this->ownerId;
     }
 
     public function getScores()
@@ -96,8 +73,28 @@ class Group extends AbstractEntity
         return $this->follow;
     }
 
+    // create an empty group
+    protected static function createEmptyEntity(IdentifiesAggregate $groupId)
+    {
+        return new Group($groupId, '', '', '');
+    }
+
+    // create a group
+    public static function create(GroupId $groupId, $name, GroupInviteCode $inviteCode, UserId $ownerId, Date $dateOccurred)
+    {
+        $group = new static();
+
+        $group->applyAndRecordThat(new GroupCreated($groupId, $name, $inviteCode, $ownerId, $dateOccurred));
+
+        $group->applyAndRecordThat(
+            new MemberAdded($groupId, new MemberId(), $ownerId, GroupRole::getGroupAdmin(), Group::MULTIPLE_PLAYERS, $dateOccurred)
+        );
+
+        return $group;
+    }
+
     // add a score
-    public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction)
+    public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction, Date $dateOccurred)
     {
         if (!$this->getPlayerById($playerId)) {
             throw new RuntimeException('The player submitting the score does not exist.');
@@ -114,13 +111,14 @@ class Group extends AbstractEntity
                 $playerId,
                 $gameId,
                 $homeTeamPrediction,
-                $awayTeamPrediction
+                $awayTeamPrediction,
+                $dateOccurred
             )
         );
     }
 
     // add a player
-    public function addPlayer(MemberId $memberId, $username)
+    public function addPlayer(MemberId $memberId, $username, Date $dateOccurred)
     {
         if (!$member = $this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist. Cannot add the player.');
@@ -139,12 +137,12 @@ class Group extends AbstractEntity
         }
 
         $this->applyAndRecordThat(
-            new PlayerAdded($this->groupId, new PlayerId(), $memberId, $username)
+            new PlayerAdded($this->groupId, new PlayerId(), $memberId, $username, $dateOccurred)
         );
     }
 
     // change who owns a player to a different member
-    public function changePlayerOwner(PlayerId $playerId, MemberId $memberId)
+    public function changePlayerOwner(PlayerId $playerId, MemberId $memberId, Date $dateOccurred)
     {
         if (!$this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist. Cannot change the player owner.');
@@ -155,24 +153,24 @@ class Group extends AbstractEntity
         }
 
         $this->applyAndRecordThat(
-            new PlayerOwnerChanged($this->groupId, $playerId, $memberId)
+            new PlayerOwnerChanged($this->groupId, $playerId, $memberId, $dateOccurred)
         );
     }
 
     // changes a score to something else
-    public function updateScore(ScoreId $scoreId, $homeTeamPrediction, $awayTeamPrediction)
+    public function updateScore(ScoreId $scoreId, $homeTeamPrediction, $awayTeamPrediction, Date $dateOccurred)
     {
         if (!$this->getScoreById($scoreId)) {
             throw new RuntimeException('The score does not exist. Cannot update the score.');
         }
 
         $this->applyAndRecordThat(
-            new GroupScoreUpdated($this->groupId, $scoreId, $homeTeamPrediction, $awayTeamPrediction)
+            new GroupScoreUpdated($this->groupId, $scoreId, $homeTeamPrediction, $awayTeamPrediction, $dateOccurred)
         );
     }
 
     // add a member
-    public function addMember(UserId $userId)
+    public function addMember(UserId $userId, Date $dateOccurred)
     {
         if ($this->getMemberByUserId($userId)) {
             throw new RuntimeException('The member is already in the group.');
@@ -183,27 +181,23 @@ class Group extends AbstractEntity
         }
 
         $this->applyAndRecordThat(
-            new MemberAdded($this->groupId, new MemberId(), $userId, Group::G_ROLE_MEMBER, Group::SINGLE_PLAYER)
+            new MemberAdded($this->groupId, new MemberId(), $userId, GroupRole::getGroupMember(), Group::SINGLE_PLAYER, $dateOccurred)
         );
     }
 
     // updates the group name, and owner
-    public function update($name, UserId $ownerId)
+    public function update($name, UserId $ownerId, Date $dateOccurred)
     {
         $this->applyAndRecordThat(
-            new GroupUpdated($this->groupId, $name, $ownerId)
+            new GroupUpdated($this->groupId, $name, $ownerId, $dateOccurred)
         );
     }
 
     // updates a member role, and if they can add multiple players
-    public function updateMember(MemberId $memberId, $groupRole, $allowMultiple)
+    public function updateMember(MemberId $memberId, $groupRole, $allowMultiple, Date $dateOccurred)
     {
         if (!$this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist.');
-        }
-
-        if (!in_array($groupRole, $this->getValidGroupRoles())) {
-            throw new RuntimeException('Invalid group role. Group role does not exist.');
         }
 
         // get all admin members
@@ -220,7 +214,7 @@ class Group extends AbstractEntity
         if (
             count($adminMemberIds) == self::MIN_NUMBER_ADMINS
             && in_array($memberId, $adminMemberIds)
-            && ($groupRole != self::G_ROLE_ADMIN)
+            && ($groupRole != GroupRole::getGroupAdmin())
         ) {
             throw new RuntimeException('Cannot change the last admin in the group to not be an admin.');
         }
@@ -231,18 +225,18 @@ class Group extends AbstractEntity
         }
 
         $this->applyAndRecordThat(
-            new MemberUpdated($this->groupId, $memberId, $groupRole, $allowMultiple)
+            new MemberUpdated($this->groupId, $memberId, $groupRole, $allowMultiple, $dateOccurred)
         );
     }
 
     // remove all members, players, and scores from a group
-    public function delete()
+    public function delete(Date $dateOccurred)
     {
-        $this->applyAndRecordThat(new GroupDeleted($this->groupId));
+        $this->applyAndRecordThat(new GroupDeleted($this->groupId, $dateOccurred));
     }
 
     // delete a member, all players the member has, and all scores from each player
-    public function deleteMember(MemberId $memberId)
+    public function deleteMember(MemberId $memberId, Date $dateOccurred)
     {
         if (!$this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist.');
@@ -265,56 +259,57 @@ class Group extends AbstractEntity
         }
 
         $this->applyAndRecordThat(
-            new MemberDeleted($this->groupId, $memberId)
+            new MemberDeleted($this->groupId, $memberId, $dateOccurred)
         );
     }
 
     // delete a player, and all of their scores
-    public function deletePlayer(PlayerId $playerId)
+    public function deletePlayer(PlayerId $playerId, Date $dateOccurred)
     {
         if (!$this->getPlayerById($playerId)) {
             throw new RuntimeException('The player does not exist.');
         }
 
         $this->applyAndRecordThat(
-            new PlayerDeleted($this->groupId, $playerId)
+            new PlayerDeleted($this->groupId, $playerId, $dateOccurred)
         );
     }
 
     // delete a score
-    public function deleteScore(ScoreId $scoreId)
+    public function deleteScore(ScoreId $scoreId, Date $dateOccurred)
     {
         if (!$this->getScoreById($scoreId)) {
             throw new RuntimeException('The score does not exist. Cannot update the score.');
         }
 
         $this->applyAndRecordThat(
-            new ScoreDeleted($this->groupId, $scoreId)
+            new ScoreDeleted($this->groupId, $scoreId, $dateOccurred)
         );
     }
 
     // follow a team
-    public function followTeam(TeamId $teamId, SeasonId $seasonId)
+    public function followTeam(TeamId $teamId, SeasonId $seasonId, Date $dateOccurred)
     {
         if ($this->follow) {
             throw new RuntimeException('Cannot follow this team. This group is already following a team.');
         }
 
-        $this->applyAndRecordThat(new TeamFollowed($this->groupId, new FollowId(), $teamId, $seasonId));
+        $this->applyAndRecordThat(new TeamFollowed($this->groupId, new FollowId(), $teamId, $seasonId, $dateOccurred));
     }
 
     // remove a follow
-    public function deleteFollow(FollowId $followId)
+    public function deleteFollow(FollowId $followId, Date $dateOccurred)
     {
         if (!$this->follow instanceof Follow) {
             throw new RuntimeException('Group is not following a team.');
         }
 
-        $this->applyAndRecordThat(new FollowDeleted($this->groupId, $followId));
+        $this->applyAndRecordThat(new FollowDeleted($this->groupId, $followId, $dateOccurred));
     }
 
     protected function applyGroupCreated(GroupCreated $event)
     {
+        $this->groupId = $event->getAggregateId();
         $this->name = $event->getName();
         $this->inviteCode = $event->getInviteCode();
         $this->ownerId = $event->getOwnerId();
@@ -492,15 +487,8 @@ class Group extends AbstractEntity
     private function getMembersThatAreAdmin()
     {
         return array_filter($this->members, function ($member) {
-            return $member->getGroupRole() == self::G_ROLE_ADMIN;
+            return $member->getGroupRole() == GroupRole::getGroupAdmin();
         });
     }
 
-    public static function getValidGroupRoles()
-    {
-        return [
-            self::G_ROLE_ADMIN,
-            self::G_ROLE_MEMBER,
-        ];
-    }
 }

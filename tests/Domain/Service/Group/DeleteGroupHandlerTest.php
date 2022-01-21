@@ -2,34 +2,36 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\DeleteGroupCommand;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\DeleteGroupHandler;
+use Tailgate\Test\BaseTestCase;
 
-class DeleteGroupHandlerTest extends TestCase
+class DeleteGroupHandlerTest extends BaseTestCase
 {
-    private $groupId = 'groupId';
-    private $userId = 'userId';
-    private $groupName = 'groupName';
-    private $groupInviteCode = 'code';
-    private $group;
-    private $deleteGroupCommand;
-
     public function setUp(): void
     {
+        $this->groupId = GroupId::fromString('groupId');
+        $this->userId = UserId::fromString('userId');
+        $this->groupName = 'groupName';
+        $this->groupInviteCode = GroupInviteCode::create();
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
         // create a group and clear events
         $this->group = Group::create(
-            GroupId::fromString($this->groupId),
+            $this->groupId,
             $this->groupName,
             $this->groupInviteCode,
-            UserId::fromString($this->userId)
+            $this->userId,
+            $this->dateOccurred
         );
-        $this->group->clearRecordedEvents();
 
         $this->deleteGroupCommand = new DeleteGroupCommand(
             $this->groupId
@@ -38,27 +40,11 @@ class DeleteGroupHandlerTest extends TestCase
 
     public function testItAddsAGroupDeletedEventToTheGroupRepository()
     {
-        $groupId = $this->groupId;
-        $group = $this->group;
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
+        $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
+        $groupRepository->expects($this->once())->method('add');
 
-        // the get method should be called once and will return the group
-        $groupRepository->expects($this->once())->method('get')->willReturn($group);
-
-        // the add method should be called once
-        // the group object should have the GroupDeleted event
-        $groupRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($group) use ($groupId) {
-                $events = $group->getRecordedEvents();
-
-                return $events[0] instanceof GroupDeleted
-                && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
-
-        $deleteGroupHandler = new DeleteGroupHandler($groupRepository);
+        $deleteGroupHandler = new DeleteGroupHandler($groupRepository, new FakeClock());
 
         $deleteGroupHandler->handle($this->deleteGroupCommand);
     }

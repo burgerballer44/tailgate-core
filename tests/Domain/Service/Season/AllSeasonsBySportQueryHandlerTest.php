@@ -2,14 +2,15 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Season\AllSeasonsBySportQuery;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
+use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Service\DataTransformer\SeasonDataTransformerInterface;
 use Tailgate\Domain\Service\Season\AllSeasonsBySportQueryHandler;
 
-class AllSeasonsBySportQueryHandlerTest extends TestCase
+class AllSeasonsBySportQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToGetAllSeasonsFromSeasonViewRepository()
     {
@@ -17,7 +18,7 @@ class AllSeasonsBySportQueryHandlerTest extends TestCase
         $seasonViewTransformer = $this->createMock(SeasonDataTransformerInterface::class);
         $seasonViewRepository->expects($this->once())->method('allBySport')->willReturn([]);
 
-        $allSeasonsQuery = new AllSeasonsBySportQuery(Season::SPORT_FOOTBALL);
+        $allSeasonsQuery = new AllSeasonsBySportQuery(Sport::getFootball());
         $allSeasonsQueryHandler = new AllSeasonsBySportQueryHandler($seasonViewRepository, $seasonViewTransformer);
         $allSeasonsQueryHandler->handle($allSeasonsQuery);
     }

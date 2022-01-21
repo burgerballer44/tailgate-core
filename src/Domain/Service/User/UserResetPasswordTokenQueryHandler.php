@@ -21,9 +21,7 @@ class UserResetPasswordTokenQueryHandler
 
     public function handle(UserResetPasswordTokenQuery $query)
     {
-        $passwordResetToken = $query->getPasswordResetToken();
-
-        $userView = $this->userViewRepository->byPasswordResetToken($passwordResetToken);
+        $userView = $this->userViewRepository->byPasswordResetToken($query->getPasswordResetToken());
         return $this->userViewTransformer->read($userView);
     }
 }

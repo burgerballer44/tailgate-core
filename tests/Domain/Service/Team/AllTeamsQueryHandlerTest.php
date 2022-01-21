@@ -2,13 +2,13 @@
 
 namespace Tailgate\Test\Domain\Service\Team;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Team\AllTeamsQuery;
 use Tailgate\Domain\Service\Team\AllTeamsQueryHandler;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\TeamDataTransformerInterface;
 
-class AllTeamsQueryHandlerTest extends TestCase
+class AllTeamsQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToGetAllTeamsFromTeamViewRepository()
     {

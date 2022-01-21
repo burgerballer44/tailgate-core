@@ -21,9 +21,7 @@ class AllSeasonsBySportQueryHandler
 
     public function handle(AllSeasonsBySportQuery $query)
     {
-        $sport = $query->getSport();
-
-        $seasonViews = $this->seasonViewRepository->allBySport($sport);
+        $seasonViews = $this->seasonViewRepository->allBySport($query->getSport());
 
         $seasons = [];
 

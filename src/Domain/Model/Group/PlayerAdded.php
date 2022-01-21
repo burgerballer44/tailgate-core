@@ -2,7 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class PlayerAdded implements DomainEvent, GroupDomainEvent
 {
@@ -10,19 +10,25 @@ class PlayerAdded implements DomainEvent, GroupDomainEvent
     private $playerId;
     private $memberId;
     private $username;
-    private $occurredOn;
+    private $dateOccurred;
 
     public function __construct(
         GroupId $groupId,
         PlayerId $playerId,
         MemberId $memberId,
-        $username
+        $username,
+        $dateOccurred
     ) {
         $this->groupId = $groupId;
         $this->playerId = $playerId;
         $this->memberId = $memberId;
         $this->username = $username;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Group player added.';
     }
 
     public function getAggregateId()
@@ -45,8 +51,8 @@ class PlayerAdded implements DomainEvent, GroupDomainEvent
         return $this->username;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

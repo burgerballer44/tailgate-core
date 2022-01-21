@@ -2,10 +2,10 @@
 
 namespace Tailgate\Infrastructure\Persistence\Event\PDO;
 
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use Buttercup\Protects\DomainEvents;
-use Buttercup\Protects\IdentifiesAggregate;
+use Burger\Aggregate\AggregateHistory;
+use Burger\Aggregate\DomainEvent;
+use Burger\Aggregate\DomainEvents;
+use Burger\Aggregate\IdentifiesAggregate;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use PDO;
 

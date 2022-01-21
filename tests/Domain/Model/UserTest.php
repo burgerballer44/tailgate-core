@@ -2,142 +2,168 @@
 
 namespace Tailgate\Test\Domain\Model;
 
-use Buttercup\Protects\AggregateHistory;
-use PHPUnit\Framework\TestCase;
+use Burger\Aggregate\AggregateHistory;
+use Burger\Aggregate\DomainEvents;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
+use Tailgate\Domain\Model\User\PasswordResetToken;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
-use RuntimeException;
+use Tailgate\Domain\Model\User\UserRole;
+use Tailgate\Domain\Model\User\UserStatus;
+use Tailgate\Test\BaseTestCase;
 
-class UserTest extends TestCase
+class UserTest extends BaseTestCase
 {
-    private $userId;
-    private $passwordHash = 'passwordHashBlahBlah';
-    private $email = 'emailAddress';
+    private function createUser()
+    {
+        return User::register($this->userId, $this->email, $this->passwordHash, $this->dateOccurred);
+    }
 
-    public function setUp(): void
+    public function setUp() : void
     {
         $this->userId = UserId::fromString('userId');
+        $this->email = Email::fromString('email@email.com');
+        $this->passwordHash = 'passwordHashBlahBlah';
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
     }
 
     public function testUserShouldBeTheSameAfterReconstitution()
     {
-        $user = User::create(
-            $this->userId,
-            $this->email,
-            $this->passwordHash
-        );
+        // create a user
+        $user = $this->createUser();
         $events = $user->getRecordedEvents();
         $user->clearRecordedEvents();
 
-        $reconstitutedUser = User::reconstituteFrom(
+        // recreate the user using event array
+        $reconstitutedUser = User::reconstituteFromEvents(
             new AggregateHistory($this->userId, (array) $events)
         );
 
-        $this->assertEquals(
-            $user,
-            $reconstitutedUser,
-            'the reconstituted user does not match the original user'
-        );
+        // both user objects should be the same
+        $this->assertEquals($user, $reconstitutedUser, 'the reconstituted user does not match the original user');
     }
 
-    public function testAUserCanBeCreated()
+    public function testRegisteringAUserStoresUserIdPasswordHashAndEmail()
     {
-        $user = User::create($this->userId, $this->email, $this->passwordHash);
+        $user = $this->createUser();
 
-        $this->assertEquals($this->userId, $user->getId());
-        $this->assertEquals($this->passwordHash, $user->getPasswordHash());
+        $userRegisteredEvent = $user->getRecordedEvents()[0];
+
+        // $this->assertEquals(
+        //     new DomainEvents([new UserRegistered($this->userId, $this->email, $this->passwordHash, UserStatus::getPending(), UserRole::getStandard(), $this->dateOccurred)]),
+        //     $user->getRecordedEvents()
+        // );
+
+        $this->assertEquals($this->userId, $userRegisteredEvent->getAggregateId());
+        $this->assertEquals($this->email, $userRegisteredEvent->getEmail());
+        $this->assertEquals($this->passwordHash, $userRegisteredEvent->getPasswordHash());
+        $this->assertEquals($this->dateOccurred, $userRegisteredEvent->getDateOccurred());
+        $this->assertEquals($this->userId, $user->getUserId());
         $this->assertEquals($this->email, $user->getEmail());
-        $this->assertEquals(User::STATUS_PENDING, $user->getStatus());
-        $this->assertEquals(User::ROLE_USER, $user->getRole());
+        $this->assertEquals($this->passwordHash, $user->getPasswordHash());
     }
 
-    public function testAUserCanBeActivated()
+    public function testRegisteringAUserHasPendingStatus()
     {
-        $user = User::create($this->userId, $this->email, $this->passwordHash);
+        $user = $this->createUser();
 
-        $user->activate();
+        $userRegisteredEvent = $user->getRecordedEvents()[0];
 
-        $this->assertEquals(User::STATUS_ACTIVE, $user->getStatus());
+        $this->assertEquals(UserStatus::getPending(), $userRegisteredEvent->getStatus());
+        $this->assertEquals(UserStatus::getPending(), $user->getStatus());
+    }
+
+    public function testRegisteringAUserHasStandardRole()
+    {
+        $user = $this->createUser();
+
+        $userRegisteredEvent = $user->getRecordedEvents()[0];
+
+        $this->assertEquals(UserRole::getStandard(), $userRegisteredEvent->getRole());
+        $this->assertEquals(UserRole::getStandard(), $user->getRole());
+    }
+
+    public function testActivatingAUserSetsTheActiveStatus()
+    {
+        $user = $this->createUser();
+        $user->clearRecordedEvents();
+
+        $user->activate($this->dateOccurred);
+
+        $userActicvatedEvent = $user->getRecordedEvents()[0];
+
+        $this->assertEquals(UserStatus::getActive(), $userActicvatedEvent->getStatus());
+        $this->assertEquals($this->dateOccurred, $userActicvatedEvent->getDateOccurred());
+        $this->assertEquals(UserStatus::getActive(), $user->getStatus());
     }
 
     public function testAPasswordCanBeUpdated()
     {
+        $user = $this->createUser();
+        $user->clearRecordedEvents();
+
         $newPassword = 'newPassword';
-        $user = User::create($this->userId, $this->email, $this->passwordHash);
+        $user->updatePassword($newPassword, $this->dateOccurred);
 
-        $user->updatePassword($newPassword);
+        $passwordUpdatedEvent = $user->getRecordedEvents()[0];
 
+        $this->assertEquals($newPassword, $passwordUpdatedEvent->getPasswordHash());
+        $this->assertEquals($this->dateOccurred, $passwordUpdatedEvent->getDateOccurred());
+        $this->assertNotEquals($this->passwordHash, $passwordUpdatedEvent->getPasswordHash());
         $this->assertEquals($newPassword, $user->getPasswordHash());
-        $this->assertNotEquals($this->passwordHash, $user->getPasswordHash());
     }
 
     public function testAnEmailCanBeUpdated()
     {
-        $newEmail = 'email@new.new';
-        $user = User::create($this->userId, $this->email, $this->passwordHash);
+        $user = $this->createUser();
+        $user->clearRecordedEvents();
 
-        $user->updateEmail($newEmail);
+        $newEmail = Email::fromString('updated@email.com');
+        $user->updateEmail($newEmail, $this->dateOccurred);
 
+        $emailUpdatedEvent = $user->getRecordedEvents()[0];
+
+        $this->assertEquals($newEmail, $emailUpdatedEvent->getEmail());
+        $this->assertEquals($this->dateOccurred, $emailUpdatedEvent->getDateOccurred());
+        $this->assertNotEquals($this->email, $emailUpdatedEvent->getEmail());
         $this->assertEquals($newEmail, $user->getEmail());
-        $this->assertNotEquals($this->email, $user->getEmail());
     }
 
-    public function testAUserCanBeUpdated()
+    public function testEmailStatusAndRoleCanBeUpdated()
     {
-        $email = 'email@email.com';
-        $status = User::STATUS_PENDING;
-        $role = User::ROLE_ADMIN;
-        $user = User::create($this->userId, $this->email, $this->passwordHash);
+        $user = $this->createUser();
+        $user->clearRecordedEvents();
 
-        $user->update($email, $status, $role);
+        $email = Email::fromString('updated@email.com');
+        $status = UserStatus::getDeleted();
+        $role = UserRole::getAdmin();
+        $user->update($email, $status, $role, $this->dateOccurred);
+        
+        $userUpdatedEvent = $user->getRecordedEvents()[0];
 
+        $this->assertEquals($email, $userUpdatedEvent->getEmail());
+        $this->assertEquals($status, $userUpdatedEvent->getStatus());
+        $this->assertEquals($role, $userUpdatedEvent->getRole());
+        $this->assertEquals($this->dateOccurred, $userUpdatedEvent->getDateOccurred());
         $this->assertEquals($email, $user->getEmail());
         $this->assertEquals($status, $user->getStatus());
         $this->assertEquals($role, $user->getRole());
     }
 
-    public function testUpdatingAUserThrowsExceptionsWithInvalidValues()
+    public function testAUserCanHaveApasswordResetTokenApplied()
     {
-        $user = User::create($this->userId, $this->email, $this->passwordHash);
+        $user = $this->createUser();
+        $user->clearRecordedEvents();
 
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Invalid role. Role does not exist.');
-        $user->update('email@email.com', User::STATUS_PENDING, 'invalideRole');
+        $token = PasswordResetToken::create();
+        $user->applyPasswordResetToken($token, $this->dateOccurred);
 
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Invalid status. Status does not exist.');
-        $user->update('email@email.com', 'invalidStatus', User::ROLE_ADMIN);
-    }
+        $passwordResetTokenAppliedEvent = $user->getRecordedEvents()[0];
 
-    public function testAUserCanHaveAPasswordResetTokenCreated()
-    {
-        $email = 'email@email.com';
-        $status = User::STATUS_PENDING;
-        $role = User::ROLE_ADMIN;
-        $user = User::create($this->userId, $this->email, $this->passwordHash);
-
-        $randomString = 'randomString';
-        $user->createPasswordResetToken($randomString);
-
-        $result = $user->getPasswordResetToken();
-        // randomString
-        $this->assertEquals($randomString, substr($result, 0, strlen($randomString)));
-        // _
-        $this->assertEquals('_', substr($result, strlen($randomString), 1));
-        // 1572211329 (the time)
-        $this->assertEquals(10, strlen(substr($result, strlen($randomString) + 1)));
-    }
-
-    public function testAPasswordResetTokenIsInvalidIfOlderThanOneHour()
-    {
-        $passwordResetToken = 'randomString' . "_" . strtotime("1 hour 1 minute ago");
-        $this->assertFalse(User::isPasswordResetTokenValid($passwordResetToken));
-    }
-
-    public function testAPasswordResetTokenIsValidIfWithinOneHour()
-    {
-        $passwordResetToken = 'randomString' . "_" . strtotime("30 minutes ago");
-        $this->assertTrue(User::isPasswordResetTokenValid($passwordResetToken));
+        $this->assertEquals($token, $passwordResetTokenAppliedEvent->getPasswordResetToken());
+        $this->assertEquals($this->dateOccurred, $passwordResetTokenAppliedEvent->getDateOccurred());
+        $this->assertEquals($token, $user->getPasswordResetToken());
     }
 }

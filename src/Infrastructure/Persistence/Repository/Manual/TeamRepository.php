@@ -2,8 +2,8 @@
 
 namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Buttercup\Protects\RecordsEvents;
+use Burger\Aggregate\IdentifiesAggregate;
+use Burger\Aggregate\RecordsEvents;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -27,7 +27,7 @@ class TeamRepository implements TeamRepositoryInterface
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return Team::reconstituteFrom($eventStream);
+        return Team::reconstituteFromEvents($eventStream);
     }
 
     public function add(RecordsEvents $team)

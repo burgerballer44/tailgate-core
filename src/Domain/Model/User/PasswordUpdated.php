@@ -2,19 +2,24 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class PasswordUpdated implements DomainEvent, UserDomainEvent
 {
     private $userId;
     private $passwordHash;
-    private $occurredOn;
+    private $dateOccurred;
 
-    public function __construct(UserId $userId, $passwordHash)
+    public function __construct(UserId $userId, $passwordHash, $dateOccurred)
     {
         $this->userId = $userId;
         $this->passwordHash = $passwordHash;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Password updated.';
     }
 
     public function getAggregateId()
@@ -27,8 +32,8 @@ class PasswordUpdated implements DomainEvent, UserDomainEvent
         return $this->passwordHash;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

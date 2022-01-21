@@ -2,18 +2,22 @@
 
 namespace Tailgate\Domain\Model\Season;
 
-use Buttercup\Protects\DomainEvent;
-use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Domain\Model\DomainEvent;
 
 class SeasonDeleted implements DomainEvent, SeasonDomainEvent
 {
     private $seasonId;
-    private $occurredOn;
+    private $dateOccurred;
 
-    public function __construct(SeasonId $seasonId)
+    public function __construct(SeasonId $seasonId, $dateOccurred)
     {
         $this->seasonId = $seasonId;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Season removed.';
     }
 
     public function getAggregateId()
@@ -21,8 +25,8 @@ class SeasonDeleted implements DomainEvent, SeasonDomainEvent
         return $this->seasonId;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

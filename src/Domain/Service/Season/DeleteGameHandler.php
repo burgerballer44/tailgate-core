@@ -4,28 +4,29 @@ namespace Tailgate\Domain\Service\Season;
 
 use Tailgate\Application\Command\Season\DeleteGameCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
+use Tailgate\Domain\Service\Clock\Clock;
 
 class DeleteGameHandler
 {
     private $seasonRepository;
+    private $clock;
 
-    public function __construct(SeasonRepositoryInterface $seasonRepository)
+    public function __construct(SeasonRepositoryInterface $seasonRepository, Clock $clock)
     {
         $this->seasonRepository = $seasonRepository;
+        $this->clock = $clock;
     }
 
     public function handle(DeleteGameCommand $command)
     {
-        $seasonId = $command->getSeasonId();
-        $gameId = $command->getGameId();
+        $season = $this->seasonRepository->get(SeasonId::fromString($command->getSeasonId()));
 
-        $season = $this->seasonRepository->get(SeasonId::fromString($seasonId));
-
-        $season->deleteGame(GameId::fromString($gameId));
+        $season->deleteGame(GameId::fromString($command->getGameId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
 
         $this->seasonRepository->add($season);
     }

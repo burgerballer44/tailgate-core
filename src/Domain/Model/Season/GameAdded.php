@@ -2,7 +2,7 @@
 
 namespace Tailgate\Domain\Model\Season;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 use Tailgate\Domain\Model\Team\TeamId;
 
 class GameAdded implements DomainEvent, SeasonDomainEvent
@@ -13,7 +13,7 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
     private $awayTeamId;
     private $startDate;
     private $startTime;
-    private $occurredOn;
+    private $dateOccurred;
 
     public function __construct(
         SeasonId $seasonId,
@@ -21,7 +21,8 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
         TeamId $homeTeamId,
         TeamId $awayTeamId,
         $startDate,
-        $startTime
+        $startTime,
+        $dateOccurred
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;
@@ -29,7 +30,12 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
         $this->awayTeamId = $awayTeamId;
         $this->startDate = $startDate;
         $this->startTime = $startTime;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Game added to season.';
     }
 
     public function getAggregateId()
@@ -62,8 +68,8 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
         return $this->startTime;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Tailgate\Infrastructure\Persistence\Projection;
 
-use Buttercup\Protects\DomainEvent;
-use Buttercup\Protects\DomainEvents;
+use Burger\Aggregate\DomainEvent;
+use Burger\Aggregate\DomainEvents;
 
 interface ProjectionInterface
 {

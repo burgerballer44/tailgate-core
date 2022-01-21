@@ -2,7 +2,7 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Season\AllFollowedGamesQuery;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\FollowView;
@@ -13,7 +13,7 @@ use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Service\DataTransformer\GameDataTransformerInterface;
 use Tailgate\Domain\Service\Season\AllFollowedGamesQueryHandler;
 
-class AllFollowedGamesQueryHandlerTest extends TestCase
+class AllFollowedGamesQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToGetASeasonBySeasonIdFromTeamViewRepository()
     {

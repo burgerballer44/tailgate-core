@@ -3,12 +3,12 @@
 namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 
 use PDO;
-use Tailgate\Domain\Model\User\UserRegistered;
+use Tailgate\Domain\Model\User\EmailUpdated;
+use Tailgate\Domain\Model\User\PasswordResetTokenApplied;
+use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\UserDeleted;
-use Tailgate\Domain\Model\User\PasswordUpdated;
-use Tailgate\Domain\Model\User\PasswordResetTokenCreated;
-use Tailgate\Domain\Model\User\EmailUpdated;
+use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserUpdated;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
@@ -25,8 +25,8 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectUserRegistered(UserRegistered $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `user` (user_id, password_hash, email, status, role, password_reset_token, created_at)
-            VALUES (:user_id, :password_hash, :email, :status, :role, :password_reset_token, :created_at)'
+            'INSERT INTO `user` (user_id, password_hash, email, status, role, created_at)
+            VALUES (:user_id, :password_hash, :email, :status, :role, :created_at)'
         );
 
         $stmt->execute([
@@ -35,7 +35,6 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
             ':email' => $event->getEmail(),
             ':status' => $event->getStatus(),
             ':role' => $event->getRole(),
-            ':password_reset_token' => $event->getPasswordResetToken(),
             ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
         ]);
     }
@@ -112,7 +111,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
         ]);
     }
 
-    public function projectPasswordResetTokenCreated(PasswordResetTokenCreated $event)
+    public function projectPasswordResetTokenApplied(PasswordResetTokenApplied $event)
     {
         $stmt = $this->pdo->prepare(
             'UPDATE `user`

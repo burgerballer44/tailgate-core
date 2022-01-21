@@ -2,13 +2,13 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Group\QueryGroupsQuery;
 use Tailgate\Domain\Service\Group\QueryGroupsQueryHandler;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
 
-class QueryGroupsQueryHandlerTest extends TestCase
+class QueryGroupsQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToQueryGroupsFromGroupViewRepository()
     {

@@ -2,21 +2,23 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use PHPUnit\Framework\TestCase;
-use Burger\EventPublisher;
-use Burger\EventPublisherInterface;
+use Burger\Aggregate\AggregateHistory;
+use Burger\Aggregate\DomainEvent;
+use Burger\Event\EventPublisher;
+use Burger\Event\EventPublisherInterface;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupDomainEvent;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
+use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\GroupProjectorEventSubscriber;
+use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\GroupRepository;
+use Tailgate\Test\BaseTestCase;
 
-class PublisherGroupRepositoryTest extends TestCase
+class PublisherGroupRepositoryTest extends BaseTestCase
 {
     private $eventStore;
     private $projection;
@@ -31,12 +33,12 @@ class PublisherGroupRepositoryTest extends TestCase
         $this->eventPublisher->subscribe(new GroupProjectorEventSubscriber($this->projection));
 
         // create a group so we have an event
-        $this->group = Group::create(GroupId::fromString('GroupId'), 'Groupname', 'inviteCode', UserId::fromString('userId'));
+        $this->group = Group::create(GroupId::fromString('GroupId'), 'Groupname', GroupInviteCode::create(), UserId::fromString('userId'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
     }
 
     public function testItCanGetAGroup()
     {
-        $groupId = GroupId::fromString($this->group->getId());
+        $groupId = $this->group->getGroupId();
         $aggregateHistory = new AggregateHistory($groupId, (array)$this->group->getRecordedEvents());
 
         // the getAggregateHistoryFor method should be called once and will return the aggregateHistory

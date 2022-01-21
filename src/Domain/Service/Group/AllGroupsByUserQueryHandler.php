@@ -22,9 +22,7 @@ class AllGroupsByUserQueryHandler
 
     public function handle(AllGroupsByUserQuery $query)
     {
-        $userId = UserId::fromString($query->getUserId());
-
-        $groupViews = $this->groupViewRepository->allByUser($userId);
+        $groupViews = $this->groupViewRepository->allByUser(UserId::fromString($query->getUserId()));
 
         $groups = [];
 

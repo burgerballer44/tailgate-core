@@ -2,13 +2,14 @@
 
 namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Buttercup\Protects\RecordsEvents;
+use Burger\Aggregate\IdentifiesAggregate;
+use Burger\Aggregate\IsEventSourced;
+use Burger\Aggregate\RecordsEvents;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
+use Tailgate\Infrastructure\Persistence\Projection\UserProjectionInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -23,11 +24,11 @@ class UserRepository implements UserRepositoryInterface
         $this->userProjection = $userProjection;
     }
 
-    public function get(IdentifiesAggregate $aggregateId)
+    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return User::reconstituteFrom($eventStream);
+        return User::reconstituteFromEvents($eventStream);
     }
 
     public function add(RecordsEvents $user)

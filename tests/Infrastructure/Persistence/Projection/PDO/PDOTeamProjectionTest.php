@@ -2,17 +2,19 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Domain\Model\Team\TeamDeleted;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamUpdated;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\TeamProjection;
+use Tailgate\Test\BaseTestCase;
 
-class PDOTeamProjectionTest extends TestCase
+class PDOTeamProjectionTest extends BaseTestCase
 {
     private $pdoMock;
     private $pdoStatementMock;
@@ -27,7 +29,7 @@ class PDOTeamProjectionTest extends TestCase
 
     public function testItCanProjectTeamAdded()
     {
-        $event = new TeamAdded(TeamId::fromString('teamId'), 'designation', 'mascot', Season::SPORT_FOOTBALL);
+        $event = new TeamAdded(TeamId::fromString('teamId'), 'designation', 'mascot', Sport::getFootball(), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -46,7 +48,7 @@ class PDOTeamProjectionTest extends TestCase
                 ':designation' => $event->getDesignation(),
                 ':mascot' => $event->getMascot(),
                 ':sport' => $event->getSport(),
-                ':created_at' => $event->getOccurredOn()->format('Y-m-d H:i:s')
+                ':created_at' => $event->getDateOccurred()
             ]);
 
         $this->projection->projectTeamAdded($event);
@@ -54,7 +56,7 @@ class PDOTeamProjectionTest extends TestCase
 
     public function testItCanProjectTeamUpdated()
     {
-        $event = new TeamUpdated(TeamId::fromString('teamId'), 'designation', 'mascot');
+        $event = new TeamUpdated(TeamId::fromString('teamId'), 'designation', 'mascot', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -80,29 +82,19 @@ class PDOTeamProjectionTest extends TestCase
 
     public function testItCanProjectTeamDeleted()
     {
-        $event = new TeamDeleted(TeamId::fromString('teamId'));
+        $event = new TeamDeleted(TeamId::fromString('teamId'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('prepare')
-            ->with('DELETE FROM `score` WHERE game_id IN
-            (SELECT game_id FROM game WHERE home_team_id = :team_id OR away_team_id = :team_id)')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(1))
-            ->method('prepare')
-            ->with('DELETE FROM `game` WHERE home_team_id = :team_id OR away_team_id = :team_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(2))
-            ->method('prepare')
-            ->with('DELETE FROM `follow` WHERE team_id = :team_id')
-            ->willReturn($this->pdoStatementMock);
-        $this->pdoMock
-            ->expects($this->at(3))
-            ->method('prepare')
-            ->with('DELETE FROM `team` WHERE team_id = :team_id')
+            ->withConsecutive(
+                ['DELETE FROM `score` WHERE game_id IN
+            (SELECT game_id FROM game WHERE home_team_id = :team_id OR away_team_id = :team_id)'],
+                ['DELETE FROM `game` WHERE home_team_id = :team_id OR away_team_id = :team_id'],
+                ['DELETE FROM `follow` WHERE team_id = :team_id'],
+                ['DELETE FROM `team` WHERE team_id = :team_id'],
+            )
             ->willReturn($this->pdoStatementMock);
 
         // execute method called 4 times

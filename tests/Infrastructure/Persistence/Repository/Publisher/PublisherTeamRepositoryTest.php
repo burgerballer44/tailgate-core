@@ -2,12 +2,13 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
-use Burger\EventPublisher;
-use Burger\EventPublisherInterface;
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use PHPUnit\Framework\TestCase;
+use Burger\Aggregate\AggregateHistory;
+use Burger\Aggregate\DomainEvent;
+use Burger\Event\EventPublisher;
+use Burger\Event\EventPublisherInterface;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Season\Season;
+use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamDomainEvent;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -15,8 +16,9 @@ use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection\TeamProjectorEventSubscriber;
 use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
 use Tailgate\Infrastructure\Persistence\Repository\Publisher\TeamRepository;
+use Tailgate\Test\BaseTestCase;
 
-class PublisherTeamRepositoryTest extends TestCase
+class PublisherTeamRepositoryTest extends BaseTestCase
 {
     private $eventStore;
     private $projection;
@@ -31,12 +33,12 @@ class PublisherTeamRepositoryTest extends TestCase
         $this->eventPublisher->subscribe(new TeamProjectorEventSubscriber($this->projection));
 
         // create a team so we have an event
-        $this->team = Team::create(teamId::fromString('teamId'), 'dedignation', 'mascot', Season::SPORT_FOOTBALL);
+        $this->team = Team::create(teamId::fromString('teamId'), 'dedignation', 'mascot', Sport::getFootball(), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
     }
 
     public function testItCanGetATeam()
     {
-        $teamId = TeamId::fromString($this->team->getId());
+        $teamId = $this->team->getTeamId();
         $aggregateHistory = new AggregateHistory($teamId, (array)$this->team->getRecordedEvents());
 
         // the getAggregateHistoryFor method should be called once and will return the aggregateHistory

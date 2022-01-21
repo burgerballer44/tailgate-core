@@ -2,15 +2,15 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\Event\PDO;
 
-use Buttercup\Protects\AggregateHistory;
-use Buttercup\Protects\DomainEvent;
-use Buttercup\Protects\DomainEvents;
-use PHPUnit\Framework\TestCase;
+use Burger\Aggregate\AggregateHistory;
+use Burger\Aggregate\DomainEvent;
+use Burger\Aggregate\DomainEvents;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Infrastructure\Persistence\Event\PDO\EventStore;
 
-class PDOEventStoreTest extends TestCase
+class PDOEventStoreTest extends BaseTestCase
 {
     private $pdoMock;
     private $pdoStatementMock;
@@ -110,13 +110,13 @@ class PDOEventStoreTest extends TestCase
 
         // fetch method called
         $this->pdoStatementMock
-           ->expects($this->at(1))
+           ->expects($this->exactly(3))
            ->method('fetch')
-           ->will($this->returnValue($rows[0]));
-        $this->pdoStatementMock
-           ->expects($this->at(2))
-           ->method('fetch')
-           ->will($this->returnValue($rows[1]));
+           ->withConsecutive([],[])
+           ->willReturnOnConsecutiveCalls(
+            $this->returnValue($rows[0]),
+            $this->returnValue($rows[1]),
+        );
 
         $history = $this->eventStore->getAggregateHistoryFor($id);
 

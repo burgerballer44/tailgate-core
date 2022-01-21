@@ -2,7 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\Season\GameId;
 
@@ -12,19 +12,25 @@ class GroupScoreUpdated implements DomainEvent, GroupDomainEvent
     private $scoreId;
     private $homeTeamPrediction;
     private $awayTeamPrediction;
-    private $occurredOn;
+    private $dateOccurred;
 
     public function __construct(
         GroupId $groupId,
         ScoreId $scoreId,
         $homeTeamPrediction,
-        $awayTeamPrediction
+        $awayTeamPrediction,
+        $dateOccurred
     ) {
         $this->groupId = $groupId;
         $this->scoreId = $scoreId;
         $this->homeTeamPrediction = $homeTeamPrediction;
         $this->awayTeamPrediction = $awayTeamPrediction;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'A score in the group has been updated.';
     }
 
     public function getAggregateId()
@@ -47,8 +53,8 @@ class GroupScoreUpdated implements DomainEvent, GroupDomainEvent
         return $this->awayTeamPrediction;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

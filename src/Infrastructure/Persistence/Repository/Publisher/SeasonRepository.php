@@ -2,9 +2,10 @@
 
 namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Buttercup\Protects\RecordsEvents;
-use Burger\EventPublisherInterface;
+use Burger\Aggregate\IdentifiesAggregate;
+use Burger\Aggregate\IsEventSourced;
+use Burger\Aggregate\RecordsEvents;
+use Burger\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonDomainEvent;
 use Tailgate\Domain\Model\Season\SeasonId;
@@ -24,11 +25,11 @@ class SeasonRepository implements SeasonRepositoryInterface
         $this->domainEventPublisher = $domainEventPublisher;
     }
 
-    public function get(IdentifiesAggregate $aggregateId)
+    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return Season::reconstituteFrom($eventStream);
+        return Season::reconstituteFromEvents($eventStream);
     }
 
     public function add(RecordsEvents $season)

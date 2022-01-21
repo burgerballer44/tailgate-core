@@ -11,10 +11,8 @@ class AllUsersQueryHandler
     private $userViewRepository;
     private $userViewTransformer;
 
-    public function __construct(
-        UserViewRepositoryInterface $userViewRepository,
-        UserDataTransformerInterface $userViewTransformer
-    ) {
+    public function __construct(UserViewRepositoryInterface $userViewRepository, UserDataTransformerInterface $userViewTransformer)
+    {
         $this->userViewRepository = $userViewRepository;
         $this->userViewTransformer = $userViewTransformer;
     }

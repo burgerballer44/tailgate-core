@@ -4,10 +4,12 @@ namespace Tailgate\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\SubmitScoreForGroupCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Season\GameId;
+use Tailgate\Domain\Service\Clock\Clock;
 use Tailgate\Domain\Service\Validatable;
 use Tailgate\Domain\Service\ValidatableService;
 
@@ -16,11 +18,13 @@ class SubmitScoreForGroupHandler implements ValidatableService
     use Validatable;
     
     private $validator;
+    private $clock;
     private $groupRepository;
 
-    public function __construct(ValidatorInterface $validator, GroupRepositoryInterface $groupRepository)
+    public function __construct(ValidatorInterface $validator, Clock $clock, GroupRepositoryInterface $groupRepository)
     {
         $this->validator = $validator;
+        $this->clock = $clock;
         $this->groupRepository = $groupRepository;
     }
 
@@ -28,19 +32,14 @@ class SubmitScoreForGroupHandler implements ValidatableService
     {
         $this->validate($command);
 
-        $groupId = $command->getGroupId();
-        $playerId = $command->getPlayerId();
-        $gameId = $command->getGameId();
-        $homeTeamPrediction = $command->getHomeTeamPrediction();
-        $awayTeamPrediction = $command->getAwayTeamPrediction();
-
-        $group = $this->groupRepository->get(GroupId::fromString($groupId));
+        $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
         $group->submitScore(
-            PlayerId::fromString($playerId),
-            GameId::fromString($gameId),
-            $homeTeamPrediction,
-            $awayTeamPrediction
+            PlayerId::fromString($command->getPlayerId()),
+            GameId::fromString($command->getGameId()),
+            $command->getHomeTeamPrediction(),
+            $command->getAwayTeamPrediction(),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
         );
 
         $this->groupRepository->add($group);

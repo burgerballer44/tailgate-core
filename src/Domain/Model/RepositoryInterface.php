@@ -2,9 +2,9 @@
 
 namespace Tailgate\Domain\Model;
 
-use Buttercup\Protects\AggregateRepository;
+use Burger\Aggregate\EventSourcedRepository;
 
-interface RepositoryInterface extends AggregateRepository
+interface RepositoryInterface extends EventSourcedRepository
 {
     public function nextIdentity();
 }

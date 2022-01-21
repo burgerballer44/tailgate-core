@@ -2,38 +2,41 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Season\UpdateSeasonCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
+use Tailgate\Domain\Model\Season\SeasonType;
 use Tailgate\Domain\Model\Season\SeasonUpdated;
+use Tailgate\Domain\Model\Season\Sport;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Season\UpdateSeasonHandler;
+use Tailgate\Test\BaseTestCase;
 
-class UpdateSeasonHandlerTest extends TestCase
+class UpdateSeasonHandlerTest extends BaseTestCase
 {
-    private $seasonId = 'seasonId';
-    private $sport = Season::SPORT_FOOTBALL;
-    private $seasonType = Season::SEASON_TYPE_REG;
-    private $name = 'updatedname';
-    private $seasonStart;
-    private $seasonEnd;
-    private $season;
-    private $updateSeasonCommand;
-
     public function setUp(): void
     {
-        // create season and clear events
-        $this->seasonStart = '2021-09-01';
-        $this->seasonEnd = '2021-12-28';
+        $this->seasonId = SeasonId::fromString('seasonId');
+        $this->name = 'name';
+        $this->sport = Sport::getFootball();
+        $this->seasonType = SeasonType::getRegularSeason();
+        $this->seasonStart = DateOrString::fromString('2019-09-01');
+        $this->seasonEnd = DateOrString::fromString('2019-12-28');
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
+        // create a season and clear events
         $this->season = Season::create(
-            SeasonId::fromString($this->seasonId),
-            'Name',
-            Season::SPORT_FOOTBALL,
-            Season::SEASON_TYPE_REG,
-            '2019-09-01',
-            '2019-09-01'
+            $this->seasonId,
+            $this->name,
+            $this->sport,
+            $this->seasonType,
+            $this->seasonStart,
+            $this->seasonEnd,
+            $this->dateOccurred
         );
         $this->season->clearRecordedEvents();
 
@@ -49,40 +52,14 @@ class UpdateSeasonHandlerTest extends TestCase
 
     public function testItAddsASeasonUpdatedEventToTheSeasonRepository()
     {
-        $seasonId = $this->seasonId;
-        $sport = $this->sport;
-        $seasonType = $this->seasonType;
-        $name = $this->name;
-        $seasonStart = $this->seasonStart;
-        $seasonEnd = $this->seasonEnd;
-        $season = $this->season;
-
-        $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
-
-        // the nextIdentity method should be called once and will return a the season
-        $seasonRepository->expects($this->once())->method('get')->willReturn($season);
-
-        // the add method should be called once
-        // the season object should have the SeasonUpdated event
-        $seasonRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($season) use ($seasonId, $sport, $seasonType, $name, $seasonStart, $seasonEnd) {
-                $events = $season->getRecordedEvents();
-
-                return $events[0] instanceof SeasonUpdated
-                && $events[0]->getAggregateId()->equals(SeasonId::fromString($seasonId))
-                && $events[0]->getSport() === $sport
-                && $events[0]->getSeasonType() === $seasonType
-                && $events[0]->getName() === $name
-                && $events[0]->getSeasonStart() === \DateTimeImmutable::createFromFormat('Y-m-d', $seasonStart)->format('Y-m-d H:i:s')
-                && $events[0]->getSeasonEnd() === \DateTimeImmutable::createFromFormat('Y-m-d', $seasonEnd)->format('Y-m-d H:i:s')
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
-
         $validator = $this->createMock(ValidatorInterface::class);
         $validator->expects($this->once())->method('assert')->willReturn(true);
 
-        $updateSeasonHandler = new UpdateSeasonHandler($validator, $seasonRepository);
+        $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
+        $seasonRepository->expects($this->once())->method('get')->willReturn($this->season);
+        $seasonRepository->expects($this->once())->method('add');
+
+        $updateSeasonHandler = new UpdateSeasonHandler($validator, new FakeClock(), $seasonRepository);
 
         $updateSeasonHandler->handle($this->updateSeasonCommand);
     }

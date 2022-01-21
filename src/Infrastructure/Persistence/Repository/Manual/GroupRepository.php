@@ -2,8 +2,8 @@
 
 namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Buttercup\Protects\RecordsEvents;
+use Burger\Aggregate\IdentifiesAggregate;
+use Burger\Aggregate\RecordsEvents;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -27,7 +27,7 @@ class GroupRepository implements GroupRepositoryInterface
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return Group::reconstituteFrom($eventStream);
+        return Group::reconstituteFromEvents($eventStream);
     }
 
     public function add(RecordsEvents $group)

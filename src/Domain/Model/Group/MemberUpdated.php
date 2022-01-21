@@ -2,8 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\DomainEvent;
-use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\DomainEvent;
 
 class MemberUpdated implements DomainEvent, GroupDomainEvent
 {
@@ -11,15 +10,19 @@ class MemberUpdated implements DomainEvent, GroupDomainEvent
     private $memberId;
     private $groupRole;
     private $allowMultiplePlayers;
-    private $occurredOn;
+    private $dateOccurred;
 
-    public function __construct(GroupId $groupId, MemberId $memberId, $groupRole, $allowMultiplePlayers)
+    public function __construct(GroupId $groupId, MemberId $memberId, $groupRole, $allowMultiplePlayers, $dateOccurred)
     {
         $this->groupId = $groupId;
         $this->memberId = $memberId;
         $this->groupRole = $groupRole;
         $this->allowMultiplePlayers = $allowMultiplePlayers;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+    public function getEventDescription() : string
+    {
+        return 'Group member information updated.';
     }
 
     public function getAggregateId()
@@ -42,8 +45,8 @@ class MemberUpdated implements DomainEvent, GroupDomainEvent
         return $this->allowMultiplePlayers;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

@@ -2,82 +2,65 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\ChangePlayerOwnerCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\PlayerOwnerChanged;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\ChangePlayerOwnerHandler;
+use Tailgate\Test\BaseTestCase;
 
-class ChangePlayerOwnerHandlerTest extends TestCase
+class ChangePlayerOwnerHandlerTest extends BaseTestCase
 {
-    private $groupId = 'groupId';
-    private $userId = 'userId';
-    private $member = 'MemberId';
-    private $group;
-    private $playerId;
-    private $newMemberId;
-    private $changePlayerOwnerCommand;
-
     public function setUp(): void
     {
+        $this->groupId = GroupId::fromString('groupId');
+        $this->userId = UserId::fromString('userId');
+        $this->userId2 = UserId::fromString('userId2');
+        $this->groupName = 'groupName';
+        $this->groupInviteCode = GroupInviteCode::create();
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
         // create a group and clear events
         $this->group = Group::create(
-            GroupId::fromString($this->groupId),
-            'groupName',
-            'invitecode',
-            UserId::fromString($this->userId)
+            $this->groupId,
+            $this->groupName,
+            $this->groupInviteCode,
+            $this->userId,
+            $this->dateOccurred
         );
-        $this->group->addMember(UserId::fromString('otherMember'));
-        $memberId = $this->group->getMembers()[0]->getMemberId();
+        $this->group->addMember($this->userId2, $this->dateOccurred);
+        $this->ownerMemberId = $this->group->getMembers()[0]->getMemberId();
         $this->newMemberId = (string) $this->group->getMembers()[1]->getMemberId();
-        $this->group->addPlayer($memberId, 'username');
+        $this->group->addPlayer($this->ownerMemberId, 'username', $this->dateOccurred);
         $this->group->clearRecordedEvents();
 
         $this->playerId = (string) $this->group->getPlayers()[0]->getPlayerId();
 
         $this->changePlayerOwnerCommand = new ChangePlayerOwnerCommand(
             $this->groupId,
-            (string)$this->playerId,
-            (string)$this->newMemberId
+            $this->playerId,
+            $this->newMemberId
         );
     }
 
     public function testItAddsAPlayerOwnerChangedEventToAGroupInTheGroupRepository()
     {
-        $groupId = $this->groupId;
-        $newMemberId = $this->newMemberId;
-        $playerId = $this->playerId;
-        $group = $this->group;
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
-
-        // the get method should be called once and will return the group
-        $groupRepository->expects($this->once())->method('get')->willReturn($group);
-
-        // the add method should be called once
-        // the group object should have the PlayerOwnerChanged event
-        $groupRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($group) use ($groupId, $newMemberId, $playerId) {
-                $events = $group->getRecordedEvents();
-
-                return $events[0] instanceof PlayerOwnerChanged
-                && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
-                && $events[0]->getMemberId()->equals(MemberId::fromString($newMemberId))
-                && $events[0]->getPlayerId()->equals(PlayerId::fromString($playerId))
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
+        $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
+        $groupRepository->expects($this->once())->method('add');
 
         $validator = $this->createMock(ValidatorInterface::class);
         $validator->expects($this->once())->method('assert')->willReturn(true);
         
-        $changeplayerOwnerHandler = new ChangePlayerOwnerHandler($validator, $groupRepository);
+        $changeplayerOwnerHandler = new ChangePlayerOwnerHandler($validator, new FakeClock(), $groupRepository);
 
         $changeplayerOwnerHandler->handle($this->changePlayerOwnerCommand);
     }

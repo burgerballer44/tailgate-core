@@ -2,20 +2,24 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Buttercup\Protects\DomainEvent;
-use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Model\DomainEvent;
 
 class ScoreDeleted implements DomainEvent, GroupDomainEvent
 {
     private $groupId;
     private $scoreId;
-    private $occurredOn;
+    private $dateOccurred;
 
-    public function __construct(GroupId $groupId, ScoreId $scoreId)
+    public function __construct(GroupId $groupId, ScoreId $scoreId, $dateOccurred)
     {
         $this->groupId = $groupId;
         $this->scoreId = $scoreId;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Group score deleted.';
     }
 
     public function getAggregateId()
@@ -28,8 +32,8 @@ class ScoreDeleted implements DomainEvent, GroupDomainEvent
         return $this->scoreId;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

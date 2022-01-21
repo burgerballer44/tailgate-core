@@ -3,7 +3,7 @@
 namespace Tailgate\Infrastructure\Persistence\Projection;
 
 use Tailgate\Domain\Model\User\EmailUpdated;
-use Tailgate\Domain\Model\User\PasswordResetTokenCreated;
+use Tailgate\Domain\Model\User\PasswordResetTokenApplied;
 use Tailgate\Domain\Model\User\PasswordUpdated;
 use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\UserDeleted;
@@ -19,5 +19,5 @@ interface UserProjectionInterface extends ProjectionInterface
     public function projectPasswordUpdated(PasswordUpdated $event);
     public function projectEmailUpdated(EmailUpdated $event);
     public function projectUserUpdated(UserUpdated $event);
-    public function projectPasswordResetTokenCreated(PasswordResetTokenCreated $event);
+    public function projectPasswordResetTokenApplied(PasswordResetTokenApplied $event);
 }

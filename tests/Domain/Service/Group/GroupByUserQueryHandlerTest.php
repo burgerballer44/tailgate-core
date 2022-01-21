@@ -2,7 +2,7 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use PHPUnit\Framework\TestCase;
+use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Group\GroupByUserQuery;
 use Tailgate\Domain\Service\Group\GroupByUserQueryHandler;
 use Tailgate\Domain\Model\User\UserId;
@@ -19,7 +19,7 @@ use Tailgate\Domain\Model\Group\PlayerViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
 
-class GroupByUserQueryHandlerTest extends TestCase
+class GroupByUserQueryHandlerTest extends BaseTestCase
 {
     public function testItAttemptsToGetAGroupByGroupIdFromGroupViewRepository()
     {

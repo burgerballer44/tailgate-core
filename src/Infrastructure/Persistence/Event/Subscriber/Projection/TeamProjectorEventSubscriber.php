@@ -2,9 +2,9 @@
 
 namespace Tailgate\Infrastructure\Persistence\Event\Subscriber\Projection;
 
-use Burger\Event;
-use Burger\EventPublisherInterface;
-use Burger\EventSubscriberInterface;
+use Burger\Event\Event;
+use Burger\Event\EventPublisherInterface;
+use Burger\Event\EventSubscriberInterface;
 use Tailgate\Domain\Model\Team\TeamDomainEvent;
 use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
 
@@ -19,7 +19,7 @@ class TeamProjectorEventSubscriber implements EventSubscriberInterface
 
     public function handle(Event $event)
     {
-        $this->teamProjection->projectOne($event->data);
+        $this->teamProjection->projectOne($event->getData());
     }
 
     public function subscribe(EventPublisherInterface $publisher)

@@ -2,7 +2,7 @@
 
 namespace Tailgate\Domain\Model\Season;
 
-use Buttercup\Protects\DomainEvent;
+use Tailgate\Domain\Model\DomainEvent;
 
 class SeasonCreated implements DomainEvent, SeasonDomainEvent
 {
@@ -12,7 +12,7 @@ class SeasonCreated implements DomainEvent, SeasonDomainEvent
     private $name;
     private $seasonStart;
     private $seasonEnd;
-    private $occurredOn;
+    private $dateOccurred;
 
     public function __construct(
         SeasonId $seasonId,
@@ -20,7 +20,8 @@ class SeasonCreated implements DomainEvent, SeasonDomainEvent
         $seasonType,
         $name,
         $seasonStart,
-        $seasonEnd
+        $seasonEnd,
+        $dateOccurred
     ) {
         $this->seasonId = $seasonId;
         $this->sport = $sport;
@@ -28,7 +29,12 @@ class SeasonCreated implements DomainEvent, SeasonDomainEvent
         $this->name = $name;
         $this->seasonStart = $seasonStart;
         $this->seasonEnd = $seasonEnd;
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->dateOccurred = $dateOccurred;
+    }
+
+    public function getEventDescription() : string
+    {
+        return 'Season created.';
     }
 
     public function getAggregateId()
@@ -66,8 +72,8 @@ class SeasonCreated implements DomainEvent, SeasonDomainEvent
         return $this->seasonEnd;
     }
 
-    public function getOccurredOn()
+    public function getDateOccurred()
     {
-        return $this->occurredOn;
+        return (string) $this->dateOccurred;
     }
 }

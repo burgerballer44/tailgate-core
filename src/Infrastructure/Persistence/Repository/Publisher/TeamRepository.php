@@ -2,9 +2,10 @@
 
 namespace Tailgate\Infrastructure\Persistence\Repository\Publisher;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Buttercup\Protects\RecordsEvents;
-use Burger\EventPublisherInterface;
+use Burger\Aggregate\IdentifiesAggregate;
+use Burger\Aggregate\IsEventSourced;
+use Burger\Aggregate\RecordsEvents;
+use Burger\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamDomainEvent;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -24,11 +25,11 @@ class TeamRepository implements TeamRepositoryInterface
         $this->domainEventPublisher = $domainEventPublisher;
     }
 
-    public function get(IdentifiesAggregate $aggregateId)
+    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return Team::reconstituteFrom($eventStream);
+        return Team::reconstituteFromEvents($eventStream);
     }
 
     public function add(RecordsEvents $team)

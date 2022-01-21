@@ -2,37 +2,40 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Season\DeleteSeasonCommand;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonDeleted;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
+use Tailgate\Domain\Model\Season\SeasonType;
+use Tailgate\Domain\Model\Season\Sport;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Season\DeleteSeasonHandler;
+use Tailgate\Test\BaseTestCase;
 
-class DeleteSeasonHandlerTest extends TestCase
+class DeleteSeasonHandlerTest extends BaseTestCase
 {
-    private $seasonId = 'seasonId';
-    private $name = 'name';
-    private $sport = Season::SPORT_FOOTBALL;
-    private $seasonType = Season::SEASON_TYPE_REG;
-    private $seasonStart;
-    private $seasonEnd;
-    private $season;
-    private $deleteSeasonCommand;
-
     public function setUp(): void
     {
-        // create season and clear events
-        $this->seasonStart = '2021-09-01';
-        $this->seasonEnd = '2021-12-28';
+        $this->seasonId = SeasonId::fromString('seasonId');
+        $this->name = 'name';
+        $this->sport = Sport::getFootball();
+        $this->seasonType = SeasonType::getRegularSeason();
+        $this->seasonStart = DateOrString::fromString('2019-09-01');
+        $this->seasonEnd = DateOrString::fromString('2019-12-28');
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
+        // create a season and clear events
         $this->season = Season::create(
-            SeasonId::fromString($this->seasonId),
+            $this->seasonId,
             $this->name,
             $this->sport,
             $this->seasonType,
             $this->seasonStart,
-            $this->seasonEnd
+            $this->seasonEnd,
+            $this->dateOccurred
         );
         $this->season->clearRecordedEvents();
 
@@ -43,27 +46,11 @@ class DeleteSeasonHandlerTest extends TestCase
 
     public function testItAddsASeasonDeletedEventToTheSeasonRepository()
     {
-        $seasonId = $this->seasonId;
-        $season = $this->season;
-
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
+        $seasonRepository->expects($this->once())->method('get')->willReturn($this->season);
+        $seasonRepository->expects($this->once())->method('add');
 
-        // the nextIdentity method should be called once and will return a the season
-        $seasonRepository->expects($this->once())->method('get')->willReturn($season);
-
-        // the add method should be called once
-        // the season object should have the SeasonDeleted event
-        $seasonRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($season) use ($seasonId) {
-                $events = $season->getRecordedEvents();
-
-                return $events[0] instanceof SeasonDeleted
-                && $events[0]->getAggregateId()->equals(SeasonId::fromString($seasonId))
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
-
-        $deleteSeasonHandler = new DeleteSeasonHandler($seasonRepository);
+        $deleteSeasonHandler = new DeleteSeasonHandler($seasonRepository, new FakeClock());
 
         $deleteSeasonHandler->handle($this->deleteSeasonCommand);
     }

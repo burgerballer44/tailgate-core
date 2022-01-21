@@ -2,8 +2,8 @@
 
 namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
 
-use Buttercup\Protects\IdentifiesAggregate;
-use Buttercup\Protects\RecordsEvents;
+use Burger\Aggregate\IdentifiesAggregate;
+use Burger\Aggregate\RecordsEvents;
 use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
@@ -27,7 +27,7 @@ class SeasonRepository implements SeasonRepositoryInterface
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
-        return Season::reconstituteFrom($eventStream);
+        return Season::reconstituteFromEvents($eventStream);
     }
 
     public function add(RecordsEvents $season)

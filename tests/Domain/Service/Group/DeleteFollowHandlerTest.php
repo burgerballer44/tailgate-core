@@ -2,41 +2,42 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use PHPUnit\Framework\TestCase;
 use Tailgate\Application\Command\Group\DeleteFollowCommand;
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\User\UserId;
+use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\DeleteFollowHandler;
+use Tailgate\Test\BaseTestCase;
 
-class DeleteFollowHandlerTest extends TestCase
+class DeleteFollowHandlerTest extends BaseTestCase
 {
-    private $followId = '';
-    private $groupId = 'groupId';
-    private $teamId = 'teamId';
-    private $seasonId = 'seasonId';
-    private $designation = 'designation';
-    private $mascot = 'mascot';
-    private $deleteFollowCommand;
-    private $group;
-
     public function setUp(): void
     {
+        $this->groupId = GroupId::fromString('groupId');
+        $this->userId = UserId::fromString('userId');
+        $this->groupName = 'groupName';
+        $this->groupInviteCode = GroupInviteCode::create();
+        $this->teamId = TeamId::fromString('teamId');
+        $this->seasonId = SeasonId::fromString('seasonId');
+        $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
+
         // create a group and clear events
         $this->group = Group::create(
-            GroupId::fromString($this->groupId),
-            'groupName',
-            'code',
-            UserId::fromString('userId')
+            $this->groupId,
+            $this->groupName,
+            $this->groupInviteCode,
+            $this->userId,
+            $this->dateOccurred
         );
-
-        // add a follow
-        $this->group->followTeam(TeamId::fromString($this->teamId), SeasonId::fromString($this->seasonId));
+        $this->group->followTeam($this->teamId, $this->seasonId, $this->dateOccurred);
         $this->group->clearRecordedEvents();
 
         $this->followId = (string) $this->group->getFollow()->getFollowId();
@@ -46,29 +47,11 @@ class DeleteFollowHandlerTest extends TestCase
 
     public function testItAttemptsToAddAFollowDeletedEventToTheGroupRepository()
     {
-        $groupId = $this->groupId;
-        $followId = $this->followId;
-        $group = $this->group;
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
+        $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
+        $groupRepository->expects($this->once())->method('add');
 
-        // the get method should be called once and will return the group
-        $groupRepository->expects($this->once())->method('get')->willReturn($group);
-
-        // the add method should be called once
-        // the group object should have the FollowDeleted event
-        $groupRepository->expects($this->once())->method('add')->with($this->callback(
-            function ($group) use ($groupId, $followId) {
-                $events = $group->getRecordedEvents();
-
-                return $events[0] instanceof FollowDeleted
-                && $events[0]->getAggregateId()->equals(GroupId::fromString($groupId))
-                && $events[0]->getFollowId()->equals(FollowId::fromString($followId))
-                && $events[0]->getOccurredOn() instanceof \DateTimeImmutable;
-            }
-        ));
-
-        $this->deleteFollowHandler = new DeleteFollowHandler($groupRepository);
+        $this->deleteFollowHandler = new DeleteFollowHandler($groupRepository, new FakeClock());
 
         $this->deleteFollowHandler->handle($this->deleteFollowCommand);
     }
