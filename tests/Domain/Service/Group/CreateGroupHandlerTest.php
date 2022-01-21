@@ -10,7 +10,6 @@ use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\CreateGroupHandler;
-use Tailgate\Domain\Service\Security\RandomStringInterface;
 use Tailgate\Test\BaseTestCase;
 
 class CreateGroupHandlerTest extends BaseTestCase

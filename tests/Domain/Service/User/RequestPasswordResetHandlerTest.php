@@ -11,7 +11,6 @@ use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Domain\Service\Clock\FakeClock;
-use Tailgate\Domain\Service\Security\RandomStringInterface;
 use Tailgate\Domain\Service\User\RequestPasswordResetHandler;
 use Tailgate\Test\BaseTestCase;
 
