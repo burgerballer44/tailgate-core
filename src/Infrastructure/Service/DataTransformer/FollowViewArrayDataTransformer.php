@@ -10,14 +10,14 @@ class FollowViewArrayDataTransformer implements FollowDataTransformerInterface
     public function read(FollowView $followView)
     {
         return [
-            'groupId' => $followView->getGroupId(),
-            'followId' => $followView->getFollowId(),
-            'teamId' => $followView->getTeamId(),
-            'seasonId' => $followView->getSeasonId(),
-            'groupName' => $followView->getGroupName(),
+            'groupId'         => $followView->getGroupId(),
+            'followId'        => $followView->getFollowId(),
+            'teamId'          => $followView->getTeamId(),
+            'seasonId'        => $followView->getSeasonId(),
+            'groupName'       => $followView->getGroupName(),
             'teamDesignation' => $followView->getTeamDesignation(),
-            'teamMascot' => $followView->getTeamMascot(),
-            'seasonName' => $followView->getSeasonName()
+            'teamMascot'      => $followView->getTeamMascot(),
+            'seasonName'      => $followView->getSeasonName()
         ];
     }
 }

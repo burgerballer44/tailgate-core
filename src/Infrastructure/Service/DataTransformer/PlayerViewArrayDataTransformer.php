@@ -12,7 +12,7 @@ class PlayerViewArrayDataTransformer implements PlayerDataTransformerInterface
         return [
             'playerId' => $playerView->getPlayerId(),
             'memberId' => $playerView->getMemberId(),
-            'groupId' => $playerView->getGroupId(),
+            'groupId'  => $playerView->getGroupId(),
             'username' => $playerView->getUsername()
         ];
     }
