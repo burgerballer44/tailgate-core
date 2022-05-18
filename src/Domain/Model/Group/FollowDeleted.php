@@ -17,7 +17,7 @@ class FollowDeleted implements DomainEvent, GroupDomainEvent
         $this->dateOccurred = $dateOccurred;
     }
 
-    public function getEventDescription() : string
+    public function getEventDescription(): string
     {
         return 'Group unfollowed a team.';
     }

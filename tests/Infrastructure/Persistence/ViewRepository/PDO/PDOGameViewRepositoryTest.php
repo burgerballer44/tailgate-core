@@ -2,12 +2,12 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
-use Tailgate\Test\BaseTestCase;
-use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Domain\Model\Season\SeasonId;
-use Tailgate\Domain\Model\Season\GameId;
-use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\GameViewRepository;
 use RuntimeException;
+use Tailgate\Domain\Model\Season\GameId;
+use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\GameViewRepository;
+use Tailgate\Test\BaseTestCase;
 
 class PDOGameViewRepositoryTest extends BaseTestCase
 {
@@ -87,7 +87,7 @@ class PDOGameViewRepositoryTest extends BaseTestCase
                 'home_designation' => 'blah',
                 'home_mascot' => 'blah',
                 'away_designation' => 'blah',
-                'away_mascot' => 'blah'
+                'away_mascot' => 'blah',
             ]);
 
         $this->viewRepository->get($gameId);

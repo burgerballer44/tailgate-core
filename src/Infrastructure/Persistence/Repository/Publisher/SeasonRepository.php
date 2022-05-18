@@ -25,7 +25,7 @@ class SeasonRepository implements SeasonRepositoryInterface
         $this->domainEventPublisher = $domainEventPublisher;
     }
 
-    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
+    public function get(IdentifiesAggregate $aggregateId): IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
@@ -35,7 +35,7 @@ class SeasonRepository implements SeasonRepositoryInterface
     public function add(RecordsEvents $season)
     {
         $events = $season->getRecordedEvents();
-        
+
         foreach ($events as $event) {
             $this->domainEventPublisher->publish(SeasonDomainEvent::class, $event);
         };

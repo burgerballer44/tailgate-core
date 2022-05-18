@@ -2,11 +2,9 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use InvalidArgumentException;
-
 class GroupInviteCode
 {
-    const LENGTH_STRING = 10;
+    public const LENGTH_STRING = 10;
 
     private $value;
 
@@ -16,12 +14,12 @@ class GroupInviteCode
         $this->value = $string . '_' . time();
     }
 
-    public static function create() : GroupInviteCode
+    public static function create(): GroupInviteCode
     {
         return new GroupInviteCode();
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return (string) $this->value;
     }

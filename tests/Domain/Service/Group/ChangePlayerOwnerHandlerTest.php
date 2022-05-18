@@ -9,9 +9,6 @@ use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Model\Group\MemberId;
-use Tailgate\Domain\Model\Group\PlayerId;
-use Tailgate\Domain\Model\Group\PlayerOwnerChanged;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\ChangePlayerOwnerHandler;
@@ -59,7 +56,7 @@ class ChangePlayerOwnerHandlerTest extends BaseTestCase
 
         $validator = $this->createMock(ValidatorInterface::class);
         $validator->expects($this->once())->method('assert')->willReturn(true);
-        
+
         $changeplayerOwnerHandler = new ChangePlayerOwnerHandler($validator, new FakeClock(), $groupRepository);
 
         $changeplayerOwnerHandler->handle($this->changePlayerOwnerCommand);

@@ -2,13 +2,12 @@
 
 namespace Tailgate\Test\Domain\Service\User;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\User\UserResetPasswordTokenQuery;
-use Tailgate\Domain\Service\User\UserResetPasswordTokenQueryHandler;
-use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserView;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\UserDataTransformerInterface;
+use Tailgate\Domain\Service\User\UserResetPasswordTokenQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class UserResetPasswordTokenQueryHandlerTest extends BaseTestCase
 {

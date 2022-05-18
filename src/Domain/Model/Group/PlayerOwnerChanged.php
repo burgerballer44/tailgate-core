@@ -23,7 +23,7 @@ class PlayerOwnerChanged implements DomainEvent, GroupDomainEvent
         $this->dateOccurred = $dateOccurred;
     }
 
-    public function getEventDescription() : string
+    public function getEventDescription(): string
     {
         return 'Group player has changed owner.';
     }

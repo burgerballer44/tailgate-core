@@ -3,10 +3,8 @@
 namespace Tailgate\Domain\Service\Season;
 
 use Tailgate\Application\Command\Season\DeleteGameCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Season\GameId;
-use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Domain\Service\Clock\Clock;

@@ -3,7 +3,6 @@
 namespace Tailgate\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\DeleteFollowCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\GroupId;

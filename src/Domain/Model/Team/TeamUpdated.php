@@ -19,7 +19,7 @@ class TeamUpdated implements DomainEvent, TeamDomainEvent
         $this->dateOccurred = $dateOccurred;
     }
 
-    public function getEventDescription() : string
+    public function getEventDescription(): string
     {
         return 'Team information updated.';
     }

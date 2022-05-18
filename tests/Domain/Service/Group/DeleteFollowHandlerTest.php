@@ -4,8 +4,6 @@ namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\DeleteFollowCommand;
 use Tailgate\Domain\Model\Common\Date;
-use Tailgate\Domain\Model\Group\FollowDeleted;
-use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupInviteCode;

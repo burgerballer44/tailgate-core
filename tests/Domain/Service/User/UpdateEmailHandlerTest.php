@@ -6,7 +6,6 @@ use Tailgate\Application\Command\User\UpdateEmailCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
-use Tailgate\Domain\Model\User\EmailUpdated;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;

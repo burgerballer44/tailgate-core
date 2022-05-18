@@ -3,9 +3,6 @@
 namespace Tailgate\Domain\Service\Team;
 
 use Tailgate\Application\Query\Team\TeamsBySportQuery;
-use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
-use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
-use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\TeamDataTransformerInterface;
 

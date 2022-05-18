@@ -2,21 +2,21 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Group\GroupQuery;
-use Tailgate\Domain\Service\Group\GroupQueryHandler;
+use Tailgate\Domain\Model\Group\FollowView;
+use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupView;
-use Tailgate\Domain\Model\Group\FollowView;
-use Tailgate\Domain\Model\Group\MemberView;
-use Tailgate\Domain\Model\Group\PlayerView;
-use Tailgate\Domain\Model\Group\ScoreView;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
-use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
+use Tailgate\Domain\Model\Group\MemberView;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
+use Tailgate\Domain\Model\Group\PlayerView;
 use Tailgate\Domain\Model\Group\PlayerViewRepositoryInterface;
+use Tailgate\Domain\Model\Group\ScoreView;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
+use Tailgate\Domain\Service\Group\GroupQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class GroupQueryHandlerTest extends BaseTestCase
 {

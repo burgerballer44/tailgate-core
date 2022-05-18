@@ -2,12 +2,12 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
-use Tailgate\Test\BaseTestCase;
-use Tailgate\Domain\Model\User\UserId;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\MemberId;
+use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\MemberViewRepository;
-use RuntimeException;
+use Tailgate\Test\BaseTestCase;
 
 class PDOMemberViewRepositoryTest extends BaseTestCase
 {

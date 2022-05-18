@@ -2,12 +2,12 @@
 
 namespace Tailgate\Infrastructure\Service\DataTransformer;
 
-use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
+use Tailgate\Domain\Model\Group\GroupView;
 use Tailgate\Domain\Service\DataTransformer\FollowDataTransformerInterface;
+use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
 use Tailgate\Domain\Service\DataTransformer\MemberDataTransformerInterface;
 use Tailgate\Domain\Service\DataTransformer\PlayerDataTransformerInterface;
 use Tailgate\Domain\Service\DataTransformer\ScoreDataTransformerInterface;
-use Tailgate\Domain\Model\Group\GroupView;
 
 class GroupViewArrayDataTransformer implements GroupDataTransformerInterface
 {
@@ -52,14 +52,14 @@ class GroupViewArrayDataTransformer implements GroupDataTransformerInterface
         }
 
         return [
-            'groupId'    => $groupView->getGroupId(),
-            'name'       => $groupView->getName(),
+            'groupId' => $groupView->getGroupId(),
+            'name' => $groupView->getName(),
             'inviteCode' => $groupView->getInviteCode(),
-            'ownerId'    => $groupView->getOwnerId(),
-            'follow'     => $follow,
-            'members'    => $members,
-            'players'    => $players,
-            'scores'     => $scores,
+            'ownerId' => $groupView->getOwnerId(),
+            'follow' => $follow,
+            'members' => $members,
+            'players' => $players,
+            'scores' => $scores,
         ];
     }
 }

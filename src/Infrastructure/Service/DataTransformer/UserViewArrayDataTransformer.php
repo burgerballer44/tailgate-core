@@ -2,8 +2,8 @@
 
 namespace Tailgate\Infrastructure\Service\DataTransformer;
 
-use Tailgate\Domain\Service\DataTransformer\UserDataTransformerInterface;
 use Tailgate\Domain\Model\User\UserView;
+use Tailgate\Domain\Service\DataTransformer\UserDataTransformerInterface;
 
 class UserViewArrayDataTransformer implements UserDataTransformerInterface
 {
@@ -11,9 +11,9 @@ class UserViewArrayDataTransformer implements UserDataTransformerInterface
     {
         return [
             'userId' => $userView->getUserId(),
-            'email'  => $userView->getEmail(),
+            'email' => $userView->getEmail(),
             'status' => $userView->getStatus(),
-            'role'   => $userView->getRole(),
+            'role' => $userView->getRole(),
         ];
     }
 }

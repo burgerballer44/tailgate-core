@@ -4,10 +4,10 @@ namespace Tailgate\Infrastructure\Persistence\Repository\Manual;
 
 use Burger\Aggregate\IdentifiesAggregate;
 use Burger\Aggregate\RecordsEvents;
-use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
 
 class GroupRepository implements GroupRepositoryInterface

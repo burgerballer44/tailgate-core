@@ -6,9 +6,9 @@ use InvalidArgumentException;
 
 class UserStatus
 {
-    const ACTIVE = 'Active';
-    const PENDING = 'Pending';
-    const DELETED = 'Deleted';
+    public const ACTIVE = 'Active';
+    public const PENDING = 'Pending';
+    public const DELETED = 'Deleted';
 
     private $value;
 
@@ -17,29 +17,31 @@ class UserStatus
         // check if a key was passed in
         if (in_array($value, $this->getValidKeys())) {
             $this->value = $this->getUserStatuses()[$value]['title'];
+
             return;
         }
 
         // check if a title was passed in
         if (in_array($value, $this->getValidTitles())) {
             $this->value = $value;
+
             return;
         }
 
         throw new InvalidArgumentException("Invalid user status. Status does not exist.");
     }
 
-    public static function fromString(string $value) : UserStatus
+    public static function fromString(string $value): UserStatus
     {
         return new UserStatus($value);
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return (string) $this->value;
     }
 
-    public function equals(UserStatus $other) : bool
+    public function equals(UserStatus $other): bool
     {
         return $other instanceof UserStatus && $this->value === $other->value;
     }
@@ -54,17 +56,17 @@ class UserStatus
         return array_column(self::getUserStatuses(), 'title');
     }
 
-    public static function getActive() : UserStatus
+    public static function getActive(): UserStatus
     {
         return new UserStatus(self::ACTIVE);
     }
 
-    public static function getPending() : UserStatus
+    public static function getPending(): UserStatus
     {
         return new UserStatus(self::PENDING);
     }
 
-    public static function getDeleted() : UserStatus
+    public static function getDeleted(): UserStatus
     {
         return new UserStatus(self::DELETED);
     }
@@ -80,12 +82,12 @@ class UserStatus
             self::PENDING => [
                 'key' => self::PENDING,
                 'title' => "Pending",
-                'description' => "user who registered but needs to confirm email"
+                'description' => "user who registered but needs to confirm email",
             ],
             self::DELETED => [
                 'key' => self::DELETED,
                 'title' => "Deleted",
-                'description' => "user who is deleted"
+                'description' => "user who is deleted",
             ],
         ];
     }

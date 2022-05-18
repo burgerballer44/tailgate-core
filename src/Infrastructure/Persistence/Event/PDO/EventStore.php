@@ -6,8 +6,8 @@ use Burger\Aggregate\AggregateHistory;
 use Burger\Aggregate\DomainEvent;
 use Burger\Aggregate\DomainEvents;
 use Burger\Aggregate\IdentifiesAggregate;
-use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 use PDO;
+use Tailgate\Infrastructure\Persistence\Event\EventStoreInterface;
 
 class EventStore implements EventStoreInterface
 {
@@ -29,7 +29,7 @@ class EventStore implements EventStoreInterface
             ':aggregate_id' => (string) $event->getAggregateId(),
             ':type' => get_class($event),
             ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
-            ':data' => serialize($event)
+            ':data' => serialize($event),
         ]);
     }
 
@@ -44,7 +44,7 @@ class EventStore implements EventStoreInterface
                 ':aggregate_id' => (string) $event->getAggregateId(),
                 ':type' => get_class($event),
                 ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
-                ':data' => serialize($event)
+                ':data' => serialize($event),
             ]);
         }
     }

@@ -2,7 +2,6 @@
 
 namespace Tailgate\Domain\Service\Team;
 
-use Tailgate\Application\Query\Team\AllTeamsQuery;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\TeamDataTransformerInterface;
 

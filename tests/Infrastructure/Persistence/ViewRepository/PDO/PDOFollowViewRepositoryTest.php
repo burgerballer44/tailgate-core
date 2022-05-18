@@ -2,12 +2,12 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
-use Tailgate\Test\BaseTestCase;
-use Tailgate\Domain\Model\Team\TeamId;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\FollowViewRepository;
-use RuntimeException;
+use Tailgate\Test\BaseTestCase;
 
 class PDOFollowViewRepositoryTest extends BaseTestCase
 {
@@ -85,7 +85,7 @@ class PDOFollowViewRepositoryTest extends BaseTestCase
                 'groupName' => 'blah',
                 'designation' => 'blah',
                 'mascot' => 'blah',
-                'seasonName' => 'blah'
+                'seasonName' => 'blah',
             ]);
 
         $this->viewRepository->get($followId);

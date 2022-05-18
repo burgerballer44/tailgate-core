@@ -3,9 +3,7 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
 use Burger\Aggregate\AggregateHistory;
-use Burger\Aggregate\DomainEvent;
 use Burger\Event\EventPublisher;
-use Burger\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Season\Season;
@@ -56,7 +54,7 @@ class PublisherSeasonRepositoryTest extends BaseTestCase
         $seasonRepository = new SeasonRepository($this->eventStore, $this->eventPublisher);
 
         $season = $seasonRepository->get($seasonId);
-        
+
         $this->assertInstanceOf(Season::class, $season);
     }
 

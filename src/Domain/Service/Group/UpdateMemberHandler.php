@@ -8,7 +8,6 @@ use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberId;
-use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Service\Clock\Clock;
 use Tailgate\Domain\Service\Validatable;
 use Tailgate\Domain\Service\ValidatableService;
@@ -16,7 +15,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class UpdateMemberHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $groupRepository;

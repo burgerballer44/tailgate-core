@@ -5,7 +5,6 @@ namespace Tailgate\Test\Domain\Service\Group;
 use Tailgate\Application\Command\Group\DeleteGroupCommand;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
-use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;

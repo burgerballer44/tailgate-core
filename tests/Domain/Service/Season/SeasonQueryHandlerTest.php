@@ -2,14 +2,14 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Season\SeasonQuery;
-use Tailgate\Domain\Service\Season\SeasonQueryHandler;
+use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
-use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\SeasonDataTransformerInterface;
+use Tailgate\Domain\Service\Season\SeasonQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class SeasonQueryHandlerTest extends BaseTestCase
 {

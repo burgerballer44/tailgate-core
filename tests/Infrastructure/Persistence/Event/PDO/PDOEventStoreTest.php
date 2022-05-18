@@ -3,12 +3,11 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Event\PDO;
 
 use Burger\Aggregate\AggregateHistory;
-use Burger\Aggregate\DomainEvent;
 use Burger\Aggregate\DomainEvents;
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Infrastructure\Persistence\Event\PDO\EventStore;
+use Tailgate\Test\BaseTestCase;
 
 class PDOEventStoreTest extends BaseTestCase
 {
@@ -25,7 +24,7 @@ class PDOEventStoreTest extends BaseTestCase
 
     public function testItCanCommitADomainEvent()
     {
-        $event =  new UserRegistered(UserId::fromString('userId1'), 'email1', 'password1', 'status', 'role', 'randomString');
+        $event = new UserRegistered(UserId::fromString('userId1'), 'email1', 'password1', 'status', 'role', 'randomString');
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -43,7 +42,7 @@ class PDOEventStoreTest extends BaseTestCase
                 ':aggregate_id' => (string) $event->getAggregateId(),
                 ':type' => get_class($event),
                 ':created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
-                ':data' => serialize($event)
+                ':data' => serialize($event),
             ]);
         ;
 
@@ -86,13 +85,13 @@ class PDOEventStoreTest extends BaseTestCase
                 'aggregate_id' => $id,
                 'type' => get_class($event1),
                 'created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
-                'data' => $serializedEvent1
+                'data' => $serializedEvent1,
             ], [
                 'aggregate_id' => $id,
                 'type' => get_class($event2),
                 'created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
-                'data' => $serializedEvent2
-            ]
+                'data' => $serializedEvent2,
+            ],
         ];
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -112,11 +111,11 @@ class PDOEventStoreTest extends BaseTestCase
         $this->pdoStatementMock
            ->expects($this->exactly(3))
            ->method('fetch')
-           ->withConsecutive([],[])
+           ->withConsecutive([], [])
            ->willReturnOnConsecutiveCalls(
-            $this->returnValue($rows[0]),
-            $this->returnValue($rows[1]),
-        );
+               $this->returnValue($rows[0]),
+               $this->returnValue($rows[1]),
+           );
 
         $history = $this->eventStore->getAggregateHistoryFor($id);
 

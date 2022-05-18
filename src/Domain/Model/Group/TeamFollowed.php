@@ -3,9 +3,8 @@
 namespace Tailgate\Domain\Model\Group;
 
 use Tailgate\Domain\Model\DomainEvent;
-use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Team\TeamId;
 
 class TeamFollowed implements DomainEvent, GroupDomainEvent
 {
@@ -29,7 +28,7 @@ class TeamFollowed implements DomainEvent, GroupDomainEvent
         $this->dateOccurred = $dateOccurred;
     }
 
-    public function getEventDescription() : string
+    public function getEventDescription(): string
     {
         return 'Group followed a team.';
     }

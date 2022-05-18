@@ -3,12 +3,12 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use RuntimeException;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\GameView;
 use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
-use RuntimeException;
 
 class GameViewRepository implements GameViewRepositoryInterface
 {
@@ -28,7 +28,7 @@ class GameViewRepository implements GameViewRepositoryInterface
             WHERE g.game_id = :game_id LIMIT 1');
         $stmt->execute([':game_id' => (string) $id]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Game not found.");
         }
 

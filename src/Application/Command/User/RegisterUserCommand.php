@@ -24,7 +24,7 @@ class RegisterUserCommand
     {
         return $this->password;
     }
-    
+
     public function getConfirmPassword()
     {
         return $this->confirmPassword;

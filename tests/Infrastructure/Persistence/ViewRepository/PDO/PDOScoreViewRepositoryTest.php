@@ -2,13 +2,13 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
-use Tailgate\Test\BaseTestCase;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\ScoreViewRepository;
-use RuntimeException;
+use Tailgate\Test\BaseTestCase;
 
 class PDOScoreViewRepositoryTest extends BaseTestCase
 {

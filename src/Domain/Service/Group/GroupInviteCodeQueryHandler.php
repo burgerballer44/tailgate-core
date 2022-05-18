@@ -22,6 +22,7 @@ class GroupInviteCodeQueryHandler
     public function handle(GroupInviteCodeQuery $query)
     {
         $groupView = $this->groupViewRepository->byInviteCode($query->getInviteCode());
+
         return $this->groupViewTransformer->read($groupView);
     }
 }

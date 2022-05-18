@@ -3,10 +3,10 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use RuntimeException;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
-use RuntimeException;
 
 class SeasonViewRepository implements SeasonViewRepositoryInterface
 {
@@ -22,7 +22,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         $stmt = $this->pdo->prepare('SELECT * FROM `season` WHERE season_id = :season_id LIMIT 1');
         $stmt->execute([':season_id' => (string) $id]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Season not found.");
         }
 
@@ -37,7 +37,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         $seasons = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $seasons[] =  $this->createSeasonView($row);
+            $seasons[] = $this->createSeasonView($row);
         }
 
         return $seasons;
@@ -51,7 +51,7 @@ class SeasonViewRepository implements SeasonViewRepositoryInterface
         $seasons = [];
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $seasons[] =  $this->createSeasonView($row);
+            $seasons[] = $this->createSeasonView($row);
         }
 
         return $seasons;

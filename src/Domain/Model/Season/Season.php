@@ -99,7 +99,7 @@ class Season extends AbstractEventBasedEntity
     // update the score of a game
     public function updateGameScore(GameId $gameId, $homeTeamScore, $awayTeamScore, DateOrString $startDate, TimeOrString $startTime, Date $dateOccurred)
     {
-        if (!$this->getGameById($gameId)) {
+        if (! $this->getGameById($gameId)) {
             throw new RuntimeException('The game does not exist. Cannot update the game score.');
         }
 
@@ -119,7 +119,7 @@ class Season extends AbstractEventBasedEntity
     // delete a game
     public function deleteGame(GameId $gameId, Date $dateOccurred)
     {
-        if (!$this->getGameById($gameId)) {
+        if (! $this->getGameById($gameId)) {
             throw new RuntimeException('The game does not exist. Cannot delete the game.');
         }
 
@@ -166,11 +166,10 @@ class Season extends AbstractEventBasedEntity
         $game->addStartTime($event->getStartTime());
     }
 
-
     protected function applyGameDeleted(GameDeleted $event)
     {
         $this->games = array_values(array_filter($this->games, function ($game) use ($event) {
-            return !$game->getGameId()->equals($event->getGameId());
+            return ! $game->getGameId()->equals($event->getGameId());
         }));
     }
 

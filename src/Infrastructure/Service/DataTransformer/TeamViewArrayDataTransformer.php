@@ -2,10 +2,10 @@
 
 namespace Tailgate\Infrastructure\Service\DataTransformer;
 
-use Tailgate\Domain\Service\DataTransformer\TeamDataTransformerInterface;
+use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Domain\Service\DataTransformer\FollowDataTransformerInterface;
 use Tailgate\Domain\Service\DataTransformer\GameDataTransformerInterface;
-use Tailgate\Domain\Model\Team\TeamView;
+use Tailgate\Domain\Service\DataTransformer\TeamDataTransformerInterface;
 
 class TeamViewArrayDataTransformer implements TeamDataTransformerInterface
 {
@@ -34,12 +34,12 @@ class TeamViewArrayDataTransformer implements TeamDataTransformerInterface
         }
 
         return [
-            'teamId'      => $teamView->getTeamId(),
+            'teamId' => $teamView->getTeamId(),
             'designation' => $teamView->getDesignation(),
-            'mascot'      => $teamView->getMascot(),
-            'sport'       => $teamView->getSport(),
-            'follows'     => $follows,
-            'games'       => $games,
+            'mascot' => $teamView->getMascot(),
+            'sport' => $teamView->getSport(),
+            'follows' => $follows,
+            'games' => $games,
         ];
     }
 }

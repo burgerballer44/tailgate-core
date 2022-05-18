@@ -3,9 +3,7 @@
 namespace Tailgate\Domain\Service\User;
 
 use Tailgate\Application\Command\User\DeleteUserCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
-use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Domain\Service\Clock\Clock;

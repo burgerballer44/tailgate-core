@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Model;
 
 use Burger\Aggregate\AggregateHistory;
-use DateTimeImmutable;
 use RuntimeException;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\DateOrString;
@@ -44,7 +43,7 @@ class SeasonTest extends BaseTestCase
     }
 
     public function testSeasonShouldBeTheSameAfterReconstitution()
-    {   
+    {
         // create a ceason
         $season = $this->createSeason();
         $events = $season->getRecordedEvents();
@@ -165,7 +164,7 @@ class SeasonTest extends BaseTestCase
         $startTime = TimeOrString::fromString('12:12');
         $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime, $this->dateOccurred);
         $season->clearRecordedEvents();
- 
+
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('The game does not exist. Cannot update the game score.');
         $season->updateGameScore(
@@ -237,7 +236,7 @@ class SeasonTest extends BaseTestCase
         $startDate = DateOrString::fromString('2019-10-01');
         $startTime = TimeOrString::fromString('12:12');
         $season->addGame($homeTeamId, $awayTeamId, $startDate, $startTime, $this->dateOccurred);
-        
+
         $games = $season->getGames();
         $this->assertCount(1, $games);
 

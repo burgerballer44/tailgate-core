@@ -52,7 +52,7 @@ class GroupTest extends BaseTestCase
         $events = $group->getRecordedEvents();
         $group->clearRecordedEvents();
 
-        // recreate the group using event array 
+        // recreate the group using event array
         $reconstitutedGroup = Group::reconstituteFromEvents(
             new AggregateHistory($this->groupId, (array) $events)
         );
@@ -327,7 +327,6 @@ class GroupTest extends BaseTestCase
         $this->expectExceptionMessage('Cannot remove the last admin in a group.');
         $group->deleteMember($memberId1, $this->dateOccurred);
     }
-
 
     public function testAPlayersAndTheirScoresAreRemovedWhenAPlayerIsDeleted()
     {
@@ -674,7 +673,7 @@ class GroupTest extends BaseTestCase
 
         $teamFollowedEvent = $group->getRecordedEvents()[0];
         $follow = $group->getFollow();
-        
+
         $this->assertTrue($teamFollowedEvent->getFollowId() instanceof FollowId);
         $this->assertTrue($teamFollowedEvent->getAggregateId()->equals($this->groupId));
         $this->assertTrue($teamFollowedEvent->getSeasonId()->equals($seasonId));

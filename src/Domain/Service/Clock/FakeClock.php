@@ -2,7 +2,6 @@
 
 namespace Tailgate\Domain\Service\Clock;
 
-use Tailgate\Domain\Service\Clock\Clock;
 use DateTimeImmutable;
 
 class FakeClock implements Clock
@@ -19,7 +18,7 @@ class FakeClock implements Clock
         if ($this->currentTime === null) {
             return new DateTimeImmutable('now');
         }
-        
+
         return $this->currentTime;
     }
 }

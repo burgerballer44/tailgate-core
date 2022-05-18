@@ -3,12 +3,12 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
-use Tailgate\Domain\Model\User\UserId;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\MemberView;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
-use RuntimeException;
+use Tailgate\Domain\Model\User\UserId;
 
 class MemberViewRepository implements MemberViewRepositoryInterface
 {
@@ -27,7 +27,7 @@ class MemberViewRepository implements MemberViewRepositoryInterface
             WHERE `member`.member_id = :member_id LIMIT 1');
         $stmt->execute([':member_id' => (string) $id]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Member not found.");
         }
 

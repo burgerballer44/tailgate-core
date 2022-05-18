@@ -2,9 +2,6 @@
 
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification;
 
-use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\SpecificationDecorator;
-use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\SqlSpecification;
-
 class NameSpecification extends SpecificationDecorator
 {
     protected $specification;

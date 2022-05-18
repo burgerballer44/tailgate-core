@@ -3,12 +3,9 @@
 namespace Tailgate\Domain\Model\User;
 
 use Burger\Aggregate\IdentifiesAggregate;
-use RuntimeException;
 use Tailgate\Domain\Model\AbstractEventBasedEntity;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
-use Tailgate\Domain\Model\User\UserRole;
-use Tailgate\Domain\Model\User\UserStatus;
 
 class User extends AbstractEventBasedEntity
 {
@@ -105,11 +102,11 @@ class User extends AbstractEventBasedEntity
 
     protected function applyUserRegistered(UserRegistered $event)
     {
-        $this->userId       = $event->getAggregateId();
-        $this->email        = $event->getEmail();
+        $this->userId = $event->getAggregateId();
+        $this->email = $event->getEmail();
         $this->passwordHash = $event->getPasswordHash();
-        $this->status       = $event->getStatus();
-        $this->role         = $event->getRole();
+        $this->status = $event->getStatus();
+        $this->role = $event->getRole();
     }
 
     protected function applyUserActivated(UserActivated $event)
@@ -129,9 +126,9 @@ class User extends AbstractEventBasedEntity
 
     protected function applyUserUpdated(UserUpdated $event)
     {
-        $this->email  = $event->getEmail();
+        $this->email = $event->getEmail();
         $this->status = $event->getStatus();
-        $this->role   = $event->getRole();
+        $this->role = $event->getRole();
     }
 
     protected function applyPasswordResetTokenApplied(PasswordResetTokenApplied $event)

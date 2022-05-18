@@ -23,7 +23,7 @@ class SubmitScoreForGroupCommand
     {
         return $this->groupId;
     }
-    
+
     public function getPlayerId()
     {
         return $this->playerId;

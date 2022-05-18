@@ -9,9 +9,6 @@ use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Model\Group\MemberId;
-use Tailgate\Domain\Model\Group\PlayerAdded;
-use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\AddPlayerToGroupHandler;
@@ -55,7 +52,7 @@ class AddPlayerToGroupHandlerTest extends BaseTestCase
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
         $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
         $groupRepository->expects($this->once())->method('add');
-        
+
         $addPlayerToGroupHandler = new AddPlayerToGroupHandler($validator, new FakeClock(), $groupRepository);
 
         $addPlayerToGroupHandler->handle($this->addPlayerToGroupCommand);

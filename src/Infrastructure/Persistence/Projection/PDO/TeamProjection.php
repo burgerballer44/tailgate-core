@@ -4,10 +4,10 @@ namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 
 use PDO;
 use Tailgate\Domain\Model\Team\TeamAdded;
-use Tailgate\Domain\Model\Team\TeamUpdated;
 use Tailgate\Domain\Model\Team\TeamDeleted;
-use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
+use Tailgate\Domain\Model\Team\TeamUpdated;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
+use Tailgate\Infrastructure\Persistence\Projection\TeamProjectionInterface;
 
 class TeamProjection extends AbstractProjection implements TeamProjectionInterface
 {
@@ -30,7 +30,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
             ':designation' => $event->getDesignation(),
             ':mascot' => $event->getMascot(),
             ':sport' => $event->getSport(),
-            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -43,7 +43,7 @@ class TeamProjection extends AbstractProjection implements TeamProjectionInterfa
         $stmt->execute([
             ':team_id' => $event->getAggregateId(),
             ':designation' => $event->getDesignation(),
-            ':mascot' => $event->getMascot()
+            ':mascot' => $event->getMascot(),
         ]);
     }
 

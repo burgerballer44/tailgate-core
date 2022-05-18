@@ -2,7 +2,6 @@
 
 namespace Tailgate\Domain\Model;
 
-use Tailgate\Domain\Model\DomainEvent;
 use Burger\Common\ClassFunctions;
 
 trait AppliesAndRecordsDomainEvents

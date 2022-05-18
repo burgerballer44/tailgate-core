@@ -2,12 +2,10 @@
 
 namespace Tailgate\Domain\Model\User;
 
-use InvalidArgumentException;
-
 class PasswordResetToken
 {
-    const LENGTH_STRING = 20;
-    const TIME_TO_EXPIRE = 3600; // 1 hour
+    public const LENGTH_STRING = 20;
+    public const TIME_TO_EXPIRE = 3600; // 1 hour
 
     private $value;
 
@@ -17,12 +15,12 @@ class PasswordResetToken
         $this->value = $string . '_' . time();
     }
 
-    public static function create() : PasswordResetToken
+    public static function create(): PasswordResetToken
     {
         return new PasswordResetToken();
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return (string) $this->value;
     }
@@ -36,6 +34,7 @@ class PasswordResetToken
 
         $timestamp = (int) substr($token, strrpos($token, '_') + 1);
         $expire = self::TIME_TO_EXPIRE;
+
         return $timestamp + $expire >= time();
     }
 }

@@ -59,7 +59,7 @@ class PDOSeasonProjectionTest extends BaseTestCase
                 ':name' => $event->getName(),
                 ':season_start' => $event->getSeasonStart(),
                 ':season_end' => $event->getSeasonEnd(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectSeasonCreated($event);
@@ -96,12 +96,11 @@ class PDOSeasonProjectionTest extends BaseTestCase
                 ':away_team_id' => $event->getAwayTeamId(),
                 ':start_date' => $event->getStartDate(),
                 ':start_time' => $event->getStartTime(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectGameAdded($event);
     }
-
 
     public function testItCanProjectGameScoreUpdated()
     {
@@ -132,7 +131,7 @@ class PDOSeasonProjectionTest extends BaseTestCase
                 ':home_team_score' => $event->getHomeTeamScore(),
                 ':away_team_score' => $event->getAwayTeamScore(),
                 ':start_date' => $event->getStartDate(),
-                ':start_time' => $event->getStartTime()
+                ':start_time' => $event->getStartTime(),
             ]);
 
         $this->projection->projectGameScoreUpdated($event);
@@ -175,7 +174,6 @@ class PDOSeasonProjectionTest extends BaseTestCase
                 ['DELETE FROM `follow` WHERE season_id = :season_id'],
                 ['DELETE FROM `game` WHERE season_id = :season_id'],
                 ['DELETE FROM `season` WHERE season_id = :season_id']
-
             )
             ->willReturn($this->pdoStatementMock);
 
@@ -218,7 +216,7 @@ class PDOSeasonProjectionTest extends BaseTestCase
                 ':type' => $event->getSeasonType(),
                 ':name' => $event->getName(),
                 ':season_start' => $event->getSeasonStart(),
-                ':season_end' => $event->getSeasonEnd()
+                ':season_end' => $event->getSeasonEnd(),
             ]);
 
         $this->projection->projectSeasonUpdated($event);

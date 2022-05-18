@@ -6,8 +6,8 @@ use InvalidArgumentException;
 
 class UserRole
 {
-    const STANDARD = 'Standard';
-    const ADMIN = 'Admin';
+    public const STANDARD = 'Standard';
+    public const ADMIN = 'Admin';
 
     private $value;
 
@@ -16,29 +16,31 @@ class UserRole
         // check if a key was passed in
         if (in_array($value, $this->getValidKeys())) {
             $this->value = $this->getUserRoles()[$value]['title'];
+
             return;
         }
 
         // check if a title was passed in
         if (in_array($value, $this->getValidTitles())) {
             $this->value = $value;
+
             return;
         }
 
         throw new InvalidArgumentException("Invalid user role. Role does not exist.");
     }
 
-    public static function fromString(string $value) : UserRole
+    public static function fromString(string $value): UserRole
     {
         return new UserRole($value);
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return (string) $this->value;
     }
 
-    public function equals(UserRole $other) : bool
+    public function equals(UserRole $other): bool
     {
         return $other instanceof UserRole && $this->value === $other->value;
     }
@@ -53,12 +55,12 @@ class UserRole
         return array_column(self::getUserRoles(), 'title');
     }
 
-    public static function getStandard() : UserRole
+    public static function getStandard(): UserRole
     {
         return new UserRole(self::STANDARD);
     }
 
-    public static function getAdmin() : UserRole
+    public static function getAdmin(): UserRole
     {
         return new UserRole(self::ADMIN);
     }
@@ -74,7 +76,7 @@ class UserRole
             self::ADMIN => [
                 'key' => self::ADMIN,
                 'title' => "Admin",
-                'description' => "an important person who can do whatever"
+                'description' => "an important person who can do whatever",
             ],
         ];
     }

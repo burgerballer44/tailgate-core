@@ -25,7 +25,7 @@ class UserRepository implements UserRepositoryInterface
         $this->eventPublisher = $eventPublisher;
     }
 
-    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
+    public function get(IdentifiesAggregate $aggregateId): IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 

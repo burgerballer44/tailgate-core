@@ -47,10 +47,10 @@ class RegisterUserHandler implements ValidatableService
         $this->userRepository->add($user);
 
         return [
-            'userId'   => $user->getUserId(),
-            'email'    => $user->getEmail(),
-            'status'   => $user->getStatus(),
-            'role'     => $user->getRole()
+            'userId' => $user->getUserId(),
+            'email' => $user->getEmail(),
+            'status' => $user->getStatus(),
+            'role' => $user->getRole(),
         ];
     }
 }

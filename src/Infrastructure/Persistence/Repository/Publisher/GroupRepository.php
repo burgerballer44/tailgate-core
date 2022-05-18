@@ -25,7 +25,7 @@ class GroupRepository implements GroupRepositoryInterface
         $this->domainEventPublisher = $domainEventPublisher;
     }
 
-    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
+    public function get(IdentifiesAggregate $aggregateId): IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
@@ -35,7 +35,7 @@ class GroupRepository implements GroupRepositoryInterface
     public function add(RecordsEvents $group)
     {
         $events = $group->getRecordedEvents();
-        
+
         foreach ($events as $event) {
             $this->domainEventPublisher->publish(GroupDomainEvent::class, $event);
         }

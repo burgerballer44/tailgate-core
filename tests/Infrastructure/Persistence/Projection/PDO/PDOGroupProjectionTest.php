@@ -69,7 +69,7 @@ class PDOGroupProjectionTest extends BaseTestCase
                 ':name' => $event->getName(),
                 ':invite_code' => $event->getInviteCode(),
                 ':owner_id' => $event->getOwnerId(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectGroupCreated($event);
@@ -104,7 +104,7 @@ class PDOGroupProjectionTest extends BaseTestCase
                 ':user_id' => $event->getUserId(),
                 ':role' => $event->getGroupRole(),
                 ':allow_multiple' => $event->getAllowMultiplePlayers(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectMemberAdded($event);
@@ -135,12 +135,11 @@ class PDOGroupProjectionTest extends BaseTestCase
             ->with([
                 ':member_id' => $event->getMemberId(),
                 ':role' => $event->getGroupRole(),
-                ':allow_multiple' => $event->getAllowMultiplePlayers()
+                ':allow_multiple' => $event->getAllowMultiplePlayers(),
             ]);
 
         $this->projection->projectMemberUpdated($event);
     }
-
 
     public function testItCanProjectScoreSubmitted()
     {
@@ -173,7 +172,7 @@ class PDOGroupProjectionTest extends BaseTestCase
                 ':game_id' => $event->getGameId(),
                 ':home_team_prediction' => $event->getHomeTeamPrediction(),
                 ':away_team_prediction' => $event->getAwayTeamPrediction(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectScoreSubmitted($event);
@@ -373,7 +372,6 @@ class PDOGroupProjectionTest extends BaseTestCase
         $this->projection->projectGroupScoreUpdated($event);
     }
 
-
     public function testItCanProjectPlayerAdded()
     {
         $event = new PlayerAdded(
@@ -401,7 +399,7 @@ class PDOGroupProjectionTest extends BaseTestCase
                 ':player_id' => $event->getPlayerId(),
                 ':member_id' => $event->getMemberId(),
                 ':username' => $event->getUsername(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectPlayerAdded($event);
@@ -434,7 +432,7 @@ class PDOGroupProjectionTest extends BaseTestCase
                 ':group_id' => $event->getAggregateId(),
                 ':team_id' => $event->getTeamId(),
                 ':season_id' => $event->getSeasonId(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectTeamFollowed($event);

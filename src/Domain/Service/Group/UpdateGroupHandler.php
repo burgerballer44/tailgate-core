@@ -15,7 +15,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class UpdateGroupHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $groupRepository;

@@ -3,13 +3,13 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
-use Tailgate\Domain\Model\Group\GroupId;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\FollowView;
 use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
-use Tailgate\Domain\Model\Team\TeamId;
+use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Season\SeasonId;
-use RuntimeException;
+use Tailgate\Domain\Model\Team\TeamId;
 
 class FollowViewRepository implements FollowViewRepositoryInterface
 {
@@ -30,7 +30,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             WHERE `follow`.follow_id = :follow_id LIMIT 1');
         $stmt->execute([':follow_id' => (string) $id]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Follow not found.");
         }
 
@@ -86,7 +86,7 @@ class FollowViewRepository implements FollowViewRepositoryInterface
             LIMIT 1');
         $stmt->execute([':group_id' => (string) $id]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             return false;
         }
 

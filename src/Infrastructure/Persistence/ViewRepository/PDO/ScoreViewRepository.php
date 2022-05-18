@@ -3,13 +3,13 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\ScoreId;
-use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Group\ScoreView;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
-use RuntimeException;
+use Tailgate\Domain\Model\Season\GameId;
 
 class ScoreViewRepository implements ScoreViewRepositoryInterface
 {
@@ -31,7 +31,7 @@ class ScoreViewRepository implements ScoreViewRepositoryInterface
             WHERE s.score_id = :score_id LIMIT 1');
         $stmt->execute([':score_id' => (string) $id]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Score not found.");
         }
 

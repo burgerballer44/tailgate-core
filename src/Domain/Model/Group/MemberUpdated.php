@@ -20,7 +20,8 @@ class MemberUpdated implements DomainEvent, GroupDomainEvent
         $this->allowMultiplePlayers = $allowMultiplePlayers;
         $this->dateOccurred = $dateOccurred;
     }
-    public function getEventDescription() : string
+
+    public function getEventDescription(): string
     {
         return 'Group member information updated.';
     }

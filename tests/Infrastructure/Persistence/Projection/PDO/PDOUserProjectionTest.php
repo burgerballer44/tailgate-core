@@ -49,7 +49,7 @@ class PDOUserProjectionTest extends BaseTestCase
                 ':password_hash' => $event->getPasswordHash(),
                 ':status' => $event->getStatus(),
                 ':role' => $event->getRole(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectUserRegistered($event);
@@ -201,7 +201,7 @@ class PDOUserProjectionTest extends BaseTestCase
             ->method('execute')
             ->with([
                 ':user_id' => $event->getAggregateId(),
-                ':password_reset_token' => $event->getPasswordResetToken()
+                ':password_reset_token' => $event->getPasswordResetToken(),
             ]);
 
         $this->projection->projectPasswordResetTokenApplied($event);

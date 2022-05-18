@@ -3,8 +3,8 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Group\FollowView;
 use Tailgate\Domain\Model\Group\GroupView;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
@@ -12,7 +12,6 @@ use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\AndSpec
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\NameSpecification;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\UserSpecification;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\Specification\WhereSpecification;
-use RuntimeException;
 
 class GroupViewRepository implements GroupViewRepositoryInterface
 {
@@ -31,7 +30,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             LIMIT 1');
         $stmt->execute([':group_id' => (string) $groupId]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Group not found.");
         }
 
@@ -48,10 +47,10 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             LIMIT 1');
         $stmt->execute([
             ':user_id' => (string) $userId,
-            ':group_id' => (string) $groupId
+            ':group_id' => (string) $groupId,
         ]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Group not found.");
         }
 
@@ -128,7 +127,7 @@ class GroupViewRepository implements GroupViewRepositoryInterface
             LIMIT 1');
         $stmt->execute([':invite_code' => (string) $inviteCode]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Group not found by invite code.");
         }
 

@@ -3,7 +3,6 @@
 namespace Tailgate\Domain\Model\Group;
 
 use Tailgate\Domain\Model\DomainEvent;
-use Tailgate\Domain\Model\User\UserId;
 
 class PlayerDeleted implements DomainEvent, GroupDomainEvent
 {
@@ -18,7 +17,7 @@ class PlayerDeleted implements DomainEvent, GroupDomainEvent
         $this->dateOccurred = $dateOccurred;
     }
 
-    public function getEventDescription() : string
+    public function getEventDescription(): string
     {
         return 'Group player removed.';
     }

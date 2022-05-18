@@ -2,11 +2,11 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Group\QueryGroupsQuery;
-use Tailgate\Domain\Service\Group\QueryGroupsQueryHandler;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
+use Tailgate\Domain\Service\Group\QueryGroupsQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class QueryGroupsQueryHandlerTest extends BaseTestCase
 {

@@ -2,15 +2,15 @@
 
 namespace Tailgate\Test\Domain\Service\Team;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Team\TeamQuery;
-use Tailgate\Domain\Service\Team\TeamQueryHandler;
+use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
+use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
-use Tailgate\Domain\Model\Group\FollowViewRepositoryInterface;
-use Tailgate\Domain\Model\Season\GameViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\TeamDataTransformerInterface;
+use Tailgate\Domain\Service\Team\TeamQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class TeamQueryHandlerTest extends BaseTestCase
 {

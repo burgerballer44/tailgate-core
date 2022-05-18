@@ -8,8 +8,6 @@ use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Model\Group\ScoreDeleted;
-use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Service\Clock\FakeClock;

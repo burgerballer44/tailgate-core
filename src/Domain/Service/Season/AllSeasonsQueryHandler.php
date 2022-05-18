@@ -2,7 +2,6 @@
 
 namespace Tailgate\Domain\Service\Season;
 
-use Tailgate\Application\Query\Season\AllSeasonsQuery;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\SeasonDataTransformerInterface;
 

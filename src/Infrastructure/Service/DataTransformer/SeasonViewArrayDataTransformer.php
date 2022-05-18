@@ -2,9 +2,9 @@
 
 namespace Tailgate\Infrastructure\Service\DataTransformer;
 
-use Tailgate\Domain\Service\DataTransformer\SeasonDataTransformerInterface;
-use Tailgate\Domain\Service\DataTransformer\GameDataTransformerInterface;
 use Tailgate\Domain\Model\Season\SeasonView;
+use Tailgate\Domain\Service\DataTransformer\GameDataTransformerInterface;
+use Tailgate\Domain\Service\DataTransformer\SeasonDataTransformerInterface;
 
 class SeasonViewArrayDataTransformer implements SeasonDataTransformerInterface
 {
@@ -14,6 +14,7 @@ class SeasonViewArrayDataTransformer implements SeasonDataTransformerInterface
     {
         $this->gameViewTransformer = $gameViewTransformer;
     }
+
     public function read(SeasonView $seasonView)
     {
         $games = [];
@@ -23,13 +24,13 @@ class SeasonViewArrayDataTransformer implements SeasonDataTransformerInterface
         }
 
         return [
-            'seasonId'    => $seasonView->getSeasonId(),
-            'sport'       => $seasonView->getSport(),
-            'seasonType'  => $seasonView->getSeasonType(),
-            'name'        => $seasonView->getName(),
+            'seasonId' => $seasonView->getSeasonId(),
+            'sport' => $seasonView->getSport(),
+            'seasonType' => $seasonView->getSeasonType(),
+            'name' => $seasonView->getName(),
             'seasonStart' => $seasonView->getSeasonStart(),
-            'seasonEnd'   => $seasonView->getSeasonEnd(),
-            'games'       => $games,
+            'seasonEnd' => $seasonView->getSeasonEnd(),
+            'games' => $games,
         ];
     }
 }

@@ -3,9 +3,6 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 
 use Tailgate\Domain\Model\Common\Date;
-use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Season\Season;
-use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\TeamAdded;
 use Tailgate\Domain\Model\Team\TeamDeleted;
@@ -48,7 +45,7 @@ class PDOTeamProjectionTest extends BaseTestCase
                 ':designation' => $event->getDesignation(),
                 ':mascot' => $event->getMascot(),
                 ':sport' => $event->getSport(),
-                ':created_at' => $event->getDateOccurred()
+                ':created_at' => $event->getDateOccurred(),
             ]);
 
         $this->projection->projectTeamAdded($event);
@@ -74,7 +71,7 @@ class PDOTeamProjectionTest extends BaseTestCase
             ->with([
                 ':team_id' => $event->getAggregateId(),
                 ':designation' => $event->getDesignation(),
-                ':mascot' => $event->getMascot()
+                ':mascot' => $event->getMascot(),
             ]);
 
         $this->projection->projectTeamUpdated($event);

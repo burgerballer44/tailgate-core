@@ -2,7 +2,6 @@
 
 namespace Tailgate\Domain\Service\User;
 
-use Tailgate\Application\Query\User\AllUsersQuery;
 use Tailgate\Domain\Model\User\UserViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\UserDataTransformerInterface;
 

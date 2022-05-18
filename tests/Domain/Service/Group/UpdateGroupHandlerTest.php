@@ -9,7 +9,6 @@ use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Model\Group\GroupUpdated;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\UpdateGroupHandler;

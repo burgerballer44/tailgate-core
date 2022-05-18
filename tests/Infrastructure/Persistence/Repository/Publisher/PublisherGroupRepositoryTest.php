@@ -3,9 +3,7 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
 use Burger\Aggregate\AggregateHistory;
-use Burger\Aggregate\DomainEvent;
 use Burger\Event\EventPublisher;
-use Burger\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupDomainEvent;
@@ -47,7 +45,7 @@ class PublisherGroupRepositoryTest extends BaseTestCase
         $groupRepository = new GroupRepository($this->eventStore, $this->eventPublisher);
 
         $group = $groupRepository->get($groupId);
-        
+
         $this->assertInstanceOf(Group::class, $group);
     }
 

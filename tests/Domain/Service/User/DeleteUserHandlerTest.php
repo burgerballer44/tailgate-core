@@ -6,7 +6,6 @@ use Tailgate\Application\Command\User\DeleteUserCommand;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
-use Tailgate\Domain\Model\User\UserDeleted;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Domain\Service\Clock\FakeClock;

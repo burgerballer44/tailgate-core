@@ -6,5 +6,6 @@ namespace Tailgate\Application\Validator;
 interface ValidatorInterface
 {
     public function assert($command): bool;
+
     public function errors(): array;
 }

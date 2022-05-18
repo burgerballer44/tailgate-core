@@ -4,7 +4,6 @@ namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
 use RuntimeException;
-use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamView;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
@@ -23,7 +22,7 @@ class TeamViewRepository implements TeamViewRepositoryInterface
         $stmt = $this->pdo->prepare('SELECT * FROM `team` WHERE team_id = :team_id LIMIT 1');
         $stmt->execute([':team_id' => (string) $id]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Team not found.");
         }
 

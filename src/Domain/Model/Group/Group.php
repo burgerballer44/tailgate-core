@@ -6,8 +6,6 @@ use Burger\Aggregate\IdentifiesAggregate;
 use RuntimeException;
 use Tailgate\Domain\Model\AbstractEventBasedEntity;
 use Tailgate\Domain\Model\Common\Date;
-use Tailgate\Domain\Model\Group\GroupInviteCode;
-use Tailgate\Domain\Model\Group\GroupRole;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -15,14 +13,14 @@ use Tailgate\Domain\Model\User\UserId;
 
 class Group extends AbstractEventBasedEntity
 {
-    const SINGLE_PLAYER = 0;  // member can not add multiple players to group
-    const MULTIPLE_PLAYERS = 1;  // member can add multiple players to group
+    public const SINGLE_PLAYER = 0;  // member can not add multiple players to group
+    public const MULTIPLE_PLAYERS = 1;  // member can add multiple players to group
 
-    const MEMBER_LIMIT = 30;  // maximum number of members in a group
+    public const MEMBER_LIMIT = 30;  // maximum number of members in a group
 
-    const PLAYER_LIMIT = 5;  // maximum number of players for a player who can have multiple
+    public const PLAYER_LIMIT = 5;  // maximum number of players for a player who can have multiple
 
-    const MIN_NUMBER_ADMINS = 1;  // minimum number of admins that have to be in a group
+    public const MIN_NUMBER_ADMINS = 1;  // minimum number of admins that have to be in a group
 
     private $groupId;
     private $name;
@@ -96,7 +94,7 @@ class Group extends AbstractEventBasedEntity
     // add a score
     public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction, Date $dateOccurred)
     {
-        if (!$this->getPlayerById($playerId)) {
+        if (! $this->getPlayerById($playerId)) {
             throw new RuntimeException('The player submitting the score does not exist.');
         }
 
@@ -120,7 +118,7 @@ class Group extends AbstractEventBasedEntity
     // add a player
     public function addPlayer(MemberId $memberId, $username, Date $dateOccurred)
     {
-        if (!$member = $this->getMemberById($memberId)) {
+        if (! $member = $this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist. Cannot add the player.');
         }
 
@@ -144,11 +142,11 @@ class Group extends AbstractEventBasedEntity
     // change who owns a player to a different member
     public function changePlayerOwner(PlayerId $playerId, MemberId $memberId, Date $dateOccurred)
     {
-        if (!$this->getMemberById($memberId)) {
+        if (! $this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist. Cannot change the player owner.');
         }
 
-        if (!$this->getPlayerById($playerId)) {
+        if (! $this->getPlayerById($playerId)) {
             throw new RuntimeException('The player does not exist. Cannot change the player owner.');
         }
 
@@ -160,7 +158,7 @@ class Group extends AbstractEventBasedEntity
     // changes a score to something else
     public function updateScore(ScoreId $scoreId, $homeTeamPrediction, $awayTeamPrediction, Date $dateOccurred)
     {
-        if (!$this->getScoreById($scoreId)) {
+        if (! $this->getScoreById($scoreId)) {
             throw new RuntimeException('The score does not exist. Cannot update the score.');
         }
 
@@ -196,7 +194,7 @@ class Group extends AbstractEventBasedEntity
     // updates a member role, and if they can add multiple players
     public function updateMember(MemberId $memberId, $groupRole, $allowMultiple, Date $dateOccurred)
     {
-        if (!$this->getMemberById($memberId)) {
+        if (! $this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist.');
         }
 
@@ -220,7 +218,7 @@ class Group extends AbstractEventBasedEntity
         }
 
         // set single player by default. no need for exception
-        if (!in_array($allowMultiple, [self::SINGLE_PLAYER, self::MULTIPLE_PLAYERS])) {
+        if (! in_array($allowMultiple, [self::SINGLE_PLAYER, self::MULTIPLE_PLAYERS])) {
             $allowMultiple = self::SINGLE_PLAYER;
         }
 
@@ -238,7 +236,7 @@ class Group extends AbstractEventBasedEntity
     // delete a member, all players the member has, and all scores from each player
     public function deleteMember(MemberId $memberId, Date $dateOccurred)
     {
-        if (!$this->getMemberById($memberId)) {
+        if (! $this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist.');
         }
 
@@ -266,7 +264,7 @@ class Group extends AbstractEventBasedEntity
     // delete a player, and all of their scores
     public function deletePlayer(PlayerId $playerId, Date $dateOccurred)
     {
-        if (!$this->getPlayerById($playerId)) {
+        if (! $this->getPlayerById($playerId)) {
             throw new RuntimeException('The player does not exist.');
         }
 
@@ -278,7 +276,7 @@ class Group extends AbstractEventBasedEntity
     // delete a score
     public function deleteScore(ScoreId $scoreId, Date $dateOccurred)
     {
-        if (!$this->getScoreById($scoreId)) {
+        if (! $this->getScoreById($scoreId)) {
             throw new RuntimeException('The score does not exist. Cannot update the score.');
         }
 
@@ -300,7 +298,7 @@ class Group extends AbstractEventBasedEntity
     // remove a follow
     public function deleteFollow(FollowId $followId, Date $dateOccurred)
     {
-        if (!$this->follow instanceof Follow) {
+        if (! $this->follow instanceof Follow) {
             throw new RuntimeException('Group is not following a team.');
         }
 
@@ -377,7 +375,7 @@ class Group extends AbstractEventBasedEntity
     protected function applyMemberDeleted(MemberDeleted $event)
     {
         $this->members = array_values(array_filter($this->members, function ($member) use ($event) {
-            return !$member->getMemberId()->equals($event->getMemberId());
+            return ! $member->getMemberId()->equals($event->getMemberId());
         }));
 
         $playerIdsForMember = array_map(function ($player) {
@@ -385,29 +383,29 @@ class Group extends AbstractEventBasedEntity
         }, $this->getPlayersByMemberId($event->getMemberId()));
 
         $this->players = array_values(array_filter($this->players, function ($player) use ($event) {
-            return !$player->getMemberId()->equals($event->getMemberId());
+            return ! $player->getMemberId()->equals($event->getMemberId());
         }));
 
         $this->scores = array_values(array_filter($this->scores, function ($score) use ($playerIdsForMember) {
-            return !in_array((string)$score->getPlayerId(), $playerIdsForMember);
+            return ! in_array((string)$score->getPlayerId(), $playerIdsForMember);
         }));
     }
 
     protected function applyPlayerDeleted(PlayerDeleted $event)
     {
         $this->players = array_values(array_filter($this->players, function ($player) use ($event) {
-            return !$player->getPlayerId()->equals($event->getPlayerId());
+            return ! $player->getPlayerId()->equals($event->getPlayerId());
         }));
-        
+
         $this->scores = array_values(array_filter($this->scores, function ($score) use ($event) {
-            return !$score->getPlayerId()->equals($event->getPlayerId());
+            return ! $score->getPlayerId()->equals($event->getPlayerId());
         }));
     }
 
     protected function applyScoreDeleted(ScoreDeleted $event)
     {
         $this->scores = array_values(array_filter($this->scores, function ($score) use ($event) {
-            return !$score->getScoreId()->equals($event->getScoreId());
+            return ! $score->getScoreId()->equals($event->getScoreId());
         }));
     }
 
@@ -490,5 +488,4 @@ class Group extends AbstractEventBasedEntity
             return $member->getGroupRole() == GroupRole::getGroupAdmin();
         });
     }
-
 }

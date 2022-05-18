@@ -3,11 +3,8 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
 use Burger\Aggregate\AggregateHistory;
-use Burger\Aggregate\DomainEvent;
 use Burger\Event\EventPublisher;
-use Burger\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Common\Date;
-use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamDomainEvent;
@@ -47,7 +44,7 @@ class PublisherTeamRepositoryTest extends BaseTestCase
         $teamRepository = new TeamRepository($this->eventStore, $this->eventPublisher);
 
         $team = $teamRepository->get($teamId);
-        
+
         $this->assertInstanceOf(Team::class, $team);
     }
 

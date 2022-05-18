@@ -16,7 +16,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class CreateGroupHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $groupRepository;
@@ -42,7 +42,7 @@ class CreateGroupHandler implements ValidatableService
             UserId::fromString($command->getOwnerId()),
             Date::fromDateTimeImmutable($this->clock->currentTime())
         );
-        
+
         $this->groupRepository->add($group);
     }
 }

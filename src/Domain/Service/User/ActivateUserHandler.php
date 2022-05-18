@@ -14,7 +14,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class ActivateUserHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $userRepository;
@@ -29,7 +29,7 @@ class ActivateUserHandler implements ValidatableService
     public function handle(ActivateUserCommand $command)
     {
         $this->validate($command);
-        
+
         $user = $this->userRepository->get(UserId::fromString($command->getUserId()));
 
         $user->activate(Date::fromDateTimeImmutable($this->clock->currentTime()));

@@ -6,5 +6,5 @@ use DateTimeImmutable;
 
 interface Clock
 {
-    public function currentTime() : DateTimeImmutable;
+    public function currentTime(): DateTimeImmutable;
 }

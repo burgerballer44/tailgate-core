@@ -6,7 +6,6 @@ use Tailgate\Application\Command\Season\DeleteSeasonCommand;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Season\Season;
-use Tailgate\Domain\Model\Season\SeasonDeleted;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonType;

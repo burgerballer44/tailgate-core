@@ -32,7 +32,7 @@ class SeasonCreated implements DomainEvent, SeasonDomainEvent
         $this->dateOccurred = $dateOccurred;
     }
 
-    public function getEventDescription() : string
+    public function getEventDescription(): string
     {
         return 'Season created.';
     }

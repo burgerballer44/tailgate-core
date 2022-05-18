@@ -2,11 +2,11 @@
 
 namespace Tailgate\Test\Domain\Service\Team;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Team\AllTeamsQuery;
-use Tailgate\Domain\Service\Team\AllTeamsQueryHandler;
 use Tailgate\Domain\Model\Team\TeamViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\TeamDataTransformerInterface;
+use Tailgate\Domain\Service\Team\AllTeamsQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class AllTeamsQueryHandlerTest extends BaseTestCase
 {

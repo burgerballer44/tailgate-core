@@ -2,11 +2,11 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Season\AllSeasonsQuery;
-use Tailgate\Domain\Service\Season\AllSeasonsQueryHandler;
 use Tailgate\Domain\Model\Season\SeasonViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\SeasonDataTransformerInterface;
+use Tailgate\Domain\Service\Season\AllSeasonsQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class AllSeasonsQueryHandlerTest extends BaseTestCase
 {

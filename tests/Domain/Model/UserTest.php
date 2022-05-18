@@ -21,7 +21,7 @@ class UserTest extends BaseTestCase
         return User::register($this->userId, $this->email, $this->passwordHash, $this->dateOccurred);
     }
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->userId = UserId::fromString('userId');
         $this->email = Email::fromString('email@email.com');
@@ -140,7 +140,7 @@ class UserTest extends BaseTestCase
         $status = UserStatus::getDeleted();
         $role = UserRole::getAdmin();
         $user->update($email, $status, $role, $this->dateOccurred);
-        
+
         $userUpdatedEvent = $user->getRecordedEvents()[0];
 
         $this->assertEquals($email, $userUpdatedEvent->getEmail());

@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\CreateGroupCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
-use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;

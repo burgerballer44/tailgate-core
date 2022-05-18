@@ -77,6 +77,7 @@ class ScoreView
     {
         return $this->awayTeamPrediction;
     }
+
     public function getHomeTeamId()
     {
         return $this->homeTeamId;

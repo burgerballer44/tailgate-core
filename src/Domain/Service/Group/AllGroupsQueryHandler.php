@@ -2,7 +2,6 @@
 
 namespace Tailgate\Domain\Service\Group;
 
-use Tailgate\Application\Query\Group\AllGroupsQuery;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
 

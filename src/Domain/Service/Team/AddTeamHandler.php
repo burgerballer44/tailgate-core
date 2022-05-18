@@ -15,7 +15,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class AddTeamHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $teamRepository;
@@ -30,7 +30,7 @@ class AddTeamHandler implements ValidatableService
     public function handle(AddTeamCommand $command)
     {
         $this->validate($command);
-        
+
         $team = Team::create(
             $this->teamRepository->nextIdentity(),
             $command->getDesignation(),
@@ -38,7 +38,7 @@ class AddTeamHandler implements ValidatableService
             Sport::fromString($command->getSport()),
             Date::fromDateTimeImmutable($this->clock->currentTime())
         );
-        
+
         $this->teamRepository->add($team);
     }
 }

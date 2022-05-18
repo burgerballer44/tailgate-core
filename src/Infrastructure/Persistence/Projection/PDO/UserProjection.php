@@ -35,7 +35,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
             ':email' => $event->getEmail(),
             ':status' => $event->getStatus(),
             ':role' => $event->getRole(),
-            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT),
         ]);
     }
 

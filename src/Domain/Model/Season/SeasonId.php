@@ -2,8 +2,8 @@
 
 namespace Tailgate\Domain\Model\Season;
 
-use Ramsey\Uuid\Uuid;
 use Burger\Aggregate\IdentifiesAggregate;
+use Ramsey\Uuid\Uuid;
 
 class SeasonId implements IdentifiesAggregate
 {
@@ -14,17 +14,17 @@ class SeasonId implements IdentifiesAggregate
         $this->seasonId = null === $seasonId ? Uuid::uuid4()->toString() : $seasonId;
     }
 
-    public static function fromString($seasonId) : IdentifiesAggregate
+    public static function fromString($seasonId): IdentifiesAggregate
     {
         return new SeasonId($seasonId);
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return (string) $this->seasonId;
     }
 
-    public function equals(IdentifiesAggregate $other) : bool
+    public function equals(IdentifiesAggregate $other): bool
     {
         return
             $other instanceof SeasonId

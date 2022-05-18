@@ -2,8 +2,8 @@
 
 namespace Tailgate\Domain\Model\Group;
 
-use Ramsey\Uuid\Uuid;
 use Burger\Aggregate\IdentifiesAggregate;
+use Ramsey\Uuid\Uuid;
 
 class MemberId implements IdentifiesAggregate
 {
@@ -14,17 +14,17 @@ class MemberId implements IdentifiesAggregate
         $this->memberId = null === $memberId ? Uuid::uuid4()->toString() : $memberId;
     }
 
-    public static function fromString($memberId) : IdentifiesAggregate
+    public static function fromString($memberId): IdentifiesAggregate
     {
         return new MemberId($memberId);
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return (string) $this->memberId;
     }
 
-    public function equals(IdentifiesAggregate $other) : bool
+    public function equals(IdentifiesAggregate $other): bool
     {
         return
             $other instanceof MemberId

@@ -6,7 +6,6 @@ use Tailgate\Application\Command\Season\UpdateSeasonCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\DateOrString;
-use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonType;
@@ -18,7 +17,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class UpdateSeasonHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $seasonRepository;
@@ -44,7 +43,7 @@ class UpdateSeasonHandler implements ValidatableService
             DateOrString::fromString($command->getSeasonEnd()),
             Date::fromDateTimeImmutable($this->clock->currentTime())
         );
-        
+
         $this->seasonRepository->add($season);
     }
 }

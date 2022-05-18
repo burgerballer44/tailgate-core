@@ -13,6 +13,7 @@ class BaseTestCase extends TestCase
         $clock = new FakeClock();
         $currentTime = new DateTimeImmutable($time);
         $clock->setCurrentTime($currentTime);
+
         return $clock;
     }
 }

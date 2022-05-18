@@ -3,7 +3,6 @@
 namespace Tailgate\Domain\Model\Common;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 
 // some date fields need to be able to hold things like 'TBD'
 class DateOrString
@@ -17,7 +16,7 @@ class DateOrString
         $this->date = $date;
     }
 
-    public static function fromString(string $date) : self
+    public static function fromString(string $date): self
     {
         // check if it is a date
         $dateTime = DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $date);
@@ -28,7 +27,7 @@ class DateOrString
         return new self($date);
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return (string) $this->date;
     }

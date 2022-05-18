@@ -6,7 +6,6 @@ use Tailgate\Application\Command\User\RequestPasswordResetCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\User\PasswordResetToken;
-use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Domain\Service\Clock\Clock;
@@ -16,7 +15,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class RequestPasswordResetHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $userRepository;
@@ -43,8 +42,8 @@ class RequestPasswordResetHandler implements ValidatableService
         $this->userRepository->add($user);
 
         return [
-            'userId'             => $user->getUserId(),
-            'passwordResetToken' => $user->getPasswordResetToken()
+            'userId' => $user->getUserId(),
+            'passwordResetToken' => $user->getPasswordResetToken(),
         ];
     }
 }

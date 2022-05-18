@@ -2,13 +2,11 @@
 
 namespace Tailgate\Tests\Infrastructure\Persistence\ViewRepository\PDO;
 
-use Tailgate\Test\BaseTestCase;
 use RuntimeException;
-use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
-use Tailgate\Domain\Model\Season\SeasonView;
 use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Infrastructure\Persistence\ViewRepository\PDO\SeasonViewRepository;
+use Tailgate\Test\BaseTestCase;
 
 class PDOSeasonViewRepositoryTest extends BaseTestCase
 {

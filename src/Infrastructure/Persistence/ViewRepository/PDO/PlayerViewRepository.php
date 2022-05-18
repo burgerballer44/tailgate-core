@@ -3,12 +3,11 @@
 namespace Tailgate\Infrastructure\Persistence\ViewRepository\PDO;
 
 use PDO;
+use RuntimeException;
 use Tailgate\Domain\Model\Group\GroupId;
-use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Model\Group\PlayerId;
 use Tailgate\Domain\Model\Group\PlayerView;
 use Tailgate\Domain\Model\Group\PlayerViewRepositoryInterface;
-use RuntimeException;
 
 class PlayerViewRepository implements PlayerViewRepositoryInterface
 {
@@ -24,7 +23,7 @@ class PlayerViewRepository implements PlayerViewRepositoryInterface
         $stmt = $this->pdo->prepare('SELECT * FROM `player` WHERE player_id = :player_id LIMIT 1');
         $stmt->execute([':player_id' => (string) $id]);
 
-        if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        if (! $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             throw new RuntimeException("Player not found.");
         }
 

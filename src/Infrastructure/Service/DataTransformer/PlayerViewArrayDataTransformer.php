@@ -2,8 +2,8 @@
 
 namespace Tailgate\Infrastructure\Service\DataTransformer;
 
-use Tailgate\Domain\Service\DataTransformer\PlayerDataTransformerInterface;
 use Tailgate\Domain\Model\Group\PlayerView;
+use Tailgate\Domain\Service\DataTransformer\PlayerDataTransformerInterface;
 
 class PlayerViewArrayDataTransformer implements PlayerDataTransformerInterface
 {
@@ -12,8 +12,8 @@ class PlayerViewArrayDataTransformer implements PlayerDataTransformerInterface
         return [
             'playerId' => $playerView->getPlayerId(),
             'memberId' => $playerView->getMemberId(),
-            'groupId'  => $playerView->getGroupId(),
-            'username' => $playerView->getUsername()
+            'groupId' => $playerView->getGroupId(),
+            'username' => $playerView->getUsername(),
         ];
     }
 }

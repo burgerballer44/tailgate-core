@@ -3,9 +3,7 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Repository\Publisher;
 
 use Burger\Aggregate\AggregateHistory;
-use Burger\Aggregate\DomainEvent;
 use Burger\Event\EventPublisher;
-use Burger\Event\EventPublisherInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
@@ -47,7 +45,7 @@ class PublisherUserRepositoryTest extends BaseTestCase
         $userRepository = new UserRepository($this->eventStore, $this->eventPublisher);
 
         $user = $userRepository->get($userId);
-        
+
         $this->assertInstanceOf(User::class, $user);
     }
 

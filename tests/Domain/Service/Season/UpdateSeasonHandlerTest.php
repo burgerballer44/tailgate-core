@@ -10,7 +10,6 @@ use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonType;
-use Tailgate\Domain\Model\Season\SeasonUpdated;
 use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Season\UpdateSeasonHandler;

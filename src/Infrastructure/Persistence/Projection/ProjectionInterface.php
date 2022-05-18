@@ -8,5 +8,6 @@ use Burger\Aggregate\DomainEvents;
 interface ProjectionInterface
 {
     public function project(DomainEvents $eventStream);
+
     public function projectOne(DomainEvent $event);
 }

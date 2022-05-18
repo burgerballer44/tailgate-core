@@ -3,6 +3,7 @@
 namespace Tailgate\Infrastructure\Persistence\Projection\PDO;
 
 use PDO;
+use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Domain\Model\Group\GroupScoreUpdated;
@@ -13,10 +14,9 @@ use Tailgate\Domain\Model\Group\MemberUpdated;
 use Tailgate\Domain\Model\Group\PlayerAdded;
 use Tailgate\Domain\Model\Group\PlayerDeleted;
 use Tailgate\Domain\Model\Group\PlayerOwnerChanged;
-use Tailgate\Domain\Model\Group\TeamFollowed;
-use Tailgate\Domain\Model\Group\FollowDeleted;
 use Tailgate\Domain\Model\Group\ScoreDeleted;
 use Tailgate\Domain\Model\Group\ScoreSubmitted;
+use Tailgate\Domain\Model\Group\TeamFollowed;
 use Tailgate\Infrastructure\Persistence\Projection\AbstractProjection;
 use Tailgate\Infrastructure\Persistence\Projection\GroupProjectionInterface;
 
@@ -41,7 +41,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':name' => $event->getName(),
             ':invite_code' => $event->getInviteCode(),
             ':owner_id' => $event->getOwnerId(),
-            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -58,7 +58,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':user_id' => $event->getUserId(),
             ':role' => $event->getGroupRole(),
             ':allow_multiple' => $event->getAllowMultiplePlayers(),
-            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -76,7 +76,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':game_id' => $event->getGameId(),
             ':home_team_prediction' => $event->getHomeTeamPrediction(),
             ':away_team_prediction' => $event->getAwayTeamPrediction(),
-            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -161,7 +161,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
         $stmt->execute([
             ':member_id' => $event->getMemberId(),
             ':role' => $event->getGroupRole(),
-            ':allow_multiple' => $event->getAllowMultiplePlayers()
+            ':allow_multiple' => $event->getAllowMultiplePlayers(),
         ]);
     }
 
@@ -191,7 +191,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':player_id' => $event->getPlayerId(),
             ':member_id' => $event->getMemberId(),
             ':username' => $event->getUsername(),
-            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -207,7 +207,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
             ':group_id' => $event->getAggregateId(),
             ':season_id' => $event->getSeasonId(),
             ':team_id' => $event->getTeamId(),
-            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT)
+            ':created_at' => (new \DateTimeImmutable())->format(self::DATE_FORMAT),
         ]);
     }
 

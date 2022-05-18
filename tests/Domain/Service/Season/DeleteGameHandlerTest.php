@@ -6,8 +6,6 @@ use Tailgate\Application\Command\Season\DeleteGameCommand;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Common\TimeOrString;
-use Tailgate\Domain\Model\Season\GameDeleted;
-use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;

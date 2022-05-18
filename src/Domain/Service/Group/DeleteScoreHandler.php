@@ -3,9 +3,7 @@
 namespace Tailgate\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\DeleteScoreCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
-use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreId;

@@ -16,7 +16,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class FollowTeamHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $groupRepository;
@@ -35,7 +35,7 @@ class FollowTeamHandler implements ValidatableService
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
         $group->followTeam(TeamId::fromString($command->getTeamId()), SeasonId::fromString($command->getSeasonId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
-        
+
         $this->groupRepository->add($group);
     }
 }

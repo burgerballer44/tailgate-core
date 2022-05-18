@@ -3,12 +3,11 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Event\InMemory;
 
 use Burger\Aggregate\AggregateHistory;
-use Burger\Aggregate\DomainEvent;
 use Burger\Aggregate\DomainEvents;
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Infrastructure\Persistence\Event\InMemory\EventStore;
+use Tailgate\Test\BaseTestCase;
 
 class InMemoryEventStoreTest extends BaseTestCase
 {
@@ -16,7 +15,7 @@ class InMemoryEventStoreTest extends BaseTestCase
     {
         $id = UserId::fromString('userId1');
         $event = new UserRegistered($id, 'email1', 'password1', 'status', 'role', 'randomString');
-        $eventStore = new EventStore;
+        $eventStore = new EventStore();
 
         $history = $eventStore->getAggregateHistoryFor($id);
         $this->assertEmpty(
@@ -45,7 +44,7 @@ class InMemoryEventStoreTest extends BaseTestCase
             new UserRegistered($id1, 'email2', 'password2', 'status', 'role', 'randomString'),
             new UserRegistered($id2, 'email3', 'password3', 'status', 'role', 'randomString'),
         ]);
-        $eventStore = new EventStore;
+        $eventStore = new EventStore();
 
         $history = $eventStore->getAggregateHistoryFor($id1);
         $this->assertEmpty(

@@ -22,6 +22,7 @@ class UserEmailQueryHandler
     public function handle(UserEmailQuery $query)
     {
         $userView = $this->userViewRepository->byEmail($query->getEmail());
+
         return $this->userViewTransformer->read($userView);
     }
 }

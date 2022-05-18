@@ -13,7 +13,7 @@ class Date
 
     private function __construct(string $date)
     {
-        if ( ! DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $date)) {
+        if (! DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $date)) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Invalid date provided: %s. Expected format is: %s',
@@ -26,17 +26,17 @@ class Date
         $this->date = $date;
     }
 
-    public static function fromString(string $date) : self
+    public static function fromString(string $date): self
     {
         return self::fromDateTimeImmutable(new DateTimeImmutable($date));
     }
 
-    public static function fromDateTimeImmutable(DateTimeImmutable $dateTimeImmutable) : self
+    public static function fromDateTimeImmutable(DateTimeImmutable $dateTimeImmutable): self
     {
         return new self($dateTimeImmutable->format(self::DATE_FORMAT));
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return (string) $this->date;
     }

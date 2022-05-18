@@ -9,7 +9,6 @@ use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\MemberViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\PlayerViewRepositoryInterface;
 use Tailgate\Domain\Model\Group\ScoreViewRepositoryInterface;
-use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
 
 class GroupQueryHandler

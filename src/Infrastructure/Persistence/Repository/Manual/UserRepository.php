@@ -24,7 +24,7 @@ class UserRepository implements UserRepositoryInterface
         $this->userProjection = $userProjection;
     }
 
-    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
+    public function get(IdentifiesAggregate $aggregateId): IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 

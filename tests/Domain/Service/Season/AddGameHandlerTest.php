@@ -7,8 +7,6 @@ use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Common\TimeOrString;
-use Tailgate\Domain\Model\Season\GameAdded;
-use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\Season;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;

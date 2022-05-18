@@ -17,7 +17,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class UpdateGameScoreHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $seasonRepository;
@@ -43,7 +43,7 @@ class UpdateGameScoreHandler implements ValidatableService
             TimeOrString::fromString($command->getStartTime()),
             Date::fromDateTimeImmutable($this->clock->currentTime())
         );
-        
+
         $this->seasonRepository->add($season);
     }
 }

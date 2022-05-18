@@ -26,7 +26,7 @@ class TeamTest extends BaseTestCase
     }
 
     public function testTeamShouldBeTheSameAfterReconstitution()
-    {   
+    {
         // create team
         $team = $this->createTeam();
         $events = $team->getRecordedEvents();

@@ -2,7 +2,6 @@
 
 namespace Tailgate\Test\Domain\Service\Season;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Season\AllFollowedGamesQuery;
 use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\FollowView;
@@ -12,6 +11,7 @@ use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Service\DataTransformer\GameDataTransformerInterface;
 use Tailgate\Domain\Service\Season\AllFollowedGamesQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class AllFollowedGamesQueryHandlerTest extends BaseTestCase
 {

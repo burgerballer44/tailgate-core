@@ -21,7 +21,7 @@ class TeamAdded implements DomainEvent, TeamDomainEvent
         $this->dateOccurred = $dateOccurred;
     }
 
-    public function getEventDescription() : string
+    public function getEventDescription(): string
     {
         return 'Team added.';
     }

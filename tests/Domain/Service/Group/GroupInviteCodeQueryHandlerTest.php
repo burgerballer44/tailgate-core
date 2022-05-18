@@ -2,12 +2,12 @@
 
 namespace Tailgate\Test\Domain\Service\Group;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Application\Query\Group\GroupInviteCodeQuery;
-use Tailgate\Domain\Service\Group\GroupInviteCodeQueryHandler;
 use Tailgate\Domain\Model\Group\GroupView;
 use Tailgate\Domain\Model\Group\GroupViewRepositoryInterface;
 use Tailgate\Domain\Service\DataTransformer\GroupDataTransformerInterface;
+use Tailgate\Domain\Service\Group\GroupInviteCodeQueryHandler;
+use Tailgate\Test\BaseTestCase;
 
 class GroupInviteCodeQueryHandlerTest extends BaseTestCase
 {

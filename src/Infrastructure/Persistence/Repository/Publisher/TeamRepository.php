@@ -25,7 +25,7 @@ class TeamRepository implements TeamRepositoryInterface
         $this->domainEventPublisher = $domainEventPublisher;
     }
 
-    public function get(IdentifiesAggregate $aggregateId) : IsEventSourced
+    public function get(IdentifiesAggregate $aggregateId): IsEventSourced
     {
         $eventStream = $this->eventStore->getAggregateHistoryFor($aggregateId);
 
@@ -35,7 +35,7 @@ class TeamRepository implements TeamRepositoryInterface
     public function add(RecordsEvents $team)
     {
         $events = $team->getRecordedEvents();
-        
+
         foreach ($events as $event) {
             $this->domainEventPublisher->publish(TeamDomainEvent::class, $event);
         }

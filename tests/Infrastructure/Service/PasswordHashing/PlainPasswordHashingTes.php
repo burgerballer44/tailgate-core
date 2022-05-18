@@ -2,8 +2,8 @@
 
 namespace Tailgate\Test\Infrastructure\ServicePasswordHashing;
 
-use Tailgate\Test\BaseTestCase;
 use Tailgate\Infrastructure\Service\PasswordHashing\PlainPasswordHashing;
+use Tailgate\Test\BaseTestCase;
 
 class PlainPasswordHashingTest extends BaseTestCase
 {

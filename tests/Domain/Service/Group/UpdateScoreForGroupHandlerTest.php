@@ -9,9 +9,6 @@ use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
-use Tailgate\Domain\Model\Group\GroupScoreUpdated;
-use Tailgate\Domain\Model\Group\PlayerId;
-use Tailgate\Domain\Model\Group\ScoreId;
 use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -67,7 +64,7 @@ class UpdateScoreForGroupHandlerTest extends BaseTestCase
 
         $validator = $this->createMock(ValidatorInterface::class);
         $validator->expects($this->once())->method('assert')->willReturn(true);
-        
+
         $updateScoreForGroupHandler = new UpdateScoreForGroupHandler($validator, new FakeClock(), $groupRepository);
 
         $updateScoreForGroupHandler->handle($this->updateScoreForGroupCommand);

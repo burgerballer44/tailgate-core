@@ -14,7 +14,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class UpdateUserHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $userRepository;

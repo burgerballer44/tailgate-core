@@ -17,7 +17,7 @@ use Tailgate\Domain\Service\ValidatableService;
 class CreateSeasonHandler implements ValidatableService
 {
     use Validatable;
-    
+
     private $validator;
     private $clock;
     private $seasonRepository;
@@ -42,7 +42,7 @@ class CreateSeasonHandler implements ValidatableService
             DateOrString::fromString($command->getSeasonEnd()),
             Date::fromDateTimeImmutable($this->clock->currentTime())
         );
-        
+
         $this->seasonRepository->add($season);
     }
 }

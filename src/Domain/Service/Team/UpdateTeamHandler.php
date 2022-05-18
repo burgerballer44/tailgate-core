@@ -5,7 +5,6 @@ namespace Tailgate\Domain\Service\Team;
 use Tailgate\Application\Command\Team\UpdateTeamCommand;
 use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
-use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
 use Tailgate\Domain\Service\Clock\Clock;
@@ -34,7 +33,7 @@ class UpdateTeamHandler implements ValidatableService
         $team = $this->teamRepository->get(TeamId::fromString($command->getTeamId()));
 
         $team->update($command->getDesignation(), $command->getMascot(), Date::fromDateTimeImmutable($this->clock->currentTime()));
-        
+
         $this->teamRepository->add($team);
     }
 }

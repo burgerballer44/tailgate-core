@@ -11,7 +11,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/burgerballer44/aggregate.git",
+                "url": "git@github.com:burgerballer44/aggregate.git",
                 "reference": "22ce783f41bc6c9a77533f92988c7f860cfb2b32"
             },
             "dist": {
@@ -37,10 +37,6 @@
                 }
             ],
             "description": "build aggregates that produce domain events",
-            "support": {
-                "source": "https://github.com/burgerballer44/aggregate/tree/master",
-                "issues": "https://github.com/burgerballer44/aggregate/issues"
-            },
             "time": "2022-01-14T18:20:08+00:00"
         },
         {
@@ -48,7 +44,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/burgerballer44/common.git",
+                "url": "git@github.com:burgerballer44/common.git",
                 "reference": "65582000c43422f75955071ed71c51c38361445f"
             },
             "dist": {
@@ -74,10 +70,6 @@
                 }
             ],
             "description": "common things",
-            "support": {
-                "source": "https://github.com/burgerballer44/common/tree/master",
-                "issues": "https://github.com/burgerballer44/common/issues"
-            },
             "time": "2022-01-14T20:31:23+00:00"
         },
         {
@@ -85,7 +77,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/burgerballer44/event-publisher.git",
+                "url": "git@github.com:burgerballer44/event-publisher.git",
                 "reference": "aa2af4a4ea810aa702b174ebdaf5e1859c969eb7"
             },
             "dist": {
@@ -114,10 +106,6 @@
                 }
             ],
             "description": "subscribe and listen for events",
-            "support": {
-                "source": "https://github.com/burgerballer44/event-publisher/tree/master",
-                "issues": "https://github.com/burgerballer44/event-publisher/issues"
-            },
             "time": "2022-01-14T19:13:18+00:00"
         },
         {

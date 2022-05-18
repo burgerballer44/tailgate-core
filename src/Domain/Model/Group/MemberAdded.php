@@ -30,7 +30,7 @@ class MemberAdded implements DomainEvent, GroupDomainEvent
         $this->dateOccurred = $dateOccurred;
     }
 
-    public function getEventDescription() : string
+    public function getEventDescription(): string
     {
         return 'Group added a member.';
     }
