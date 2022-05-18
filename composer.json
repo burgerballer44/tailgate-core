@@ -36,15 +36,15 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:burgerballer44/aggregate.git"
+            "url": "https://github.com/burgerballer44/common"
         },
         {
             "type": "vcs",
-            "url": "git@github.com:burgerballer44/event-publisher.git"
+            "url": "https://github.com/burgerballer44/event-publisher"
         },
         {
             "type": "vcs",
-            "url": "git@github.com:burgerballer44/common.git"
+            "url": "https://github.com/burgerballer44/aggregate"
         }
     ]
 }
