@@ -4,8 +4,8 @@ language: php
 # versions of PHP to run project with
 php:
   - '7.3'
-  - '7.4'
   - '8.0'
+  - '8.1'
 
 # safelist
 branches:
