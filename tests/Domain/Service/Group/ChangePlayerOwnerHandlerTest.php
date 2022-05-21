@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\ChangePlayerOwnerCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -54,10 +53,7 @@ class ChangePlayerOwnerHandlerTest extends BaseTestCase
         $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
         $groupRepository->expects($this->once())->method('add');
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
-        $changeplayerOwnerHandler = new ChangePlayerOwnerHandler($validator, new FakeClock(), $groupRepository);
+        $changeplayerOwnerHandler = new ChangePlayerOwnerHandler(new FakeClock(), $groupRepository);
 
         $changeplayerOwnerHandler->handle($this->changePlayerOwnerCommand);
     }

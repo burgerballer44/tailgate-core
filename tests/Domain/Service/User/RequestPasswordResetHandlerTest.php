@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\User;
 
 use Tailgate\Application\Command\User\RequestPasswordResetCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
@@ -36,14 +35,11 @@ class RequestPasswordResetHandlerTest extends BaseTestCase
 
     public function testItAddsAPasswordResetTokenAppliedToTheRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
         $userRepository->expects($this->once())->method('get')->willReturn($this->user);
         $userRepository->expects($this->once())->method('add');
 
-        $requestPasswordResethanlder = new RequestPasswordResetHandler($validator, new FakeClock(), $userRepository);
+        $requestPasswordResethanlder = new RequestPasswordResetHandler(new FakeClock(), $userRepository);
 
         $requestPasswordResethanlder->handle($this->requestPasswordReset);
     }

@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\SubmitScoreForGroupCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -58,14 +57,11 @@ class SubmitScoreForGroupHandlerTest extends BaseTestCase
 
     public function testItAddsScoreSubmittedEventToAGroupInTheGroupRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
         $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
         $groupRepository->expects($this->once())->method('add');
 
-        $submitScoreForGroupHandler = new SubmitScoreForGroupHandler($validator, new FakeClock(), $groupRepository);
+        $submitScoreForGroupHandler = new SubmitScoreForGroupHandler(new FakeClock(), $groupRepository);
 
         $submitScoreForGroupHandler->handle($this->submitScoreForGroupCommand);
     }

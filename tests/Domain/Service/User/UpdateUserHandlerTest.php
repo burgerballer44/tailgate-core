@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\User;
 
 use Tailgate\Application\Command\User\UpdateUserCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
@@ -46,15 +45,12 @@ class UpdateUserHandlerTest extends BaseTestCase
 
     public function testItAddsAUserUpdatedToTheUserRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
         $userRepository->expects($this->once())->method('get')->willReturn($this->user);
 
         $userRepository->expects($this->once())->method('add');
 
-        $updateUserHandler = new UpdateUserHandler($validator, new FakeClock(), $userRepository);
+        $updateUserHandler = new UpdateUserHandler(new FakeClock(), $userRepository);
 
         $updateUserHandler->handle($this->updateUserCommand);
     }

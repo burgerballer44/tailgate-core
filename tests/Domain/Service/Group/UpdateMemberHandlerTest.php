@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\UpdateMemberCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -48,14 +47,11 @@ class UpdateMemberHandlerTest extends BaseTestCase
 
     public function testItAddsAMemberUpdatedEventToAGroupInTheGroupRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
         $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
         $groupRepository->expects($this->once())->method('add');
 
-        $updateMemberHandler = new UpdateMemberHandler($validator, new FakeClock(), $groupRepository);
+        $updateMemberHandler = new UpdateMemberHandler(new FakeClock(), $groupRepository);
 
         $updateMemberHandler->handle($this->updateMemberCommand);
     }

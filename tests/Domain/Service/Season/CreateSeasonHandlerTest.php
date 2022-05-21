@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Season;
 
 use Tailgate\Application\Command\Season\CreateSeasonCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
@@ -35,14 +34,11 @@ class CreateSeasonHandlerTest extends BaseTestCase
 
     public function testItAddsASeasonCreatedEventToTheSeasonRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
         $seasonRepository->expects($this->once())->method('nextIdentity')->willReturn(new SeasonId());
         $seasonRepository->expects($this->once())->method('add');
 
-        $createSeasonHandler = new CreateSeasonHandler($validator, new FakeClock(), $seasonRepository);
+        $createSeasonHandler = new CreateSeasonHandler(new FakeClock(), $seasonRepository);
 
         $createSeasonHandler->handle($this->createSeasonCommand);
     }

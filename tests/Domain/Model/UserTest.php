@@ -3,13 +3,11 @@
 namespace Tailgate\Test\Domain\Model;
 
 use Burger\Aggregate\AggregateHistory;
-use Burger\Aggregate\DomainEvents;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\PasswordResetToken;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Model\User\UserRegistered;
 use Tailgate\Domain\Model\User\UserRole;
 use Tailgate\Domain\Model\User\UserStatus;
 use Tailgate\Test\BaseTestCase;
@@ -50,11 +48,6 @@ class UserTest extends BaseTestCase
         $user = $this->createUser();
 
         $userRegisteredEvent = $user->getRecordedEvents()[0];
-
-        // $this->assertEquals(
-        //     new DomainEvents([new UserRegistered($this->userId, $this->email, $this->passwordHash, UserStatus::getPending(), UserRole::getStandard(), $this->dateOccurred)]),
-        //     $user->getRecordedEvents()
-        // );
 
         $this->assertEquals($this->userId, $userRegisteredEvent->getAggregateId());
         $this->assertEquals($this->email, $userRegisteredEvent->getEmail());

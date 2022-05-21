@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Season;
 
 use Tailgate\Application\Command\Season\AddGameCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\Common\TimeOrString;
@@ -58,14 +57,11 @@ class AddGameHandlerTest extends BaseTestCase
 
     public function testItAddsAGameAddedEventToTheSeasonRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $seasonRepository = $this->getMockBuilder(SeasonRepositoryInterface::class)->getMock();
         $seasonRepository->expects($this->once())->method('get')->willReturn($this->season);
         $seasonRepository->expects($this->once())->method('add');
 
-        $addGameHandler = new AddGameHandler($validator, new FakeClock(), $seasonRepository);
+        $addGameHandler = new AddGameHandler(new FakeClock(), $seasonRepository);
 
         $addGameHandler->handle($this->addGameCommand);
     }

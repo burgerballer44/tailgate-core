@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\User;
 
 use Tailgate\Application\Command\User\UpdateEmailCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
@@ -37,14 +36,11 @@ class UpdateEmailHandlerTest extends BaseTestCase
 
     public function testItAddsAEmailUpdatedRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
         $userRepository->expects($this->once())->method('get')->willReturn($this->user);
         $userRepository->expects($this->once())->method('add');
 
-        $updateEmailHandler = new UpdateEmailHandler($validator, new FakeClock(), $userRepository);
+        $updateEmailHandler = new UpdateEmailHandler(new FakeClock(), $userRepository);
 
         $updateEmailHandler->handle($this->updateEmailCommand);
     }

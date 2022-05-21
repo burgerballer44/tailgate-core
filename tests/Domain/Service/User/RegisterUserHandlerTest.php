@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\User;
 
 use Tailgate\Application\Command\User\RegisterUserCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\UserId;
@@ -33,9 +32,6 @@ class RegisterUserHandlerTest extends BaseTestCase
 
     public function testItAddsAUserRegisteredToTheUserRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
         $userRepository->expects($this->once())->method('nextIdentity')->willReturn(new UserId());
         $userRepository->expects($this->once())->method('add');
@@ -43,7 +39,7 @@ class RegisterUserHandlerTest extends BaseTestCase
         $passwordHashing = $this->createMock(PasswordHashingInterface::class);
         $passwordHashing->expects($this->once())->method('hash')->willReturn($this->passwordHash);
 
-        $registerUserHandler = new RegisterUserHandler($validator, new FakeClock(), $userRepository, $passwordHashing);
+        $registerUserHandler = new RegisterUserHandler(new FakeClock(), $userRepository, $passwordHashing);
 
         $user = $registerUserHandler->handle($this->registerUserCommand);
 

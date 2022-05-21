@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\AddPlayerToGroupCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -46,14 +45,11 @@ class AddPlayerToGroupHandlerTest extends BaseTestCase
 
     public function testItAddsAPlayerAddedEventToAGroupInTheGroupRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
         $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
         $groupRepository->expects($this->once())->method('add');
 
-        $addPlayerToGroupHandler = new AddPlayerToGroupHandler($validator, new FakeClock(), $groupRepository);
+        $addPlayerToGroupHandler = new AddPlayerToGroupHandler(new FakeClock(), $groupRepository);
 
         $addPlayerToGroupHandler->handle($this->addPlayerToGroupCommand);
     }

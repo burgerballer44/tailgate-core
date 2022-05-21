@@ -3,7 +3,7 @@
 namespace Tailgate\Test\Domain\Service\Team;
 
 use Tailgate\Application\Command\Team\UpdateTeamCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
+
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\Team;
@@ -33,14 +33,11 @@ class UpdateTeamHandlerTest extends BaseTestCase
 
     public function testItAttemptsToAddATeamUpdatedEventToTheTeamRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $teamRepository = $this->getMockBuilder(TeamRepositoryInterface::class)->getMock();
         $teamRepository->expects($this->once())->method('get')->willReturn($this->team);
         $teamRepository->expects($this->once())->method('add');
 
-        $this->updateTeamHandler = new UpdateTeamHandler($validator, new FakeClock(), $teamRepository);
+        $this->updateTeamHandler = new UpdateTeamHandler(new FakeClock(), $teamRepository);
 
         $this->updateTeamHandler->handle($this->updateTeamCommand);
     }

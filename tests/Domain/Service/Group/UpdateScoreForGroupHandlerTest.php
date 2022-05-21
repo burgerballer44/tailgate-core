@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\UpdateScoreForGroupCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -62,10 +61,7 @@ class UpdateScoreForGroupHandlerTest extends BaseTestCase
         $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
         $groupRepository->expects($this->once())->method('add');
 
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
-        $updateScoreForGroupHandler = new UpdateScoreForGroupHandler($validator, new FakeClock(), $groupRepository);
+        $updateScoreForGroupHandler = new UpdateScoreForGroupHandler(new FakeClock(), $groupRepository);
 
         $updateScoreForGroupHandler->handle($this->updateScoreForGroupCommand);
     }

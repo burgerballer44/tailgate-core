@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\FollowTeamCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\Group;
 use Tailgate\Domain\Model\Group\GroupId;
@@ -43,14 +42,11 @@ class FollowTeamHandlerTest extends BaseTestCase
 
     public function testItAttemptsToAddATeamFollowedEventToTheGroupRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
         $groupRepository->expects($this->once())->method('get')->willReturn($this->group);
         $groupRepository->expects($this->once())->method('add');
 
-        $this->followTeamHandler = new FollowTeamHandler($validator, new FakeClock(), $groupRepository);
+        $this->followTeamHandler = new FollowTeamHandler(new FakeClock(), $groupRepository);
 
         $this->followTeamHandler->handle($this->followTeamCommand);
     }

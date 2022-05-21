@@ -3,7 +3,6 @@
 namespace Tailgate\Test\Domain\Service\Group;
 
 use Tailgate\Application\Command\Group\CreateGroupCommand;
-use Tailgate\Application\Validator\ValidatorInterface;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
@@ -26,14 +25,11 @@ class CreateGroupHandlerTest extends BaseTestCase
 
     public function testItAddsAGroupCreatedEventToTheGroupRepository()
     {
-        $validator = $this->createMock(ValidatorInterface::class);
-        $validator->expects($this->once())->method('assert')->willReturn(true);
-
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)->getMock();
         $groupRepository->expects($this->once())->method('nextIdentity')->willReturn(new GroupId());
         $groupRepository->expects($this->once())->method('add');
 
-        $createGroupHandler = new CreateGroupHandler($validator, new FakeClock(), $groupRepository);
+        $createGroupHandler = new CreateGroupHandler(new FakeClock(), $groupRepository);
 
         $createGroupHandler->handle($this->createGroupCommand);
     }
