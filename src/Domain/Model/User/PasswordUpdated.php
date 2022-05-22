@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\User;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class PasswordUpdated implements DomainEvent, UserDomainEvent
@@ -10,7 +11,7 @@ class PasswordUpdated implements DomainEvent, UserDomainEvent
     private $passwordHash;
     private $dateOccurred;
 
-    public function __construct(UserId $userId, $passwordHash, $dateOccurred)
+    public function __construct(UserId $userId, $passwordHash, Date $dateOccurred)
     {
         $this->userId = $userId;
         $this->passwordHash = $passwordHash;

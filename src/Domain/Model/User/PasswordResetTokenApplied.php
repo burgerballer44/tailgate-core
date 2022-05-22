@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\User;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class PasswordResetTokenApplied implements DomainEvent, UserDomainEvent
@@ -10,7 +11,7 @@ class PasswordResetTokenApplied implements DomainEvent, UserDomainEvent
     private $passwordResetToken;
     private $dateOccurred;
 
-    public function __construct(UserId $userId, $passwordResetToken, $dateOccurred)
+    public function __construct(UserId $userId, $passwordResetToken, Date $dateOccurred)
     {
         $this->userId = $userId;
         $this->passwordResetToken = $passwordResetToken;

@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class MemberDeleted implements DomainEvent, GroupDomainEvent
@@ -10,7 +11,7 @@ class MemberDeleted implements DomainEvent, GroupDomainEvent
     private $memberId;
     private $dateOccurred;
 
-    public function __construct(GroupId $groupId, MemberId $memberId, $dateOccurred)
+    public function __construct(GroupId $groupId, MemberId $memberId, Date $dateOccurred)
     {
         $this->groupId = $groupId;
         $this->memberId = $memberId;

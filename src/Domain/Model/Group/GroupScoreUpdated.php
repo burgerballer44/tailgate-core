@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class GroupScoreUpdated implements DomainEvent, GroupDomainEvent
@@ -17,7 +18,7 @@ class GroupScoreUpdated implements DomainEvent, GroupDomainEvent
         ScoreId $scoreId,
         $homeTeamPrediction,
         $awayTeamPrediction,
-        $dateOccurred
+        Date $dateOccurred
     ) {
         $this->groupId = $groupId;
         $this->scoreId = $scoreId;

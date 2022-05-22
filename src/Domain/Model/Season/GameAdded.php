@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Season;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 use Tailgate\Domain\Model\Team\TeamId;
 
@@ -22,7 +23,7 @@ class GameAdded implements DomainEvent, SeasonDomainEvent
         TeamId $awayTeamId,
         $startDate,
         $startTime,
-        $dateOccurred
+        Date $dateOccurred
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;

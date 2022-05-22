@@ -3,6 +3,7 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 
 use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\EmailUpdated;
 use Tailgate\Domain\Model\User\PasswordResetTokenApplied;
 use Tailgate\Domain\Model\User\PasswordUpdated;
@@ -10,6 +11,8 @@ use Tailgate\Domain\Model\User\UserActivated;
 use Tailgate\Domain\Model\User\UserDeleted;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
+use Tailgate\Domain\Model\User\UserRole;
+use Tailgate\Domain\Model\User\UserStatus;
 use Tailgate\Domain\Model\User\UserUpdated;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\UserProjection;
 use Tailgate\Test\BaseTestCase;
@@ -29,7 +32,7 @@ class PDOUserProjectionTest extends BaseTestCase
 
     public function testItCanProjectUserRegistered()
     {
-        $event = new UserRegistered(UserId::fromString('userId'), 'email1', 'password1', 'status', 'role', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
+        $event = new UserRegistered(UserId::fromString('userId'), Email::fromString('email@email.com'), 'password1', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -57,7 +60,7 @@ class PDOUserProjectionTest extends BaseTestCase
 
     public function testItCanProjectUserActivated()
     {
-        $event = new UserActivated(UserId::fromString('userId'), 'status', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
+        $event = new UserActivated(UserId::fromString('userId'), UserStatus::fromString('Active'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -132,7 +135,7 @@ class PDOUserProjectionTest extends BaseTestCase
 
     public function testItCanProjectEmailUpdated()
     {
-        $event = new EmailUpdated(UserId::fromString('userId'), 'email@email.com', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
+        $event = new EmailUpdated(UserId::fromString('userId'), Email::fromString('email@email.com'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -157,7 +160,7 @@ class PDOUserProjectionTest extends BaseTestCase
 
     public function testItCanProjectUserUpdated()
     {
-        $event = new UserUpdated(UserId::fromString('userId'), 'email@email.com', 'status', 'role', Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
+        $event = new UserUpdated(UserId::fromString('userId'), Email::fromString('email@email.com'), UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock

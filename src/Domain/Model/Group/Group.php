@@ -92,7 +92,7 @@ class Group extends AbstractEventBasedEntity
     }
 
     // add a score
-    public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction, Date $dateOccurred)
+    public function submitScore(PlayerId $playerId, GameId $gameId, $homeTeamPrediction, $awayTeamPrediction, $dateOccurred)
     {
         if (! $this->getPlayerById($playerId)) {
             throw new RuntimeException('The player submitting the score does not exist.');

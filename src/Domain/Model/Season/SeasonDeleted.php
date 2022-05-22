@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Season;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class SeasonDeleted implements DomainEvent, SeasonDomainEvent
@@ -9,7 +10,7 @@ class SeasonDeleted implements DomainEvent, SeasonDomainEvent
     private $seasonId;
     private $dateOccurred;
 
-    public function __construct(SeasonId $seasonId, $dateOccurred)
+    public function __construct(SeasonId $seasonId, Date $dateOccurred)
     {
         $this->seasonId = $seasonId;
         $this->dateOccurred = $dateOccurred;

@@ -2,7 +2,9 @@
 
 namespace Tailgate\Domain\Model\Team;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
+use Tailgate\Domain\Model\Season\Sport;
 
 class TeamAdded implements DomainEvent, TeamDomainEvent
 {
@@ -12,7 +14,7 @@ class TeamAdded implements DomainEvent, TeamDomainEvent
     private $sport;
     private $dateOccurred;
 
-    public function __construct(TeamId $teamId, $designation, $mascot, $sport, $dateOccurred)
+    public function __construct(TeamId $teamId, $designation, $mascot, Sport $sport, Date $dateOccurred)
     {
         $this->teamId = $teamId;
         $this->designation = $designation;

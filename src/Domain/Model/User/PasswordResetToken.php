@@ -5,7 +5,7 @@ namespace Tailgate\Domain\Model\User;
 class PasswordResetToken
 {
     public const LENGTH_STRING = 20;
-    public const TIME_TO_EXPIRE = 3600; // 1 hour
+    public const TIME_TO_EXPIRE = 3600; // 1 hour in seconds
 
     private $value;
 

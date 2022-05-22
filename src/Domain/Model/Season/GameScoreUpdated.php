@@ -2,6 +2,9 @@
 
 namespace Tailgate\Domain\Model\Season;
 
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\DateOrString;
+use Tailgate\Domain\Model\Common\TimeOrString;
 use Tailgate\Domain\Model\DomainEvent;
 
 class GameScoreUpdated implements DomainEvent, SeasonDomainEvent
@@ -19,9 +22,9 @@ class GameScoreUpdated implements DomainEvent, SeasonDomainEvent
         GameId $gameId,
         $homeTeamScore,
         $awayTeamScore,
-        $startDate,
-        $startTime,
-        $dateOccurred
+        DateOrString $startDate,
+        TimeOrString $startTime,
+        Date $dateOccurred
     ) {
         $this->seasonId = $seasonId;
         $this->gameId = $gameId;

@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 use Tailgate\Domain\Model\Season\GameId;
 
@@ -22,7 +23,7 @@ class ScoreSubmitted implements DomainEvent, GroupDomainEvent
         GameId $gameId,
         $homeTeamPrediction,
         $awayTeamPrediction,
-        $dateOccurred
+        Date $dateOccurred
     ) {
         $this->groupId = $groupId;
         $this->scoreId = $scoreId;

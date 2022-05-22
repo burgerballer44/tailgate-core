@@ -3,6 +3,8 @@
 namespace Tailgate\Tests\Infrastructure\Persistence\Projection\PDO;
 
 use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\DateOrString;
+use Tailgate\Domain\Model\Common\TimeOrString;
 use Tailgate\Domain\Model\Season\GameAdded;
 use Tailgate\Domain\Model\Season\GameDeleted;
 use Tailgate\Domain\Model\Season\GameId;
@@ -10,7 +12,9 @@ use Tailgate\Domain\Model\Season\GameScoreUpdated;
 use Tailgate\Domain\Model\Season\SeasonCreated;
 use Tailgate\Domain\Model\Season\SeasonDeleted;
 use Tailgate\Domain\Model\Season\SeasonId;
+use Tailgate\Domain\Model\Season\SeasonType;
 use Tailgate\Domain\Model\Season\SeasonUpdated;
+use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Infrastructure\Persistence\Projection\PDO\SeasonProjection;
 use Tailgate\Test\BaseTestCase;
@@ -32,11 +36,11 @@ class PDOSeasonProjectionTest extends BaseTestCase
     {
         $event = new SeasonCreated(
             SeasonId::fromString('seasonId'),
-            'sport',
-            'season type',
+            Sport::fromString('Basketball'),
+            SeasonType::fromString('Regular-Season'),
             'name of season',
-            '2019-09-01',
-            '2019-12-28',
+            DateOrString::fromString('2019-09-01'),
+            DateOrString::fromString('2019-12-28'),
             Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
@@ -109,8 +113,8 @@ class PDOSeasonProjectionTest extends BaseTestCase
             GameId::fromString('gameId'),
             80,
             70,
-            '2019-09-01',
-            '19:30',
+            DateOrString::fromString('2019-09-01'),
+            TimeOrString::fromString('19:30'),
             Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 
@@ -190,11 +194,11 @@ class PDOSeasonProjectionTest extends BaseTestCase
     {
         $event = new SeasonUpdated(
             SeasonId::fromString('seasonId'),
-            'sport',
-            'season type',
+            Sport::fromString('Basketball'),
+            SeasonType::fromString('Regular-Season'),
             'name of season',
-            '2019-09-01',
-            '2019-12-28',
+            DateOrString::fromString('2019-09-01'),
+            DateOrString::fromString('2019-12-28'),
             Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
 

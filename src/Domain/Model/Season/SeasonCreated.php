@@ -2,6 +2,8 @@
 
 namespace Tailgate\Domain\Model\Season;
 
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\DateOrString;
 use Tailgate\Domain\Model\DomainEvent;
 
 class SeasonCreated implements DomainEvent, SeasonDomainEvent
@@ -16,12 +18,12 @@ class SeasonCreated implements DomainEvent, SeasonDomainEvent
 
     public function __construct(
         SeasonId $seasonId,
-        $sport,
-        $seasonType,
+        Sport $sport,
+        SeasonType $seasonType,
         $name,
-        $seasonStart,
-        $seasonEnd,
-        $dateOccurred
+        DateOrString $seasonStart,
+        DateOrString $seasonEnd,
+        Date $dateOccurred
     ) {
         $this->seasonId = $seasonId;
         $this->sport = $sport;

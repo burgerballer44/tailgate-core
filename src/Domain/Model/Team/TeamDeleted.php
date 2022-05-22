@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Team;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class TeamDeleted implements DomainEvent, TeamDomainEvent
@@ -9,7 +10,7 @@ class TeamDeleted implements DomainEvent, TeamDomainEvent
     private $teamId;
     private $dateOccurred;
 
-    public function __construct(TeamId $teamId, $dateOccurred)
+    public function __construct(TeamId $teamId, Date $dateOccurred)
     {
         $this->teamId = $teamId;
         $this->dateOccurred = $dateOccurred;

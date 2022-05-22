@@ -2,6 +2,8 @@
 
 namespace Tailgate\Domain\Model\User;
 
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\DomainEvent;
 
 class UserUpdated implements DomainEvent, UserDomainEvent
@@ -14,10 +16,10 @@ class UserUpdated implements DomainEvent, UserDomainEvent
 
     public function __construct(
         UserId $userId,
-        $email,
-        $status,
-        $role,
-        $dateOccurred
+        Email $email,
+        UserStatus $status,
+        UserRole $role,
+        Date $dateOccurred
     ) {
         $this->userId = $userId;
         $this->email = $email;

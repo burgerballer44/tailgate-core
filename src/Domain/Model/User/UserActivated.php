@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\User;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class UserActivated implements DomainEvent, UserDomainEvent
@@ -10,7 +11,7 @@ class UserActivated implements DomainEvent, UserDomainEvent
     private $status;
     private $dateOccurred;
 
-    public function __construct(UserId $userId, $status, $dateOccurred)
+    public function __construct(UserId $userId, UserStatus $status, Date $dateOccurred)
     {
         $this->userId = $userId;
         $this->status = $status;

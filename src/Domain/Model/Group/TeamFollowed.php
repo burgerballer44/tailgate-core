@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
@@ -19,7 +20,7 @@ class TeamFollowed implements DomainEvent, GroupDomainEvent
         FollowId $followId,
         TeamId $teamId,
         SeasonId $seasonId,
-        $dateOccurred
+        Date $dateOccurred
     ) {
         $this->groupId = $groupId;
         $this->followId = $followId;

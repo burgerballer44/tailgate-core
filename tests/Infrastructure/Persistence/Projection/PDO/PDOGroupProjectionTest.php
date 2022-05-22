@@ -8,6 +8,7 @@ use Tailgate\Domain\Model\Group\FollowId;
 use Tailgate\Domain\Model\Group\GroupCreated;
 use Tailgate\Domain\Model\Group\GroupDeleted;
 use Tailgate\Domain\Model\Group\GroupId;
+use Tailgate\Domain\Model\Group\GroupRole;
 use Tailgate\Domain\Model\Group\GroupScoreUpdated;
 use Tailgate\Domain\Model\Group\GroupUpdated;
 use Tailgate\Domain\Model\Group\MemberAdded;
@@ -81,7 +82,7 @@ class PDOGroupProjectionTest extends BaseTestCase
             GroupId::fromString('groupId'),
             MemberId::fromString('memberId'),
             UserId::fromString('userId'),
-            'role',
+            GroupRole::fromString('Group-Admin'),
             0,
             Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );
@@ -115,7 +116,7 @@ class PDOGroupProjectionTest extends BaseTestCase
         $event = new MemberUpdated(
             GroupId::fromString('groupId'),
             MemberId::fromString('memberId'),
-            'role',
+            GroupRole::fromString('Group-Admin'),
             0,
             Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())
         );

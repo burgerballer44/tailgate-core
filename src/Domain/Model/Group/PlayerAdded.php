@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class PlayerAdded implements DomainEvent, GroupDomainEvent
@@ -17,7 +18,7 @@ class PlayerAdded implements DomainEvent, GroupDomainEvent
         PlayerId $playerId,
         MemberId $memberId,
         $username,
-        $dateOccurred
+        Date $dateOccurred
     ) {
         $this->groupId = $groupId;
         $this->playerId = $playerId;

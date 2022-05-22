@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 
 class MemberUpdated implements DomainEvent, GroupDomainEvent
@@ -12,7 +13,7 @@ class MemberUpdated implements DomainEvent, GroupDomainEvent
     private $allowMultiplePlayers;
     private $dateOccurred;
 
-    public function __construct(GroupId $groupId, MemberId $memberId, $groupRole, $allowMultiplePlayers, $dateOccurred)
+    public function __construct(GroupId $groupId, MemberId $memberId, GroupRole $groupRole, $allowMultiplePlayers, Date $dateOccurred)
     {
         $this->groupId = $groupId;
         $this->memberId = $memberId;

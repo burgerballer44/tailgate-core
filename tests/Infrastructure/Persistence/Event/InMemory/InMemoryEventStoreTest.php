@@ -4,8 +4,12 @@ namespace Tailgate\Tests\Infrastructure\Persistence\Event\InMemory;
 
 use Burger\Aggregate\AggregateHistory;
 use Burger\Aggregate\DomainEvents;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
+use Tailgate\Domain\Model\User\UserRole;
+use Tailgate\Domain\Model\User\UserStatus;
 use Tailgate\Infrastructure\Persistence\Event\InMemory\EventStore;
 use Tailgate\Test\BaseTestCase;
 
@@ -14,7 +18,7 @@ class InMemoryEventStoreTest extends BaseTestCase
     public function testItCanCommitOneDomainEvent()
     {
         $id = UserId::fromString('userId1');
-        $event = new UserRegistered($id, 'email1', 'password1', 'status', 'role', 'randomString');
+        $event = new UserRegistered($id, Email::fromString('email1@email.com'), 'password1', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
         $eventStore = new EventStore();
 
         $history = $eventStore->getAggregateHistoryFor($id);
@@ -40,9 +44,9 @@ class InMemoryEventStoreTest extends BaseTestCase
         $id3 = UserId::fromString('userId3');
 
         $domainEvents = new DomainEvents([
-            new UserRegistered($id1, 'email1', 'password1', 'status', 'role', 'randomString'),
-            new UserRegistered($id1, 'email2', 'password2', 'status', 'role', 'randomString'),
-            new UserRegistered($id2, 'email3', 'password3', 'status', 'role', 'randomString'),
+            new UserRegistered($id1, Email::fromString('email1@email.com'), 'password1', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())),
+            new UserRegistered($id1, Email::fromString('email2@email.com'), 'password2', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())),
+            new UserRegistered($id2, Email::fromString('email3@email.com'), 'password3', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())),
         ]);
         $eventStore = new EventStore();
 

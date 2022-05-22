@@ -2,6 +2,7 @@
 
 namespace Tailgate\Domain\Model\Group;
 
+use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\DomainEvent;
 use Tailgate\Domain\Model\User\UserId;
 
@@ -18,9 +19,9 @@ class MemberAdded implements DomainEvent, GroupDomainEvent
         GroupId $groupId,
         MemberId $memberId,
         UserId $userId,
-        $groupRole,
+        GroupRole $groupRole,
         $allowMultiplePlayers,
-        $dateOccurred
+        Date $dateOccurred
     ) {
         $this->groupId = $groupId;
         $this->memberId = $memberId;

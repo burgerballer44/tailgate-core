@@ -4,8 +4,12 @@ namespace Tailgate\Tests\Infrastructure\Persistence\Event\PDO;
 
 use Burger\Aggregate\AggregateHistory;
 use Burger\Aggregate\DomainEvents;
+use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRegistered;
+use Tailgate\Domain\Model\User\UserRole;
+use Tailgate\Domain\Model\User\UserStatus;
 use Tailgate\Infrastructure\Persistence\Event\PDO\EventStore;
 use Tailgate\Test\BaseTestCase;
 
@@ -24,7 +28,7 @@ class PDOEventStoreTest extends BaseTestCase
 
     public function testItCanCommitADomainEvent()
     {
-        $event = new UserRegistered(UserId::fromString('userId1'), 'email1', 'password1', 'status', 'role', 'randomString');
+        $event = new UserRegistered(UserId::fromString('userId1'), Email::fromString('email1@email.com'), 'password1', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
 
         // the pdo mock should call prepare and return a pdostatement mock
         $this->pdoMock
@@ -52,9 +56,9 @@ class PDOEventStoreTest extends BaseTestCase
     public function testItCanCommitManyDomainEvents()
     {
         $domainEvents = new DomainEvents([
-            new UserRegistered(UserId::fromString('userId1'), 'email1', 'password1', 'status', 'role', 'randomString'),
-            new UserRegistered(UserId::fromString('userId2'), 'email2', 'password2', 'status', 'role', 'randomString'),
-            new UserRegistered(UserId::fromString('userId3'), 'email3', 'password3', 'status', 'role', 'randomString'),
+            new UserRegistered(UserId::fromString('userId1'), Email::fromString('email1@email.com'), 'password1', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())),
+            new UserRegistered(UserId::fromString('userId2'), Email::fromString('email2@email.com'), 'password2', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())),
+            new UserRegistered(UserId::fromString('userId3'), Email::fromString('email3@email.com'), 'password3', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime())),
         ]);
 
         // the pdo mock should call prepare and return a pdostatement mock
@@ -75,8 +79,8 @@ class PDOEventStoreTest extends BaseTestCase
     public function testItCanGetAnAggregateHistory()
     {
         $id = UserId::fromString('userId');
-        $event1 = new UserRegistered($id, 'email1', 'password1', 'status', 'role', 'randomString');
-        $event2 = new UserRegistered($id, 'email2', 'password2', 'status', 'role', 'randomString');
+        $event1 = new UserRegistered($id, Email::fromString('email1@email.com'), 'password1', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
+        $event2 = new UserRegistered($id, Email::fromString('email2@email.com'), 'password2', UserStatus::fromString('Active'), UserRole::fromString('Admin'), Date::fromDateTimeImmutable($this->getFakeTime()->currentTime()));
         $serializedEvent1 = serialize($event1);
         $serializedEvent2 = serialize($event2);
 
