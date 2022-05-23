@@ -8,8 +8,8 @@ use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonType;
 use Tailgate\Domain\Model\Season\Sport;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Season\CreateSeasonHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class CreateSeasonHandlerTest extends BaseTestCase

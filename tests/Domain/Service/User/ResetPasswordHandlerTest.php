@@ -8,9 +8,9 @@ use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\PasswordHashing\PasswordHashingInterface;
 use Tailgate\Domain\Service\User\ResetPasswordHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class ResetPasswordHandlerTest extends BaseTestCase

@@ -12,8 +12,8 @@ use Tailgate\Domain\Model\Season\GameId;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\SubmitScoreForGroupHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class SubmitScoreForGroupHandlerTest extends BaseTestCase

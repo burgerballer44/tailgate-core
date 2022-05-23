@@ -9,8 +9,8 @@ use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupInviteCode;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\AddPlayerToGroupHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class AddPlayerToGroupHandlerTest extends BaseTestCase

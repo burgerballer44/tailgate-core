@@ -4,7 +4,7 @@ namespace Tailgate\Test;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
-use Tailgate\Domain\Service\Clock\FakeClock;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 
 class BaseTestCase extends TestCase
 {

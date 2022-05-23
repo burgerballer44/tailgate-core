@@ -9,8 +9,8 @@ use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\Team;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Team\UpdateTeamHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class UpdateTeamHandlerTest extends BaseTestCase

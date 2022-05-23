@@ -10,8 +10,8 @@ use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Domain\Model\User\UserRole;
 use Tailgate\Domain\Model\User\UserStatus;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\User\UpdateUserHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class UpdateUserHandlerTest extends BaseTestCase

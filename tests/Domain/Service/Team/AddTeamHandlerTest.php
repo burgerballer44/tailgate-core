@@ -8,8 +8,8 @@ use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\Team\TeamRepositoryInterface;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Team\AddTeamHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class AddTeamHandlerTest extends BaseTestCase

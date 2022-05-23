@@ -1,8 +1,9 @@
 <?php
 
-namespace Tailgate\Domain\Service\Clock;
+namespace Tailgate\Infrastructure\Service\Clock;
 
 use DateTimeImmutable;
+use Tailgate\Domain\Service\Clock\Clock;
 
 class ClockUsingSystemClock implements Clock
 {

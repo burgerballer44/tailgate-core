@@ -12,8 +12,8 @@ use Tailgate\Domain\Model\Season\SeasonRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonType;
 use Tailgate\Domain\Model\Season\Sport;
 use Tailgate\Domain\Model\Team\TeamId;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Season\AddGameHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class AddGameHandlerTest extends BaseTestCase

@@ -6,8 +6,8 @@ use Tailgate\Application\Command\Group\CreateGroupCommand;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\CreateGroupHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class CreateGroupHandlerTest extends BaseTestCase

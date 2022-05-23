@@ -11,8 +11,8 @@ use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
 use Tailgate\Domain\Model\Season\SeasonId;
 use Tailgate\Domain\Model\Team\TeamId;
 use Tailgate\Domain\Model\User\UserId;
-use Tailgate\Domain\Service\Clock\FakeClock;
 use Tailgate\Domain\Service\Group\DeleteFollowHandler;
+use Tailgate\Infrastructure\Service\Clock\FakeClock;
 use Tailgate\Test\BaseTestCase;
 
 class DeleteFollowHandlerTest extends BaseTestCase
