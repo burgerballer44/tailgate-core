@@ -38,8 +38,7 @@ class PDOUserProjectionTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('INSERT INTO `user` (user_id, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :password_hash, :email, :status, :role, :created_at)')
+            ->with('INSERT INTO `user` (user_id, password_hash, email, status, role, created_at) VALUES (:user_id, :password_hash, :email, :status, :role, :created_at)')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -66,9 +65,7 @@ class PDOUserProjectionTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `user`
-            SET status = :status
-            WHERE user_id = :user_id')
+            ->with('UPDATE `user` SET status = :status WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -91,9 +88,7 @@ class PDOUserProjectionTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `user`
-            SET status = :status
-            WHERE user_id = :user_id')
+            ->with('UPDATE `user` SET status = :status WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -116,9 +111,7 @@ class PDOUserProjectionTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `user`
-            SET password_hash = :password_hash
-            WHERE user_id = :user_id')
+            ->with('UPDATE `user` SET password_hash = :password_hash WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -141,9 +134,7 @@ class PDOUserProjectionTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `user`
-            SET email = :email
-            WHERE user_id = :user_id')
+            ->with('UPDATE `user` SET email = :email WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -166,9 +157,7 @@ class PDOUserProjectionTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `user`
-            SET email = :email, status = :status, role = :role
-            WHERE user_id = :user_id')
+            ->with('UPDATE `user` SET email = :email, status = :status, role = :role WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once
@@ -193,9 +182,7 @@ class PDOUserProjectionTest extends BaseTestCase
         $this->pdoMock
             ->expects($this->once())
             ->method('prepare')
-            ->with('UPDATE `user`
-            SET password_reset_token = :password_reset_token
-            WHERE user_id = :user_id')
+            ->with('UPDATE `user` SET password_reset_token = :password_reset_token WHERE user_id = :user_id')
             ->willReturn($this->pdoStatementMock);
 
         // execute method called once

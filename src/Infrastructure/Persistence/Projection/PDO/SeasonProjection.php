@@ -24,8 +24,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectSeasonCreated(SeasonCreated $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `season` (season_id, name, sport, type, season_start, season_end, created_at)
-            VALUES (:season_id, :name, :sport, :type, :season_start, :season_end, :created_at)'
+            'INSERT INTO `season` (season_id, name, sport, type, season_start, season_end, created_at) VALUES (:season_id, :name, :sport, :type, :season_start, :season_end, :created_at)'
         );
 
         $stmt->execute([
@@ -42,8 +41,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectGameAdded(GameAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, start_time, created_at)
-            VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :start_time, :created_at)'
+            'INSERT INTO `game` (game_id, season_id, home_team_id, away_team_id, start_date, start_time, created_at) VALUES (:game_id, :season_id, :home_team_id, :away_team_id, :start_date, :start_time, :created_at)'
         );
 
         $stmt->execute([
@@ -60,8 +58,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectGameScoreUpdated(GameScoreUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score, start_date = :start_date, start_time = :start_time
-            WHERE game_id = :game_id'
+            'UPDATE `game` SET home_team_score = :home_team_score, away_team_score = :away_team_score, start_date = :start_date, start_time = :start_time WHERE game_id = :game_id'
         );
 
         $stmt->execute([
@@ -101,8 +98,7 @@ class SeasonProjection extends AbstractProjection implements SeasonProjectionInt
     public function projectSeasonUpdated(SeasonUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `season` SET name = :name, sport = :sport, type = :type, season_start = :season_start, season_end = :season_end
-            WHERE season_id = :season_id'
+            'UPDATE `season` SET name = :name, sport = :sport, type = :type, season_start = :season_start, season_end = :season_end WHERE season_id = :season_id'
         );
 
         $stmt->execute([

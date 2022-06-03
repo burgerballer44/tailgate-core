@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": "^7.1.3",
-        "ramsey/uuid": "^3.8",
+        "ramsey/uuid": "^4.2",
         "burger/aggregate": "dev-master",
         "burger/event-publisher": "dev-master",
         "burger/common": "dev-master"

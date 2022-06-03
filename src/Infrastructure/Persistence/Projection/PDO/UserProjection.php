@@ -25,8 +25,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectUserRegistered(UserRegistered $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `user` (user_id, password_hash, email, status, role, created_at)
-            VALUES (:user_id, :password_hash, :email, :status, :role, :created_at)'
+            'INSERT INTO `user` (user_id, password_hash, email, status, role, created_at) VALUES (:user_id, :password_hash, :email, :status, :role, :created_at)'
         );
 
         $stmt->execute([
@@ -42,9 +41,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectUserActivated(UserActivated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `user`
-            SET status = :status
-            WHERE user_id = :user_id'
+            'UPDATE `user` SET status = :status WHERE user_id = :user_id'
         );
 
         $stmt->execute([
@@ -56,9 +53,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectUserDeleted(UserDeleted $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `user`
-            SET status = :status
-            WHERE user_id = :user_id'
+            'UPDATE `user` SET status = :status WHERE user_id = :user_id'
         );
 
         $stmt->execute([
@@ -70,9 +65,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectPasswordUpdated(PasswordUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `user`
-            SET password_hash = :password_hash
-            WHERE user_id = :user_id'
+            'UPDATE `user` SET password_hash = :password_hash WHERE user_id = :user_id'
         );
 
         $stmt->execute([
@@ -84,9 +77,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectEmailUpdated(EmailUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `user`
-            SET email = :email
-            WHERE user_id = :user_id'
+            'UPDATE `user` SET email = :email WHERE user_id = :user_id'
         );
 
         $stmt->execute([
@@ -98,9 +89,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectUserUpdated(UserUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `user`
-            SET email = :email, status = :status, role = :role
-            WHERE user_id = :user_id'
+            'UPDATE `user` SET email = :email, status = :status, role = :role WHERE user_id = :user_id'
         );
 
         $stmt->execute([
@@ -114,9 +103,7 @@ class UserProjection extends AbstractProjection implements UserProjectionInterfa
     public function projectPasswordResetTokenApplied(PasswordResetTokenApplied $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `user`
-            SET password_reset_token = :password_reset_token
-            WHERE user_id = :user_id'
+            'UPDATE `user` SET password_reset_token = :password_reset_token WHERE user_id = :user_id'
         );
 
         $stmt->execute([

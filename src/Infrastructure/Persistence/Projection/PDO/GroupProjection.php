@@ -32,8 +32,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectGroupCreated(GroupCreated $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `group` (group_id, name, invite_code, owner_id, created_at)
-            VALUES (:group_id, :name, :invite_code, :owner_id, :created_at)'
+            'INSERT INTO `group` (group_id, name, invite_code, owner_id, created_at) VALUES (:group_id, :name, :invite_code, :owner_id, :created_at)'
         );
 
         $stmt->execute([
@@ -48,8 +47,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectMemberAdded(MemberAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `member` (member_id, group_id, user_id, role, allow_multiple, created_at)
-            VALUES (:member_id, :group_id, :user_id, :role, :allow_multiple, :created_at)'
+            'INSERT INTO `member` (member_id, group_id, user_id, role, allow_multiple, created_at) VALUES (:member_id, :group_id, :user_id, :role, :allow_multiple, :created_at)'
         );
 
         $stmt->execute([
@@ -65,8 +63,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectScoreSubmitted(ScoreSubmitted $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `score` (score_id, group_id, player_id, game_id, home_team_prediction, away_team_prediction, created_at)
-            VALUES (:score_id, :group_id, :player_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)'
+            'INSERT INTO `score` (score_id, group_id, player_id, game_id, home_team_prediction, away_team_prediction, created_at) VALUES (:score_id, :group_id, :player_id, :game_id, :home_team_prediction, :away_team_prediction, :created_at)'
         );
 
         $stmt->execute([
@@ -83,8 +80,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectGroupUpdated(GroupUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `group` SET name = :name, owner_id = :owner_id
-            WHERE group_id = :group_id'
+            'UPDATE `group` SET name = :name, owner_id = :owner_id WHERE group_id = :group_id'
         );
 
         $stmt->execute([
@@ -154,8 +150,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectMemberUpdated(MemberUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `member` SET member_id = :member_id, role =:role, allow_multiple = :allow_multiple
-            WHERE member_id = :member_id'
+            'UPDATE `member` SET member_id = :member_id, role =:role, allow_multiple = :allow_multiple WHERE member_id = :member_id'
         );
 
         $stmt->execute([
@@ -168,8 +163,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectGroupScoreUpdated(GroupScoreUpdated $event)
     {
         $stmt = $this->pdo->prepare(
-            'UPDATE `score` SET home_team_prediction = :home_team_prediction, away_team_prediction = :away_team_prediction
-            WHERE score_id = :score_id'
+            'UPDATE `score` SET home_team_prediction = :home_team_prediction, away_team_prediction = :away_team_prediction WHERE score_id = :score_id'
         );
 
         $stmt->execute([
@@ -182,8 +176,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectPlayerAdded(PlayerAdded $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `player` (player_id, member_id, group_id, username, created_at)
-            VALUES (:player_id, :member_id, :group_id, :username, :created_at)'
+            'INSERT INTO `player` (player_id, member_id, group_id, username, created_at) VALUES (:player_id, :member_id, :group_id, :username, :created_at)'
         );
 
         $stmt->execute([
@@ -198,8 +191,7 @@ class GroupProjection extends AbstractProjection implements GroupProjectionInter
     public function projectTeamFollowed(TeamFollowed $event)
     {
         $stmt = $this->pdo->prepare(
-            'INSERT INTO `follow` (follow_id, group_id, team_id, season_id, created_at)
-            VALUES (:follow_id, :group_id, :team_id, :season_id, :created_at)'
+            'INSERT INTO `follow` (follow_id, group_id, team_id, season_id, created_at) VALUES (:follow_id, :group_id, :team_id, :season_id, :created_at)'
         );
 
         $stmt->execute([
