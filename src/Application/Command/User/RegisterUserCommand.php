@@ -6,13 +6,11 @@ class RegisterUserCommand
 {
     private $email;
     private $password;
-    private $confirmPassword;
 
-    public function __construct($email, $password, $confirmPassword)
+    public function __construct($email, $password)
     {
         $this->email = $email;
         $this->password = $password;
-        $this->confirmPassword = $confirmPassword;
     }
 
     public function getEmail()
@@ -23,10 +21,5 @@ class RegisterUserCommand
     public function getPassword()
     {
         return $this->password;
-    }
-
-    public function getConfirmPassword()
-    {
-        return $this->confirmPassword;
     }
 }

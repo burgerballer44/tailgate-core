@@ -20,13 +20,11 @@ class RegisterUserHandlerTest extends BaseTestCase
     {
         $this->email = Email::fromString('email@email.com');
         $this->passwordHash = 'password';
-        $this->confirmPassword = 'password';
         $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
 
         $this->registerUserCommand = new RegisterUserCommand(
             $this->email,
-            $this->passwordHash,
-            $this->confirmPassword
+            $this->passwordHash
         );
     }
 
