@@ -72,12 +72,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/burgerballer44/aggregate.git",
-                "reference": "22ce783f41bc6c9a77533f92988c7f860cfb2b32"
+                "reference": "2e6c335873fb0754f05fd5c2672ac58deaca5d44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/burgerballer44/aggregate/zipball/22ce783f41bc6c9a77533f92988c7f860cfb2b32",
-                "reference": "22ce783f41bc6c9a77533f92988c7f860cfb2b32",
+                "url": "https://api.github.com/repos/burgerballer44/aggregate/zipball/2e6c335873fb0754f05fd5c2672ac58deaca5d44",
+                "reference": "2e6c335873fb0754f05fd5c2672ac58deaca5d44",
                 "shasum": ""
             },
             "default-branch": true,
@@ -101,7 +101,7 @@
                 "source": "https://github.com/burgerballer44/aggregate/tree/master",
                 "issues": "https://github.com/burgerballer44/aggregate/issues"
             },
-            "time": "2022-01-14T18:20:08+00:00"
+            "time": "2022-06-12T20:16:17+00:00"
         },
         {
             "name": "burger/common",

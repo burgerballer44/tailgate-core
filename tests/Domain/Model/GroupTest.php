@@ -454,7 +454,7 @@ class GroupTest extends BaseTestCase
         $group->clearRecordedEvents();
 
         $groupRole = GroupRole::getGroupMember();
-        $allowMultiplePlayers = 'updatedAllowMultiplePlayers';
+        $allowMultiplePlayers = Group::MULTIPLE_PLAYERS;
         $memberId = $group->getMembers()[1]->getMemberId();
         $group->updateMember($memberId, $groupRole, $allowMultiplePlayers, $this->dateOccurred);
 
