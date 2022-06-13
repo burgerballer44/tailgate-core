@@ -29,7 +29,10 @@ class ResetPasswordHandler
     {
         $user = $this->userRepository->get(UserId::fromString($command->getUserId()));
 
-        $user->updatePassword($this->passwordHashing->hash($command->getPassword()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $user->updatePassword(
+            $this->passwordHashing->hash($command->getPassword()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->userRepository->add($user);
     }

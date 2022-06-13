@@ -25,7 +25,11 @@ class AddPlayerToGroupHandler
     {
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group->addPlayer(MemberId::fromString($command->getMemberId()), $command->getUsername(), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $group->addPlayer(
+            MemberId::fromString($command->getMemberId()),
+            $command->getUsername(),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->groupRepository->add($group);
     }

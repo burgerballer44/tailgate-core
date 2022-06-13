@@ -4,7 +4,6 @@ namespace Tailgate\Test\Domain\Service\User;
 
 use Tailgate\Application\Command\User\RegisterUserCommand;
 use Tailgate\Domain\Model\Common\Date;
-use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\UserId;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Domain\Model\User\UserRole;
@@ -18,7 +17,7 @@ class RegisterUserHandlerTest extends BaseTestCase
 {
     public function setUp(): void
     {
-        $this->email = Email::fromString('email@email.com');
+        $this->email = 'email@email.com';
         $this->passwordHash = 'password';
         $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
 

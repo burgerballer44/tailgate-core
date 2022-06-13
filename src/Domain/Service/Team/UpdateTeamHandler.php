@@ -23,7 +23,11 @@ class UpdateTeamHandler
     {
         $team = $this->teamRepository->get(TeamId::fromString($command->getTeamId()));
 
-        $team->update($command->getDesignation(), $command->getMascot(), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $team->update(
+            $command->getDesignation(),
+            $command->getMascot(),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->teamRepository->add($team);
     }

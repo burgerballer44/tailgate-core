@@ -24,7 +24,10 @@ class DeleteScoreHandler
     {
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group->deleteScore(ScoreId::fromString($command->getScoreId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $group->deleteScore(
+            ScoreId::fromString($command->getScoreId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->groupRepository->add($group);
     }

@@ -24,7 +24,10 @@ class DeleteGameHandler
     {
         $season = $this->seasonRepository->get(SeasonId::fromString($command->getSeasonId()));
 
-        $season->deleteGame(GameId::fromString($command->getGameId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $season->deleteGame(
+            GameId::fromString($command->getGameId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->seasonRepository->add($season);
     }

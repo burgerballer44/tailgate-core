@@ -22,7 +22,7 @@ class UpdateUserHandlerTest extends BaseTestCase
         $this->passwordHash = 'password';
         $this->email = Email::fromString('email@email.com');
         $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
-        $this->newEmail = Email::fromString('updated@email.com');
+        $this->newEmail = 'updated@email.com';
         $this->status = UserStatus::getPending();
         $this->role = UserRole::getAdmin();
 

@@ -24,7 +24,10 @@ class AddMemberToGroupHandler
     {
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group->addMember(UserId::fromString($command->getUserId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $group->addMember(
+            UserId::fromString($command->getUserId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->groupRepository->add($group);
     }

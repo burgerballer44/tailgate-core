@@ -24,7 +24,10 @@ class DeleteMemberHandler
     {
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group->deleteMember(MemberId::fromString($command->getMemberId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $group->deleteMember(
+            MemberId::fromString($command->getMemberId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->groupRepository->add($group);
     }

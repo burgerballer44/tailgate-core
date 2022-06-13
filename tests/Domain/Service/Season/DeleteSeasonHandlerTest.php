@@ -39,7 +39,7 @@ class DeleteSeasonHandlerTest extends BaseTestCase
         $this->season->clearRecordedEvents();
 
         $this->deleteSeasonCommand = new DeleteSeasonCommand(
-            SeasonId::fromString($this->seasonId)
+            $this->seasonId
         );
     }
 

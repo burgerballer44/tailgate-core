@@ -25,7 +25,11 @@ class ChangePlayerOwnerHandler
     {
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group->changePlayerOwner(PlayerId::fromString($command->getPlayerId()), MemberId::fromString($command->getMemberId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $group->changePlayerOwner(
+            PlayerId::fromString($command->getPlayerId()),
+            MemberId::fromString($command->getMemberId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->groupRepository->add($group);
     }

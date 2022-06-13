@@ -24,7 +24,10 @@ class DeletePlayerHandler
     {
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group->deletePlayer(PlayerId::fromString($command->getPlayerId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $group->deletePlayer(
+            PlayerId::fromString($command->getPlayerId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->groupRepository->add($group);
     }

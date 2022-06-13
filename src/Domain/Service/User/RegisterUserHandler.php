@@ -4,6 +4,7 @@ namespace Tailgate\Domain\Service\User;
 
 use Tailgate\Application\Command\User\RegisterUserCommand;
 use Tailgate\Domain\Model\Common\Date;
+use Tailgate\Domain\Model\Common\Email;
 use Tailgate\Domain\Model\User\User;
 use Tailgate\Domain\Model\User\UserRepositoryInterface;
 use Tailgate\Domain\Service\Clock\Clock;
@@ -29,7 +30,7 @@ class RegisterUserHandler
     {
         $user = User::register(
             $this->userRepository->nextIdentity(),
-            $command->getEmail(),
+            Email::fromString($command->getEmail()),
             $this->passwordHashing->hash($command->getPassword()),
             Date::fromDateTimeImmutable($this->clock->currentTime())
         );

@@ -25,7 +25,11 @@ class FollowTeamHandler
     {
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group->followTeam(TeamId::fromString($command->getTeamId()), SeasonId::fromString($command->getSeasonId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $group->followTeam(
+            TeamId::fromString($command->getTeamId()),
+            SeasonId::fromString($command->getSeasonId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->groupRepository->add($group);
     }

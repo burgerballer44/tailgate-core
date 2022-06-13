@@ -20,7 +20,7 @@ class UpdateEmailHandlerTest extends BaseTestCase
         $this->passwordHash = 'password';
         $this->email = Email::fromString('email@email.com');
         $this->dateOccurred = Date::fromDateTimeImmutable($this->getFakeTime()->currentTime());
-        $this->newEmail = Email::fromString('newEmail@email.com');
+        $this->newEmail = 'newEmail@email.com';
 
         // create a user and clear events
         $this->user = User::register(

@@ -24,7 +24,10 @@ class DeleteFollowHandler
     {
         $group = $this->groupRepository->get(GroupId::fromString($command->getGroupId()));
 
-        $group->deleteFollow(FollowId::fromString($command->getFollowId()), Date::fromDateTimeImmutable($this->clock->currentTime()));
+        $group->deleteFollow(
+            FollowId::fromString($command->getFollowId()),
+            Date::fromDateTimeImmutable($this->clock->currentTime())
+        );
 
         $this->groupRepository->add($group);
     }

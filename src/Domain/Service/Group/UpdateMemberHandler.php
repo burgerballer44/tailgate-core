@@ -6,6 +6,7 @@ use Tailgate\Application\Command\Group\UpdateMemberCommand;
 use Tailgate\Domain\Model\Common\Date;
 use Tailgate\Domain\Model\Group\GroupId;
 use Tailgate\Domain\Model\Group\GroupRepositoryInterface;
+use Tailgate\Domain\Model\Group\GroupRole;
 use Tailgate\Domain\Model\Group\MemberId;
 use Tailgate\Domain\Service\Clock\Clock;
 
@@ -26,7 +27,7 @@ class UpdateMemberHandler
 
         $group->updateMember(
             MemberId::fromString($command->getMemberId()),
-            $command->getGroupRole(),
+            GroupRole::fromString($command->getGroupRole()),
             $command->getAllowMultiplePlayers(),
             Date::fromDateTimeImmutable($this->clock->currentTime())
         );

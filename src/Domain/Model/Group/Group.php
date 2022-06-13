@@ -192,7 +192,7 @@ class Group extends AbstractEventBasedEntity
     }
 
     // updates a member role, and if they can add multiple players
-    public function updateMember(MemberId $memberId, $groupRole, $allowMultiple, Date $dateOccurred)
+    public function updateMember(MemberId $memberId, GroupRole $groupRole, $allowMultiple, Date $dateOccurred)
     {
         if (! $this->getMemberById($memberId)) {
             throw new RuntimeException('The member does not exist.');
