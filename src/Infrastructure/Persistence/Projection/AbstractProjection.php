@@ -4,7 +4,7 @@ namespace Tailgate\Infrastructure\Persistence\Projection;
 
 use Burger\Aggregate\DomainEvent;
 use Burger\Aggregate\DomainEvents;
-use Verraes\ClassFunctions\ClassFunctions;
+use Burger\Common\ClassFunctions;
 
 abstract class AbstractProjection implements ProjectionInterface
 {
