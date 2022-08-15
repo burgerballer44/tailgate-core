@@ -52,10 +52,10 @@ class GroupViewArrayDataTransformer implements GroupDataTransformerInterface
         }
 
         return [
-            'groupId' => $groupView->getGroupId(),
+            'group_id' => $groupView->getGroupId(),
             'name' => $groupView->getName(),
-            'inviteCode' => $groupView->getInviteCode(),
-            'ownerId' => $groupView->getOwnerId(),
+            'invite_code' => $groupView->getInviteCode(),
+            'owner_id' => $groupView->getOwnerId(),
             'follow' => $follow,
             'members' => $members,
             'players' => $players,

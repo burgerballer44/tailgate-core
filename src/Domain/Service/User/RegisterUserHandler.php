@@ -37,8 +37,9 @@ class RegisterUserHandler
 
         $this->userRepository->add($user);
 
+        // we want to return our newly created user
         return [
-            'userId' => (string) $user->getUserId(),
+            'user_id' => (string) $user->getUserId(),
             'email' => (string) $user->getEmail(),
             'status' => (string) $user->getStatus(),
             'role' => (string) $user->getRole(),

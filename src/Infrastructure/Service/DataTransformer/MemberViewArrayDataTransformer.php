@@ -10,11 +10,11 @@ class MemberViewArrayDataTransformer implements MemberDataTransformerInterface
     public function read(MemberView $memberView)
     {
         return [
-            'memberId' => $memberView->getMemberId(),
-            'groupId' => $memberView->getGroupId(),
-            'userId' => $memberView->getUserId(),
+            'member_id' => $memberView->getMemberId(),
+            'group_id' => $memberView->getGroupId(),
+            'user_id' => $memberView->getUserId(),
             'role' => $memberView->getRole(),
-            'allowMultiplePlayers' => $memberView->getAllowMultiplePlayers(),
+            'allow_multiple_players' => $memberView->getAllowMultiplePlayers(),
             'email' => $memberView->getEmail(),
         ];
     }

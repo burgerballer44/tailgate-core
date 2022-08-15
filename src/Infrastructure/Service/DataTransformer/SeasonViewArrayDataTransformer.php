@@ -24,12 +24,12 @@ class SeasonViewArrayDataTransformer implements SeasonDataTransformerInterface
         }
 
         return [
-            'seasonId' => $seasonView->getSeasonId(),
+            'season_id' => $seasonView->getSeasonId(),
             'sport' => $seasonView->getSport(),
-            'seasonType' => $seasonView->getSeasonType(),
+            'season_type' => $seasonView->getSeasonType(),
             'name' => $seasonView->getName(),
-            'seasonStart' => $seasonView->getSeasonStart(),
-            'seasonEnd' => $seasonView->getSeasonEnd(),
+            'season_start' => $seasonView->getSeasonStart(),
+            'season_end' => $seasonView->getSeasonEnd(),
             'games' => $games,
         ];
     }

@@ -40,7 +40,7 @@ class RegisterUserHandlerTest extends BaseTestCase
 
         $user = $registerUserHandler->handle($this->registerUserCommand);
 
-        $this->assertNotEmpty($user['userId']);
+        $this->assertNotEmpty($user['user_id']);
         $this->assertEquals($this->email, $user['email']);
         $this->assertEquals(UserStatus::getPending(), $user['status']);
         $this->assertEquals(UserRole::getStandard(), $user['role']);

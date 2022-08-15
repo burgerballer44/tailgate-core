@@ -10,18 +10,18 @@ class ScoreViewArrayDataTransformer implements ScoreDataTransformerInterface
     public function read(ScoreView $scoreView)
     {
         return [
-            'scoreId' => $scoreView->getScoreId(),
-            'groupId' => $scoreView->getGroupId(),
-            'playerId' => $scoreView->getPlayerId(),
-            'gameId' => $scoreView->getGameId(),
-            'homeTeamPrediction' => $scoreView->getHomeTeamPrediction(),
-            'awayTeamPrediction' => $scoreView->getAwayTeamPrediction(),
-            'homeTeamId' => $scoreView->getHomeTeamId(),
-            'awayTeamId' => $scoreView->getAwayTeamId(),
-            'homeDesignation' => $scoreView->getHomeDesignation(),
-            'homeMascot' => $scoreView->getHomeMascot(),
-            'awayDesignation' => $scoreView->getAwayDesignation(),
-            'awayMascot' => $scoreView->getAwayMascot(),
+            'score_id' => $scoreView->getScoreId(),
+            'group_id' => $scoreView->getGroupId(),
+            'player_id' => $scoreView->getPlayerId(),
+            'game_id' => $scoreView->getGameId(),
+            'home_team_prediction' => $scoreView->getHomeTeamPrediction(),
+            'away_team_prediction' => $scoreView->getAwayTeamPrediction(),
+            'home_team_id' => $scoreView->getHomeTeamId(),
+            'away_team_id' => $scoreView->getAwayTeamId(),
+            'home_designation' => $scoreView->getHomeDesignation(),
+            'home_mascot' => $scoreView->getHomeMascot(),
+            'away_designation' => $scoreView->getAwayDesignation(),
+            'away_mascot' => $scoreView->getAwayMascot(),
             'username' => $scoreView->getUsername(),
         ];
     }

@@ -10,9 +10,9 @@ class PlayerViewArrayDataTransformer implements PlayerDataTransformerInterface
     public function read(PlayerView $playerView)
     {
         return [
-            'playerId' => $playerView->getPlayerId(),
-            'memberId' => $playerView->getMemberId(),
-            'groupId' => $playerView->getGroupId(),
+            'player_id' => $playerView->getPlayerId(),
+            'member_id' => $playerView->getMemberId(),
+            'group_id' => $playerView->getGroupId(),
             'username' => $playerView->getUsername(),
         ];
     }
